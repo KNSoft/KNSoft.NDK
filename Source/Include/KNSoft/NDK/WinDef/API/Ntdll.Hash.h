@@ -49,7 +49,7 @@ RSA32API
 A_SHAUpdate(
     _Inout_ PA_SHA_CTX Context,
     _In_reads_(BufferSize) PUCHAR Buffer,
-    ULONG BufferSize);
+    _In_ ULONG BufferSize);
 
 NTSYSAPI
 VOID
@@ -70,7 +70,7 @@ RSA32API
 MD5Update(
     _Inout_ PMD5_CTX Context,
     _In_reads_(BufferSize) PUCHAR Buffer,
-    ULONG BufferSize);
+    _In_ ULONG BufferSize);
 
 NTSYSAPI
 VOID
@@ -90,7 +90,7 @@ RSA32API
 MD4Update(
     _Inout_ PMD4_CTX Context,
     _In_reads_(BufferSize) PUCHAR Buffer,
-    ULONG BufferSize);
+    _In_ ULONG BufferSize);
 
 NTSYSAPI
 VOID
