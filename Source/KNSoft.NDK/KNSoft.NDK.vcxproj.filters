@@ -127,6 +127,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Extension\SMBIOS.h">
       <Filter>Extension</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\StrSafe.h">
+      <Filter>WinDef\WinAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -147,6 +147,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\Kernel32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\Ntdll.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\Ntdll.Hash.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\StrSafe.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\User32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\WinSta.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
