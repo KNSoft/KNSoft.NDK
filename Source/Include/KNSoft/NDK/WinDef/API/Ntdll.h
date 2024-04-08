@@ -630,6 +630,54 @@ RtlSizeHeap(
     _In_opt_ ULONG Flags,
     _In_ PVOID BaseAddress);
 
+NTSYSAPI
+SIZE_T
+NTAPI
+RtlCompactHeap(
+    _In_ PVOID HeapHandle,
+    _In_ ULONG Flags);
+
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlValidateHeap(
+    _In_ PVOID HeapHandle,
+    _In_ ULONG Flags,
+    _In_ PVOID BaseAddress);
+
+typedef struct _RTL_HEAP_WALK_ENTRY
+{
+    PVOID DataAddress;
+    SIZE_T DataSize;
+    UCHAR OverheadBytes;
+    UCHAR SegmentIndex;
+    USHORT Flags;
+    union
+    {
+        struct
+        {
+            SIZE_T Settable;
+            USHORT TagIndex;
+            USHORT AllocatorBackTraceIndex;
+            ULONG Reserved[2];
+        } Block;
+        struct
+        {
+            ULONG_PTR CommittedSize;
+            ULONG_PTR UnCommittedSize;
+            PVOID FirstEntry;
+            PVOID LastEntry;
+        } Segment;
+    };
+} RTL_HEAP_WALK_ENTRY, *PRTL_HEAP_WALK_ENTRY;
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWalkHeap(
+    _In_ PVOID HeapHandle,
+    _Inout_ PRTL_HEAP_WALK_ENTRY Entry);
+
 #pragma endregion
 
 #pragma region LUID
