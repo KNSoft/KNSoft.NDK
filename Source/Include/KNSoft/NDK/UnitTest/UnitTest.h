@@ -44,6 +44,9 @@ ULONG NTAPI UnitTest_Main(
     _In_reads_(argc) _Pre_z_ wchar_t** argv,
     _Out_ PUNITTEST_RESULT Result);
 
+VOID __cdecl UnitTest_PrintF(
+    _In_z_ _Printf_format_string_ PCSTR Format, ...);
+
 EXTERN_C_END
 
 #pragma section(".NUT$ELB", long, read)

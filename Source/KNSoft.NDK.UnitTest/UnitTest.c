@@ -1,6 +1,12 @@
 ﻿#include "../Include/KNSoft/NDK/UnitTest/UnitTest.h"
 
+#include "../Include/KNSoft/NDK/WinDef/API/StrSafe.h"
 #include "../Include/KNSoft/NDK/WinDef/API/Ntdll.h"
+#include "../Include/KNSoft/NDK/NT/Extension.h"
+
+#include <dpfilter.h>
+
+#pragma region Entries
 
 #pragma section(".NUT$ELA", long, read) // First
 #pragma section(".NUT$ELZ", long, read) // Last
@@ -55,6 +61,10 @@ PUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
     return NULL;
 }
 
+#pragma endregion
+
+#pragma region Execuate
+
 ULONG NTAPI UnitTest_RunAll(
     _Out_ PUNITTEST_RESULT Result)
 {
@@ -87,6 +97,7 @@ BOOL NTAPI UnitTest_Run(
         return FALSE;
     }
 
+    RtlZeroMemory(Result, sizeof(*Result));
     Entry->Proc(Result);
     return TRUE;
 }
@@ -131,3 +142,67 @@ ULONG NTAPI UnitTest_Main(
 
     return RunCount;
 }
+
+#pragma endregion
+
+#pragma region Utils
+
+VOID __cdecl UnitTest_PrintF(
+    _In_z_ _Printf_format_string_ PCSTR Format, ...)
+{
+    CHAR sz[512 + 1];
+    va_list argList;
+    ULONG u, uNew;
+    HANDLE hStdOut;
+    PSTR psz;
+    IO_STATUS_BLOCK IoStatusBlock;
+
+    va_start(argList, Format);
+
+    /* Write DbgPrint */
+    vDbgPrintEx(MAXULONG, DPFLTR_ERROR_LEVEL, Format, argList);
+
+    /* Write standard output if exists */
+    hStdOut = NtCurrentPeb()->ProcessParameters->StandardOutput;
+    if (hStdOut == NULL)
+    {
+        return;
+    }
+
+    /* Format string */
+    u = StrSafe_CchVPrintfA(sz, ARRAYSIZE(sz), Format, argList);
+    if (u == 0)
+    {
+        return;
+    }
+
+    /* Allocate buffer if sz too small */
+    if (u >= ARRAYSIZE(sz))
+    {
+        psz = RtlAllocateHeap(NtGetProcessHeap(), 0, u + 1);
+        if (psz != NULL)
+        {
+            uNew = StrSafe_CchVPrintfA(psz, u + 1, Format, argList);
+            if (uNew > 0 && uNew < u)
+            {
+                u = uNew;
+                goto _Print_Stdout;
+            }
+            RtlFreeHeap(NtGetProcessHeap(), 0, psz);
+        }
+
+        /* New allocated buffer unavailable, fallback to sz (truncated) */
+        u = ARRAYSIZE(sz) - 1;
+    }
+
+    psz = sz;
+
+_Print_Stdout:
+    NtWriteFile(hStdOut, NULL, NULL, NULL, &IoStatusBlock, psz, u, NULL, NULL);
+    if (psz != sz)
+    {
+        RtlFreeHeap(NtGetProcessHeap(), 0, psz);
+    }
+}
+
+#pragma endregion
