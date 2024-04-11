@@ -1,6 +1,6 @@
 # KNSoft.NDK
 
-![NuGet Downloads](https://img.shields.io/nuget/dt/KNSoft.NDK) ![GitHub Release](https://img.shields.io/github/v/release/KNSoft/KNSoft.NDK) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml) ![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) ![GitHub License](https://img.shields.io/github/license/KNSoft/KNSoft.NDK)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/KNSoft.NDK)](https://www.nuget.org/packages/KNSoft.NDK) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/msbuild.yml) ![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub License](https://img.shields.io/github/license/KNSoft/KNSoft.NDK)](./LICENSE)
 
 KNSoft.NDK provides native C/C++ definitions and import libraries for Windows NT and some specifications.
 
@@ -19,14 +19,15 @@ KNSoft.NDK provides native C/C++ definitions and import libraries for Windows NT
   - MSVC
 - Kits
   - Unit Test Framework
+  - StrSafe.h (different from `strsafe.h` in Windows SDK)
 
 ## Usage
 
-![NuGet Downloads](https://img.shields.io/nuget/dt/KNSoft.NDK) ![GitHub Release](https://img.shields.io/github/v/release/KNSoft/KNSoft.NDK)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/KNSoft.NDK)](https://www.nuget.org/packages/KNSoft.NDK)
 
 ### TL;DR
 
-Include [NDK.h](./Source/Include/KNSoft/NDK/NDK.h) instead of `Windows.h` will do.
+Include [NDK.h](./Source/Include/KNSoft/NDK/NDK.h) instead of (or **BEFORE**) `Windows.h` will do.
 ```C
 #include <KNSoft/NDK/NDK.h>
 ```
@@ -45,6 +46,8 @@ Reference following header and library on demand:
 - Unit Test Framework
   - [UnitTest.h](./Source/Include/KNSoft/NDK/UnitTest/UnitTest.h)
   - KNSoft.NDK.UnitTest.lib (Generated from [KNSoft.NDK.UnitTest](./Source/KNSoft.NDK.UnitTest/))
+- Safe string functions (different from `strsafe.h` in Windows SDK)
+  - [StrSafe.h](./Source/Include/KNSoft/NDK/WinDef/API/StrSafe.h)
 
 To include specified feature, include corresponding header (i.e. [SMBIOS.h](./Source/Include/KNSoft/NDK/Extension/SMBIOS.h) for SMBIOS Specification) instead of the whole [NDK.h](./Source/Include/KNSoft/NDK/NDK.h) is better. To exclude specified feature included by default, define following macros:
 
@@ -57,7 +60,7 @@ To include specified feature, include corresponding header (i.e. [SMBIOS.h](./So
 
 ## Compatibility
 
-![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)
+![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/msbuild.yml)
 
 KNSoft.NDK always keep up with trends:
 - Keep up the latest Windows NT and specifications
@@ -67,7 +70,7 @@ KNSoft.NDK always keep up with trends:
 
 ## License
 
-![GitHub License](https://img.shields.io/github/license/KNSoft/KNSoft.NDK)
+[![GitHub License](https://img.shields.io/github/license/KNSoft/KNSoft.NDK)](./LICENSE)
 
 KNSoft.NDK is licensed under the [MPL-2.0 license](./LICENSE).
 
@@ -76,5 +79,9 @@ The content from the following public sources were used:
 - Microsoft Public Symbolic Data
 - Microsoft Learning
 - Microsoft Windows Protocols
+
+And public projects:
+- [NDK (From ReactOS)](https://github.com/reactos/reactos/tree/master/sdk/include/ndk) - MIT
+- [winsiderss/phnt](https://github.com/winsiderss/phnt) - CC-BY-4.0
 
 KNSoft.NDK also uses [KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C) to generate DLL import libraries.
