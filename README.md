@@ -47,7 +47,7 @@ Reference following header and library on demand:
   - [UnitTest.h](./Source/Include/KNSoft/NDK/UnitTest/UnitTest.h)
   - KNSoft.NDK.UnitTest.lib (Generated from [KNSoft.NDK.UnitTest](./Source/KNSoft.NDK.UnitTest/))
 - Safe string functions (different from `strsafe.h` in Windows SDK)
-  - [StrSafe.h](./Source/Include/KNSoft/NDK/WinDef/API/StrSafe.h)
+  - [StrSafe.h](./Source/Include/KNSoft/NDK/Extension/StrSafe.h)
 
 To include specified feature, include corresponding header (i.e. [SMBIOS.h](./Source/Include/KNSoft/NDK/Extension/SMBIOS.h) for SMBIOS Specification) instead of the whole [NDK.h](./Source/Include/KNSoft/NDK/NDK.h) is better. To exclude specified feature included by default, define following macros:
 

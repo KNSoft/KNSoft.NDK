@@ -1,10 +1,4 @@
-﻿/*
- * Needs legacy_stdio_definitions.lib or alternative
- */
-
-#pragma once
-
-#define _NO_CRT_STDIO_INLINE
+﻿#pragma once
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -109,10 +103,10 @@ __inline unsigned long __cdecl StrSafe_CchPrintfA(
     _In_ size_t const BufferCount,
     _In_z_ _Printf_format_string_ const char* Format, ...)
 {
-    va_list argList;
+    va_list ArgList;
 
-    va_start(argList, Format);
-    return StrSafe_CchVPrintfA(Buffer, BufferCount, Format, argList);
+    va_start(ArgList, Format);
+    return StrSafe_CchVPrintfA(Buffer, BufferCount, Format, ArgList);
 }
 
 _Success_(
@@ -123,10 +117,10 @@ __inline unsigned long __cdecl StrSafe_CchPrintfW(
     _In_ size_t const BufferCount,
     _In_z_ _Printf_format_string_ const wchar_t* Format, ...)
 {
-    va_list argList;
+    va_list ArgList;
 
-    va_start(argList, Format);
-    return StrSafe_CchVPrintfW(Buffer, BufferCount, Format, argList);
+    va_start(ArgList, Format);
+    return StrSafe_CchVPrintfW(Buffer, BufferCount, Format, ArgList);
 }
 
 #pragma endregion
