@@ -3,10 +3,11 @@
     <PropertyGroup>
         <ForceImportAfterCppDefaultProps>$(MsbuildThisFileDirectory)\Directory.Build.AfterCppDefault.props</ForceImportAfterCppDefaultProps>
     </PropertyGroup>
+
     <ItemDefinitionGroup>
         <ClCompile>
             <WarningLevel>Level3</WarningLevel>
-            <LanguageStandard>stdcpp20</LanguageStandard>
+            <LanguageStandard>stdcpplatest</LanguageStandard>
             <LanguageStandard_C>stdc17</LanguageStandard_C>
             <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
         </ClCompile>
@@ -31,6 +32,18 @@
     <ItemDefinitionGroup Condition="'$(ConfigurationType)' == 'Utility'">
         <ClCompile>
             <PreprocessorDefinitions>MSB_CONFIGURATIONTYPE_UTILITY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+        </ClCompile>
+    </ItemDefinitionGroup>
+
+    <!-- Use static default libraries -->
+    <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+        <ClCompile>
+            <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+        </ClCompile>
+    </ItemDefinitionGroup>
+    <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+        <ClCompile>
+            <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
         </ClCompile>
     </ItemDefinitionGroup>
 
