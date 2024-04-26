@@ -820,6 +820,22 @@ RtlRandomEx(
 
 #pragma region Error and Exception
 
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlGetLastNtStatus();
+
+NTSYSAPI
+ULONG
+NTAPI
+RtlGetLastWin32Error();
+
+NTSYSAPI
+ULONG
+NTAPI
+RtlSetLastWin32Error(
+    _In_ ULONG LastError);
+
 _IRQL_requires_max_(APC_LEVEL)
 _When_(Status < 0, _Out_range_(> , 0))
 _When_(Status >= 0, _Out_range_(== , 0))
