@@ -3,8 +3,20 @@
   <ItemGroup>
     <ClCompile Include="UnitTestFramework.c" />
     <ClCompile Include="Main.c" />
+    <ClCompile Include="NT\PebTebKUSD.c">
+      <Filter>NT</Filter>
+    </ClCompile>
+    <ClCompile Include="StrSafe.c" />
+    <ClCompile Include="NT\PebLdr.c">
+      <Filter>NT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NT">
+      <UniqueIdentifier>{62d5419b-ca75-423e-b61b-b51ebb1a1c18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
