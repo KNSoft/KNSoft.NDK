@@ -83,16 +83,6 @@ typedef enum _PROCESSINFOCLASS
     MaxProcessInfoClass // MaxProcessInfoClass should always be the last enum
 } PROCESSINFOCLASS;
 
-typedef struct _PROCESS_BASIC_INFORMATION
-{
-    NTSTATUS ExitStatus;
-    PVOID PebBaseAddress; // PPEB
-    ULONG_PTR AffinityMask;
-    KPRIORITY BasePriority;
-    ULONG_PTR UniqueProcessId;
-    ULONG_PTR InheritedFromUniqueProcessId;
-} PROCESS_BASIC_INFORMATION, *PPROCESS_BASIC_INFORMATION;
-
 typedef enum _THREADINFOCLASS
 {
     ThreadBasicInformation = 0,
@@ -136,8 +126,43 @@ typedef enum _THREADINFOCLASS
     ThreadDynamicCodePolicyInfo = 42,
     ThreadSubsystemInformation = 45,
 
-    MaxThreadInfoClass = 53,
+    MaxThreadInfoClass = 56,
 } THREADINFOCLASS;
+
+/* ProcessPagePriority and ThreadPagePriority */
+
+#define MEMORY_PRIORITY_LOWEST           0
+#define MEMORY_PRIORITY_VERY_LOW         1
+#define MEMORY_PRIORITY_LOW              2
+#define MEMORY_PRIORITY_MEDIUM           3
+#define MEMORY_PRIORITY_BELOW_NORMAL     4
+#define MEMORY_PRIORITY_NORMAL           5
+
+typedef struct _PAGE_PRIORITY_INFORMATION
+{
+    ULONG PagePriority;
+} PAGE_PRIORITY_INFORMATION, *PPAGE_PRIORITY_INFORMATION;
+
+/* ProcessBasicInformation */
+
+typedef struct _PROCESS_BASIC_INFORMATION
+{
+    NTSTATUS ExitStatus;
+    PVOID PebBaseAddress; // PPEB
+    ULONG_PTR AffinityMask;
+    KPRIORITY BasePriority;
+    ULONG_PTR UniqueProcessId;
+    ULONG_PTR InheritedFromUniqueProcessId;
+} PROCESS_BASIC_INFORMATION, *PPROCESS_BASIC_INFORMATION;
+
+/* ProcessSessionInformation */
+
+typedef struct _PROCESS_SESSION_INFORMATION
+{
+    ULONG SessionId;
+} PROCESS_SESSION_INFORMATION, *PPROCESS_SESSION_INFORMATION;
+
+/* ThreadBasicInformation */
 
 typedef struct _THREAD_BASIC_INFORMATION
 {
