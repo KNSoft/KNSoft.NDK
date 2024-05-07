@@ -72,6 +72,7 @@ typedef enum _PROCESSINFOCLASS
     ProcessFaultInformation = 63,
     ProcessTelemetryIdInformation = 64,
     ProcessCommitReleaseInformation = 65,
+#if 1 /* From kernel mode ntddk.h */
     ProcessReserved1Information = 66,
     ProcessReserved2Information = 67,
     ProcessSubsystemProcess = 68,
@@ -80,8 +81,16 @@ typedef enum _PROCESSINFOCLASS
     ProcessSubsystemInformation = 75,
     ProcessWin32kSyscallFilterInformation = 79,
     ProcessEnergyTrackingState = 82,
+#else /* From user mode PDB */
+    ProcessDefaultCpuSetsInformation = 66,
+    ProcessAllowedCpuSetsInformation = 67,
+    ProcessReserved1Information = 68,
+    ProcessReserved2Information = 69,
+    ProcessSubsystemProcess = 70,
+    ProcessJobMemoryInformation = 71,
+#endif
     MaxProcessInfoClass // MaxProcessInfoClass should always be the last enum
-} PROCESSINFOCLASS;
+} PROCESSINFOCLASS, *PPROCESSINFOCLASS;
 
 typedef enum _THREADINFOCLASS
 {
@@ -127,7 +136,7 @@ typedef enum _THREADINFOCLASS
     ThreadSubsystemInformation = 45,
 
     MaxThreadInfoClass = 56,
-} THREADINFOCLASS;
+} THREADINFOCLASS, *PTHREADINFOCLASS;
 
 /* ProcessPagePriority and ThreadPagePriority */
 

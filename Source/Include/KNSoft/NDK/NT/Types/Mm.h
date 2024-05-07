@@ -59,3 +59,62 @@ typedef enum _MEMORY_INFORMATION_CLASS
     MemoryBasicVlmInformation,
     MemoryWorkingSetExList
 } MEMORY_INFORMATION_CLASS, *PMEMORY_INFORMATION_CLASS;
+
+typedef enum _SECTION_INFORMATION_CLASS
+{
+    SectionBasicInformation,
+    SectionImageInformation
+} SECTION_INFORMATION_CLASS, *PSECTION_INFORMATION_CLASS;
+
+typedef struct _SECTION_BASIC_INFORMATION
+{
+    PVOID BaseAddress;
+    ULONG AllocationAttributes;
+    LARGE_INTEGER MaximumSize;
+} SECTION_BASIC_INFORMATION, *PSECTION_BASIC_INFORMATION;
+
+typedef struct _SECTION_IMAGE_INFORMATION
+{
+    PVOID TransferAddress;
+    ULONG ZeroBits;
+    SIZE_T MaximumStackSize;
+    SIZE_T CommittedStackSize;
+    ULONG SubSystemType;
+    union
+    {
+        struct
+        {
+            USHORT SubSystemMinorVersion;
+            USHORT SubSystemMajorVersion;
+        };
+        ULONG SubSystemVersion;
+    };
+    ULONG GpValue;
+    USHORT ImageCharacteristics;
+    USHORT DllCharacteristics;
+    USHORT Machine;
+    BOOLEAN ImageContainsCode;
+#if (NTDDI_VERSION >= NTDDI_WIN6)
+    union
+    {
+        struct
+        {
+            UCHAR ComPlusNativeReady : 1;
+            UCHAR ComPlusILOnly : 1;
+            UCHAR ImageDynamicallyRelocated : 1;
+            UCHAR ImageMappedFlat : 1;
+            UCHAR Reserved : 4;
+        };
+        UCHAR ImageFlags;
+    };
+#else
+    BOOLEAN Spare1;
+#endif
+    ULONG LoaderFlags;
+    ULONG ImageFileSize;
+#if (NTDDI_VERSION >= NTDDI_WIN6)
+    ULONG CheckSum;
+#else
+    ULONG Reserved[1];
+#endif
+} SECTION_IMAGE_INFORMATION, *PSECTION_IMAGE_INFORMATION;
