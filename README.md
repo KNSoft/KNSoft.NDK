@@ -2,17 +2,17 @@
 
 [![NuGet Downloads](https://img.shields.io/nuget/dt/KNSoft.NDK)](https://www.nuget.org/packages/KNSoft.NDK) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/msbuild.yml) ![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub License](https://img.shields.io/github/license/KNSoft/KNSoft.NDK)](./LICENSE)
 
-KNSoft.NDK provides native C/C++ definitions and import libraries for Windows NT and some specifications.
+KNSoft.NDK provides native C/C++ definitions and import libraries for Windows NT and some specifications development.
 
 ## Feature
 
 - Windows NT
-  - Undocumented type definitions, i.e. `PEB`, `TEB`, `LDR_*`, ...
-  - Undocumented API declarations, i.e. `Nt/Zw*`, `Ldr*`, ...
-  - Definitions in public sources but not in Windows SDK, i.e. `winsta.h`, `KUSER_SHARED_DATA`, ...
-  - Import library for Windows DLL exports, i.e. `KERNEL32.dll!CreateProcessInternalW`, `ntdll.dll!LdrRegisterDllNotification`, ...
+  - Undocumented type definitions, e.g. `PEB`, `TEB`, `LDR_*`, ...
+  - Undocumented API declarations, e.g. `Nt/Zw*`, `Ldr*`, ...
+  - Definitions in public sources but not in Windows SDK, e.g. `winsta.h`, `KUSER_SHARED_DATA`, ...
+  - Import library for Windows DLL exports, e.g. `KERNEL32.dll!CreateProcessInternalW`, `ntdll.dll!LdrRegisterDllNotification`, ...
   - Addendum to Windows SDK
-  - Extension macros and definitions, i.e. `NtCurrentPeb()`, `PEB(64/32)`, `TEB(64/32)`, ...
+  - Extension macros and definitions, e.g. `NtCurrentPeb()`, `PEB(64/32)`, `TEB(64/32)`, ...
 - Specifications
   - SMBIOS
   - CPUID
@@ -49,7 +49,7 @@ Reference following header and library on demand:
 - Safe string functions (different from `strsafe.h` in Windows SDK)
   - [StrSafe.h](./Source/Include/KNSoft/NDK/Extension/StrSafe.h)
 
-To include specified feature, include corresponding header (i.e. [SMBIOS.h](./Source/Include/KNSoft/NDK/Extension/SMBIOS.h) for SMBIOS Specification) instead of the whole [NDK.h](./Source/Include/KNSoft/NDK/NDK.h) is better. To exclude specified feature included by default, define following macros:
+To include specified feature, include corresponding header (e.g. [SMBIOS.h](./Source/Include/KNSoft/NDK/Extension/SMBIOS.h) for SMBIOS Specification) instead of the whole [NDK.h](./Source/Include/KNSoft/NDK/NDK.h) is better. To exclude specified feature included by default, define following macros:
 
 | Macro | Exclude feature |
 | ---- | ---- |
@@ -66,7 +66,8 @@ KNSoft.NDK always keep up with trends:
 - Keep up the latest Windows NT and specifications
 - Build with the latest Visual Studio (MSVC) and SDK, targets to x86, x64 and ARM64 platforms
 
-**In alpha stage, do not use on production environment.**
+> [!CAUTION]
+> In alpha stage, do not use on production environment.
 
 ## License
 
