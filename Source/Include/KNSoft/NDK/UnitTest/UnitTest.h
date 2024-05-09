@@ -33,6 +33,7 @@ typedef struct _UNITTEST_RESULT
     ULONG Pass;
     ULONG Fail;
     ULONG Skip;
+    ULONGLONG Elapsed; // in μs (us, microsecond)
 } UNITTEST_RESULT, *PUNITTEST_RESULT;
 
 typedef VOID NTAPI FN_UNITTEST_PROC(UNITTEST_RESULT*);
@@ -42,8 +43,9 @@ typedef struct _UNITTEST_ENTRY
     FN_UNITTEST_PROC* Proc;
     UNICODE_STRING Name;
 } UNITTEST_ENTRY, *PUNITTEST_ENTRY;
+typedef const UNITTEST_ENTRY *PCUNITTEST_ENTRY;
 
-typedef BOOL CALLBACK FN_UNITTEST_ENUM_PROC(_In_ PUNITTEST_ENTRY Entry, _In_opt_ PVOID Context);
+typedef BOOL CALLBACK FN_UNITTEST_ENUM_PROC(_In_ PCUNITTEST_ENTRY Entry, _In_opt_ PVOID Context);
 
 BOOL NTAPI UnitTest_EnumEntries(
     _In_ __callback FN_UNITTEST_ENUM_PROC* Callback,
@@ -51,11 +53,11 @@ BOOL NTAPI UnitTest_EnumEntries(
 
 _Ret_maybenull_
 _Must_inspect_result_
-PUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
+PCUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
     _In_z_ PCWSTR Name);
 
 VOID NTAPI UnitTest_RunEntry(
-    _In_ PUNITTEST_ENTRY Entry,
+    _In_ PCUNITTEST_ENTRY Entry,
     _Out_ PUNITTEST_RESULT Result);
 
 ULONG NTAPI UnitTest_RunAll(
@@ -92,11 +94,18 @@ VOID __cdecl UnitTest_FormatMessage(
 
 #define TEST_PARAMETER_RESULT _KNSoft_NDK_UnitTest_Result
 
-/* Define a test entry (function) */
+/*
+ * Define a test entry (function)
+ * 
+ * FIXME: _KNSoft_NDK_UnitTest_Entry_Ptr_##Name may be optimized out,
+ * add "_KNSoft_NDK_UnitTest_Entry_Ptr_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_Ptr_##Name;"
+ * is a hack fix but seems works.
+ */
 #define TEST_DECL(Name)\
 VOID NTAPI Name(UNITTEST_RESULT*);\
-static UNITTEST_ENTRY _KNSoft_NDK_UnitTest_Entry_##Name = { Name, RTL_CONSTANT_STRING(L###Name) };\
-__declspec(allocate(".NDK$UTB")) PUNITTEST_ENTRY _KNSoft_NDK_UnitTest_Entry_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_##Name;\
+static UNITTEST_ENTRY const _KNSoft_NDK_UnitTest_Entry_##Name = { Name, RTL_CONSTANT_STRING(L###Name) };\
+static __declspec(allocate(".NDK$UTB")) PCUNITTEST_ENTRY _KNSoft_NDK_UnitTest_Entry_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_##Name;\
+static volatile PCUNITTEST_ENTRY* _KNSoft_NDK_UnitTest_Entry_Ptr_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_Ptr_##Name;\
 VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT)
 
 /* Increase count of test result, parameter can be Pass/Fail/Skip */

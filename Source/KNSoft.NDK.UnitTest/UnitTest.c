@@ -11,10 +11,10 @@
 #pragma section(".NDK$UTA", long, read) // First
 #pragma section(".NDK$UTZ", long, read) // Last
 
-__declspec(allocate(".NDK$UTA")) static PUNITTEST_ENTRY g_EntryList_First = NULL;
-__declspec(allocate(".NDK$UTZ")) static PUNITTEST_ENTRY g_EntryList_Last = NULL;
-static PUNITTEST_ENTRY* g_pEntryBegin = (&g_EntryList_First) + 1;
-static PUNITTEST_ENTRY* g_pEntryEnd = (&g_EntryList_Last);
+static __declspec(allocate(".NDK$UTA")) PUNITTEST_ENTRY g_EntryList_First = NULL;
+static __declspec(allocate(".NDK$UTZ")) PUNITTEST_ENTRY g_EntryList_Last = NULL;
+static PUNITTEST_ENTRY* const g_pEntryBegin = (&g_EntryList_First) + 1;
+static PUNITTEST_ENTRY* const g_pEntryEnd = (&g_EntryList_Last);
 
 #pragma comment(linker, "/merge:.NDK=.rdata")
 
@@ -88,7 +88,7 @@ BOOL NTAPI UnitTest_EnumEntries(
 
 _Ret_maybenull_
 _Must_inspect_result_
-PUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
+PCUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
     _In_z_ PCWSTR Name)
 {
     PUNITTEST_ENTRY* Entry;
@@ -112,24 +112,39 @@ PUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
 #pragma region Execute API
 
 VOID NTAPI UnitTest_RunEntry(
-    _In_ PUNITTEST_ENTRY Entry,
+    _In_ PCUNITTEST_ENTRY Entry,
     _Out_ PUNITTEST_RESULT Result)
 {
+    LARGE_INTEGER PrefCounter1, PrefCounter2, PrefFreq;
+    ULONGLONG ElapsedMicroseconds;
+
     UnitTest_FormatMessage(">>>> Running unit test: %wZ\n", &Entry->Name);
     RtlZeroMemory(Result, sizeof(*Result));
+
+    /* NtQueryPerformanceCounter writes frequency after counter */
+    NtQueryPerformanceCounter(&PrefCounter1, NULL);
     Entry->Proc(Result);
-    UnitTest_FormatMessage("<<<< Result: %lu tests executed (%lu passed, %lu failed, %lu skipped)\n\n",
+    NtQueryPerformanceCounter(&PrefCounter2, &PrefFreq);
+
+    /* Convert to microseconds before dividing For avoiding loss-of-precision */
+    ElapsedMicroseconds = (ULONGLONG)PrefCounter2.QuadPart - (ULONGLONG)PrefCounter1.QuadPart;
+    ElapsedMicroseconds *= 1000000;
+    ElapsedMicroseconds = (ULONGLONG)((ElapsedMicroseconds / (DOUBLE)PrefFreq.QuadPart) + (DOUBLE)0.5);
+    Result->Elapsed = ElapsedMicroseconds;
+    UnitTest_FormatMessage("<<<< Result: %lu tests executed (%lu passed, %lu failed, %lu skipped) in %llu ms (%llu μs)\n\n",
                            Result->Pass + Result->Fail + Result->Skip,
                            Result->Pass,
                            Result->Fail,
-                           Result->Skip);
+                           Result->Skip,
+                           (ULONGLONG)((ElapsedMicroseconds / 1000.0F) + 0.5F),
+                           Result->Elapsed);
 }
 
 ULONG NTAPI UnitTest_RunAll(
     _Out_ PUNITTEST_RESULT Result)
 {
     ULONG Ret = 0;
-    PUNITTEST_ENTRY* Entry;
+    PCUNITTEST_ENTRY* Entry;
     UNITTEST_RESULT EntryResult;
 
     RtlZeroMemory(Result, sizeof(*Result));
@@ -142,16 +157,18 @@ ULONG NTAPI UnitTest_RunAll(
             Result->Pass += EntryResult.Pass;
             Result->Fail += EntryResult.Fail;
             Result->Skip += EntryResult.Skip;
+            Result->Elapsed += EntryResult.Elapsed;
             Ret++;
         }
     }
 
-    UnitTest_FormatMessage("Totally %lu test entries run, %lu tests executed (%lu passed, %lu failed, %lu skipped)\n",
+    UnitTest_FormatMessage("Totally %lu test entries ran, %lu tests executed (%lu passed, %lu failed, %lu skipped) in %llu ms\n",
                            Ret,
                            Result->Pass + Result->Fail + Result->Skip,
                            Result->Pass,
                            Result->Fail,
-                           Result->Skip);
+                           Result->Skip,
+                           (ULONGLONG)((Result->Elapsed / 1000.0F) + 0.5F));
 
     return Ret;
 }
@@ -161,7 +178,7 @@ BOOL NTAPI UnitTest_Run(
     _In_z_ PCWSTR Name,
     _Out_ PUNITTEST_RESULT Result)
 {
-    PUNITTEST_ENTRY Entry = UnitTest_FindEntry(Name);
+    PCUNITTEST_ENTRY Entry = UnitTest_FindEntry(Name);
 
     if (Entry == NULL)
     {
@@ -178,7 +195,7 @@ INT NTAPI UnitTest_Main(
     _In_reads_(argc) _Pre_z_ wchar_t** argv)
 {
     UNITTEST_RESULT Result;
-    PUNITTEST_ENTRY Entry;
+    PCUNITTEST_ENTRY Entry;
 
     UnitTest_PrintTitle();
     if (argc > 1)
