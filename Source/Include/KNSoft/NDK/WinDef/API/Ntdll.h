@@ -890,6 +890,13 @@ RtlGetUserPreferredUILanguages(
     _Out_writes_opt_z_(*LanguagesCchSize) PWSTR LanguagesBuffer,
     _Inout_ PULONG LanguagesCchSize);
 
+NTSYSAPI
+VOID
+NTAPI
+RtlGetCallersAddress(
+    _Out_ PVOID* CallersAddress,
+    _Out_ PVOID* CallersCaller);
+
 #pragma endregion
 
 #pragma endregion

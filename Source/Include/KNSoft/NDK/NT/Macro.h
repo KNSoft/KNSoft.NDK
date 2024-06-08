@@ -4,6 +4,9 @@
 
 #pragma region Pointer and Size
 
+#define RtlOffsetToPointer(B,O) ((PCHAR)(((PCHAR)(B)) + ((ULONG_PTR)(O))))
+#define RtlPointerToOffset(B,P) ((ULONG)(((PCHAR)(P)) - ((PCHAR)(B))))
+
 #define Add2Ptr(P,I) ((PVOID)((PUCHAR)(P) + (I)))
 #define PtrOffset(B,O) ((ULONG)((ULONG_PTR)(O) - (ULONG_PTR)(B)))
 
