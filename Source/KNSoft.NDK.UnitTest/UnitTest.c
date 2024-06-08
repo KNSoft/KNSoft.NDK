@@ -126,7 +126,7 @@ VOID NTAPI UnitTest_RunEntry(
     Entry->Proc(Result);
     NtQueryPerformanceCounter(&PrefCounter2, &PrefFreq);
 
-    /* Convert to microseconds before dividing For avoiding loss-of-precision */
+    /* Convert to microseconds before dividing for avoiding loss-of-precision */
     ElapsedMicroseconds = (ULONGLONG)PrefCounter2.QuadPart - (ULONGLONG)PrefCounter1.QuadPart;
     ElapsedMicroseconds *= 1000000;
     ElapsedMicroseconds = (ULONGLONG)((ElapsedMicroseconds / (DOUBLE)PrefFreq.QuadPart) + (DOUBLE)0.5);
@@ -208,28 +208,30 @@ INT NTAPI UnitTest_Main(
         {
             if (argc == 2)
             {
-                UnitTest_RunAll(&Result);
-                goto _Exit;
+                if (UnitTest_RunAll(&Result) == 0)
+                {
+                    UnitTest_Print("No test entry found\n\n");
+                    return (INT)STATUS_NOT_FOUND;
+                }
+                return Result.Fail;
             } else if (argc == 3)
             {
                 Entry = UnitTest_FindEntry(argv[2]);
                 if (Entry == NULL)
                 {
-                    UnitTest_PrintF("Test \"%ls\" not found.\n\n", argv[2]);
+                    UnitTest_PrintF("Test \"%ls\" not found\n\n", argv[2]);
                     UnitTest_PrintList();
                     return (INT)STATUS_NOT_FOUND;
                 }
                 UnitTest_RunEntry(Entry, &Result);
-                goto _Exit;
+                return Result.Fail;
             }
         }
     }
-    UnitTest_Print("Invalid parameter.\n\n");
+
+    UnitTest_Print("Invalid parameter\n\n");
     UnitTest_PrintUsage();
     return (INT)STATUS_INVALID_PARAMETER;
-
-_Exit:
-    return Result.Fail;
 }
 
 #pragma endregion
@@ -254,8 +256,7 @@ static VOID __cdecl UnitTest_PrintFV(
     _In_z_ _Printf_format_string_ PCSTR Format,
     _In_ va_list ArgList)
 {
-
-    CHAR sz[512 + 1];
+    CHAR sz[512 + 1]; // Same limitation as DbgPrint 
     ULONG u, uNew;
     HANDLE hStdOut;
     PSTR psz;
@@ -278,10 +279,10 @@ static VOID __cdecl UnitTest_PrintFV(
     /* Allocate buffer if sz too small */
     if (u >= ARRAYSIZE(sz))
     {
-        psz = RtlAllocateHeap(NtGetProcessHeap(), 0, u + 1);
+        psz = RtlAllocateHeap(NtGetProcessHeap(), 0, (SIZE_T)u + 1);
         if (psz != NULL)
         {
-            uNew = StrSafe_CchVPrintfA(psz, u + 1, Format, ArgList);
+            uNew = StrSafe_CchVPrintfA(psz, (SIZE_T)u + 1, Format, ArgList);
             if (uNew > 0 && uNew < u)
             {
                 u = uNew;

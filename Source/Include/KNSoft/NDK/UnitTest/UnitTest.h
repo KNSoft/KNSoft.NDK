@@ -96,7 +96,7 @@ VOID __cdecl UnitTest_FormatMessage(
 
 /*
  * Define a test entry (function)
- * 
+ *
  * FIXME: _KNSoft_NDK_UnitTest_Entry_Ptr_##Name may be optimized out,
  * add "_KNSoft_NDK_UnitTest_Entry_Ptr_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_Ptr_##Name;"
  * is a hack fix but seems works.
