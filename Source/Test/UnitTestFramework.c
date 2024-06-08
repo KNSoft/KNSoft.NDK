@@ -10,7 +10,7 @@ TEST_DECL(UnitTestFramework)
 
     UnitTest_Print("The following tests verify the unit test framework itself, so fail and skip outputs are expected\n");
 
-    /* Totally 5 pass, 4 fail, 3 skip */
+    /* Totally 5 pass, 6 fail, 3 skip */
     TEST_OK(TRUE);
     TEST_OK(1 == 1);
     TEST_OK(1 != 2);
@@ -21,6 +21,8 @@ TEST_DECL(UnitTestFramework)
     TEST_OK(1 != 1);
     TEST_OK(1 == 2);
     TEST_RESULT(Fail);
+    TEST_FAIL("Fail");
+    TEST_FAIL();
 
     TEST_SKIP("Skip");
     TEST_SKIP();
@@ -32,6 +34,6 @@ TEST_DECL(UnitTestFramework)
     RtlZeroMemory(TEST_PARAMETER_RESULT, sizeof(*TEST_PARAMETER_RESULT));
 
     TEST_OK(Result.Pass == 5);
-    TEST_OK(Result.Fail == 4);
+    TEST_OK(Result.Fail == 6);
     TEST_OK(Result.Skip == 3);
 }

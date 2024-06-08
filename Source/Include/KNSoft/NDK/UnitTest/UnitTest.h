@@ -117,4 +117,7 @@ VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT)
 /* Skip and print message */
 #define TEST_SKIP(Format, ...) (TEST_RESULT(Skip), UnitTest_FormatMessage("%hs (Line %d) Skipped: " Format "\n", __FILE__, __LINE__, ##__VA_ARGS__))
 
+/* Fail and print message */
+#define TEST_FAIL(Format, ...) (TEST_RESULT(Fail), UnitTest_FormatMessage("%hs (Line %d) Failed: " Format "\n", __FILE__, __LINE__, ##__VA_ARGS__))
+
 EXTERN_C_END
