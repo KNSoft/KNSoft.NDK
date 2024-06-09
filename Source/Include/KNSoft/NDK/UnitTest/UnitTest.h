@@ -36,7 +36,10 @@ typedef struct _UNITTEST_RESULT
     ULONGLONG Elapsed; // in μs (us, microsecond)
 } UNITTEST_RESULT, *PUNITTEST_RESULT;
 
-typedef VOID NTAPI FN_UNITTEST_PROC(UNITTEST_RESULT*);
+typedef VOID NTAPI FN_UNITTEST_PROC(
+    UNITTEST_RESULT* Result,
+    _In_ INT ArgC,
+    _In_reads_(ArgC) _Pre_z_ PCWSTR* ArgV);
 
 typedef struct _UNITTEST_ENTRY
 {
@@ -58,7 +61,9 @@ PCUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
 
 VOID NTAPI UnitTest_RunEntry(
     _In_ PCUNITTEST_ENTRY Entry,
-    _Out_ PUNITTEST_RESULT Result);
+    _Out_ PUNITTEST_RESULT Result,
+    _In_ INT ArgC,
+    _In_reads_(ArgC) _Pre_z_ PCWSTR* ArgV);
 
 ULONG NTAPI UnitTest_RunAll(
     _Out_ PUNITTEST_RESULT Result);
@@ -66,7 +71,9 @@ ULONG NTAPI UnitTest_RunAll(
 _Success_(return != FALSE)
 BOOL NTAPI UnitTest_Run(
     _In_z_ PCWSTR Name,
-    _Out_ PUNITTEST_RESULT Result);
+    _Out_ PUNITTEST_RESULT Result,
+    _In_ INT ArgC,
+    _In_reads_(ArgC) _Pre_z_ PCWSTR* ArgV);
 
 _Success_(return == 0)
 INT NTAPI UnitTest_Main(
@@ -93,6 +100,8 @@ VOID __cdecl UnitTest_FormatMessage(
 #pragma section(".NDK$UTB", long, read)
 
 #define TEST_PARAMETER_RESULT _KNSoft_NDK_UnitTest_Result
+#define TEST_PARAMETER_ARGC _KNSoft_NDK_UnitTest_ArgC
+#define TEST_PARAMETER_ARGV _KNSoft_NDK_UnitTest_ArgV
 
 /*
  * Define a test entry (function)
@@ -102,11 +111,11 @@ VOID __cdecl UnitTest_FormatMessage(
  * is a hack fix but seems works.
  */
 #define TEST_DECL(Name)\
-VOID NTAPI Name(UNITTEST_RESULT*);\
+VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV);\
 static UNITTEST_ENTRY const _KNSoft_NDK_UnitTest_Entry_##Name = { Name, RTL_CONSTANT_STRING(L###Name) };\
 static __declspec(allocate(".NDK$UTB")) PCUNITTEST_ENTRY _KNSoft_NDK_UnitTest_Entry_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_##Name;\
 static volatile PCUNITTEST_ENTRY* _KNSoft_NDK_UnitTest_Entry_Ptr_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_Ptr_##Name;\
-VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT)
+VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV)
 
 /* Increase count of test result, parameter can be Pass/Fail/Skip */
 #define TEST_RESULT(r) (TEST_PARAMETER_RESULT->r++)

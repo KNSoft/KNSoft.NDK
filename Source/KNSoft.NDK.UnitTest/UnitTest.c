@@ -32,14 +32,14 @@ static VOID UnitTest_PrintTitle()
 
 static VOID UnitTest_PrintUsage()
 {
-    UnitTest_Print("Usage: Test_Program [-Run | -List] [TestName]\n\n"
+    UnitTest_Print("Usage: Test_Program [-Run | -List] [TestName] [Parameters]\n\n"
                    "e.g.,\n\n"
                    "    Test_Program -List\n"
                    "        List all tests.\n\n"
                    "    Test_Program -Run\n"
                    "        Run all tests.\n\n"
-                   "    Test_Program -Run TestName\n"
-                   "        Run the test that named TestName.\n\n"
+                   "    Test_Program -Run TestName -Switch1 -Switch2\n"
+                   "        Run the test that named TestName with two input parameters.\n\n"
                    "Exit with the count of failed tests, or 0 if no test failed.\n\n");
 }
 
@@ -113,7 +113,9 @@ PCUNITTEST_ENTRY NTAPI UnitTest_FindEntry(
 
 VOID NTAPI UnitTest_RunEntry(
     _In_ PCUNITTEST_ENTRY Entry,
-    _Out_ PUNITTEST_RESULT Result)
+    _Out_ PUNITTEST_RESULT Result,
+    _In_ INT ArgC,
+    _In_reads_(ArgC) _Pre_z_ PCWSTR* ArgV)
 {
     LARGE_INTEGER PrefCounter1, PrefCounter2, PrefFreq;
     ULONGLONG ElapsedMicroseconds;
@@ -123,7 +125,7 @@ VOID NTAPI UnitTest_RunEntry(
 
     /* NtQueryPerformanceCounter writes frequency after counter */
     NtQueryPerformanceCounter(&PrefCounter1, NULL);
-    Entry->Proc(Result);
+    Entry->Proc(Result, ArgC, ArgV);
     NtQueryPerformanceCounter(&PrefCounter2, &PrefFreq);
 
     /* Convert to microseconds before dividing for avoiding loss-of-precision */
@@ -153,7 +155,7 @@ ULONG NTAPI UnitTest_RunAll(
     {
         if (*Entry != NULL)
         {
-            UnitTest_RunEntry(*Entry, &EntryResult);
+            UnitTest_RunEntry(*Entry, &EntryResult, 0, NULL);
             Result->Pass += EntryResult.Pass;
             Result->Fail += EntryResult.Fail;
             Result->Skip += EntryResult.Skip;
@@ -176,7 +178,9 @@ ULONG NTAPI UnitTest_RunAll(
 _Success_(return != FALSE)
 BOOL NTAPI UnitTest_Run(
     _In_z_ PCWSTR Name,
-    _Out_ PUNITTEST_RESULT Result)
+    _Out_ PUNITTEST_RESULT Result,
+    _In_ INT ArgC,
+    _In_reads_(ArgC) _Pre_z_ PCWSTR* ArgV)
 {
     PCUNITTEST_ENTRY Entry = UnitTest_FindEntry(Name);
 
@@ -185,7 +189,7 @@ BOOL NTAPI UnitTest_Run(
         return FALSE;
     }
 
-    UnitTest_RunEntry(Entry, Result);
+    UnitTest_RunEntry(Entry, Result, ArgC, ArgV);
     return TRUE;
 }
 
@@ -214,7 +218,7 @@ INT NTAPI UnitTest_Main(
                     return (INT)STATUS_NOT_FOUND;
                 }
                 return Result.Fail;
-            } else if (argc == 3)
+            } else if (argc >= 3)
             {
                 Entry = UnitTest_FindEntry(argv[2]);
                 if (Entry == NULL)
@@ -223,7 +227,7 @@ INT NTAPI UnitTest_Main(
                     UnitTest_PrintList();
                     return (INT)STATUS_NOT_FOUND;
                 }
-                UnitTest_RunEntry(Entry, &Result);
+                UnitTest_RunEntry(Entry, &Result, argc - 3, argv + 3);
                 return Result.Fail;
             }
         }
