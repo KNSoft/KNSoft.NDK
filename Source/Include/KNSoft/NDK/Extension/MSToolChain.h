@@ -4,7 +4,7 @@
 
 #pragma region Disable Microsoft extension warnings
 
-// nonstandard extension used: zero-sized array in struct/union
+// Nonstandard extension used: zero-sized array in struct/union
 #pragma warning(disable: 4200)
 
 #pragma endregion

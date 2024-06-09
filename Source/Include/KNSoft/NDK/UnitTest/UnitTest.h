@@ -19,7 +19,6 @@
  * {
  *     return UnitTest_Main(argc, argv);
  * }
- *
  */
 
 #pragma once
@@ -103,18 +102,18 @@ VOID __cdecl UnitTest_FormatMessage(
 #define TEST_PARAMETER_ARGC _KNSoft_NDK_UnitTest_ArgC
 #define TEST_PARAMETER_ARGV _KNSoft_NDK_UnitTest_ArgV
 
-/*
- * Define a test entry (function)
- *
- * FIXME: _KNSoft_NDK_UnitTest_Entry_Ptr_##Name may be optimized out,
- * add "_KNSoft_NDK_UnitTest_Entry_Ptr_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_Ptr_##Name;"
- * is a hack fix but seems works.
- */
+#if _WIN64
+#define TEST_C_VARIABLE_DECORATOR
+#else
+#define TEST_C_VARIABLE_DECORATOR "_"
+#endif
+
+/* Define a test entry (function) */
 #define TEST_DECL(Name)\
 VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV);\
 static UNITTEST_ENTRY const _KNSoft_NDK_UnitTest_Entry_##Name = { Name, RTL_CONSTANT_STRING(L###Name) };\
-static __declspec(allocate(".NDK$UTB")) PCUNITTEST_ENTRY _KNSoft_NDK_UnitTest_Entry_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_##Name;\
-static volatile PCUNITTEST_ENTRY* _KNSoft_NDK_UnitTest_Entry_Ptr_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_Ptr_##Name;\
+__declspec(allocate(".NDK$UTB")) PCUNITTEST_ENTRY _KNSoft_NDK_UnitTest_Entry_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_##Name;\
+__pragma(comment(linker, "/include:"TEST_C_VARIABLE_DECORATOR"_KNSoft_NDK_UnitTest_Entry_Ptr_"#Name))\
 VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV)
 
 /* Increase count of test result, parameter can be Pass/Fail/Skip */

@@ -164,14 +164,16 @@ ULONG NTAPI UnitTest_RunAll(
         }
     }
 
-    UnitTest_FormatMessage("Totally %lu test entries ran, %lu tests executed (%lu passed, %lu failed, %lu skipped) in %llu ms\n",
+    if (Ret > 0)
+    {
+        UnitTest_FormatMessage("Totally %lu test entries ran, %lu tests executed (%lu passed, %lu failed, %lu skipped) in %llu ms\n",
                            Ret,
                            Result->Pass + Result->Fail + Result->Skip,
                            Result->Pass,
                            Result->Fail,
                            Result->Skip,
                            (ULONGLONG)((Result->Elapsed / 1000.0F) + 0.5F));
-
+    }
     return Ret;
 }
 
