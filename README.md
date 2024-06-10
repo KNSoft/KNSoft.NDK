@@ -36,8 +36,11 @@ NuGet package [KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK) includes a
 
 ### Details
 
-Reference following header and library on demand:
+The following features are not enabled by default, reference corresponding headers and libraries on demand:
 
+- Specifications
+  - CPUID: [CPUID.h](./Source/Include/KNSoft/NDK/Extension/CPUID.h)
+  - SMBIOS: [SMBIOS.h](./Source/Include/KNSoft/NDK/Extension/SMBIOS.h)
 - Ntdll Hash API (`(A_SHA/MD4/MD5)(Init/Update/Final)`)
   - [Ntdll.Hash.h](./Source/Include/KNSoft/NDK/WinDef/API/Ntdll.Hash.h)
   - KNSoft.NDK.Ntdll.Hash.lib (Generated from [KNSoft.NDK.Ntdll.Hash.xml](./Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.Hash.xml))
@@ -49,14 +52,12 @@ Reference following header and library on demand:
 - Safe string functions (different from `strsafe.h` in Windows SDK)
   - [StrSafe.h](./Source/Include/KNSoft/NDK/Extension/StrSafe.h)
 
-To include specified feature, include corresponding header (e.g. [SMBIOS.h](./Source/Include/KNSoft/NDK/Extension/SMBIOS.h) for SMBIOS Specification) instead of the whole [NDK.h](./Source/Include/KNSoft/NDK/NDK.h) is better. To exclude specified feature included by default, define following macros:
+The following features are enabled by default, can be excluded by defining corresponding macro:
 
 | Macro | Exclude feature |
 | ---- | ---- |
 | _KNSOFT_NDK_NO_EXTENSION | Addendum or extension macros and definitions |
-| _KNSOFT_NDK_NO_EXTENSION_CPUID | CPUID Specification |
-| _KNSOFT_NDK_NO_EXTENSION_MSTOOLCHAIN | Microsoft Tool chain Specification |
-| _KNSOFT_NDK_NO_EXTENSION_SMBIOS | SMBIOS Specification |
+| _KNSOFT_NDK_NO_EXTENSION_MSTOOLCHAIN | Microsoft Tool Chain Specification |
 
 ## Compatibility
 

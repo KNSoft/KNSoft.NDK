@@ -32,14 +32,6 @@
 #include "Extension/Extension.h"
 #endif
 
-#ifndef _KNSOFT_NDK_NO_EXTENSION_CPUID
-#include "Extension/CPUID.h"
-#endif
-
 #ifndef _KNSOFT_NDK_NO_EXTENSION_MSTOOLCHAIN
 #include "Extension/MSToolChain.h"
-#endif
-
-#ifndef _KNSOFT_NDK_NO_EXTENSION_SMBIOS
-#include "Extension/SMBIOS.h"
 #endif
