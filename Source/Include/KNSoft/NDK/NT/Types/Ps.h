@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../MinDef.h"
-
+#include "Basic.h"
 #include "Ke.h"
 
 typedef enum _PROCESSINFOCLASS

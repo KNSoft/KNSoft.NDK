@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "../MinDef.h"
-
 #include "Basic.h"
 
 #include "Ke.h"
@@ -13,7 +11,7 @@
 #include "Ps.h"
 #include "Rtl.h"
 #include "Ldr.h"
-#include "Reg.h"
+#include "Cm.h"
 #include "Ex.h"
 
 #include "Sys.h"

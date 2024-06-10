@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "../NT/Extension.h"
+#include "../Extension/MSToolChain.h"
 
 // nonstandard extension used: zero-sized array in struct/union
 #pragma warning(disable: 4200)

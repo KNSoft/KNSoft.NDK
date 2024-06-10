@@ -53,7 +53,7 @@
 #define NtCurrentSession() ((HANDLE)(LONG_PTR)-3)
 #define ZwCurrentSession() NtCurrentSession()
 
-#if defined(_KNSOFT_NDK_EXTENSION)
+#if defined(_KNSOFT_NDK_NT_EXTENSION)
 
 #define NtCurrentProcessToken()  ((HANDLE)(LONG_PTR)-4)
 #define ZwCurrentProcessToken() NtCurrentProcessToken()
@@ -62,7 +62,7 @@
 #define NtCurrentThreadEffectiveToken() ((HANDLE)(LONG_PTR)-6)
 #define ZwCurrentThreadEffectiveToken() NtCurrentThreadEffectiveToken()
 
-#endif /* defined(_KNSOFT_NDK_EXTENSION) */
+#endif /* defined(_KNSOFT_NDK_NT_EXTENSION) */
 
 #define SERVERNAME_CURRENT ((HANDLE)NULL)
 

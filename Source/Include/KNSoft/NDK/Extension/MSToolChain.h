@@ -9,7 +9,7 @@
 
 #pragma endregion
 
-#pragma region MSVC
+#pragma region MSVC and WinSDK
 
 EXTERN_C_START
 
@@ -34,6 +34,13 @@ EXTERN_C_END
 #define _A2W(quote) __A2W(quote)
 #define __A2W(quote) L##quote
 
+#define DECLSPEC_EXPORT __declspec(dllexport)
+typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
+
+// Makes a DWORD value by LOWORD and HIWORD
+#define MAKEDWORD(l, h) ((DWORD)(((WORD)(((DWORD_PTR)(l)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(h)) & 0xffff))) << 16))
+#define MAKEQWORD(l, h) ((QWORD)(((DWORD)(((DWORD_PTR)(l)) & 0xffffffff)) | ((QWORD)((DWORD)(((DWORD_PTR)(h)) & 0xffffffff))) << 32))
+
 #pragma endregion
 
 #pragma region MSBuild
@@ -52,6 +59,6 @@ EXTERN_C_END
 #define MSB_CONFIGURATION "Release"
 #endif
 
-#define MSB_LIB_PATH(LibName) (MSB_PLATFORMTARGET "/" MSB_CONFIGURATION "/" ##LibName)
+#define MSB_LIB_PATH(LibName) (MSB_PLATFORMTARGET"/"MSB_CONFIGURATION"/"##LibName)
 
 #pragma endregion

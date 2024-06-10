@@ -1,10 +1,8 @@
 ﻿#include "../Include/KNSoft/NDK/UnitTest/UnitTest.h"
 
 #include "../Include/KNSoft/NDK/Extension/StrSafe.h"
-#include "../Include/KNSoft/NDK/WinDef/API/Ntdll.h"
+#include "../Include/KNSoft/NDK/Win32/API/Ntdll.h"
 #include "../Include/KNSoft/NDK/NT/Extension.h"
-
-#include <dpfilter.h>
 
 #pragma region Entries
 

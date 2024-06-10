@@ -13,7 +13,7 @@
 #endif
 #define MM_LOWEST_USER_ADDRESS ((PVOID)0x10000)
 
-#if defined(_KNSOFT_NDK_EXTENSION)
+#if defined(_KNSOFT_NDK_NT_EXTENSION)
 
 /* 
  * ASLR initialization constants, see:
@@ -37,7 +37,7 @@
 
 #endif
 
-#endif /* defined(_KNSOFT_NDK_EXTENSION) */
+#endif /* defined(_KNSOFT_NDK_NT_EXTENSION) */
 
 typedef enum _SECTION_INHERIT
 {

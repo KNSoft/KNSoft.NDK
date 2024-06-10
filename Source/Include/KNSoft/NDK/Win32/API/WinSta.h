@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Addendum/winsta.h"
+#include "../Def/winsta.h"
 
 EXTERN_C_START
 

@@ -13,42 +13,21 @@
     <Filter Include="NT\Private">
       <UniqueIdentifier>{2e85c850-9b91-4075-b52c-19c59f8872c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WinDef">
+    <Filter Include="Win32">
       <UniqueIdentifier>{347e9f2f-faac-4fa8-b572-16ecdf28ed59}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WinDef\Addendum">
-      <UniqueIdentifier>{b16b103b-f035-4094-a5ed-607db33d7845}</UniqueIdentifier>
+    <Filter Include="Win32\Def">
+      <UniqueIdentifier>{9f7bef88-765d-47ea-93a4-dbd29859e6e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WinDef\WinAPI">
+    <Filter Include="Win32\API">
       <UniqueIdentifier>{b8cf96b3-56aa-4366-920a-77b5f9d68ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NT\API">
+      <UniqueIdentifier>{c2d448d8-eace-41a6-a2cb-f83cd2106c72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\Kernel32.h">
-      <Filter>WinDef\WinAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\Ntdll.h">
-      <Filter>WinDef\WinAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\Ntdll.Hash.h">
-      <Filter>WinDef\WinAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\User32.h">
-      <Filter>WinDef\WinAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\API\WinSta.h">
-      <Filter>WinDef\WinAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\Addendum\CommCtrl.h">
-      <Filter>WinDef\Addendum</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\Addendum\winsta.h">
-      <Filter>WinDef\Addendum</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\WinDef\Addendum\WinUser.h">
-      <Filter>WinDef\Addendum</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Extension.h">
       <Filter>NT</Filter>
     </ClInclude>
@@ -91,7 +70,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Types\Ps.h">
       <Filter>NT\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\Types\Reg.h">
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Types\Cm.h">
       <Filter>NT\Types</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Types\Rtl.h">
@@ -130,16 +109,103 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Extension\StrSafe.h">
       <Filter>Extension</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\CommCtrl.h">
+      <Filter>Win32\Def</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\winsta.h">
+      <Filter>Win32\Def</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinUser.h">
+      <Filter>Win32\Def</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Hash.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\User32.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\WinSta.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\API.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Csr.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Ldr.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Dbg.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.String.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Process.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Synchronization.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Path.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Heap.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Security.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Bitmap.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Random.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Mm.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Ob.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Ps.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Fs.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Se.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Cm.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Sys.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Wow.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Ex.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.WinAPI.xml">
-      <Filter>WinDef\WinAPI</Filter>
+      <Filter>Win32\API</Filter>
     </Precomp4C_LibCreate>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">
-      <Filter>WinDef\WinAPI</Filter>
+      <Filter>Win32\API</Filter>
     </Precomp4C_LibCreate>
   </ItemGroup>
 </Project>

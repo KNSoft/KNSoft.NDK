@@ -56,6 +56,32 @@ typedef struct _RTL_HEAP_PARAMETERS
     SIZE_T Reserved[2];
 } RTL_HEAP_PARAMETERS, *PRTL_HEAP_PARAMETERS;
 
+typedef struct _RTL_HEAP_WALK_ENTRY
+{
+    PVOID DataAddress;
+    SIZE_T DataSize;
+    UCHAR OverheadBytes;
+    UCHAR SegmentIndex;
+    USHORT Flags;
+    union
+    {
+        struct
+        {
+            SIZE_T Settable;
+            USHORT TagIndex;
+            USHORT AllocatorBackTraceIndex;
+            ULONG Reserved[2];
+        } Block;
+        struct
+        {
+            ULONG_PTR CommittedSize;
+            ULONG_PTR UnCommittedSize;
+            PVOID FirstEntry;
+            PVOID LastEntry;
+        } Segment;
+    };
+} RTL_HEAP_WALK_ENTRY, * PRTL_HEAP_WALK_ENTRY;
+
 typedef enum _RTL_MEMORY_TYPE
 {
     MemoryTypePaged,
@@ -166,7 +192,7 @@ typedef struct _RTL_DRIVE_LETTER_CURDIR
     STRING DosPath;
 } RTL_DRIVE_LETTER_CURDIR, *PRTL_DRIVE_LETTER_CURDIR;
 
-#if defined(_KNSOFT_NDK_EXTENSION)
+#if defined(_KNSOFT_NDK_NT_EXTENSION)
 
 typedef struct _RTL_DRIVE_LETTER_CURDIR64
 {
@@ -184,7 +210,7 @@ typedef struct _RTL_DRIVE_LETTER_CURDIR32
     STRING32 DosPath;
 } RTL_DRIVE_LETTER_CURDIR32, *PRTL_DRIVE_LETTER_CURDIR32;
 
-#endif /* defined(_KNSOFT_NDK_EXTENSION) */
+#endif /* defined(_KNSOFT_NDK_NT_EXTENSION) */
 
 #pragma endregion
 
@@ -196,7 +222,7 @@ typedef struct _RTL_BITMAP
     PULONG Buffer;                          // Pointer to the bit map itself
 } RTL_BITMAP, *PRTL_BITMAP;
 
-#if defined(_KNSOFT_NDK_EXTENSION)
+#if defined(_KNSOFT_NDK_NT_EXTENSION)
 
 typedef struct _RTL_BITMAP64
 {
@@ -210,7 +236,7 @@ typedef struct _RTL_BITMAP32
     ULONG* POINTER_32 Buffer;
 } RTL_BITMAP32, *PRTL_BITMAP32;
 
-#endif /* defined(_KNSOFT_NDK_EXTENSION) */
+#endif /* defined(_KNSOFT_NDK_NT_EXTENSION) */
 
 #pragma endregion
 
@@ -259,7 +285,7 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS
     ULONG HeapMemoryTypeMask;
 } RTL_USER_PROCESS_PARAMETERS, *PRTL_USER_PROCESS_PARAMETERS;
 
-#if defined(_KNSOFT_NDK_EXTENSION)
+#if defined(_KNSOFT_NDK_NT_EXTENSION)
 
 typedef struct _RTL_USER_PROCESS_PARAMETERS64
 {
@@ -347,11 +373,11 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32
     ULONG HeapMemoryTypeMask;
 } RTL_USER_PROCESS_PARAMETERS32, *PRTL_USER_PROCESS_PARAMETERS32;
 
-#endif /* defined(_KNSOFT_NDK_EXTENSION) */
+#endif /* defined(_KNSOFT_NDK_NT_EXTENSION) */
 
 #pragma endregion
 
-#if defined(_KNSOFT_NDK_EXTENSION)
+#if defined(_KNSOFT_NDK_NT_EXTENSION)
 
 #pragma region RTL_BALANCED_NODE(64/32)
 
@@ -454,4 +480,4 @@ struct _RTL_CRITICAL_SECTION32
 
 #pragma endregion
 
-#endif /* defined(_KNSOFT_NDK_EXTENSION) */
+#endif /* defined(_KNSOFT_NDK_NT_EXTENSION) */

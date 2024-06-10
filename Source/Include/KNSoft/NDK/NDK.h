@@ -11,15 +11,15 @@
 /* Windows.h */
 
 #include <Windows.h>
-#include "WinDef/Addendum/WinUser.h"
-#include "WinDef/Addendum/winsta.h"
+#include "Win32/Def/WinUser.h"
+#include "Win32/Def/winsta.h"
 
 /* APIs */
 
-#include "WinDef/API/Ntdll.h"
-#include "WinDef/API/Kernel32.h"
-#include "WinDef/API/User32.h"
-#include "WinDef/API/WinSta.h"
+#include "Win32/API/Ntdll.h"
+#include "Win32/API/Kernel32.h"
+#include "Win32/API/User32.h"
+#include "Win32/API/WinSta.h"
 
 /* Additional headers */
 
