@@ -81,6 +81,6 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 LdrUnregisterDllNotification(
-  _In_ PVOID Cookie);
+    _In_ PVOID Cookie);
 
 EXTERN_C_END

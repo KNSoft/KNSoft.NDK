@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#ifdef _KNSOFT_NDK_NO_EXTENSION_MSTOOLCHAIN
+#pragma message("KNSoft.NDK: MSToolChain.h is included but _KNSOFT_NDK_NO_EXTENSION_MSTOOLCHAIN is defined.")
+#endif
+
 #include "../NT/MinDef.h"
 
 #pragma region Disable Microsoft extension warnings
@@ -40,6 +44,10 @@ typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
 // Makes a DWORD value by LOWORD and HIWORD
 #define MAKEDWORD(l, h) ((DWORD)(((WORD)(((DWORD_PTR)(l)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(h)) & 0xffff))) << 16))
 #define MAKEQWORD(l, h) ((QWORD)(((DWORD)(((DWORD_PTR)(l)) & 0xffffffff)) | ((QWORD)((DWORD)(((DWORD_PTR)(h)) & 0xffffffff))) << 32))
+
+#if defined(_DEBUG) && !defined(DBG)
+#define DBG 1
+#endif
 
 #pragma endregion
 

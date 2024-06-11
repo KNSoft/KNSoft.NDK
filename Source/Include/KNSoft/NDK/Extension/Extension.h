@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#ifdef _KNSOFT_NDK_NO_EXTENSION
+#pragma message("KNSoft.NDK: Extension.h is included but _KNSOFT_NDK_NO_EXTENSION is defined.")
+#endif
+
 #include "../NT/MinDef.h"
 
 // Gets equality of two value after masked

@@ -42,7 +42,7 @@ NtOpenThreadToken(
     _Out_ PHANDLE TokenHandle);
 
 _When_(TokenInformationClass == TokenAccessInformation,
-       _At_(TokenInformationLength, _In_range_(>= , sizeof(TOKEN_ACCESS_INFORMATION)))
+       _At_(TokenInformationLength, _In_range_(>=, sizeof(TOKEN_ACCESS_INFORMATION)))
 )
 _Must_inspect_result_
 NTSYSCALLAPI
@@ -103,4 +103,3 @@ NtAccessCheck(
     _Out_ PNTSTATUS AccessStatus);
 
 EXTERN_C_END
-#pragma once

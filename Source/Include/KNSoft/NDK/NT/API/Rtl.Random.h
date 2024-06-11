@@ -5,7 +5,7 @@
 EXTERN_C_START
 
 _IRQL_requires_max_(APC_LEVEL)
-_Ret_range_(<= , MAXLONG)
+_Ret_range_(<=, MAXLONG)
 NTSYSAPI
 ULONG
 NTAPI
@@ -13,7 +13,7 @@ RtlRandom(
     _Inout_ PULONG Seed);
 
 _IRQL_requires_max_(APC_LEVEL)
-_Ret_range_(<= , MAXLONG)
+_Ret_range_(<=, MAXLONG)
 NTSYSAPI
 ULONG
 NTAPI

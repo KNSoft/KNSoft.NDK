@@ -242,25 +242,11 @@ INT NTAPI UnitTest_Main(
 
 #pragma region Utils
 
-VOID NTAPI UnitTest_PrintEx(
-    _In_reads_bytes_(TextSize) PCCH Text,
-    _In_ ULONG TextSize)
-{
-    HANDLE StdOutHandle;
-    IO_STATUS_BLOCK IoStatusBlock;
-
-    StdOutHandle = NtCurrentPeb()->ProcessParameters->StandardOutput;
-    if (StdOutHandle != NULL)
-    {
-        NtWriteFile(StdOutHandle, NULL, NULL, NULL, &IoStatusBlock, (PVOID)Text, TextSize, NULL, NULL);
-    }
-}
-
 static VOID __cdecl UnitTest_PrintFV(
     _In_z_ _Printf_format_string_ PCSTR Format,
     _In_ va_list ArgList)
 {
-    CHAR sz[512 + 1]; // Same limitation as DbgPrint 
+    CHAR sz[512 + 1]; // Same limitation as DbgPrint
     ULONG u, uNew;
     HANDLE hStdOut;
     PSTR psz;
@@ -306,6 +292,20 @@ _Print_Stdout:
     if (psz != sz)
     {
         RtlFreeHeap(NtGetProcessHeap(), 0, psz);
+    }
+}
+
+VOID NTAPI UnitTest_PrintEx(
+    _In_reads_bytes_(TextSize) PCCH Text,
+    _In_ ULONG TextSize)
+{
+    HANDLE StdOutHandle;
+    IO_STATUS_BLOCK IoStatusBlock;
+
+    StdOutHandle = NtCurrentPeb()->ProcessParameters->StandardOutput;
+    if (StdOutHandle != NULL)
+    {
+        NtWriteFile(StdOutHandle, NULL, NULL, NULL, &IoStatusBlock, (PVOID)Text, TextSize, NULL, NULL);
     }
 }
 

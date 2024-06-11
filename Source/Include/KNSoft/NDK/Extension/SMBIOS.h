@@ -6,7 +6,9 @@
 
 #pragma once
 
-#include "../Extension/MSToolChain.h"
+#include "../NT/MinDef.h"
+
+typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
 
 // nonstandard extension used: zero-sized array in struct/union
 #pragma warning(disable: 4200)

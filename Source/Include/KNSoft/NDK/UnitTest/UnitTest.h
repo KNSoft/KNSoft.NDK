@@ -123,9 +123,9 @@ VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_
 #define TEST_OK(Expr) (Expr ? TEST_RESULT(Pass) : (TEST_RESULT(Fail), UnitTest_FormatMessage("%hs (Line %d) Assertion failed: %hs\n", __FILE__, __LINE__, #Expr)))
 
 /* Skip and print message */
-#define TEST_SKIP(Format, ...) (TEST_RESULT(Skip), UnitTest_FormatMessage("%hs (Line %d) Skipped: " Format "\n", __FILE__, __LINE__, ##__VA_ARGS__))
+#define TEST_SKIP(Format, ...) (TEST_RESULT(Skip), UnitTest_FormatMessage("%hs (Line %d) Skipped: "Format"\n", __FILE__, __LINE__, ##__VA_ARGS__))
 
 /* Fail and print message */
-#define TEST_FAIL(Format, ...) (TEST_RESULT(Fail), UnitTest_FormatMessage("%hs (Line %d) Failed: " Format "\n", __FILE__, __LINE__, ##__VA_ARGS__))
+#define TEST_FAIL(Format, ...) (TEST_RESULT(Fail), UnitTest_FormatMessage("%hs (Line %d) Failed: "Format"\n", __FILE__, __LINE__, ##__VA_ARGS__))
 
 EXTERN_C_END

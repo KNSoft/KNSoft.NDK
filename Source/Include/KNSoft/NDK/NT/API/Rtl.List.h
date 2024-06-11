@@ -238,7 +238,6 @@ RemoveTailList(
     return Entry;
 }
 
-
 FORCEINLINE
 VOID
 InsertTailList(
