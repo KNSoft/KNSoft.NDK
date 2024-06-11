@@ -99,6 +99,15 @@ NTAPI
 RtlRaiseStatus(
     _In_ NTSTATUS Status);
 
+DECLSPEC_NORETURN
+FORCEINLINE
+VOID
+RtlFailFast(
+    _In_ ULONG Code)
+{
+    __fastfail(Code);
+}
+
 NTSYSAPI
 VOID
 NTAPI

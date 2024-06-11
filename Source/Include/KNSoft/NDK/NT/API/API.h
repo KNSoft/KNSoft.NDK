@@ -15,5 +15,6 @@
 #include "Rtl.Path.h"
 #include "Rtl.Heap.h"
 #include "Rtl.Process.h"
+#include "Rtl.List.h"
 #include "Rtl.Security.h"
 #include "Rtl.Synchronization.h"

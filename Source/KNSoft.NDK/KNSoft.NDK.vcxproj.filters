@@ -196,6 +196,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Ex.h">
       <Filter>NT\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.List.h">
+      <Filter>NT\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
