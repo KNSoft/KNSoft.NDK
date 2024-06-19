@@ -199,9 +199,18 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.List.h">
       <Filter>NT\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Bitmap.inl">
+      <Filter>NT\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\Include\KNSoft\NDK\NT\API\Rtl.Security.inl">
+      <Filter>NT\API</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\API\Rtl.Synchronization.inl">
+      <Filter>NT\API</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.WinAPI.xml">

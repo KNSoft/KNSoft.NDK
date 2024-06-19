@@ -35,11 +35,13 @@ RtlDeleteCriticalSection(
 
 #pragma region One-Time initialization
 
+#ifndef _KNSOFT_NDK_NT_INLINE
 NTSYSAPI
 VOID
 NTAPI
 RtlRunOnceInitialize(
     _Out_ PRTL_RUN_ONCE RunOnce);
+#endif
 
 _Maybe_raises_SEH_exception_
 NTSYSAPI
@@ -72,11 +74,13 @@ RtlRunOnceComplete(
 
 #pragma region SRW Lock
 
+#ifndef _KNSOFT_NDK_NT_INLINE
 NTSYSAPI
 VOID
 NTAPI
 RtlInitializeSRWLock(
     _Out_ PRTL_SRWLOCK SRWLock);
+#endif
 
 NTSYSAPI
 VOID

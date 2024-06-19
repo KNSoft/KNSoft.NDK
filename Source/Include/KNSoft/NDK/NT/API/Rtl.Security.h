@@ -48,21 +48,13 @@ RtlConvertUlongToLuid(_In_ ULONG Ulong)
     return(TempLuid);
 }
 
+#ifndef _KNSOFT_NDK_NT_INLINE
 _Post_satisfies_(return >= 8 && return <= SECURITY_MAX_SID_SIZE)
 ULONG
-#if !defined(_KNSOFT_NDK_NT_EXTENSION)
 NTSYSAPI
 NTAPI
 RtlLengthSid(
     _In_ PSID Sid);
-#else
-FORCEINLINE
-NTAPI_INLINE
-RtlLengthSid(
-    _In_ PSID Sid)
-{
-    return UFIELD_OFFSET(SID, SubAuthority[Sid->SubAuthorityCount]);
-}
 #endif
 
 NTSYSAPI

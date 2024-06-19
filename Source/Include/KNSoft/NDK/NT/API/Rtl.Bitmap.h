@@ -5,6 +5,7 @@
 
 EXTERN_C_START
 
+#ifndef _KNSOFT_NDK_NT_INLINE
 NTSYSAPI
 VOID
 NTAPI
@@ -12,6 +13,7 @@ RtlInitializeBitMap(
     _Out_ PRTL_BITMAP BitMapHeader,
     _In_opt_ __drv_aliasesMem PULONG BitMapBuffer,
     _In_opt_ ULONG SizeOfBitMap);
+#endif
 
 NTSYSAPI
 VOID

@@ -18,3 +18,9 @@
 #include "Rtl.List.h"
 #include "Rtl.Security.h"
 #include "Rtl.Synchronization.h"
+
+#ifdef _KNSOFT_NDK_NT_INLINE
+#include "Rtl.Bitmap.inl"
+#include "Rtl.Security.inl"
+#include "Rtl.Synchronization.inl"
+#endif

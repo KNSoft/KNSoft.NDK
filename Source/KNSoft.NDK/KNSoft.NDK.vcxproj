@@ -128,6 +128,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Ps.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Bitmap.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Heap.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Bitmap.inl" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.List.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Path.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Process.h" />
@@ -175,6 +176,8 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Include\KNSoft\NDK\NT\API\Rtl.Security.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\API\Rtl.Synchronization.inl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
