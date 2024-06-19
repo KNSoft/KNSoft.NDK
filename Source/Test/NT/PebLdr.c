@@ -4,7 +4,7 @@
 
 #include "../Test.h"
 
-TEST_DECL(PebLdrStruct)
+static TEST_DECL(PebLdrStruct)
 {
     PPEB_LDR_DATA Ldr = NtCurrentPeb()->Ldr;
     PLDR_DATA_TABLE_ENTRY NtdllLdrEntry;

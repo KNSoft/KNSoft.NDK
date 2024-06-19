@@ -4,7 +4,7 @@
 
 #include "../Test.h"
 
-TEST_DECL(PebStruct)
+static TEST_DECL(PebStruct)
 {
     NTSTATUS Status;
     PPEB Peb = NtCurrentPeb();
@@ -45,21 +45,29 @@ TEST_DECL(PebStruct)
     }
 }
 
-TEST_DECL(TebStruct)
+static TEST_DECL(TebStruct)
 {
     PTEB Teb = NtCurrentTeb();
 
+    TEST_OK(Teb->ProcessEnvironmentBlock == NtCurrentPeb());
     TEST_OK((ULONG_PTR)Teb->ClientId.UniqueProcess == (ULONG_PTR)GetCurrentProcessId());
     TEST_OK((ULONG_PTR)Teb->ClientId.UniqueThread == (ULONG_PTR)GetCurrentThreadId());
+    
+    Teb->LastErrorValue = ERROR_BAD_FILE_TYPE;
+    TEST_OK(GetLastError() == ERROR_BAD_FILE_TYPE);
+    SetLastError(ERROR_INVALID_EA_NAME);
+    TEST_OK(Teb->LastErrorValue == ERROR_INVALID_EA_NAME);
+    
+    Teb->LastStatusValue = STATUS_NOT_IMPLEMENTED;
+    TEST_OK(RtlGetLastNtStatus() == STATUS_NOT_IMPLEMENTED);
+    RtlNtStatusToDosError(STATUS_DYNAMIC_CODE_BLOCKED);
+    TEST_OK(Teb->LastStatusValue == STATUS_DYNAMIC_CODE_BLOCKED);
 
-    TEST_OK(Teb->ProcessEnvironmentBlock == NtCurrentPeb());
-    TEST_OK(Teb->LastErrorValue == GetLastError());
-    TEST_OK(Teb->LastStatusValue == RtlGetLastNtStatus());
     TEST_OK(Teb->CurrentLocale == GetThreadLocale());
     TEST_OK(Teb->HardErrorMode == GetThreadErrorMode());
 }
 
-TEST_DECL(KUSDStruct)
+static TEST_DECL(KUSDStruct)
 {
     PCKUSER_SHARED_DATA KUSD = SharedUserData;
     TIME_ZONE_INFORMATION TimeZoneInfo;

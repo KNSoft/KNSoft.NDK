@@ -4,7 +4,7 @@
 
 #include "Test.h"
 
-TEST_DECL(UnitTestFramework)
+static TEST_DECL(UnitTestFramework)
 {
     UNITTEST_RESULT Result;
 

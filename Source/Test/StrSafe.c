@@ -13,7 +13,7 @@ static const wchar_t Name##_W[] = _A2W(String);
 DEFINE_TEST_STRING(TEST_STRING1, "KNSoft.NDK StrSafe.h Test String");
 DEFINE_TEST_STRING(TEST_STRING1_PART1, "KNSoft.NDK StrSafe.h Test");
 
-TEST_DECL(StrSafeFunc)
+static TEST_DECL(StrSafeFunc)
 {
     char szTempA[_countof(TEST_STRING1_A)];
     wchar_t szTempW[_countof(TEST_STRING1_W)];

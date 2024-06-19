@@ -35,3 +35,7 @@
 #ifndef _KNSOFT_NDK_NO_EXTENSION_MSTOOLCHAIN
 #include "Extension/MSToolChain.h"
 #endif
+
+#ifndef _KNSOFT_NDK_NO_INLINE
+#define _KNSOFT_NDK_NT_INLINE
+#endif

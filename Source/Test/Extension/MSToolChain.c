@@ -6,19 +6,19 @@
 
 static volatile LONG g_lInit = 0;
 
-MSVC_INITIALIZER(Init1)
+static MSVC_INITIALIZER(Init1)
 {
     InterlockedAdd(&g_lInit, 234);
     return 0;
 }
 
-MSVC_INITIALIZER(Init2)
+static MSVC_INITIALIZER(Init2)
 {
     InterlockedAdd(&g_lInit, 432);
     return 0;
 }
 
-TEST_DECL(MSToolChain)
+static TEST_DECL(MSToolChain)
 {
     TEST_OK(g_lInit == 666);
 }

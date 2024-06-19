@@ -58,6 +58,7 @@ The following features are enabled by default, can be excluded by defining corre
 | ---- | ---- |
 | _KNSOFT_NDK_NO_EXTENSION | Addendum or extension macros and definitions |
 | _KNSOFT_NDK_NO_EXTENSION_MSTOOLCHAIN | Microsoft Tool Chain Specification |
+| _KNSOFT_NDK_NO_INLINE | Use inline implementation instead of function call |
 
 ## Compatibility
 
