@@ -182,6 +182,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Extension\MSToolChain.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="NT\PebLdr.c" />
     <ClCompile Include="NT\PebTebKUSD.c" />

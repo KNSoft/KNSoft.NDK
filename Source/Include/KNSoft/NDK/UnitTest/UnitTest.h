@@ -103,9 +103,9 @@ VOID __cdecl UnitTest_FormatMessage(
 #define TEST_PARAMETER_ARGV _KNSoft_NDK_UnitTest_ArgV
 
 #if _WIN64
-#define TEST_C_VARIABLE_DECORATOR
+#define TEST_INCLUDE_VAR(x) __pragma(comment(linker, "/include:"#x))
 #else
-#define TEST_C_VARIABLE_DECORATOR "_"
+#define TEST_INCLUDE_VAR(x) __pragma(comment(linker, "/include:_"#x))
 #endif
 
 /* Define a test entry (function) */
@@ -113,7 +113,7 @@ VOID __cdecl UnitTest_FormatMessage(
 VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV);\
 static UNITTEST_ENTRY const _KNSoft_NDK_UnitTest_Entry_##Name = { Name, RTL_CONSTANT_STRING(L###Name) };\
 __declspec(allocate(".NDK$UTB")) PCUNITTEST_ENTRY _KNSoft_NDK_UnitTest_Entry_Ptr_##Name = &_KNSoft_NDK_UnitTest_Entry_##Name;\
-__pragma(comment(linker, "/include:"TEST_C_VARIABLE_DECORATOR"_KNSoft_NDK_UnitTest_Entry_Ptr_"#Name))\
+TEST_INCLUDE_VAR(_KNSoft_NDK_UnitTest_Entry_Ptr_##Name)\
 VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV)
 
 /* Increase count of test result, parameter can be Pass/Fail/Skip */

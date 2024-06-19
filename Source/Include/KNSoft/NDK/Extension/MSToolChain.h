@@ -32,11 +32,11 @@ EXTERN_C_END
 #undef _STATIC_ASSERT
 #define _STATIC_ASSERT(expr) static_assert((expr), #expr)
 
-#define _A2U8(quote) __A2U8(quote)
 #define __A2U8(quote) u8##quote
+#define _A2U8(quote) __A2U8(quote)
 
-#define _A2W(quote) __A2W(quote)
 #define __A2W(quote) L##quote
+#define _A2W(quote) __A2W(quote)
 
 #define DECLSPEC_EXPORT __declspec(dllexport)
 typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
@@ -48,6 +48,35 @@ typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
 #if defined(_DEBUG) && !defined(DBG)
 #define DBG 1
 #endif
+
+#if _WIN64
+#define MSVC_VARDNAME(x) x
+#define MSVC_INCLUDE_VAR(x) __pragma(comment(linker, "/include:"#x))
+#else
+#define MSVC_VARDNAME(x) _##x
+#define MSVC_INCLUDE_VAR(x) __pragma(comment(linker, "/include:_"#x))
+#endif
+
+
+/*
+ * Initializer support
+ * See also:
+ *   https://devblogs.microsoft.com/cppblog/new-compiler-warnings-for-dynamic-initialization/
+ *   https://learn.microsoft.com/en-us/cpp/c-runtime-library/crt-initialization
+ */
+
+// Section 'section-name' is reserved for C++ dynamic initialization.
+#pragma warning(error: 5247 5248)
+
+typedef int(__cdecl* _PIFV)(void);
+
+#pragma section(".CRT$XINDK", long, read)
+
+#define MSVC_INITIALIZER(x)\
+int __cdecl x(void);\
+__declspec(allocate(".CRT$XINDK")) _PIFV _KNSoft_NDK_Initializer_User_##x = &x;\
+MSVC_INCLUDE_VAR(_KNSoft_NDK_Initializer_User_##x)\
+int __cdecl x(void)
 
 #pragma endregion
 
@@ -68,5 +97,7 @@ typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
 #endif
 
 #define MSB_LIB_PATH(LibName) (MSB_PLATFORMTARGET"/"MSB_CONFIGURATION"/"##LibName)
+
+/* MSB_CONFIGURATIONTYPE_[EXE/DLL/LIB/UTILITY] is defined in Directory.Build.props */
 
 #pragma endregion
