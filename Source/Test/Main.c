@@ -1,4 +1,6 @@
-﻿#include "Test.h"
+﻿#include <KNSoft/NDK/UnitTest/UnitTest.inl>
+
+#include "Test.h"
 
 int _cdecl wmain(
     _In_ int argc,

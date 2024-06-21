@@ -48,7 +48,7 @@ The following features are not enabled by default, reference corresponding heade
   - KNSoft.NDK.WinAPI.lib (Generated from [KNSoft.NDK.WinAPI.xml](./Source/KNSoft.NDK/WinAPI/KNSoft.NDK.WinAPI.xml))
 - Unit Test Framework
   - [UnitTest.h](./Source/Include/KNSoft/NDK/UnitTest/UnitTest.h)
-  - KNSoft.NDK.UnitTest.lib (Generated from [KNSoft.NDK.UnitTest](./Source/KNSoft.NDK.UnitTest/))
+  - [UnitTest.inl](./Source/Include/KNSoft/NDK/UnitTest/UnitTest.inl)
 - Safe string functions (different from `strsafe.h` in Windows SDK)
   - [StrSafe.h](./Source/Include/KNSoft/NDK/Extension/StrSafe.h)
 

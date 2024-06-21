@@ -25,6 +25,9 @@
     <Filter Include="NT\API">
       <UniqueIdentifier>{c2d448d8-eace-41a6-a2cb-f83cd2106c72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UnitTest">
+      <UniqueIdentifier>{a8b5d84e-895c-4b3c-843e-85298108c298}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
@@ -202,6 +205,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\API\Rtl.Bitmap.inl">
       <Filter>NT\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -210,6 +216,9 @@
     </None>
     <None Include="..\Include\KNSoft\NDK\NT\API\Rtl.Synchronization.inl">
       <Filter>NT\API</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.inl">
+      <Filter>UnitTest</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

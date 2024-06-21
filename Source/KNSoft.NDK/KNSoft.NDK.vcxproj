@@ -162,6 +162,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Types\Se.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Types\Sys.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Types\Types.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Csr.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Dbg.h" />
@@ -178,6 +179,7 @@
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\NT\API\Rtl.Security.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\API\Rtl.Synchronization.inl" />
+    <None Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.inl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
