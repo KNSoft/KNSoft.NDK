@@ -1,0 +1,118 @@
+﻿#pragma once
+
+#include "../MinDef.h"
+#include "../Ps/PsApi.h"
+
+EXTERN_C_START
+
+/* phnt */
+
+#ifdef _WIN64
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64GetThreadContext(
+    _In_ HANDLE ThreadHandle,
+    _Inout_ PWOW64_CONTEXT ThreadContext
+);
+#endif
+
+#ifdef _WIN64
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64SetThreadContext(
+    _In_ HANDLE ThreadHandle,
+    _In_ PWOW64_CONTEXT ThreadContext
+);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
+// rev from Wow64DetermineEnvironment
+NTSYSAPI
+USHORT
+NTAPI
+RtlWow64GetCurrentMachine(
+    VOID
+);
+
+// rev from Wow64DetermineEnvironment
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64IsWowGuestMachineSupported(
+    _In_ USHORT NativeMachine,
+    _Out_ PBOOLEAN IsWowGuestMachineSupported
+);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_NI)
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64GetProcessMachines(
+    _In_ HANDLE ProcessHandle,
+    _Out_ PUSHORT ProcessMachine,
+    _Out_ PUSHORT NativeMachine
+);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+
+typedef enum _THREAD_STATE_CHANGE_TYPE THREAD_STATE_CHANGE_TYPE, *PTHREAD_STATE_CHANGE_TYPE;
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64ChangeThreadState(
+    _In_ HANDLE ThreadStateChangeHandle,
+    _In_ HANDLE ThreadHandle,
+    _In_ THREAD_STATE_CHANGE_TYPE StateChangeType,
+    _In_opt_ PVOID ExtendedInformation,
+    _In_opt_ SIZE_T ExtendedInformationLength,
+    _In_opt_ ULONG64 Reserved);
+
+#endif
+
+// WOW64
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlGetNativeSystemInformation(
+    _In_ ULONG SystemInformationClass,
+    _In_ PVOID NativeSystemInformation,
+    _In_ ULONG InformationLength,
+    _Out_opt_ PULONG ReturnLength
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueueApcWow64Thread(
+    _In_ HANDLE ThreadHandle,
+    _In_ PPS_APC_ROUTINE ApcRoutine,
+    _In_opt_ PVOID ApcArgument1,
+    _In_opt_ PVOID ApcArgument2,
+    _In_opt_ PVOID ApcArgument3
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64EnableFsRedirection(
+    _In_ BOOLEAN Wow64FsEnableRedirection
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64EnableFsRedirectionEx(
+    _In_ PVOID Wow64FsEnableRedirection,
+    _Out_ PVOID *OldFsRedirectionLevel
+);
+
+EXTERN_C_END
