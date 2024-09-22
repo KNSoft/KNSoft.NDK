@@ -33,4 +33,11 @@ TEST_FUNC(StrSafeFunc)
     TEST_OK(wcscmp(szTempW, TEST_STRING1_PART1_W) == 0);
     TEST_OK(StrSafe_CchPrintfW(szTempW, ARRAYSIZE(szTempW), L"%ls$", TEST_STRING1_W) == _STR_CCH_LEN(TEST_STRING1_W) + 1);
     TEST_OK(wcscmp(szTempW, TEST_STRING1_W) == 0);
+
+    TEST_OK(StrSafe_CchCopyA(NULL, 0, TEST_STRING1_A) == _STR_CCH_LEN(TEST_STRING1_A));
+    TEST_OK(StrSafe_CchCopyA(szTempA, ARRAYSIZE(szTempA), TEST_STRING1_A) == _STR_CCH_LEN(TEST_STRING1_A));
+    TEST_OK(strcmp(szTempA, TEST_STRING1_A) == 0);
+    TEST_OK(StrSafe_CchCopyW(NULL, 0, TEST_STRING1_W) == _STR_CCH_LEN(TEST_STRING1_W));
+    TEST_OK(StrSafe_CchCopyW(szTempW, ARRAYSIZE(szTempW), TEST_STRING1_W) == _STR_CCH_LEN(TEST_STRING1_W));
+    TEST_OK(wcscmp(szTempW, TEST_STRING1_W) == 0);
 }
