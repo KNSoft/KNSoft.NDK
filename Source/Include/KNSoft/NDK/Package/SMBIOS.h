@@ -1,5 +1,6 @@
 ﻿/*
- * KNSoft.NDK SMBIOS.h licensed under the MIT license.
+ * KNSoft.NDK SMBIOS.h package, licensed under the MIT license.
+ * Copyright (c) KNSoft.org (https://github.com/KNSoft). All rights reserved.
  *
  * SMBIOS Specification (https://www.dmtf.org/standards/smbios)
  *

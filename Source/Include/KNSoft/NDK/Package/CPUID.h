@@ -1,4 +1,11 @@
-﻿#pragma once
+﻿/*
+ * KNSoft.NDK CPUID.h package, licensed under the MIT license.
+ * Copyright (c) KNSoft.org (https://github.com/KNSoft). All rights reserved.
+ *
+ * Intel CPUID Specification.
+ */
+
+#pragma once
 
 #define CPUID_INTEL_VERSION_INFO_MASK 0xFFF3FF0 // Extended Family ID | Extended Model ID | Processor Type | Family ID | Model
 #define CPUID_MAKE_INTEL_VERSION_INFO(ExtendedFamilyId, ExtendedModelId, ProcessorType, FamilyId, Model, SteppingId)\

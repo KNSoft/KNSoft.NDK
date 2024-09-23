@@ -4,7 +4,7 @@
 
 #include "Test.h"
 
-#include <KNSoft/NDK/Extension/StrSafe.h>
+#include <KNSoft/NDK/Package/StrSafe.h>
 
 #define DEFINE_TEST_STRING(Name, String)\
 static const char Name##_A[] = String;\

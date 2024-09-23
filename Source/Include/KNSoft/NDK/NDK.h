@@ -31,5 +31,5 @@
 /* Enable extensions */
 
 #ifndef _KNSOFT_NDK_NO_EXTENSION
-#include "Extension/Extension.h"
+#include "Package/Extension.h"
 #endif

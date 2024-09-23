@@ -16,10 +16,9 @@
   - Import library for Windows DLL exports, e.g. `KERNEL32.dll!CreateProcessInternalW`, `ntdll.dll!LdrRegisterDllNotification`, ...
   - Addendum to Windows SDK
   - Extension macros and definitions, e.g. `NtCurrentPeb()`, `PEB(64/32)`, `TEB(64/32)`, ...
-- Specifications
-  - SMBIOS
-  - CPUID
-- Kits
+- Packages
+  - SMBIOS Specification
+  - CPUID Specification
   - Unit Test Framework
   - StrSafe.h (different from `strsafe.h` in Windows SDK)
 
@@ -41,18 +40,18 @@ NuGet package [KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK) includes a
 The following features **are NOT enabled by default**, reference corresponding headers and libraries on demand:
 
 - Specifications
-  - CPUID: [CPUID.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Extension/CPUID.h)
-  - SMBIOS: [SMBIOS.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Extension/SMBIOS.h)
+  - CPUID: [CPUID.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/CPUID.h)
+  - SMBIOS: [SMBIOS.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/SMBIOS.h)
 - Ntdll Hash API (`(A_SHA/MD4/MD5)(Init/Update/Final)`)
   - [Ntdll.Hash.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Win32/API/Ntdll.Hash.h)
   - KNSoft.NDK.Ntdll.Hash.lib (Generated from [KNSoft.NDK.Ntdll.Hash.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.Hash.xml))
 - Windows API import library addendum
   - KNSoft.NDK.WinAPI.lib (Generated from [KNSoft.NDK.WinAPI.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.WinAPI.xml))
 - Unit Test Framework
-  - [UnitTest.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/UnitTest/UnitTest.h)
-  - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/UnitTest/UnitTest.inl)
+  - [UnitTest.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.h)
+  - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.inl)
 - Safe string functions (different from `strsafe.h` in Windows SDK)
-  - [StrSafe.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Extension/StrSafe.h)
+  - [StrSafe.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.h)
 
 The following features **are enabled by default**, can be excluded by defining corresponding macro:
 

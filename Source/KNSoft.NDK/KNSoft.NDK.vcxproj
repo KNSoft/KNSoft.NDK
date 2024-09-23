@@ -118,10 +118,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\CPUID.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\Extension.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\SMBIOS.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\StrSafe.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Bcd.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\Cm.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\Reg.h" />
@@ -234,7 +230,11 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Wow\Wow.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Wow\WowApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\ZwApi.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\CPUID.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\SMBIOS.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Hash.h" />
@@ -247,7 +247,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.inl" />
+    <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

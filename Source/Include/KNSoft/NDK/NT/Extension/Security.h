@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../MinDef.h"
-#include "../../Extension/Extension.h"
+#include "../../Package/Extension.h"
 
 /* Well-known SIDs */
 

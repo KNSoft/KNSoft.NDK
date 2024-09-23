@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿/* KNSoft.NDK extension package, native addendum */
+
+#pragma once
 
 #ifdef _KNSOFT_NDK_NO_EXTENSION
 #pragma message("KNSoft.NDK: Extension.h is included but _KNSOFT_NDK_NO_EXTENSION is defined.")

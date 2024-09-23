@@ -1,7 +1,8 @@
 ﻿/*
- * KNSoft.NDK.UnitTest - Lite weight unit test framework
+ * KNSoft.NDK UnitTest.h package, licensed under the MIT license.
  * Copyright (c) KNSoft.org (https://github.com/KNSoft). All rights reserved.
- * Licensed under the MIT license.
+ * 
+ * Lite weight unit test framework.
  */
 
 #pragma once

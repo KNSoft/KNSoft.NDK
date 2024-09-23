@@ -16,10 +16,9 @@
   - Windows DLL导出项引入库，例如：`KERNEL32.dll!CreateProcessInternalW`、`ntdll.dll!LdrRegisterDllNotification`……
   - Windows SDK的补充
   - 扩展的宏和定义，例如：`NtCurrentPeb()`、`PEB(64/32)`、`TEB(64/32)`……
-- 规范
-  - SMBIOS
-  - CPUID
-- 工具
+- 包
+  - SMBIOS规范
+  - CPUID规范
   - 单元测试框架
   - StrSafe.h（与Windows SDK里的`strsafe.h`不同）
 
@@ -41,18 +40,18 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
 下列功能**默认没有启用**，按需引用对应的头文件和库：
 
 - 规范
-  - CPUID: [CPUID.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Extension/CPUID.h)
-  - SMBIOS: [SMBIOS.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Extension/SMBIOS.h)
+  - CPUID: [CPUID.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/CPUID.h)
+  - SMBIOS: [SMBIOS.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/SMBIOS.h)
 - Ntdll Hash API (`(A_SHA/MD4/MD5)(Init/Update/Final)`)
   - [Ntdll.Hash.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Win32/API/Ntdll.Hash.h)
   - KNSoft.NDK.Ntdll.Hash.lib (由[KNSoft.NDK.Ntdll.Hash.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.Hash.xml)生成)
 - Windows API 引入库补充
   - KNSoft.NDK.WinAPI.lib (由[KNSoft.NDK.WinAPI.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.WinAPI.xml)生成)
 - 单元测试框架
-  - [UnitTest.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/UnitTest/UnitTest.h)
-  - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/UnitTest/UnitTest.inl)
+  - [UnitTest.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.h)
+  - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.inl)
 - 安全字符串函数（与Windows SDK里的`strsafe.h`不同）
-  - [StrSafe.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Extension/StrSafe.h)
+  - [StrSafe.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.h)
 
 下列功能**默认启用**，定义对应宏可进行排除：
 

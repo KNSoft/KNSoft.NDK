@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "./UnitTest.h"
+#include "UnitTest.h"
 
 #include "../NT/NT.h"
-#include "../Extension/StrSafe.h"
+#include "StrSafe.h"
 
 #pragma region Prints
 

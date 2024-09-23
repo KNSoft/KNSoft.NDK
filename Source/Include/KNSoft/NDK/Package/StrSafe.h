@@ -1,5 +1,6 @@
 ﻿/*
- * KNSoft.NDK StrSafe.h licensed under the MIT license.
+ * KNSoft.NDK StrSafe.h package, licensed under the MIT license.
+ * Copyright (c) KNSoft.org (https://github.com/KNSoft). All rights reserved.
  *
  * Make C string routines a bit more safe and easy.
  * Not equals to the strsafe.h in Windows SDK.

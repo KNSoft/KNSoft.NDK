@@ -1,5 +1,5 @@
 ﻿#include <KNSoft/NDK/NDK.h>
-#include <KNSoft/NDK/UnitTest/UnitTest.inl>
+#include <KNSoft/NDK/Package/UnitTest.inl>
 
 TEST_DECL_FUNC(UnitTestFramework);
 TEST_DECL_FUNC(MSToolChain);

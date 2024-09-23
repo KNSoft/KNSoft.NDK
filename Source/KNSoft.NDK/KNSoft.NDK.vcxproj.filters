@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Extension">
-      <UniqueIdentifier>{0824e6bd-fba8-4ba1-a245-1c0743fc1404}</UniqueIdentifier>
-    </Filter>
     <Filter Include="NT">
       <UniqueIdentifier>{3769bb18-ab05-4c44-8684-2ff9124963ae}</UniqueIdentifier>
     </Filter>
@@ -15,9 +12,6 @@
     </Filter>
     <Filter Include="Win32\API">
       <UniqueIdentifier>{b8cf96b3-56aa-4366-920a-77b5f9d68ee9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UnitTest">
-      <UniqueIdentifier>{a8b5d84e-895c-4b3c-843e-85298108c298}</UniqueIdentifier>
     </Filter>
     <Filter Include="NT\Rtl">
       <UniqueIdentifier>{a68ed197-518e-4f67-a03c-8742d02e2142}</UniqueIdentifier>
@@ -70,6 +64,9 @@
     <Filter Include="NT\Lpc">
       <UniqueIdentifier>{958aa1bb-cdb8-44d9-9071-55c0cf230408}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Package">
+      <UniqueIdentifier>{a566dc55-3916-4927-ae91-86f02a7a5529}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
@@ -78,18 +75,6 @@
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\NT.h">
       <Filter>NT</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\CPUID.h">
-      <Filter>Extension</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\Extension.h">
-      <Filter>Extension</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\SMBIOS.h">
-      <Filter>Extension</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Extension\StrSafe.h">
-      <Filter>Extension</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\CommCtrl.h">
       <Filter>Win32\Def</Filter>
@@ -108,9 +93,6 @@
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\User32.h">
       <Filter>Win32\API</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.h">
-      <Filter>UnitTest</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Memory.h">
       <Filter>NT\Rtl</Filter>
@@ -451,11 +433,26 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Misc.h">
       <Filter>NT\Win32K</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\CPUID.h">
+      <Filter>Package</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h">
+      <Filter>Package</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\SMBIOS.h">
+      <Filter>Package</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.h">
+      <Filter>Package</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h">
+      <Filter>Package</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="..\Include\KNSoft\NDK\UnitTest\UnitTest.inl">
-      <Filter>UnitTest</Filter>
+    <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">
+      <Filter>Package</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
