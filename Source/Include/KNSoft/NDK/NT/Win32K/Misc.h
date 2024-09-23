@@ -28,6 +28,48 @@ NtUserQueryWindow(
     _In_ WINDOWINFOCLASS WindowInfo
     );
 
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtUserTestForInteractiveUser(
+    _In_ PLUID AuthenticationId
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtUserCheckAccessForIntegrityLevel(
+    _In_ ULONG ProcessIdFirst,
+    _In_ ULONG ProcessIdSecond,
+    _Out_ PBOOLEAN GrantedAccess
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtUserCheckProcessForClipboardAccess(
+    _In_ ULONG ProcessId,
+    _Out_ PULONG GrantedAccess
+    );
+
+NTSYSCALLAPI
+ULONG
+NTAPI
+NtUserInternalGetWindowText(
+    _In_ HWND WindowHandle,
+    _Out_writes_to_(cchMaxCount, return + 1) LPWSTR pString,
+    _In_ ULONG cchMaxCount
+    );
+
+NTSYSCALLAPI
+ULONG
+NTAPI
+NtUserGetClassName(
+    _In_ HWND WindowHandle,
+    _In_ LONGLONG Real,
+    _Out_ PUNICODE_STRING ClassName
+    );
+
 typedef enum _CONSOLECONTROL
 {
     ConsoleSetVDMCursorBounds = 0, // RECT
@@ -74,7 +116,7 @@ typedef struct _CONSOLEENDTASK
 } CONSOLEENDTASK, *PCONSOLEENDTASK;
 
 /**
- * Performs special kernel operations for console host applications.
+ * Performs special kernel operations for console host applications. (win32u.dll)
  * 
  * This includes reparenting the console window, allowing the console to pass foreground rights
  * on to launched console subsystem applications and terminating attached processes.

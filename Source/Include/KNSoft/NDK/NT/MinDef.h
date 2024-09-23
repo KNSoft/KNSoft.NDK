@@ -257,7 +257,7 @@ typedef SID* PSID;
 #pragma region Basic Types
 
 typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
-typedef double *PDOUBLE;
+typedef DOUBLE *PDOUBLE;
 
 #define MAKEDWORD(l, h) ((DWORD)(((WORD)(((DWORD_PTR)(l)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(h)) & 0xffff))) << 16))
 #define MAKEQWORD(l, h) ((QWORD)(((DWORD)(((DWORD_PTR)(l)) & 0xffffffff)) | ((QWORD)((DWORD)(((DWORD_PTR)(h)) & 0xffffffff))) << 32))
@@ -273,8 +273,16 @@ typedef double *PDOUBLE;
 
 #define DECLSPEC_ALLOCATOR __declspec(allocator)
 #define DECLSPEC_EXPORT __declspec(dllexport)
+#define DECLSPEC_NOALIAS __declspec(noalias)
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+
+#if __STDC_VERSION__ >= 202311L
+#ifndef __cplusplus
+#define nullptr ((void *)0)
+#endif
+typedef __typeof__(nullptr) nullptr_t;
+#endif
 
 #pragma endregion
 

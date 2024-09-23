@@ -36,4 +36,13 @@ EndTask(
     BOOL fShutDown,
     BOOL fForce);
 
+/* See also NtUserConsoleControl */
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ConsoleControl(
+    _In_ CONSOLECONTROL Command,
+    _In_reads_bytes_(ConsoleInformationLength) PVOID ConsoleInformation,
+    _In_ ULONG ConsoleInformationLength);
+
 EXTERN_C_END
