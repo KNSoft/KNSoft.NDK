@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <minwindef.h>
+#include "../NT/MinDef.h"
 
 EXTERN_C_START
 
