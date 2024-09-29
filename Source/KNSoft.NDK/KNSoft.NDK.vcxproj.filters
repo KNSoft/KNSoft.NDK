@@ -450,10 +450,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">
       <Filter>Package</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">
