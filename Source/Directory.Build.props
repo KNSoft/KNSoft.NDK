@@ -10,6 +10,7 @@
             <LanguageStandard>stdcpplatest</LanguageStandard>
             <LanguageStandard_C>stdc17</LanguageStandard_C>
             <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+            <ObjectFileName>$(IntDir)%(Directory)</ObjectFileName>
         </ClCompile>
     </ItemDefinitionGroup>
 
@@ -41,7 +42,7 @@
             <PreprocessorDefinitions>MSB_VCTOOLS_VERSION="$(VCToolsVersion)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_PLATFORM_TOOLSET="$(PlatformToolset)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_PLATFORM_TOOLSET_VERSION="$(PlatformToolsetVersion)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-            <PreprocessorDefinitions>MSB_PLATFORM_TARGET_VERSION="$(PlatformTarget)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+            <PreprocessorDefinitions>MSB_PLATFORM_TARGET="$(PlatformTarget)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_TARGET_PLATFORM_VERSION="$(TargetPlatformVersion)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_TARGET_PLATFORM_DISPLAY_NAME="$(TargetPlatformDisplayName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
         </ClCompile>
@@ -59,9 +60,9 @@
         </ClCompile>
     </ItemDefinitionGroup>
 
-    <!-- Import $(ProjectName).Build.props if exists -->
+    <!-- Import $(MSBuildProjectName).Build.props if exists -->
     <PropertyGroup>
-        <ProjectNameBuildPropsPath>$(MSBuildProjectDirectory)\$(ProjectName).Build.props</ProjectNameBuildPropsPath>
+        <ProjectNameBuildPropsPath>$(MSBuildProjectDirectory)\$(MSBuildProjectName).Build.props</ProjectNameBuildPropsPath>
     </PropertyGroup>
     <Import Project="$(ProjectNameBuildPropsPath)" Condition="Exists('$(ProjectNameBuildPropsPath)')"/>
     
