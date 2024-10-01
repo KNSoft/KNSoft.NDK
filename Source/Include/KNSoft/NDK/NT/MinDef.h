@@ -254,6 +254,20 @@ typedef SID* PSID;
 
 #pragma region Addendum
 
+#pragma region NtStatus
+
+#define NT_CUSTOMER_SHIFT 29
+#define NT_CUSTOMER(Status) ((((ULONG)(Status)) >> NT_CUSTOMER_SHIFT) & 1)
+
+#define NT_FACILITY_MASK 0xfff
+#define NT_FACILITY_SHIFT 16
+#define NT_FACILITY(Status) ((((ULONG)(Status)) >> NT_FACILITY_SHIFT) & NT_FACILITY_MASK)
+
+#define NT_CODE_MASK 0xffff
+#define NT_CODE(Status) (((ULONG)(Status)) & NT_CODE_MASK)
+
+#pragma endregion
+
 #pragma region Basic Types
 
 typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
@@ -430,11 +444,29 @@ struct _SINGLE_LIST_ENTRY64
 
 #pragma region Macro
 
-#if DBG
-#define IF_DEBUG if (TRUE)
-#else
-#define IF_DEBUG if (FALSE)
+#pragma region Flags
+
+//
+//  These macros are used to test, set and clear flags respectivly
+//
+
+#ifndef FlagOn
+#define FlagOn(_F,_SF)        ((_F) & (_SF))
 #endif
+
+#ifndef BooleanFlagOn
+#define BooleanFlagOn(F,SF)   ((BOOLEAN)(((F) & (SF)) != 0))
+#endif
+
+#ifndef SetFlag
+#define SetFlag(_F,_SF)       ((_F) |= (_SF))
+#endif
+
+#ifndef ClearFlag
+#define ClearFlag(_F,_SF)     ((_F) &= ~(_SF))
+#endif
+
+#pragma endregion ntifs.h
 
 #pragma region Assertion
 
@@ -550,6 +582,10 @@ struct _SINGLE_LIST_ENTRY64
 #define FIELD_SIZE(type, field) (sizeof(((type*)0)->field))
 #endif
 
+#pragma endregion
+
+/* wdm.h */
+
 #if defined (_WIN64)
 #define BitScanReverseSizeT BitScanReverse64
 #define BitScanForwardSizeT BitScanForward64
@@ -558,7 +594,11 @@ struct _SINGLE_LIST_ENTRY64
 #define BitScanForwardSizeT BitScanForward
 #endif
 
-#pragma endregion
+#if DBG
+#define IF_DEBUG if (TRUE)
+#else
+#define IF_DEBUG if (FALSE)
+#endif
 
 #pragma endregion
 
