@@ -8,6 +8,8 @@
 
 #pragma region Resource File
 
+#pragma pack(push, 1)
+
 typedef struct _CURSORDIR
 {
     WORD Width;
@@ -108,23 +110,39 @@ typedef struct _POPUPMENUITEM
 
 typedef struct _RESDIR
 {
-  union
-  {
-      ICONRESDIR   Icon;
-      CURSORDIR    Cursor;
-  };
-  WORD       Planes;
-  WORD       BitCount;
-  DWORD      BytesInRes;
-  WORD       IconCursorId;
+    union
+    {
+        ICONRESDIR   Icon;
+        CURSORDIR    Cursor;
+    };
+    WORD       Planes;
+    WORD       BitCount;
+    DWORD      BytesInRes;
+    WORD       IconCursorId;
 } RESDIR, *PRESDIR;
 
 typedef struct _DLGTEMPLATEEX
 {
-    WORD        dlgVer;
-    WORD        signature;
-    DWORD       helpID;
-    DLGTEMPLATE dlgTemplate;
+    WORD    dlgVer;
+    WORD    signature;
+    DWORD   helpID;
+    DWORD   exStyle;
+    DWORD   style;
+    WORD    cDlgItems;
+    short   x;
+    short   y;
+    short   cx;
+    short   cy;
+    /*
+    sz_Or_Ord menu;
+    sz_Or_Ord windowClass;
+    WCHAR     title[titleLen];
+    WORD      pointsize;
+    WORD      weight;
+    BYTE      italic;
+    BYTE      charset;
+    WCHAR     typeface[stringLen];
+    */
 } DLGTEMPLATEEX, *PDLGTEMPLATEEX;
 
 DECLSPEC_ALIGN(4) typedef struct _DLGITEMTEMPLATEEX
@@ -132,5 +150,7 @@ DECLSPEC_ALIGN(4) typedef struct _DLGITEMTEMPLATEEX
     DWORD           helpID;
     DLGITEMTEMPLATE itemTemplate;
 } DLGITEMTEMPLATEEX, *PDLGITEMTEMPLATEEX;
+
+#pragma pack(pop)
 
 #pragma endregion
