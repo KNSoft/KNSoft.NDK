@@ -798,6 +798,41 @@ NTSYSAPI PS_SYSTEM_DLL_INIT_BLOCK LdrSystemDllInitBlock;
 
 #pragma endregion
 
+#pragma region Ntdll SCP Config
+
+// rev see also MEMORY_IMAGE_EXTENSION_INFORMATION
+typedef struct _RTL_SCPCFG_NTDLL_EXPORTS
+{
+    PVOID ScpCfgHeader_Nop;
+    PVOID ScpCfgEnd_Nop;
+    PVOID ScpCfgHeader;
+    PVOID ScpCfgEnd;
+    PVOID ScpCfgHeader_ES;
+    PVOID ScpCfgEnd_ES;
+    PVOID ScpCfgHeader_Fptr;
+    PVOID ScpCfgEnd_Fptr;
+    PVOID LdrpGuardDispatchIcallNoESFptr;
+    PVOID __guard_dispatch_icall_fptr;
+    PVOID LdrpGuardCheckIcallNoESFptr;
+    PVOID __guard_check_icall_fptr;
+    PVOID LdrpHandleInvalidUserCallTarget;
+    struct
+    {
+        PVOID NtOpenFile;
+        PVOID NtCreateSection;
+        PVOID NtQueryAttributesFile;
+        PVOID NtOpenSection;
+        PVOID NtMapViewOfSection;
+    } LdrpCriticalLoaderFunctions;
+} RTL_SCPCFG_NTDLL_EXPORTS, *PRTL_SCPCFG_NTDLL_EXPORTS;
+
+// rev
+#if (NTDDI_VERSION >= NTDDI_WIN11_GE)
+NTSYSAPI RTL_SCPCFG_NTDLL_EXPORTS RtlpScpCfgNtdllExports;
+#endif
+
+#pragma endregion
+
 #pragma region Load as Data Table
 
 #if (NTDDI_VERSION >= NTDDI_WIN6)
@@ -980,7 +1015,7 @@ NTSTATUS
 NTAPI
 LdrResGetRCConfig(
     _In_ PVOID DllHandle,
-    _In_ SIZE_T Length,
+    _In_opt_ SIZE_T Length,
     _Out_writes_bytes_opt_(Length) PVOID Config,
     _In_ ULONG Flags,
     _In_ BOOLEAN AlternateResource // LdrLoadAlternateResourceModule

@@ -342,7 +342,7 @@ typedef struct _KEY_OPEN_SUBKEYS_INFORMATION
  * @param[out] KeyInformation A pointer to a buffer that receives the key information.
  * @param[in] Length The size of the buffer.
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
- * @return NTSTATUS The status of the operation.
+ * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -362,7 +362,7 @@ NtQueryKey(
  * @param[in] KeySetInformationClass The type of information to be set.
  * @param[in] KeySetInformation A pointer to a buffer that contains the key information.
  * @param[in] KeySetInformationLength The size of the buffer.
- * @return NTSTATUS The status of the operation.
+ * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -383,7 +383,7 @@ NtSetInformationKey(
  * @param[out] KeyValueInformation A pointer to a buffer that receives the value information.
  * @param[in] Length The size of the buffer.
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
- * @return NTSTATUS The status of the operation.
+ * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -406,7 +406,7 @@ NtQueryValueKey(
  * @param[in] Type The type of the value.
  * @param[in] Data A pointer to a buffer that contains the value data.
  * @param[in] DataSize The size of the buffer.
- * @return NTSTATUS The status of the operation.
+ * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -429,7 +429,7 @@ NtSetValueKey(
  * @param[out] ValueBuffer A pointer to a buffer that receives the value data.
  * @param[in, out] BufferLength A pointer to a variable that specifies the size of the buffer and receives the size of the data returned.
  * @param[out, optional] RequiredBufferLength A pointer to a variable that receives the size of the buffer required to hold the data.
- * @return NTSTATUS The status of the operation.
+ * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -452,7 +452,7 @@ NtQueryMultipleValueKey(
  * @param[out] KeyInformation A pointer to a buffer that receives the key information.
  * @param[in] Length The size of the buffer.
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
- * @return NTSTATUS The status of the operation.
+ * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -475,7 +475,7 @@ NtEnumerateKey(
  * @param[out] KeyValueInformation A pointer to a buffer that receives the value information.
  * @param[in] Length The size of the buffer.
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
- * @return NTSTATUS The status of the operation.
+ * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS

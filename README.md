@@ -84,6 +84,6 @@ The content from the following public sources were lawfully used:
 - Windows Internals
 
 And public projects:
-- phnt (from [winsiderss/systeminformer](https://github.com/winsiderss/systeminformer), [commit 6a626538](https://github.com/winsiderss/systeminformer/commit/6a6265382ad6d4b12c362555df6a3ae4843c18f7)) - [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
+- phnt (from [winsiderss/systeminformer](https://github.com/winsiderss/systeminformer), [commit 1dd3c514](https://github.com/winsiderss/systeminformer/commit/1dd3c514d70d7d88b5c0aea442636c9827b5b93a)) - [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
 
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) also uses [KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C) to generate DLL import libraries.
