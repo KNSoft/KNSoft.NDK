@@ -113,7 +113,7 @@ NTSTATUS
 NTAPI
 RtlGetSystemPreferredUILanguages(
     _In_ ULONG Flags, // MUI_LANGUAGE_NAME
-    _In_ PCWSTR LocaleName,
+    _In_opt_ PCWSTR LocaleName,
     _Out_ PULONG NumberOfLanguages,
     _Out_writes_opt_(*ReturnLength) PZZWSTR Languages,
     _Inout_ PULONG ReturnLength
@@ -134,7 +134,7 @@ NTSTATUS
 NTAPI
 RtlGetUserPreferredUILanguages(
     _In_ ULONG Flags, // MUI_LANGUAGE_NAME
-    _In_ PCWSTR LocaleName,
+    _In_opt_ PCWSTR LocaleName,
     _Out_ PULONG NumberOfLanguages,
     _Out_writes_opt_(*ReturnLength) PZZWSTR Languages,
     _Inout_ PULONG ReturnLength
