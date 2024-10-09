@@ -84,6 +84,6 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
 - Windows Internals
 
 和公开项目：
-- phnt（来自[winsiderss/systeminformer](https://github.com/winsiderss/systeminformer)，[提交 1dd3c514](https://github.com/winsiderss/systeminformer/commit/1dd3c514d70d7d88b5c0aea442636c9827b5b93a)）- [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
+- phnt（来自[winsiderss/systeminformer](https://github.com/winsiderss/systeminformer)，[提交 934a8130](https://github.com/winsiderss/systeminformer/commit/934a81307e0a1bbdc5d9390889fdea531ecc78ea)）- [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
 
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK)也使用了[KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C)来生成DLL引入库。
