@@ -36,7 +36,7 @@ NTSTATUS
 NTAPI
 RtlCreateRegistryKey(
     _In_ ULONG RelativeTo,
-    _In_ PWSTR Path
+    _In_ PCWSTR Path
 );
 
 NTSYSAPI
@@ -44,12 +44,12 @@ NTSTATUS
 NTAPI
 RtlCheckRegistryKey(
     _In_ ULONG RelativeTo,
-    _In_ PWSTR Path
+    _In_ PCWSTR Path
 );
 
 _Function_class_(RTL_QUERY_REGISTRY_ROUTINE)
 typedef NTSTATUS(NTAPI RTL_QUERY_REGISTRY_ROUTINE)(
-    _In_ PWSTR ValueName,
+    _In_ PCWSTR ValueName,
     _In_ ULONG ValueType,
     _In_ PVOID ValueData,
     _In_ ULONG ValueLength,

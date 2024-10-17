@@ -33,7 +33,7 @@ typedef enum _RTL_PATH_TYPE
 
 // Data exports (ntdll.lib/ntdllp.lib)
 
-NTSYSAPI PWSTR RtlNtdllName;
+NTSYSAPI PCWSTR RtlNtdllName;
 NTSYSAPI UNICODE_STRING RtlDosPathSeperatorsString;
 NTSYSAPI UNICODE_STRING RtlAlternateDosPathSeperatorString;
 NTSYSAPI UNICODE_STRING RtlNtPathSeperatorString;
@@ -344,7 +344,7 @@ NTSYSAPI
 VOID
 NTAPI
 RtlReleasePath(
-    _In_ PWSTR Path
+    _In_ PCWSTR Path
 );
 
 #endif

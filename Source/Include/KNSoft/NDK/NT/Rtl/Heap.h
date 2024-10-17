@@ -301,7 +301,7 @@ NTAPI
 RtlFreeHeap(
     _In_ PVOID HeapHandle,
     _In_opt_ ULONG Flags,
-    _Frees_ptr_opt_ PVOID BaseAddress
+    _Frees_ptr_opt_ _Post_invalid_ PVOID BaseAddress
 );
 #else
 _Success_(return)
@@ -421,8 +421,8 @@ NTAPI
 RtlCreateTagHeap(
     _In_ PVOID HeapHandle,
     _In_ ULONG Flags,
-    _In_opt_ PWSTR TagPrefix,
-    _In_ PWSTR TagNames
+    _In_opt_ PCWSTR TagPrefix,
+    _In_ PCWSTR TagNames
 );
 
 NTSYSAPI

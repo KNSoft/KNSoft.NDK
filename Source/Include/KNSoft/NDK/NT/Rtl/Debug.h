@@ -62,8 +62,6 @@ RtlDestroyQueryDebugBuffer(
     _In_ PRTL_DEBUG_INFORMATION Buffer
     );
 
-#if (PHNT_VERSION >= PHNT_VISTA)
-
 // private
 NTSYSAPI
 PVOID
@@ -82,8 +80,6 @@ RtlDeCommitDebugInfo(
     _In_ PVOID p,
     _In_ SIZE_T Size
     );
-
-#endif
 
 #define RTL_QUERY_PROCESS_MODULES 0x00000001
 #define RTL_QUERY_PROCESS_BACKTRACES 0x00000002

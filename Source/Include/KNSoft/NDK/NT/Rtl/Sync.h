@@ -349,12 +349,20 @@ RtlTryAcquireSRWLockShared(
     _Inout_ PRTL_SRWLOCK SRWLock
 );
 
-#if (PHNT_VERSION >= PHNT_WIN7)
 // rev
 NTSYSAPI
 VOID
 NTAPI
 RtlAcquireReleaseSRWLockExclusive(
+    _Inout_ PRTL_SRWLOCK SRWLock
+);
+
+#if (NTDDI_VERSION >= NTDDI_WIN10)
+// rev
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlConvertSRWLockExclusiveToShared(
     _Inout_ PRTL_SRWLOCK SRWLock
 );
 #endif
@@ -474,7 +482,21 @@ RtlWakeAddressAll(
 NTSYSAPI
 VOID
 NTAPI
+RtlWakeAddressAllNoFence(
+    _In_ PVOID Address
+);
+
+NTSYSAPI
+VOID
+NTAPI
 RtlWakeAddressSingle(
+    _In_ PVOID Address
+);
+
+NTSYSAPI
+VOID
+NTAPI
+RtlWakeAddressSingleNoFence(
     _In_ PVOID Address
 );
 

@@ -137,6 +137,11 @@ RtlLocateSupervisorFeature(
 
 #endif
 
+#define ELEVATION_FLAG_TOKEN_CHECKS 0x00000001
+#define ELEVATION_FLAG_VIRTUALIZATION 0x00000002
+#define ELEVATION_FLAG_SHORTCUT_REDIR 0x00000004
+#define ELEVATION_FLAG_NO_SIGNATURE_CHECK 0x00000008
+
 typedef union _RTL_ELEVATION_FLAGS
 {
     ULONG Flags;
@@ -145,7 +150,8 @@ typedef union _RTL_ELEVATION_FLAGS
         ULONG ElevationEnabled : 1;
         ULONG VirtualizationEnabled : 1;
         ULONG InstallerDetectEnabled : 1;
-        ULONG ReservedBits : 29;
+        ULONG AdminApprovalModeType : 2;
+        ULONG ReservedBits : 27;
     };
 } RTL_ELEVATION_FLAGS, *PRTL_ELEVATION_FLAGS;
 

@@ -113,30 +113,26 @@ PVOID
 NTAPI
 RtlAddVectoredExceptionHandler(
     _In_ ULONG First,
-    _In_ PVECTORED_EXCEPTION_HANDLER Handler
-);
+    _In_ PVECTORED_EXCEPTION_HANDLER Handler);
 
 NTSYSAPI
 ULONG
 NTAPI
 RtlRemoveVectoredExceptionHandler(
-    _In_ PVOID Handle
-);
+    _In_ PVOID Handle);
 
 NTSYSAPI
 PVOID
 NTAPI
 RtlAddVectoredContinueHandler(
     _In_ ULONG First,
-    _In_ PVECTORED_EXCEPTION_HANDLER Handler
-);
+    _In_ PVECTORED_EXCEPTION_HANDLER Handler);
 
 NTSYSAPI
 ULONG
 NTAPI
 RtlRemoveVectoredContinueHandler(
-    _In_ PVOID Handle
-);
+    _In_ PVOID Handle);
 
 typedef
 _Function_class_(RTLP_UNHANDLED_EXCEPTION_FILTER)
@@ -150,16 +146,14 @@ NTSYSAPI
 VOID
 NTAPI
 RtlSetUnhandledExceptionFilter(
-    _In_ PRTLP_UNHANDLED_EXCEPTION_FILTER UnhandledExceptionFilter
-);
+    _In_ PRTLP_UNHANDLED_EXCEPTION_FILTER UnhandledExceptionFilter);
 
 // rev
 NTSYSAPI
 LONG
 NTAPI
 RtlUnhandledExceptionFilter(
-    _In_ PEXCEPTION_POINTERS ExceptionPointers
-);
+    _In_ PEXCEPTION_POINTERS ExceptionPointers);
 
 // rev
 NTSYSAPI
@@ -167,22 +161,20 @@ LONG
 NTAPI
 RtlUnhandledExceptionFilter2(
     _In_ PEXCEPTION_POINTERS ExceptionPointers,
-    _In_ ULONG Flags
-);
+    _In_ ULONG Flags);
 
 // rev
 NTSYSAPI
 LONG
 NTAPI
 RtlKnownExceptionFilter(
-    _In_ PEXCEPTION_POINTERS ExceptionPointers
-);
+    _In_ PEXCEPTION_POINTERS ExceptionPointers);
 
 #pragma endregion
 
 #pragma region Win32 Error and NTSTATUS
 
-_When_(Status < 0, _Out_range_(> , 0))
+_When_(Status < 0, _Out_range_(>, 0))
 _When_(Status >= 0, _Out_range_(== , 0))
 NTSYSAPI
 ULONG
@@ -190,7 +182,7 @@ NTAPI
 RtlNtStatusToDosError(
     _In_ NTSTATUS Status);
 
-_When_(Status < 0, _Out_range_(> , 0))
+_When_(Status < 0, _Out_range_(>, 0))
 _When_(Status >= 0, _Out_range_(== , 0))
 NTSYSAPI
 ULONG

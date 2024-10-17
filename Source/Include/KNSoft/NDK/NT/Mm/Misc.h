@@ -258,7 +258,7 @@ NTAPI
 NtCreateSection(
     _Out_ PHANDLE SectionHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ PLARGE_INTEGER MaximumSize,
     _In_ ULONG SectionPageProtection,
     _In_ ULONG AllocationAttributes,
@@ -271,7 +271,7 @@ NTAPI
 NtCreateSectionEx(
     _Out_ PHANDLE SectionHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ PLARGE_INTEGER MaximumSize,
     _In_ ULONG SectionPageProtection,
     _In_ ULONG AllocationAttributes,
@@ -286,7 +286,7 @@ NTAPI
 NtOpenSection(
     _Out_ PHANDLE SectionHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_ POBJECT_ATTRIBUTES ObjectAttributes);
+    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
 NTSYSCALLAPI
 NTSTATUS
@@ -367,7 +367,7 @@ NtCreatePartition(
     _In_opt_ HANDLE ParentPartitionHandle,
     _Out_ PHANDLE PartitionHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ ULONG PreferredNode);
 
 NTSYSCALLAPI
@@ -376,7 +376,7 @@ NTAPI
 NtOpenPartition(
     _Out_ PHANDLE PartitionHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_ POBJECT_ATTRIBUTES ObjectAttributes);
+    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
 #endif
 

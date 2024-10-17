@@ -382,8 +382,15 @@ NTSTATUS
 NTAPI
 RtlAnsiStringToUnicodeString(
     _Inout_ PUNICODE_STRING DestinationString,
-    _In_ PANSI_STRING SourceString,
+    _In_ PCANSI_STRING SourceString,
     _In_ BOOLEAN AllocateDestinationString
+);
+
+NTSYSAPI
+ULONG
+NTAPI
+RtlxAnsiStringToUnicodeSize(
+    _In_ PCANSI_STRING AnsiString
 );
 
 NTSYSAPI

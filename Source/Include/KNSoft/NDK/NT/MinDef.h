@@ -275,6 +275,8 @@ typedef DOUBLE *PDOUBLE;
 
 #define MAKEDWORD(l, h) ((DWORD)(((WORD)(((DWORD_PTR)(l)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(h)) & 0xffff))) << 16))
 #define MAKEQWORD(l, h) ((QWORD)(((DWORD)(((DWORD_PTR)(l)) & 0xffffffff)) | ((QWORD)((DWORD)(((DWORD_PTR)(h)) & 0xffffffff))) << 32))
+#define LODWORD(l) ((DWORD)(((QWORD)(l)) & 0xffffffff))
+#define HIDWORD(l) ((DWORD)((((QWORD)(l)) >> 32) & 0xffffffff))
 
 #define MAXUCHAR     0xff
 #define MAXUSHORT    0xffff

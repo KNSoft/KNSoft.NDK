@@ -45,4 +45,11 @@ ConsoleControl(
     _In_reads_bytes_(ConsoleInformationLength) PVOID ConsoleInformation,
     _In_ ULONG ConsoleInformationLength);
 
+/* See also NtQuerySendMessage */
+NTSYSCALLAPI
+BOOL
+NTAPI
+QuerySendMessage(
+    _Inout_ MSG* pMsg);
+
 EXTERN_C_END

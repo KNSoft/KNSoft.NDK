@@ -118,7 +118,7 @@ NTSTATUS
 NTAPI
 RtlAddAtomToAtomTable(
     _In_ PVOID AtomTableHandle,
-    _In_ PWSTR AtomName,
+    _In_ PCWSTR AtomName,
     _Inout_opt_ PRTL_ATOM Atom
     );
 
@@ -127,7 +127,7 @@ NTSTATUS
 NTAPI
 RtlLookupAtomInAtomTable(
     _In_ PVOID AtomTableHandle,
-    _In_ PWSTR AtomName,
+    _In_ PCWSTR AtomName,
     _Out_opt_ PRTL_ATOM Atom
     );
 
@@ -164,7 +164,7 @@ NTSYSAPI
 BOOLEAN
 NTAPI
 RtlGetIntegerAtom(
-    _In_ PWSTR AtomName,
+    _In_ PCWSTR AtomName,
     _Out_opt_ PUSHORT IntegerAtom
     );
 
