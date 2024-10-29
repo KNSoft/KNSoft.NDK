@@ -3,6 +3,7 @@
 #include "../MinDef.h"
 
 EXTERN_C_START
+
 /* ntifs.h */
 #define SeLengthSid( Sid ) (8 + (4 * ((SID*)Sid)->SubAuthorityCount))
 
