@@ -37,7 +37,7 @@
         FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writegsdword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
             FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writegsword(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
                 FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writegsbyte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
-                    (__fastfail(FAST_FAIL_INVALID_ARG), 0)\
+                    __fastfail(FAST_FAIL_INVALID_ARG)\
             )\
         )\
     )\
@@ -69,7 +69,7 @@
     FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writefsdword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
         FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writefsword(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
             FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writefsbyte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
-                (__fastfail(FAST_FAIL_INVALID_ARG), 0)\
+                __fastfail(FAST_FAIL_INVALID_ARG)\
         )\
     )\
 )
