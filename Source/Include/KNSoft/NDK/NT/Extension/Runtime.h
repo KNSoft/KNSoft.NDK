@@ -4,10 +4,6 @@
 #include "../Rtl/Process/Process.h"
 #include "../Rtl/Process/EnvironmentBlock.h"
 
-#if !defined(__cplusplus) && _MSC_FULL_VER >= 193933428
-#define FIELD_TYPE(type, field) __typeof__(((type*)NULL)->field)
-#endif
-
 #pragma region TEB Fast Access
 
 #if defined(_M_X64)
@@ -103,7 +99,13 @@ NtGetLastError(VOID)
     return Error;
 }
 
-#define NtSetLastError(Error) WriteTeb(LastErrorValue, Error)
+FORCEINLINE
+VOID
+NtSetLastError(
+    _In_ ULONG Error)
+{
+    WriteTeb(LastErrorValue, Error);
+}
 
 /* Gets or sets the last status */
 
@@ -119,7 +121,13 @@ NtGetLastStatus(VOID)
     return Status;
 }
 
-#define NtSetLastStatus(Status) WriteTeb(LastStatusValue, Status)
+FORCEINLINE
+VOID
+NtSetLastStatus(
+    _In_ NTSTATUS Status)
+{
+    WriteTeb(LastStatusValue, Status);
+}
 
 /*
  * Error code conversion (NOT translation) Win32 Error/NTSTATUS/HRESULT 

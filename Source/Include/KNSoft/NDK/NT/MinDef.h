@@ -259,12 +259,28 @@ typedef SID* PSID;
 #define NT_CUSTOMER_SHIFT 29
 #define NT_CUSTOMER(Status) ((((ULONG)(Status)) >> NT_CUSTOMER_SHIFT) & 1)
 
+#define NT_SEVERITY_MASK 3
+#define NT_SEVERITY_SHIFT 30
+#define NT_SEVERITY(Status) ((((ULONG)(Status)) >> NT_SEVERITY_SHIFT) & NT_SEVERITY_MASK)
+
 #define NT_FACILITY_MASK 0xfff
 #define NT_FACILITY_SHIFT 16
 #define NT_FACILITY(Status) ((((ULONG)(Status)) >> NT_FACILITY_SHIFT) & NT_FACILITY_MASK)
 
 #define NT_CODE_MASK 0xffff
 #define NT_CODE(Status) (((ULONG)(Status)) & NT_CODE_MASK)
+
+FORCEINLINE
+NTSTATUS
+MAKE_NTSTATUS(
+    _In_ ULONG Severity,
+    _In_ ULONG Facility,
+    _In_ ULONG Code)
+{
+    return (NTSTATUS)(((Severity & NT_SEVERITY_MASK) << NT_SEVERITY_SHIFT) |
+                      ((Facility & NT_FACILITY_MASK) << NT_FACILITY_SHIFT) |
+                      (Code & NT_CODE_MASK));
+}
 
 #pragma endregion
 
@@ -298,6 +314,16 @@ EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #define nullptr ((void *)0)
 #endif
 typedef __typeof__(nullptr) nullptr_t;
+#endif
+
+#if defined(__cplusplus)
+#define TYPE_OF decltype
+#elif _MSC_FULL_VER >= 193933428
+#define TYPE_OF __typeof__
+#endif
+
+#if defined(TYPE_OF)
+#define FIELD_TYPE(type, field) TYPE_OF(((type*)NULL)->field)
 #endif
 
 #pragma endregion
