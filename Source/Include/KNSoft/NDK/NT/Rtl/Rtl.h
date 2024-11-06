@@ -12,6 +12,16 @@
 #include "Process/Mitigation.h"
 #include "Process/Process.h"
 
+#include "Security/Access.h"
+#include "Security/Acl.h"
+#include "Security/AppContainer.h"
+#include "Security/BoundaryDescriptor.h"
+#include "Security/Luid.h"
+#include "Security/Misc.h"
+#include "Security/SecurityDescriptor.h"
+#include "Security/Sid.h"
+#include "Security/Token.h"
+
 #include "ActCtx.h"
 #include "Bits.h"
 #include "BootStatus.h"
