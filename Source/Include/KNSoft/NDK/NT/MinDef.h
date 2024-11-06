@@ -59,7 +59,9 @@
 
 #pragma endregion Windows.h
 
-#pragma region Include windef.h
+#pragma region Include windef.h, ntdef.h and wingdi.h
+
+/* windef.h */
 
 #ifndef _WINNT_
 
@@ -132,9 +134,7 @@ typedef SID* PSID;
 
 #endif
 
-#pragma endregion
-
-#pragma region Include ntdef.h
+/* ntdef.h */
 
 #ifndef _NTDEF_
 
@@ -247,6 +247,10 @@ typedef SID* PSID;
 #undef PGROUP_AFFINITY64
 
 #endif
+
+/* wingdi.h */
+
+#include <wingdi.h>
 
 #pragma endregion
 
