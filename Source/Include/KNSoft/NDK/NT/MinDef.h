@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <SdkDdkVer.h>
+
 // Nonstandard extension used: zero-sized array in struct/union
 #pragma warning(disable: 4200)
 
@@ -301,7 +303,6 @@ typedef DOUBLE *PDOUBLE;
 #define MAXUCHAR     0xff
 #define MAXUSHORT    0xffff
 #define MAXULONG     0xffffffff
-#define MAXULONGLONG 0xffffffffffffffff
 
 #pragma endregion
 
