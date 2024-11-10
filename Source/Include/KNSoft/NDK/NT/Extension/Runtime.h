@@ -159,8 +159,8 @@ NtSetLastStatus(
 #pragma region Current runtime information
 
 #define NtCurrentPeb() ((PPEB)ReadTeb(ProcessEnvironmentBlock))
-#define NtCurrentProcessId() ((HANDLE)ReadTeb(ClientId.UniqueProcess))
-#define NtCurrentThreadId() ((HANDLE)ReadTeb(ClientId.UniqueThread))
+#define NtCurrentProcessId() ((ULONG)(ULONG_PTR)ReadTeb(ClientId.UniqueProcess))
+#define NtCurrentThreadId() ((ULONG)(ULONG_PTR)ReadTeb(ClientId.UniqueThread))
 #define NtCurrentLogonId() (NtCurrentPeb()->LogonId)
 #define NtGetProcessHeap() (NtCurrentPeb()->ProcessHeap)
 #define NtGetNtdllBase() (CONTAINING_RECORD(NtCurrentPeb()->Ldr->InInitializationOrderModuleList.Flink, LDR_DATA_TABLE_ENTRY, InInitializationOrderLinks)->DllBase)
