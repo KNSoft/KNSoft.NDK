@@ -445,6 +445,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h">
       <Filter>Package</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\UxTheme.h">
+      <Filter>Win32\Def</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">

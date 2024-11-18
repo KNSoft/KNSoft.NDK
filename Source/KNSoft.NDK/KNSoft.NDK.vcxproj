@@ -242,6 +242,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\UserMgrCli.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\WinSta.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\CommCtrl.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\UxTheme.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinUser.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
   </ItemGroup>

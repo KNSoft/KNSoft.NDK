@@ -13,6 +13,7 @@
 #include <Windows.h>
 #include "Win32/Def/WinUser.h"
 #include "Win32/Def/CommCtrl.h"
+#include "Win32/Def/UxTheme.h"
 
 /* APIs */
 

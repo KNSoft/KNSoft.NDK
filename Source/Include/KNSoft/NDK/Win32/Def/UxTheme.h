@@ -1,0 +1,4 @@
+﻿#pragma once
+
+#define UXTHEME_ATOM_SUBIDLIST 0xA910
+#define UXTHEME_ATOM_SUBAPPNAME 0xA911
