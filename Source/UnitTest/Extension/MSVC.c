@@ -2,7 +2,7 @@
  * Test for the MSVC Specification
  */
 
-#include "../Test.h"
+#include "../UnitTest.h"
 
 static volatile LONG g_lInit = 0;
 

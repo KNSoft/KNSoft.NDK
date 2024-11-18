@@ -2,7 +2,7 @@
  * Test for the StrSafe.h
  */
 
-#include "Test.h"
+#include "UnitTest.h"
 
 #include <KNSoft/NDK/Package/StrSafe.h>
 

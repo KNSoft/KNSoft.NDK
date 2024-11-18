@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KNSoft.NDK", "KNSoft.NDK\KNSoft.NDK.vcxproj", "{1A6001A4-2E81-4CFB-86F3-E1FE1B4A5991}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{E4BBF3A5-9277-48A9-94E6-3F15F740655D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{E4BBF3A5-9277-48A9-94E6-3F15F740655D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1A6001A4-2E81-4CFB-86F3-E1FE1B4A5991} = {1A6001A4-2E81-4CFB-86F3-E1FE1B4A5991}
 	EndProjectSection

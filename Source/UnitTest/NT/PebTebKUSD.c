@@ -2,7 +2,7 @@
  * Test for the KNSoft.NDK PEB/TEB/KUSER_SHARED_DATA structure definitions
  */
 
-#include "../Test.h"
+#include "../UnitTest.h"
 
 TEST_FUNC(PebStruct)
 {

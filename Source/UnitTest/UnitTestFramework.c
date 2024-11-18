@@ -2,7 +2,7 @@
  * Test for the KNSoft.NDK.UnitTest unit test framework itself
  */
 
-#include "Test.h"
+#include "UnitTest.h"
 
 TEST_FUNC(UnitTestFramework)
 {

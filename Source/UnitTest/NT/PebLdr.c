@@ -2,7 +2,7 @@
  * Test for the PEB_LDR_DATA structure definitions
  */
 
-#include "../Test.h"
+#include "../UnitTest.h"
 
 TEST_FUNC(PebLdrStruct)
 {
