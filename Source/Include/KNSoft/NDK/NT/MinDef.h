@@ -4,7 +4,7 @@
 
 #include <SdkDdkVer.h>
 
-// Nonstandard extension used: zero-sized array in struct/union
+// MS-Spec: Nonstandard extension used: zero-sized array in struct/union
 #pragma warning(disable: 4200)
 
 #if defined(_DEBUG) && !defined(DBG)

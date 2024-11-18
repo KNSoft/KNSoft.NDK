@@ -13,7 +13,7 @@
 
 typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
 
-// nonstandard extension used: zero-sized array in struct/union
+// MS-Spec: nonstandard extension used: zero-sized array in struct/union
 #pragma warning(disable: 4200)
 
 #pragma pack(push, 1)
