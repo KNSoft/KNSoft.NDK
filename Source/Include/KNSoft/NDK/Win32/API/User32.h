@@ -31,6 +31,17 @@ MessageBoxTimeoutW(
 WINUSERAPI
 BOOL
 WINAPI
+IsTopLevelWindow(
+    _In_ HWND hWnd);
+
+WINUSERAPI
+HWND
+WINAPI
+GetTaskmanWindow(VOID);
+
+WINUSERAPI
+BOOL
+WINAPI
 EndTask(
     HWND hWnd,
     BOOL fShutDown,
