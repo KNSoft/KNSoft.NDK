@@ -5,7 +5,7 @@
  * Make C string routines a bit more safe and easy.
  * Not equals to the strsafe.h in Windows SDK.
  *
- * When output to a buffer, usually:
+ * Usually, return value is the number of characters written, then:
  *     Return == 0: Error or no data
  *     Return < BufferCount: Success, returns the number of characters or bytes written, not including null-terminator
  *     Return >= BufferCount: Truncated, returns required size in character or byte, not including null-terminator
@@ -17,13 +17,23 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdbool.h>
+
+__forceinline
+bool
+StrSafe_Ret(
+    _In_ unsigned long Ret,
+    _In_ size_t const BufferCount)
+{
+    return Ret > 0 && Ret < BufferCount;
+}
 
 #pragma region String PrintF
 
 _Success_(
     return > 0 && return < BufferCount
 )
-__inline
+__forceinline
 unsigned long
 __cdecl
 StrSafe_CchVPrintfA(
@@ -67,7 +77,7 @@ StrSafe_CchVPrintfA(
 _Success_(
     return > 0 && return < BufferCount
 )
-__inline
+__forceinline
 unsigned long
 __cdecl
 StrSafe_CchVPrintfW(
@@ -111,7 +121,7 @@ StrSafe_CchVPrintfW(
 _Success_(
     return > 0 && return < BufferCount
 )
-__inline
+__forceinline
 unsigned long
 __cdecl
 StrSafe_CchPrintfA(
@@ -129,7 +139,7 @@ StrSafe_CchPrintfA(
 _Success_(
     return > 0 && return < BufferCount
 )
-__inline
+__forceinline
 unsigned long
 __cdecl
 StrSafe_CchPrintfW(
@@ -151,7 +161,7 @@ StrSafe_CchPrintfW(
 _Success_(
     return > 0 && return < BufferCount
 )
-__inline
+__forceinline
 size_t
 __cdecl
 StrSafe_CchCopyA(
@@ -183,7 +193,7 @@ StrSafe_CchCopyA(
 _Success_(
     return > 0 && return < BufferCount
 )
-__inline
+__forceinline
 size_t
 __cdecl
 StrSafe_CchCopyW(
