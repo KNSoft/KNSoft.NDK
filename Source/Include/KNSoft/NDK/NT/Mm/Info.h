@@ -562,26 +562,26 @@ typedef struct _MEMORY_PARTITION_CONFIGURATION_INFORMATION
     ULONG NumaNode;
     ULONG Channel;
     ULONG NumberOfNumaNodes;
-    ULONG_PTR ResidentAvailablePages;
-    ULONG_PTR CommittedPages;
-    ULONG_PTR CommitLimit;
-    ULONG_PTR PeakCommitment;
-    ULONG_PTR TotalNumberOfPages;
-    ULONG_PTR AvailablePages;
-    ULONG_PTR ZeroPages;
-    ULONG_PTR FreePages;
-    ULONG_PTR StandbyPages;
-    ULONG_PTR StandbyPageCountByPriority[8]; // since REDSTONE2
-    ULONG_PTR RepurposedPagesByPriority[8];
-    ULONG_PTR MaximumCommitLimit;
-    ULONG_PTR Reserved; // DonatedPagesToPartitions
+    SIZE_T ResidentAvailablePages;
+    SIZE_T CommittedPages;
+    SIZE_T CommitLimit;
+    SIZE_T PeakCommitment;
+    SIZE_T TotalNumberOfPages;
+    SIZE_T AvailablePages;
+    SIZE_T ZeroPages;
+    SIZE_T FreePages;
+    SIZE_T StandbyPages;
+    SIZE_T StandbyPageCountByPriority[8]; // since REDSTONE2
+    SIZE_T RepurposedPagesByPriority[8];
+    SIZE_T MaximumCommitLimit;
+    SIZE_T Reserved; // DonatedPagesToPartitions
     ULONG PartitionId; // since REDSTONE3
 } MEMORY_PARTITION_CONFIGURATION_INFORMATION, *PMEMORY_PARTITION_CONFIGURATION_INFORMATION;
 
 // private
 typedef struct _MEMORY_PARTITION_TRANSFER_INFORMATION
 {
-    ULONG_PTR NumberOfPages;
+    SIZE_T NumberOfPages;
     ULONG NumaNode;
     ULONG Flags;
 } MEMORY_PARTITION_TRANSFER_INFORMATION, *PMEMORY_PARTITION_TRANSFER_INFORMATION;
@@ -600,14 +600,14 @@ typedef struct _MEMORY_PARTITION_PAGE_COMBINE_INFORMATION
 {
     HANDLE StopHandle;
     ULONG Flags;
-    ULONG_PTR TotalNumberOfPages;
+    SIZE_T TotalNumberOfPages;
 } MEMORY_PARTITION_PAGE_COMBINE_INFORMATION, *PMEMORY_PARTITION_PAGE_COMBINE_INFORMATION;
 
 // private
 typedef struct _MEMORY_PARTITION_PAGE_RANGE
 {
     ULONG_PTR StartPage;
-    ULONG_PTR NumberOfPages;
+    SIZE_T NumberOfPages;
 } MEMORY_PARTITION_PAGE_RANGE, *PMEMORY_PARTITION_PAGE_RANGE;
 
 // private
@@ -633,7 +633,7 @@ typedef struct _MEMORY_PARTITION_MEMORY_EVENTS_INFORMATION
     } Flags;
 
     ULONG HandleAttributes;
-    ULONG DesiredAccess;
+    ACCESS_MASK DesiredAccess;
     HANDLE LowCommitCondition; // \KernelObjects\LowCommitCondition
     HANDLE HighCommitCondition; // \KernelObjects\HighCommitCondition
     HANDLE MaximumCommitCondition; // \KernelObjects\MaximumCommitCondition

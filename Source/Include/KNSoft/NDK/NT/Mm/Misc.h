@@ -393,7 +393,7 @@ NTSTATUS
 NTAPI
 NtMapUserPhysicalPages(
     _In_ PVOID VirtualAddress,
-    _In_ ULONG_PTR NumberOfPages,
+    _In_ SIZE_T NumberOfPages,
     _In_reads_opt_(NumberOfPages) PULONG_PTR UserPfnArray);
 
 NTSYSCALLAPI
@@ -401,7 +401,7 @@ NTSTATUS
 NTAPI
 NtMapUserPhysicalPagesScatter(
     _In_reads_(NumberOfPages) PVOID* VirtualAddresses,
-    _In_ ULONG_PTR NumberOfPages,
+    _In_ SIZE_T NumberOfPages,
     _In_reads_opt_(NumberOfPages) PULONG_PTR UserPfnArray);
 
 NTSYSCALLAPI
@@ -409,7 +409,7 @@ NTSTATUS
 NTAPI
 NtAllocateUserPhysicalPages(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PULONG_PTR NumberOfPages,
+    _Inout_ PSIZE_T NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray);
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
@@ -418,7 +418,7 @@ NTSTATUS
 NTAPI
 NtAllocateUserPhysicalPagesEx(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PULONG_PTR NumberOfPages,
+    _Inout_ PSIZE_T NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray,
     _Inout_updates_opt_(ParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
@@ -430,7 +430,7 @@ NTSTATUS
 NTAPI
 NtFreeUserPhysicalPages(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PULONG_PTR NumberOfPages,
+    _Inout_ PSIZE_T NumberOfPages,
     _In_reads_(*NumberOfPages) PULONG_PTR UserPfnArray);
 
 #endif
@@ -450,7 +450,7 @@ NtGetWriteWatch(
     _In_ PVOID BaseAddress,
     _In_ SIZE_T RegionSize,
     _Out_writes_(*EntriesInUserAddressArray) PVOID* UserAddressArray,
-    _Inout_ PULONG_PTR EntriesInUserAddressArray,
+    _Inout_ PSIZE_T EntriesInUserAddressArray,
     _Out_ PULONG Granularity);
 
 NTSYSCALLAPI

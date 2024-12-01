@@ -46,7 +46,7 @@ NTSTATUS
 NTAPI
 NtCreateNamedPipeFile(
     _Out_ PHANDLE FileHandle,
-    _In_ ULONG DesiredAccess,
+    _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock,
     _In_ ULONG ShareAccess,
@@ -231,7 +231,7 @@ NTSTATUS
 NTAPI
 NtCreateMailslotFile(
     _Out_ PHANDLE FileHandle,
-    _In_ ULONG DesiredAccess,
+    _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock,
     _In_ ULONG CreateOptions,

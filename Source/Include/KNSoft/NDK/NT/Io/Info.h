@@ -114,7 +114,7 @@ typedef struct _FILE_STANDARD_INFORMATION
     BOOLEAN Directory;
 } FILE_STANDARD_INFORMATION, *PFILE_STANDARD_INFORMATION;
 
-//#if (NTDDI_VERSION >= NTDDI_WIN10)
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 typedef struct _FILE_STANDARD_INFORMATION_EX
 {
     LARGE_INTEGER AllocationSize;
@@ -125,17 +125,17 @@ typedef struct _FILE_STANDARD_INFORMATION_EX
     BOOLEAN AlternateStream;
     BOOLEAN MetadataAttribute;
 } FILE_STANDARD_INFORMATION_EX, *PFILE_STANDARD_INFORMATION_EX;
-//#endif
+#endif
 
 typedef struct _FILE_INTERNAL_INFORMATION
 {
     union
     {
-        LARGE_INTEGER IndexNumber;
+        ULARGE_INTEGER IndexNumber;
         struct
         {
-            LONGLONG MftRecordIndex : 48; // rev
-            LONGLONG SequenceNumber : 16; // rev
+            ULONGLONG MftRecordIndex : 48; // rev
+            ULONGLONG SequenceNumber : 16; // rev
         };
     };
 } FILE_INTERNAL_INFORMATION, *PFILE_INTERNAL_INFORMATION;
@@ -1090,7 +1090,7 @@ typedef struct _FILE_ID_GLOBAL_TX_DIR_INFORMATION
 
 typedef struct _FILE_OBJECTID_INFORMATION
 {
-    LONGLONG FileReference;
+    ULONGLONG FileReference;
     UCHAR ObjectId[16]; // GUID
     union
     {

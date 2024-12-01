@@ -285,7 +285,7 @@ NTSTATUS
 NTAPI
 ZwAllocateUserPhysicalPages(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PULONG_PTR NumberOfPages,
+    _Inout_ PSIZE_T NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray
     );
 
@@ -294,7 +294,7 @@ NTSTATUS
 NTAPI
 ZwAllocateUserPhysicalPagesEx(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PULONG_PTR NumberOfPages,
+    _Inout_ PSIZE_T NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray,
     _Inout_updates_opt_(ParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
@@ -1058,7 +1058,7 @@ NTSTATUS
 NTAPI
 ZwCreateMailslotFile(
     _Out_ PHANDLE FileHandle,
-    _In_ ULONG DesiredAccess,
+    _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock,
     _In_ ULONG CreateOptions,
@@ -1082,7 +1082,7 @@ NTSTATUS
 NTAPI
 ZwCreateNamedPipeFile(
     _Out_ PHANDLE FileHandle,
-    _In_ ULONG DesiredAccess,
+    _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock,
     _In_ ULONG ShareAccess,
@@ -1831,7 +1831,7 @@ NTSTATUS
 NTAPI
 ZwFreeUserPhysicalPages(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PULONG_PTR NumberOfPages,
+    _Inout_ PSIZE_T NumberOfPages,
     _In_reads_(*NumberOfPages) PULONG_PTR UserPfnArray
     );
 
@@ -2005,7 +2005,7 @@ ZwGetWriteWatch(
     _In_ PVOID BaseAddress,
     _In_ SIZE_T RegionSize,
     _Out_writes_(*EntriesInUserAddressArray) PVOID *UserAddressArray,
-    _Inout_ PULONG_PTR EntriesInUserAddressArray,
+    _Inout_ PSIZE_T EntriesInUserAddressArray,
     _Out_ PULONG Granularity
     );
 
@@ -2251,7 +2251,7 @@ NTSTATUS
 NTAPI
 ZwMapUserPhysicalPages(
     _In_ PVOID VirtualAddress,
-    _In_ ULONG_PTR NumberOfPages,
+    _In_ SIZE_T NumberOfPages,
     _In_reads_opt_(NumberOfPages) PULONG_PTR UserPfnArray
     );
 
@@ -2260,7 +2260,7 @@ NTSTATUS
 NTAPI
 ZwMapUserPhysicalPagesScatter(
     _In_reads_(NumberOfPages) PVOID *VirtualAddresses,
-    _In_ ULONG_PTR NumberOfPages,
+    _In_ SIZE_T NumberOfPages,
     _In_reads_opt_(NumberOfPages) PULONG_PTR UserPfnArray
     );
 

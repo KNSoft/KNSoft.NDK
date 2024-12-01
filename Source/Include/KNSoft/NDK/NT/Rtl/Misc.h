@@ -343,24 +343,25 @@ RtlAppxIsFileOwnedByTrustedInstaller(
 #endif
 
 // Windows Internals book
-#define PSM_ACTIVATION_TOKEN_PACKAGED_APPLICATION 0x1
-#define PSM_ACTIVATION_TOKEN_SHARED_ENTITY 0x2
-#define PSM_ACTIVATION_TOKEN_FULL_TRUST 0x4
-#define PSM_ACTIVATION_TOKEN_NATIVE_SERVICE 0x8
-#define PSM_ACTIVATION_TOKEN_DEVELOPMENT_APP 0x10
-#define PSM_ACTIVATION_TOKEN_BREAKAWAY_INHIBITED 0x20
-#define PSM_ACTIVATION_TOKEN_RUNTIME_BROKER 0x40 // rev
-#define PSM_ACTIVATION_TOKEN_UNIVERSAL_CONSOLE 0x200 // rev
-#define PSM_ACTIVATION_TOKEN_WIN32ALACARTE_PROCESS 0x10000 // rev
+#define PSM_ACTIVATION_TOKEN_PACKAGED_APPLICATION       0x00000001UL // AppX package format
+#define PSM_ACTIVATION_TOKEN_SHARED_ENTITY              0x00000002UL // Shared token, multiple binaries in the same package
+#define PSM_ACTIVATION_TOKEN_FULL_TRUST                 0x00000004UL // Trusted (Centennial), converted Win32 application
+#define PSM_ACTIVATION_TOKEN_NATIVE_SERVICE             0x00000008UL // Packaged service created by SCM
+//#define PSM_ACTIVATION_TOKEN_DEVELOPMENT_APP          0x00000010UL
+#define PSM_ACTIVATION_TOKEN_MULTIPLE_INSTANCES_ALLOWED 0x00000010UL
+#define PSM_ACTIVATION_TOKEN_BREAKAWAY_INHIBITED        0x00000020UL // Cannot create non-packaged child processes
+#define PSM_ACTIVATION_TOKEN_RUNTIME_BROKER             0x00000040UL // rev
+#define PSM_ACTIVATION_TOKEN_UNIVERSAL_CONSOLE          0x00000200UL // rev
+#define PSM_ACTIVATION_TOKEN_WIN32ALACARTE_PROCESS      0x00010000UL // rev
 
 // PackageOrigin appmodel.h
-//#define PackageOrigin_Unknown 0
-//#define PackageOrigin_Unsigned 1
-//#define PackageOrigin_Inbox 2
-//#define PackageOrigin_Store 3
+//#define PackageOrigin_Unknown           0
+//#define PackageOrigin_Unsigned          1
+//#define PackageOrigin_Inbox             2
+//#define PackageOrigin_Store             3
 //#define PackageOrigin_DeveloperUnsigned 4
-//#define PackageOrigin_DeveloperSigned 5
-//#define PackageOrigin_LineOfBusiness 6
+//#define PackageOrigin_DeveloperSigned   5
+//#define PackageOrigin_LineOfBusiness    6
 
 #define PSMP_MINIMUM_SYSAPP_CLAIM_VALUES 2
 #define PSMP_MAXIMUM_SYSAPP_CLAIM_VALUES 4
