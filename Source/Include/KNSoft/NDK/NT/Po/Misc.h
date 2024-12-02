@@ -221,7 +221,7 @@ typedef enum _POWER_STATE_DISABLED_TYPE
     PoDisabledStateReserved5 = 5,
     PoDisabledStateSleeping4Firmware = 6,
     PoDisabledStateMaximum = 7
-} POWER_STATE_DISABLED_TYPE, PPOWER_STATE_DISABLED_TYPE;
+} POWER_STATE_DISABLED_TYPE, *PPOWER_STATE_DISABLED_TYPE;
 
 #define POWER_STATE_DISABLED_TYPE_MAX  8
 

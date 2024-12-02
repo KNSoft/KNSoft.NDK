@@ -92,6 +92,8 @@ typedef enum _CONSOLECONTROL
     ConsoleEndTask = 7, // CONSOLEENDTASK
 } CONSOLECONTROL;
 
+#define CPI_NEWPROCESSWINDOW 0x0001
+
 typedef struct _CONSOLE_PROCESS_INFO
 {
     ULONG ProcessID;

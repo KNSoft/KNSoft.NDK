@@ -15,6 +15,13 @@ EXTERN_C_START
 #define EFI_VARIABLE_APPEND_WRITE                           0x00000040
 #define EFI_VARIABLE_ENHANCED_AUTHENTICATED_ACCESS          0x00000080
 
+/**
+ * Retrieves the value of the specified firmware environment variable.
+ *
+ * @param VariableName 
+ * @param VariableValue 
+ * @return NTSTATUS Successful or errant status. 
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -27,13 +34,6 @@ NtQuerySystemEnvironmentValue(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
-NtSetSystemEnvironmentValue(
-    _In_ PUNICODE_STRING VariableName,
-    _In_ PUNICODE_STRING VariableValue);
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
 NtQuerySystemEnvironmentValueEx(
     _In_ PUNICODE_STRING VariableName,
     _In_ PCGUID VendorGuid,
@@ -41,6 +41,13 @@ NtQuerySystemEnvironmentValueEx(
     _Inout_ PULONG ValueLength,
     _Out_opt_ PULONG Attributes // EFI_VARIABLE_*
 );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtSetSystemEnvironmentValue(
+    _In_ PUNICODE_STRING VariableName,
+    _In_ PUNICODE_STRING VariableValue);
 
 NTSYSCALLAPI
 NTSTATUS

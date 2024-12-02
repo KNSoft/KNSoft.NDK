@@ -112,7 +112,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlSetEnvironmentStrings(
-    _In_ PCWCHAR NewEnvironment,
+    _In_ PCWSTR NewEnvironment,
     _In_ SIZE_T NewEnvironmentSize
     );
 

@@ -130,7 +130,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemNativeBasicInformation, // q: SYSTEM_BASIC_INFORMATION
     SystemErrorPortTimeouts, // SYSTEM_ERROR_PORT_TIMEOUTS
     SystemLowPriorityIoInformation, // q: SYSTEM_LOW_PRIORITY_IO_INFORMATION
-    SystemTpmBootEntropyInformation, // q: TPM_BOOT_ENTROPY_NT_RESULT // ExQueryTpmBootEntropyInformation
+    SystemTpmBootEntropyInformation, // q: BOOT_ENTROPY_NT_RESULT // ExQueryBootEntropyInformation  
     SystemVerifierCountersInformation, // q: SYSTEM_VERIFIER_COUNTERS_INFORMATION
     SystemPagedPoolInformationEx, // q: SYSTEM_FILECACHE_INFORMATION; s (requires SeIncreaseQuotaPrivilege) (info for WorkingSetTypePagedPool)
     SystemSystemPtesInformationEx, // q: SYSTEM_FILECACHE_INFORMATION; s (requires SeIncreaseQuotaPrivilege) (info for WorkingSetTypeSystemPtes) // 120
@@ -155,7 +155,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemMemoryChannelInformation, // q: SYSTEM_MEMORY_CHANNEL_INFORMATION
     SystemBootLogoInformation, // q: SYSTEM_BOOT_LOGO_INFORMATION // 140
     SystemProcessorPerformanceInformationEx, // q: SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION_EX // (EX in: USHORT ProcessorGroup) // since WINBLUE
-    SystemCriticalProcessErrorLogInformation,
+    SystemCriticalProcessErrorLogInformation, // CRITICAL_PROCESS_EXCEPTION_DATA
     SystemSecureBootPolicyInformation, // q: SYSTEM_SECUREBOOT_POLICY_INFORMATION
     SystemPageFileInformationEx, // q: SYSTEM_PAGEFILE_INFORMATION_EX
     SystemSecureBootInformation, // q: SYSTEM_SECUREBOOT_INFORMATION
@@ -163,7 +163,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemPortableWorkspaceEfiLauncherInformation, // q: SYSTEM_PORTABLE_WORKSPACE_EFI_LAUNCHER_INFORMATION
     SystemFullProcessInformation, // q: SYSTEM_PROCESS_INFORMATION with SYSTEM_PROCESS_INFORMATION_EXTENSION (requires admin)
     SystemKernelDebuggerInformationEx, // q: SYSTEM_KERNEL_DEBUGGER_INFORMATION_EX
-    SystemBootMetadataInformation, // 150
+    SystemBootMetadataInformation, // 150 // (requires SeTcbPrivilege)
     SystemSoftRebootInformation, // q: ULONG
     SystemElamCertificateInformation, // s: SYSTEM_ELAM_CERTIFICATE_INFORMATION
     SystemOfflineDumpConfigInformation, // q: OFFLINE_CRASHDUMP_CONFIGURATION_TABLE_V2
@@ -186,7 +186,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemInterruptCpuSetsInformation, // q: SYSTEM_INTERRUPT_CPU_SET_INFORMATION // 170
     SystemSecureBootPolicyFullInformation, // q: SYSTEM_SECUREBOOT_POLICY_FULL_INFORMATION
     SystemCodeIntegrityPolicyFullInformation,
-    SystemAffinitizedInterruptProcessorInformation, // (requires SeIncreaseBasePriorityPrivilege)
+    SystemAffinitizedInterruptProcessorInformation, // q: KAFFINITY_EX // (requires SeIncreaseBasePriorityPrivilege)
     SystemRootSiloInformation, // q: SYSTEM_ROOT_SILO_INFORMATION
     SystemCpuSetInformation, // q: SYSTEM_CPU_SET_INFORMATION // since THRESHOLD2
     SystemCpuSetTagInformation, // q: SYSTEM_CPU_SET_TAG_INFORMATION
@@ -255,7 +255,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemMemoryNumaInformation, // SYSTEM_MEMORY_NUMA_INFORMATION_INPUT, SYSTEM_MEMORY_NUMA_INFORMATION_OUTPUT
     SystemMemoryNumaPerformanceInformation, // SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_INPUTSYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_INPUT, SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_OUTPUT // since 24H2 // 240
     SystemCodeIntegritySignedPoliciesFullInformation,
-    SystemSecureSecretsInformation,
+    SystemSecureCoreInformation, // SystemSecureSecretsInformation
     SystemTrustedAppsRuntimeInformation, // SYSTEM_TRUSTEDAPPS_RUNTIME_INFORMATION
     SystemBadPageInformationEx, // SYSTEM_BAD_PAGE_INFORMATION
     SystemResourceDeadlockTimeout, // ULONG
@@ -279,6 +279,29 @@ typedef struct _SYSTEM_BASIC_INFORMATION
     CCHAR NumberOfProcessors;
 } SYSTEM_BASIC_INFORMATION, *PSYSTEM_BASIC_INFORMATION;
 
+// SYSTEM_PROCESSOR_INFORMATION // ProcessorFeatureBits (see also SYSTEM_PROCESSOR_FEATURES_INFORMATION)
+#define KF_V86_VIS 0x00000001
+#define KF_RDTSC 0x00000002 // Indicates support for the RDTSC instruction.
+#define KF_CR4 0x00000004 // Indicates support for the CR4 register.
+#define KF_CMOV 0x00000008
+#define KF_GLOBAL_PAGE 0x00000010 // Indicates support for global pages.
+#define KF_LARGE_PAGE 0x00000020 // Indicates support for large pages.
+#define KF_MTRR 0x00000040
+#define KF_CMPXCHG8B 0x00000080 // Indicates support for the CMPXCHG8B instruction.
+#define KF_MMX 0x00000100
+#define KF_WORKING_PTE 0x00000200
+#define KF_PAT 0x00000400
+#define KF_FXSR 0x00000800
+#define KF_FAST_SYSCALL 0x00001000 // Indicates support for fast system calls.
+#define KF_XMMI 0x00002000
+#define KF_3DNOW 0x00004000
+#define KF_AMDK6MTRR 0x00008000
+#define KF_XMMI64 0x00010000
+#define KF_DTS 0x00020000
+#define KF_NOEXECUTE 0x20000000
+#define KF_GLOBAL_32BIT_EXECUTE 0x40000000
+#define KF_GLOBAL_32BIT_NOEXECUTE 0x80000000
+
 typedef struct _SYSTEM_PROCESSOR_INFORMATION
 {
     USHORT ProcessorArchitecture;
@@ -287,26 +310,6 @@ typedef struct _SYSTEM_PROCESSOR_INFORMATION
     USHORT MaximumProcessors;
     ULONG ProcessorFeatureBits;
 } SYSTEM_PROCESSOR_INFORMATION, *PSYSTEM_PROCESSOR_INFORMATION;
-
-// SYSTEM_PROCESSOR_INFORMATION // ProcessorFeatureBits // ksamd64
-#define KF_RDTSC 0x0000000000000002
-#define KF_CR4 0x0000000000000004
-#define KF_GLOBAL_PAGE 0x0000000000000010
-#define KF_LARGE_PAGE 0x0000000000000020
-#define KF_CMPXCHG8B 0x0000000000000080
-#define KF_FAST_SYSCALL 0x0000000000001000
-#define KF_BRANCH 0x0000000000020000
-#define KF_XSTATE 0x0000000000800000
-#define KF_RDTSCP 0x0000000400000000
-#define KF_CET_SS 0x0000400000000000
-#define KF_XFD 0x0080000000000000
-#define KF_XSAVEOPT_BIT 0x0F
-#define KF_XSTATE_BIT 0x17
-#define KF_RDWRFSGSBASE_BIT 0x1C
-#define KF_XSAVES_BIT 0x26
-#define KF_FPU_LEAKAGE_BIT 0x29
-#define KF_CAT_BIT 0x2C
-#define KF_XFD_BIT 0x37
 
 typedef struct _SYSTEM_PERFORMANCE_INFORMATION
 {
@@ -385,9 +388,13 @@ typedef struct _SYSTEM_PERFORMANCE_INFORMATION
     ULONG SecondLevelTbFills;
     ULONG SystemCalls;
     ULONGLONG CcTotalDirtyPages; // since THRESHOLD
-    ULONGLONG CcDirtyPageThreshold; // since THRESHOLD
-    LONGLONG ResidentAvailablePages; // since THRESHOLD
-    ULONGLONG SharedCommittedPages; // since THRESHOLD
+    ULONGLONG CcDirtyPageThreshold;
+    LONGLONG ResidentAvailablePages;
+    ULONGLONG SharedCommittedPages;
+    ULONGLONG MdlPagesAllocated; // since 24H2
+    ULONGLONG PfnDatabaseCommittedPages;
+    ULONGLONG SystemPageTableCommittedPages;
+    ULONGLONG ContiguousPagesAllocated;
 } SYSTEM_PERFORMANCE_INFORMATION, *PSYSTEM_PERFORMANCE_INFORMATION;
 
 typedef struct _SYSTEM_TIMEOFDAY_INFORMATION
@@ -407,7 +414,7 @@ typedef struct _SYSTEM_THREAD_INFORMATION
     LARGE_INTEGER UserTime;
     LARGE_INTEGER CreateTime;
     ULONG WaitTime;
-    ULONG_PTR StartAddress;
+    PVOID StartAddress;
     CLIENT_ID ClientId;
     KPRIORITY Priority;
     KPRIORITY BasePriority;
@@ -420,10 +427,10 @@ typedef struct _SYSTEM_THREAD_INFORMATION
 typedef struct _SYSTEM_EXTENDED_THREAD_INFORMATION
 {
     SYSTEM_THREAD_INFORMATION ThreadInfo;
-    PVOID StackBase;
-    PVOID StackLimit;
-    ULONG_PTR Win32StartAddress;
-    PTEB TebBase; // since VISTA
+    ULONG_PTR StackBase;
+    ULONG_PTR StackLimit;
+    PVOID Win32StartAddress;
+    PVOID TebBase; // since VISTA
     ULONG_PTR Reserved2;
     ULONG_PTR Reserved3;
     ULONG_PTR Reserved4;
@@ -517,7 +524,7 @@ typedef struct _SYSTEM_HANDLE_TABLE_ENTRY_INFO
     UCHAR HandleAttributes;
     USHORT HandleValue;
     PVOID Object;
-    ULONG GrantedAccess;
+    ACCESS_MASK GrantedAccess;
 } SYSTEM_HANDLE_TABLE_ENTRY_INFO, *PSYSTEM_HANDLE_TABLE_ENTRY_INFO;
 
 typedef struct _SYSTEM_HANDLE_INFORMATION
@@ -534,7 +541,7 @@ typedef struct _SYSTEM_OBJECTTYPE_INFORMATION
     ULONG TypeIndex;
     ULONG InvalidAttributes;
     GENERIC_MAPPING GenericMapping;
-    ULONG ValidAccessMask;
+    ACCESS_MASK ValidAccessMask;
     ULONG PoolType;
     BOOLEAN SecurityRequired;
     BOOLEAN WaitableObject;
@@ -866,8 +873,6 @@ typedef struct _SYSTEM_SESSION_PROCESS_INFORMATION
 
 #if !defined(_KERNEL_MODE)
 
-typedef struct _IMAGE_EXPORT_DIRECTORY *PIMAGE_EXPORT_DIRECTORY; // from ntrtl.h
-
 // private
 typedef struct _SYSTEM_GDI_DRIVER_INFORMATION
 {
@@ -927,9 +932,9 @@ typedef struct _SYSTEM_PROCESSOR_POWER_INFORMATION
 typedef struct _SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX
 {
     PVOID Object;
-    ULONG_PTR UniqueProcessId;
-    ULONG_PTR HandleValue;
-    ULONG GrantedAccess;
+    HANDLE UniqueProcessId;
+    HANDLE HandleValue;
+    ACCESS_MASK GrantedAccess;
     USHORT CreatorBackTraceIndex;
     USHORT ObjectTypeIndex;
     ULONG HandleAttributes;
@@ -1087,14 +1092,14 @@ typedef struct _SYSTEM_FIRMWARE_TABLE_HANDLER
 // private
 typedef struct _SYSTEM_MEMORY_LIST_INFORMATION
 {
-    ULONG_PTR ZeroPageCount;
-    ULONG_PTR FreePageCount;
-    ULONG_PTR ModifiedPageCount;
-    ULONG_PTR ModifiedNoWritePageCount;
-    ULONG_PTR BadPageCount;
-    ULONG_PTR PageCountByPriority[8];
-    ULONG_PTR RepurposedPagesByPriority[8];
-    ULONG_PTR ModifiedPageCountPageFile;
+    SIZE_T ZeroPageCount;
+    SIZE_T FreePageCount;
+    SIZE_T ModifiedPageCount;
+    SIZE_T ModifiedNoWritePageCount;
+    SIZE_T BadPageCount;
+    SIZE_T PageCountByPriority[8];
+    SIZE_T RepurposedPagesByPriority[8];
+    SIZE_T ModifiedPageCountPageFile;
 } SYSTEM_MEMORY_LIST_INFORMATION, *PSYSTEM_MEMORY_LIST_INFORMATION;
 
 // private
@@ -1570,9 +1575,6 @@ typedef struct _SMKM_REGION_EXTENT
     SIZE_T ByteOffset;
 } SMKM_REGION_EXTENT, *PSMKM_REGION_EXTENT;
 
-typedef struct _FILE_OBJECT *PFILE_OBJECT;
-typedef struct _DEVICE_OBJECT *PDEVICE_OBJECT;
-typedef struct _IRP *PIRP;
 typedef struct _RTL_BITMAP *PRTL_BITMAP;
 
 typedef struct _SMKM_FILE_INFO
@@ -1896,14 +1898,30 @@ typedef struct _SYSTEM_LOW_PRIORITY_IO_INFORMATION
 } SYSTEM_LOW_PRIORITY_IO_INFORMATION, *PSYSTEM_LOW_PRIORITY_IO_INFORMATION;
 
 // symbols
-typedef enum _TPM_BOOT_ENTROPY_RESULT_CODE
+typedef enum _BOOT_ENTROPY_SOURCE_RESULT_CODE
 {
-    TpmBootEntropyStructureUninitialized,
-    TpmBootEntropyDisabledByPolicy,
-    TpmBootEntropyNoTpmFound,
-    TpmBootEntropyTpmError,
-    TpmBootEntropySuccess
-} TPM_BOOT_ENTROPY_RESULT_CODE;
+    BootEntropySourceStructureUninitialized,
+    BootEntropySourceDisabledByPolicy,
+    BootEntropySourceNotPresent,
+    BootEntropySourceError,
+    BootEntropySourceSuccess
+} BOOT_ENTROPY_SOURCE_RESULT_CODE;
+
+typedef enum _BOOT_ENTROPY_SOURCE_ID
+{
+    BootEntropySourceNone = 0,
+    BootEntropySourceSeedfile = 1,
+    BootEntropySourceExternal = 2,
+    BootEntropySourceTpm = 3,
+    BootEntropySourceRdrand = 4,
+    BootEntropySourceTime = 5,
+    BootEntropySourceAcpiOem0 = 6,
+    BootEntropySourceUefi = 7,
+    BootEntropySourceCng = 8,
+    BootEntropySourceTcbTpm = 9,
+    BootEntropySourceTcbRdrand = 10,
+    BootMaxEntropySources = 10
+} BOOT_ENTROPY_SOURCE_ID, *PBOOT_ENTROPY_SOURCE_ID;
 
 // Contents of KeLoaderBlock->Extension->TpmBootEntropyResult (TPM_BOOT_ENTROPY_LDR_RESULT).
 // EntropyData is truncated to 40 bytes.
@@ -1912,12 +1930,32 @@ typedef enum _TPM_BOOT_ENTROPY_RESULT_CODE
 typedef struct _TPM_BOOT_ENTROPY_NT_RESULT
 {
     ULONGLONG Policy;
-    TPM_BOOT_ENTROPY_RESULT_CODE ResultCode;
+    BOOT_ENTROPY_SOURCE_RESULT_CODE ResultCode;
     NTSTATUS ResultStatus;
     ULONGLONG Time;
     ULONG EntropyLength;
     UCHAR EntropyData[40];
 } TPM_BOOT_ENTROPY_NT_RESULT, *PTPM_BOOT_ENTROPY_NT_RESULT;
+
+// private
+typedef struct _BOOT_ENTROPY_SOURCE_NT_RESULT
+{
+    BOOT_ENTROPY_SOURCE_ID SourceId;
+    ULONG64 Policy;
+    BOOT_ENTROPY_SOURCE_RESULT_CODE ResultCode;
+    NTSTATUS ResultStatus;
+    ULONGLONG Time;
+    ULONG EntropyLength;
+    UCHAR EntropyData[64];
+} BOOT_ENTROPY_SOURCE_NT_RESULT, *PBOOT_ENTROPY_SOURCE_NT_RESULT;
+
+// private
+typedef struct _BOOT_ENTROPY_NT_RESULT
+{
+    ULONG maxEntropySources;
+    BOOT_ENTROPY_SOURCE_NT_RESULT EntropySourceResult[10];
+    UCHAR SeedBytesForCng[48];
+} BOOT_ENTROPY_NT_RESULT, *PBOOT_ENTROPY_NT_RESULT;
 
 // private
 typedef struct _SYSTEM_VERIFIER_COUNTERS_INFORMATION
@@ -2016,7 +2054,7 @@ typedef struct _SYSTEM_BOOT_GRAPHICS_INFORMATION
 typedef struct _MEMORY_SCRUB_INFORMATION
 {
     HANDLE Handle;
-    ULONG_PTR PagesScrubbed;
+    SIZE_T PagesScrubbed;
 } MEMORY_SCRUB_INFORMATION, *PMEMORY_SCRUB_INFORMATION;
 
 // private
@@ -2086,7 +2124,7 @@ typedef struct _SYSTEM_PROCESSOR_PROFILE_CONTROL_AREA
 typedef struct _MEMORY_COMBINE_INFORMATION
 {
     HANDLE Handle;
-    ULONG_PTR PagesCombined;
+    SIZE_T PagesCombined;
 } MEMORY_COMBINE_INFORMATION, *PMEMORY_COMBINE_INFORMATION;
 
 // rev
@@ -2096,7 +2134,7 @@ typedef struct _MEMORY_COMBINE_INFORMATION
 typedef struct _MEMORY_COMBINE_INFORMATION_EX
 {
     HANDLE Handle;
-    ULONG_PTR PagesCombined;
+    SIZE_T PagesCombined;
     ULONG Flags;
 } MEMORY_COMBINE_INFORMATION_EX, *PMEMORY_COMBINE_INFORMATION_EX;
 
@@ -2104,7 +2142,7 @@ typedef struct _MEMORY_COMBINE_INFORMATION_EX
 typedef struct _MEMORY_COMBINE_INFORMATION_EX2
 {
     HANDLE Handle;
-    ULONG_PTR PagesCombined;
+    SIZE_T PagesCombined;
     ULONG Flags;
     HANDLE ProcessHandle;
 } MEMORY_COMBINE_INFORMATION_EX2, *PMEMORY_COMBINE_INFORMATION_EX2;
@@ -2212,6 +2250,16 @@ typedef struct _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION_EX
     LARGE_INTEGER Spare1;
     LARGE_INTEGER Spare2;
 } SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION_EX, *PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION_EX;
+
+// private
+typedef struct _CRITICAL_PROCESS_EXCEPTION_DATA
+{
+    GUID ReportId;
+    UNICODE_STRING ModuleName;
+    ULONG ModuleTimestamp;
+    ULONG ModuleSize;
+    ULONG_PTR Offset;
+} CRITICAL_PROCESS_EXCEPTION_DATA, *PCRITICAL_PROCESS_EXCEPTION_DATA;
 
 // private
 typedef struct _SYSTEM_SECUREBOOT_POLICY_INFORMATION
@@ -2428,6 +2476,13 @@ typedef struct _OFFLINE_CRASHDUMP_CONFIGURATION_TABLE_V1
     ULONG OfflineMemoryDumpCapable;
 } OFFLINE_CRASHDUMP_CONFIGURATION_TABLE_V1, *POFFLINE_CRASHDUMP_CONFIGURATION_TABLE_V1;
 
+// SYSTEM_PROCESSOR_FEATURES_INFORMATION // ProcessorFeatureBits
+#define KF_BRANCH 0x0000000000020000
+#define KF_XSTATE 0x0000000000800000
+#define KF_RDTSCP 0x0000000400000000
+#define KF_CET_SS 0x0000400000000000
+#define KF_XFD 0x0080000000000000
+
 // private
 typedef struct _SYSTEM_PROCESSOR_FEATURES_INFORMATION
 {
@@ -2580,6 +2635,19 @@ typedef struct _SYSTEM_SECUREBOOT_POLICY_FULL_INFORMATION
     ULONG PolicySize;
     UCHAR Policy[1];
 } SYSTEM_SECUREBOOT_POLICY_FULL_INFORMATION, *PSYSTEM_SECUREBOOT_POLICY_FULL_INFORMATION;
+
+// private
+typedef struct _KAFFINITY_EX
+{
+    USHORT Count;
+    USHORT Size;
+    ULONG Reserved;
+    union 
+    {
+        ULONG_PTR Bitmap[1];
+        ULONG_PTR StaticBitmap[32];
+    };
+} KAFFINITY_EX, *PKAFFINITY_EX;
 
 // private
 typedef struct _SYSTEM_ROOT_SILO_INFORMATION
@@ -3181,7 +3249,7 @@ typedef struct _SYSTEM_MEMORY_NUMA_PERFORMANCE_ENTRY
             BOOLEAN Reserved : 6;
         };
     };
-    ULONG_PTR MinTransferSizeInBytes;
+    SIZE_T MinTransferSizeInBytes;
     ULONG_PTR EntryValue;
 } SYSTEM_MEMORY_NUMA_PERFORMANCE_ENTRY, *PSYSTEM_MEMORY_NUMA_PERFORMANCE_ENTRY;
 

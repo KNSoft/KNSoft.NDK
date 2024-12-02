@@ -108,6 +108,14 @@ RtlRaiseNoncontinuableException(
 
 #pragma region Exception Handling
 
+/**
+ * Registers a vectored exception handler.
+ * 
+ * @param First If this parameter is TRUE, the handler is the first handler in the list.
+ * @param Handler A pointer to the vectored exception handler to be called.
+ * @return A handle to the vectored exception handler.
+ * @see https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-addvectoredexceptionhandler
+ */
 NTSYSAPI
 PVOID
 NTAPI
@@ -115,12 +123,27 @@ RtlAddVectoredExceptionHandler(
     _In_ ULONG First,
     _In_ PVECTORED_EXCEPTION_HANDLER Handler);
 
+/**
+ * Removes a vectored exception handler.
+ * 
+ * @param Handle A handle to the vectored exception handler to remove.
+ * @return The function returns 0 if the handler is removed, or -1 if the handler is not found.
+ * @see https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-removevectoredexceptionhandler
+ */
 NTSYSAPI
 ULONG
 NTAPI
 RtlRemoveVectoredExceptionHandler(
     _In_ PVOID Handle);
 
+/**
+ * Registers a vectored continue handler.
+ * 
+ * @param First If this parameter is TRUE, the handler is the first handler in the list.
+ * @param Handler A pointer to the vectored exception handler to be called.
+ * @return A handle to the vectored continue handler.
+ * @see https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-addvectoredcontinuehandler
+ */
 NTSYSAPI
 PVOID
 NTAPI
@@ -128,6 +151,13 @@ RtlAddVectoredContinueHandler(
     _In_ ULONG First,
     _In_ PVECTORED_EXCEPTION_HANDLER Handler);
 
+/**
+ * Removes a vectored continue handler.
+ * 
+ * @param Handle A handle to the vectored continue handler to remove.
+ * @return The function returns 0 if the handler is removed, or -1 if the handler is not found.
+ * @see https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-removevectoredcontinuehandler
+ */
 NTSYSAPI
 ULONG
 NTAPI

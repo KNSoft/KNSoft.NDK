@@ -129,6 +129,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Extension\Security.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Atom.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Boot.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\EventTrace.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Ex.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Processor.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\SharedData.h" />

@@ -132,7 +132,9 @@ RtlQueryPerformanceFrequency(
 NTSYSAPI
 HANDLE
 NTAPI
-RtlGetCurrentTransaction(VOID);
+RtlGetCurrentTransaction(
+    _In_opt_ PCWSTR ExistingFileName,
+    _In_opt_ PCWSTR NewFileName);
 
 NTSYSAPI
 LOGICAL
@@ -540,7 +542,7 @@ NTAPI
 RtlGetUnloadEventTrace(VOID);
 
 NTSYSAPI
-VOID
+PRTL_UNLOAD_EVENT_TRACE
 NTAPI
 RtlGetUnloadEventTraceEx(
     _Out_ PULONG * ElementSize,

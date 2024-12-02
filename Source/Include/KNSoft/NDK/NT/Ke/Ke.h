@@ -153,6 +153,19 @@ NTSTATUS
 NTAPI
 NtYieldExecution(VOID);
 
+/**
+ * The NtDelayExecution routine suspends the current thread until the specified condition is met. 
+ *
+ * @param Alertable The function returns when either the time-out period has elapsed or when the APC function is called.
+ * @param DelayInterval The time interval for which execution is to be suspended, in milliseconds.
+ * - A value of zero causes the thread to relinquish the remainder of its time slice to any other thread that is ready to run.
+ * - If there are no other threads ready to run, the function returns immediately, and the thread continues execution.
+ * - A value of INFINITE indicates that the suspension should not time out.
+ * @return NTSTATUS Successful or errant status. The return value is STATUS_USER_APC when Alertable is TRUE, and the function returned due to one or more I/O completion callback functions.
+ * @remarks Note that a ready thread is not guaranteed to run immediately. Consequently, the thread will not run until some arbitrary time after the sleep interval elapses,
+ * based upon the system "tick" frequency and the load factor from other processes.
+ * @see https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleepex
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

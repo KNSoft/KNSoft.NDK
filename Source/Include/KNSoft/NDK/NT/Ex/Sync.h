@@ -2,6 +2,7 @@
 
 #include "../MinDef.h"
 #include "../Ke/Ke.h"
+#include "../Po/Po.h"
 
 EXTERN_C_START
 
@@ -32,6 +33,18 @@ typedef struct _EVENT_BASIC_INFORMATION
     LONG EventState;
 } EVENT_BASIC_INFORMATION, *PEVENT_BASIC_INFORMATION;
 
+/**
+ * The NtCreateEvent routine creates an event object, sets the initial state of the event to the specified value,
+ * and opens a handle to the object with the specified desired access.
+ *
+ * @param EventHandle A pointer to a variable that receives the event object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the event object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @param EventType The type of the event, which can be SynchronizationEvent or a NotificationEvent.
+ * @param InitialState The initial state of the event object.
+ * @return NTSTATUS Successful or errant status.
+ * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwcreateevent
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -43,6 +56,14 @@ NtCreateEvent(
     _In_ BOOLEAN InitialState
 );
 
+/**
+ * The NtOpenEvent routine opens a handle to an existing event object.
+ *
+ * @param EventHandle A pointer to a variable that receives the event object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the event object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -52,6 +73,13 @@ NtOpenEvent(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes
 );
 
+/**
+ * The NtSetEvent routine sets an event object to the signaled state.
+ *
+ * @param EventHandle A handle to the event object.
+ * @param PreviousState A pointer to a variable that receives the previous state of the event object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -61,6 +89,13 @@ NtSetEvent(
 );
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+/**
+ * The NtSetEventEx routine sets an event object to the signaled state and optionally acquires a lock.
+ *
+ * @param ThreadId A handle to the thread.
+ * @param Lock A pointer to an RTL_SRWLOCK structure that specifies the lock to acquire.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -70,6 +105,12 @@ NtSetEventEx(
     );
 #endif
 
+/**
+ * The NtSetEventBoostPriority routine sets an event object to the signaled state and boosts the priority of threads waiting on the event.
+ *
+ * @param EventHandle A handle to the event object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -77,6 +118,12 @@ NtSetEventBoostPriority(
     _In_ HANDLE EventHandle
 );
 
+/**
+ * The NtClearEvent routine sets an event object to the not-signaled state.
+ *
+ * @param EventHandle A handle to the event object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -84,6 +131,14 @@ NtClearEvent(
     _In_ HANDLE EventHandle
 );
 
+/**
+ * The NtResetEvent routine sets an event object to the not-signaled state and optionally returns the previous state.
+ *
+ * @param EventHandle A handle to the event object.
+ * @param PreviousState A pointer to a variable that receives the previous state of the event object.
+ * @return NTSTATUS Successful or errant status.
+ * @see https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-resetevent
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -92,6 +147,14 @@ NtResetEvent(
     _Out_opt_ PLONG PreviousState
 );
 
+/**
+ * The NtPulseEvent routine sets an event object to the signaled state and then resets it to the not-signaled state after releasing the appropriate number of waiting threads.
+ *
+ * @param EventHandle A handle to the event object.
+ * @param PreviousState A pointer to a variable that receives the previous state of the event object.
+ * @return NTSTATUS Successful or errant status.
+ * @see https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-pulseevent
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -100,6 +163,16 @@ NtPulseEvent(
     _Out_opt_ PLONG PreviousState
 );
 
+/**
+ * The NtQueryEvent routine retrieves information about an event object.
+ *
+ * @param EventHandle A handle to the event object.
+ * @param EventInformationClass The type of information to be retrieved.
+ * @param EventInformation A pointer to a buffer that receives the requested information.
+ * @param EventInformationLength The size of the buffer pointed to by EventInformation.
+ * @param ReturnLength A pointer to a variable that receives the size of the data returned in the buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -350,8 +423,6 @@ typedef enum _TIMER_SET_INFORMATION_CLASS
     TimerSetCoalescableTimer, // TIMER_SET_COALESCABLE_TIMER_INFO
     MaxTimerInfoClass
 } TIMER_SET_INFORMATION_CLASS;
-
-typedef struct _COUNTED_REASON_CONTEXT *PCOUNTED_REASON_CONTEXT;
 
 typedef struct _TIMER_SET_COALESCABLE_TIMER_INFO
 {

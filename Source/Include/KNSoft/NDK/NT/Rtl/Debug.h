@@ -114,4 +114,10 @@ RtlSetProcessDebugInformation(
     _Inout_ PRTL_DEBUG_INFORMATION Buffer
     );
 
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlDebugPrintTimes(VOID);
+
 EXTERN_C_END

@@ -57,8 +57,10 @@ typedef struct _PEB_LDR_DATA32
     VOID* POINTER_32 ShutdownThreadId;
 } PEB_LDR_DATA32, *PPEB_LDR_DATA32;
 
+// PEB->AppCompatFlags
 #define KACF_OLDGETSHORTPATHNAME 0x00000001
 #define KACF_VERSIONLIE_NOT_USED 0x00000002
+#define KACF_GETTEMPPATH_NOT_USED 0x00000004
 #define KACF_GETDISKFREESPACE 0x00000008
 #define KACF_FTMFROMCURRENTAPT 0x00000020
 #define KACF_DISALLOWORBINDINGCHANGES 0x00000040
@@ -81,6 +83,7 @@ typedef struct _PEB_LDR_DATA32
 #define KACF_ALLOWMAXIMIZEDWINDOWGAMMA 0x01000000
 #define KACF_DONOTADDTOCACHE 0x80000000
 
+// PEB->ApiSetMap
 typedef struct _API_SET_NAMESPACE
 {
     ULONG Version;
@@ -117,6 +120,7 @@ typedef struct _API_SET_VALUE_ENTRY
     ULONG ValueLength;
 } API_SET_VALUE_ENTRY, *PAPI_SET_VALUE_ENTRY;
 
+// PEB->TelemetryCoverageHeader
 typedef struct _TELEMETRY_COVERAGE_HEADER
 {
     UCHAR MajorVersion;
@@ -249,7 +253,6 @@ typedef struct _PEB
             BOOLEAN IsLongPathAwareProcess : 1;
         };
     };
-
     HANDLE Mutant;
 
     PVOID ImageBaseAddress;
@@ -298,15 +301,24 @@ typedef struct _PEB
     PVOID OemCodePageData; // PCPTABLEINFO
     PVOID UnicodeCaseTableData; // PNLSTABLEINFO
 
+    // Information for LdrpInitialize
     ULONG NumberOfProcessors;
     ULONG NtGlobalFlag;
 
-    ULARGE_INTEGER CriticalSectionTimeout;
+    // Passed up from MmCreatePeb from Session Manager registry key
+    LARGE_INTEGER CriticalSectionTimeout;
     SIZE_T HeapSegmentReserve;
     SIZE_T HeapSegmentCommit;
     SIZE_T HeapDeCommitTotalFreeThreshold;
     SIZE_T HeapDeCommitFreeBlockThreshold;
 
+    //
+    // Where heap manager keeps track of all heaps created for a process
+    // Fields initialized by MmCreatePeb.  ProcessHeaps is initialized
+    // to point to the first free byte after the PEB and MaximumNumberOfHeaps
+    // is computed from the page size used to hold the PEB, less the fixed
+    // size of this data structure.
+    //
     ULONG NumberOfHeaps;
     ULONG MaximumNumberOfHeaps;
     PVOID *ProcessHeaps; // PHEAP
@@ -317,6 +329,10 @@ typedef struct _PEB
 
     PRTL_CRITICAL_SECTION LoaderLock;
 
+    //
+    // Following fields filled in by MmCreatePeb from system values and/or
+    // image header.
+    //
     ULONG OSMajorVersion;
     ULONG OSMinorVersion;
     USHORT OSBuildNumber;
@@ -478,7 +494,7 @@ typedef struct _PEB64
     VOID* POINTER_64 UnicodeCaseTableData;
     ULONG NumberOfProcessors;
     ULONG NtGlobalFlag;
-    ULARGE_INTEGER CriticalSectionTimeout;
+    LARGE_INTEGER CriticalSectionTimeout;
     ULONGLONG HeapSegmentReserve;
     ULONGLONG HeapSegmentCommit;
     ULONGLONG HeapDeCommitTotalFreeThreshold;
@@ -629,7 +645,7 @@ typedef struct _PEB32
     VOID* POINTER_32 UnicodeCaseTableData;
     ULONG NumberOfProcessors;
     ULONG NtGlobalFlag;
-    ULARGE_INTEGER CriticalSectionTimeout;
+    LARGE_INTEGER CriticalSectionTimeout;
     ULONG HeapSegmentReserve;
     ULONG HeapSegmentCommit;
     ULONG HeapDeCommitTotalFreeThreshold;
@@ -745,17 +761,21 @@ typedef struct _GDI_TEB_BATCH32
     ULONG Buffer[310];
 } GDI_TEB_BATCH32, *PGDI_TEB_BATCH32;
 
+#define TEB_ACTIVE_FRAME_CONTEXT_FLAG_EXTENDED (0x00000001)
+
 typedef struct _TEB_ACTIVE_FRAME_CONTEXT
 {
     ULONG Flags;
-    PSTR FrameName;
+    PCSTR FrameName;
 } TEB_ACTIVE_FRAME_CONTEXT, *PTEB_ACTIVE_FRAME_CONTEXT;
 
 typedef struct _TEB_ACTIVE_FRAME_CONTEXT_EX
 {
     TEB_ACTIVE_FRAME_CONTEXT BasicContext;
-    PSTR SourceLocation;
+    PCSTR SourceLocation;
 } TEB_ACTIVE_FRAME_CONTEXT_EX, *PTEB_ACTIVE_FRAME_CONTEXT_EX;
+
+#define TEB_ACTIVE_FRAME_FLAG_EXTENDED (0x00000001)
 
 typedef struct _TEB_ACTIVE_FRAME TEB_ACTIVE_FRAME, *PTEB_ACTIVE_FRAME;
 struct _TEB_ACTIVE_FRAME
@@ -775,14 +795,14 @@ typedef struct _TEB_ACTIVE_FRAME_CONTEXT64
 {
     ULONG Flags;
     UCHAR Padding[4];
-    CHAR* POINTER_64 FrameName;
+    CONST CHAR* POINTER_64 FrameName;
 } TEB_ACTIVE_FRAME_CONTEXT64, *PTEB_ACTIVE_FRAME_CONTEXT64;
 
 typedef struct _TEB_ACTIVE_FRAME_CONTEXT32
 {
     ULONG Flags;
     UCHAR Padding[4];
-    CHAR* POINTER_32 FrameName;
+    CONST CHAR* POINTER_32 FrameName;
 } TEB_ACTIVE_FRAME_CONTEXT32, *PTEB_ACTIVE_FRAME_CONTEXT32;
 
 typedef struct _TEB_ACTIVE_FRAME64 TEB_ACTIVE_FRAME64, *PTEB_ACTIVE_FRAME64;
@@ -803,14 +823,29 @@ struct _TEB_ACTIVE_FRAME32
     TEB_ACTIVE_FRAME_CONTEXT32* POINTER_32 Context;
 };
 
+/**
+ * Thread Environment Block (TEB) structure.
+ *
+ * This structure contains information about the currently executing thread.
+ */
 typedef struct _TEB
 {
+    // Thread Information Block (TIB) contains the thread's stack, base and limit addresses, the current stack pointer, and the exception list.
     NT_TIB NtTib;
 
+    // A pointer to the environment block for the thread.
     PVOID EnvironmentPointer;
+
+    // Client ID for this thread.
     CLIENT_ID ClientId;
+
+    // A handle to an active Remote Procedure Call (RPC) if the thread is currently involved in an RPC operation.
     PVOID ActiveRpcHandle;
+
+    // A pointer to the __declspec(thread) local storage array.
     PVOID ThreadLocalStoragePointer;
+
+    // A pointer to the Process Environment Block (PEB), which contains information about the process.
     PPEB ProcessEnvironmentBlock;
 
     ULONG LastErrorValue;
