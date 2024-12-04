@@ -167,13 +167,28 @@ NtSetLastStatus(
 
 #pragma endregion
 
+#pragma region Machine
+
+#define CPU_CACHE_LINE_SIZE 64
+
 #if defined(_M_IX86)
+
 #define CONTEXT_PC Eip
+#define MACHINE_TYPE IMAGE_FILE_MACHINE_I386
+
 #elif defined(_M_X64)
+
 #define CONTEXT_PC Rip
+#define MACHINE_TYPE IMAGE_FILE_MACHINE_AMD64
+
 #elif defined(_M_ARM64)
+
 #define CONTEXT_PC Pc
+#define MACHINE_TYPE IMAGE_FILE_MACHINE_ARM64
+
 #endif
+
+#pragma endregion
 
 typedef
 _Function_class_(RUNDLL32_ENTRY_FN)
@@ -184,5 +199,3 @@ RUNDLL32_ENTRY_FN(
     _In_ HINSTANCE hInst,
     _In_ LPSTR lpszCmdLine,
     _In_ int nCmdShow);
-
-#define CPU_CACHE_LINE_SIZE 64
