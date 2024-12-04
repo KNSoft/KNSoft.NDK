@@ -162,9 +162,9 @@ NTSTATUS
 NTAPI
 NtReadVirtualMemory(
     _In_ HANDLE ProcessHandle,
-    _In_opt_ PVOID BaseAddress,
-    _Out_writes_bytes_(BufferSize) PVOID Buffer,
-    _In_ SIZE_T BufferSize,
+    _In_ PVOID BaseAddress,
+    _Out_writes_bytes_(NumberOfBytesToRead) PVOID Buffer,
+    _In_ SIZE_T NumberOfBytesToRead,
     _Out_opt_ PSIZE_T NumberOfBytesRead);
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
@@ -173,9 +173,9 @@ NTSTATUS
 NTAPI
 NtReadVirtualMemoryEx(
     _In_ HANDLE ProcessHandle,
-    _In_opt_ PVOID BaseAddress,
-    _Out_writes_bytes_(BufferSize) PVOID Buffer,
-    _In_ SIZE_T BufferSize,
+    _In_ PVOID BaseAddress,
+    _Out_writes_bytes_(NumberOfBytesToRead) PVOID Buffer,
+    _In_ SIZE_T NumberOfBytesToRead,
     _Out_opt_ PSIZE_T NumberOfBytesRead,
     _In_ ULONG Flags);
 #endif
@@ -186,8 +186,8 @@ NTAPI
 NtWriteVirtualMemory(
     _In_ HANDLE ProcessHandle,
     _In_opt_ PVOID BaseAddress,
-    _In_reads_bytes_(BufferSize) PVOID Buffer,
-    _In_ SIZE_T BufferSize,
+    _In_reads_bytes_(NumberOfBytesToWrite) PVOID Buffer,
+    _In_ SIZE_T NumberOfBytesToWrite,
     _Out_opt_ PSIZE_T NumberOfBytesWritten);
 
 NTSYSCALLAPI

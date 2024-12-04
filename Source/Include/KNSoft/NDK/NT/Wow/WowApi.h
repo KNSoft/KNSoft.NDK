@@ -39,7 +39,7 @@ NTAPI
 NtWow64ReadVirtualMemory64(
     _In_ HANDLE ProcessHandle,
     _In_ ULONGLONG BaseAddress,
-    _Out_ PVOID Buffer,
+    _Out_writes_bytes_(NumberOfBytesToRead) PVOID Buffer,
     _In_ ULONGLONG NumberOfBytesToRead,
     _Out_opt_ PULONGLONG NumberOfBytesRead);
 
@@ -49,7 +49,7 @@ NTAPI
 NtWow64WriteVirtualMemory64(
     _In_ HANDLE ProcessHandle,
     _In_ ULONGLONG BaseAddress,
-    _In_ PVOID Buffer,
+    _In_reads_bytes_(NumberOfBytesToWrite) PVOID Buffer,
     _In_ ULONGLONG NumberOfBytesToWrite,
     _Out_opt_ ULONGLONG NumberOfBytesWritten);
 
