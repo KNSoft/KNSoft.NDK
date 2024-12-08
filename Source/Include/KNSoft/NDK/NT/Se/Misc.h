@@ -930,4 +930,26 @@ NtPrivilegedServiceAuditAlarm(
     _In_ BOOLEAN AccessGranted
 );
 
+typedef enum _SECURE_SETTING_VALUE_TYPE
+{
+    SecureSettingValueTypeBoolean = 0,
+    SecureSettingValueTypeUlong = 1,
+    SecureSettingValueTypeBinary = 2,
+    SecureSettingValueTypeString = 3,
+    SecureSettingValueTypeUnknown = 4
+} SECURE_SETTING_VALUE_TYPE, *PSECURE_SETTING_VALUE_TYPE;
+
+// rev
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtQuerySecurityPolicy(
+    _In_ PCUNICODE_STRING Policy, 
+    _In_ PCUNICODE_STRING KeyName,
+    _In_ PCUNICODE_STRING ValueName,
+    _In_ SECURE_SETTING_VALUE_TYPE ValueType,
+    _Out_writes_bytes_opt_(*ValueSize) PVOID Value,
+    _Inout_ PULONG ValueSize
+);
+
 EXTERN_C_END

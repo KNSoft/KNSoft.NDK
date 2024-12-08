@@ -156,6 +156,14 @@ ZwAcquireCMFViewOwnership(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
+ZwAcquireCrossVmMutant(
+    _In_ HANDLE CrossVmMutant,
+    _In_ PLARGE_INTEGER Timeout
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
 ZwAddAtom(
     _In_reads_bytes_opt_(Length) PCWSTR AtomName,
     _In_ ULONG Length,
@@ -294,9 +302,9 @@ NTSTATUS
 NTAPI
 ZwAllocateUserPhysicalPagesEx(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PSIZE_T NumberOfPages,
+    _Inout_ PULONG_PTR NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray,
-    _Inout_updates_opt_(ParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
+    _Inout_updates_opt_(ExtendedParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
     );
 
@@ -836,9 +844,9 @@ NTSTATUS
 NTAPI
 ZwConvertBetweenAuxiliaryCounterAndPerformanceCounter(
     _In_ BOOLEAN ConvertAuxiliaryToPerformanceCounter,
-    _In_ PLARGE_INTEGER PerformanceOrAuxiliaryCounterValue,
-    _Out_ PLARGE_INTEGER ConvertedValue,
-    _Out_opt_ PLARGE_INTEGER ConversionError
+    _In_ PULONG64 PerformanceOrAuxiliaryCounterValue,
+    _Out_ PULONG64 ConvertedValue,
+    _Out_opt_ PULONG64 ConversionError
     );
 
 NTSYSCALLAPI
@@ -855,6 +863,30 @@ ZwCopyFileChunk(
     _In_opt_ PULONG SourceKey,
     _In_opt_ PULONG DestKey,
     _In_ ULONG Flags
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCreateCrossVmEvent(
+    _Out_ PHANDLE CrossVmEvent,
+    _In_ ACCESS_MASK DesiredAccess,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_ ULONG CrossVmEventFlags,
+    _In_ LPCGUID VMID,
+    _In_ LPCGUID ServiceID
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCreateCrossVmMutant(
+    _Out_ PHANDLE EventHandle,
+    _In_ ACCESS_MASK DesiredAccess,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_ ULONG CrossVmEventFlags,
+    _In_ LPCGUID VMID,
+    _In_ LPCGUID ServiceID
     );
 
 NTSYSCALLAPI
@@ -1831,7 +1863,7 @@ NTSTATUS
 NTAPI
 ZwFreeUserPhysicalPages(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PSIZE_T NumberOfPages,
+    _Inout_ PULONG_PTR NumberOfPages,
     _In_reads_(*NumberOfPages) PULONG_PTR UserPfnArray
     );
 
@@ -2005,7 +2037,7 @@ ZwGetWriteWatch(
     _In_ PVOID BaseAddress,
     _In_ SIZE_T RegionSize,
     _Out_writes_(*EntriesInUserAddressArray) PVOID *UserAddressArray,
-    _Inout_ PSIZE_T EntriesInUserAddressArray,
+    _Inout_ PULONG_PTR EntriesInUserAddressArray,
     _Out_ PULONG Granularity
     );
 
@@ -2835,7 +2867,7 @@ NTSYSCALLAPI
 NTSTATUS
 NTAPI
 ZwQueryAuxiliaryCounterFrequency(
-    _Out_ PLARGE_INTEGER AuxiliaryCounterFrequency
+    _Out_ PULONG64 AuxiliaryCounterFrequency
     );
 
 NTSYSCALLAPI
@@ -3278,6 +3310,18 @@ ZwQuerySecurityObject(
     _Out_writes_bytes_to_opt_(Length, *LengthNeeded) PSECURITY_DESCRIPTOR SecurityDescriptor,
     _In_ ULONG Length,
     _Out_ PULONG LengthNeeded
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwQuerySecurityPolicy(
+    _In_ PCUNICODE_STRING Policy, 
+    _In_ PCUNICODE_STRING KeyName,
+    _In_ PCUNICODE_STRING ValueName,
+    _In_ SECURE_SETTING_VALUE_TYPE ValueType,
+    _Out_writes_bytes_opt_(*ValueSize) PVOID Value,
+    _Inout_ PULONG ValueSize
     );
 
 NTSYSCALLAPI
@@ -4032,7 +4076,7 @@ NTAPI
 ZwSetInformationDebugObject(
     _In_ HANDLE DebugObjectHandle,
     _In_ DEBUGOBJECTINFOCLASS DebugObjectInformationClass,
-    _In_ PVOID DebugInformation,
+    _In_reads_bytes_(DebugInformationLength) PVOID DebugInformation,
     _In_ ULONG DebugInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
@@ -4826,7 +4870,7 @@ NTSTATUS
 NTAPI
 ZwWriteVirtualMemory(
     _In_ HANDLE ProcessHandle,
-    _In_opt_ PVOID BaseAddress,
+    _In_ PVOID BaseAddress,
     _In_reads_bytes_(NumberOfBytesToWrite) PVOID Buffer,
     _In_ SIZE_T NumberOfBytesToWrite,
     _Out_opt_ PSIZE_T NumberOfBytesWritten

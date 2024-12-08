@@ -83,7 +83,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlGetNativeSystemInformation(
-    _In_ ULONG SystemInformationClass,
+    _In_ SYSTEM_INFORMATION_CLASS SystemInformationClass,
     _In_ PVOID NativeSystemInformation,
     _In_ ULONG InformationLength,
     _Out_opt_ PULONG ReturnLength

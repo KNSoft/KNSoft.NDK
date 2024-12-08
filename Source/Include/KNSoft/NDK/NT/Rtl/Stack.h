@@ -42,7 +42,7 @@ RtlGetFrame(VOID);
 NTSYSAPI
 ULONG
 NTAPI
-RtlWalkFrameChain (
+RtlWalkFrameChain(
     _Out_writes_(Count - (Flags >> RTL_STACK_WALKING_MODE_FRAMES_TO_SKIP_SHIFT)) PVOID *Callers,
     _In_ ULONG Count,
     _In_ ULONG Flags);

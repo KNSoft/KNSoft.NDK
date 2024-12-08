@@ -17,6 +17,7 @@
 
 /* APIs */
 
+#include "Win32/API/Ntdll.h"
 #include "Win32/API/Kernel32.h"
 #include "Win32/API/SecHost.h"
 #include "Win32/API/User32.h"

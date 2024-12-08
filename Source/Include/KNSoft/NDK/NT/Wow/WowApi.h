@@ -39,7 +39,7 @@ NTAPI
 NtWow64ReadVirtualMemory64(
     _In_ HANDLE ProcessHandle,
     _In_ ULONGLONG BaseAddress,
-    _Out_writes_bytes_(NumberOfBytesToRead) PVOID Buffer,
+    _Out_writes_bytes_to_(NumberOfBytesToRead, *NumberOfBytesRead) PVOID Buffer,
     _In_ ULONGLONG NumberOfBytesToRead,
     _Out_opt_ PULONGLONG NumberOfBytesRead);
 
@@ -51,12 +51,22 @@ NtWow64WriteVirtualMemory64(
     _In_ ULONGLONG BaseAddress,
     _In_reads_bytes_(NumberOfBytesToWrite) PVOID Buffer,
     _In_ ULONGLONG NumberOfBytesToWrite,
-    _Out_opt_ ULONGLONG NumberOfBytesWritten);
+    _Out_opt_ PULONGLONG NumberOfBytesWritten);
 
 NTSYSCALLAPI
 BOOLEAN
 NTAPI
 NtWow64IsProcessorFeaturePresent(
     _In_ ULONG ProcessorFeature);
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+NtWow64GetNativeSystemInformation(
+    _In_ SYSTEM_INFORMATION_CLASS SystemInformationClass,
+    _In_ PVOID NativeSystemInformation,
+    _In_ ULONG InformationLength,
+    _Out_opt_ PULONG ReturnLength);
 
 EXTERN_C_END

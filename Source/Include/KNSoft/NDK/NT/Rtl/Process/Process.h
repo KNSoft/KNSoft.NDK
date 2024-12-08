@@ -439,4 +439,9 @@ RtlDelayExecution(
     _In_ BOOLEAN Alertable,
     _In_opt_ PLARGE_INTEGER DelayInterval);
 
+NTSYSAPI
+USHORT
+NTAPI
+RtlGetCurrentThreadPrimaryGroup(VOID);
+
 EXTERN_C_END

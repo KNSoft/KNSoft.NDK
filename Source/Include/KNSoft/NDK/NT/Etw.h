@@ -5939,7 +5939,7 @@ typedef enum _ETWTRACECONTROLCODE
     EtwWdiSemUpdate = 20,
     EtwEnumTraceGuidList = 21, // out GUID[]
     EtwGetTraceGuidInfo = 22, // in GUID, out ETW_TRACE_GUID_INFO
-    EtwEnumerateTraceGuids = 23,
+    EtwEnumerateTraceGuids = 23, // out TRACE_GUID_PROPERTIES[]
     EtwRegisterSecurityProv = 24,
     EtwReferenceTimeCode = 25, // in ULONG LoggerId, out ETW_REF_CLOCK
     EtwTrackBinaryCode = 26, // in HANDLE
@@ -6198,10 +6198,10 @@ WmiExecuteMethodW(
 // Enable or disable a trace logging guid.
 #define NOTIFICATION_TRACE_FLAG 0x00010000
 // Enable or disable a trace direct callback.
-// The callback is invoked immediately via a seperate thread.
+// The callback is invoked immediately via a separate thread.
 #define NOTIFICATION_CALLBACK_DIRECT 0x00000004
 // Set this flag (and only this flag) when you want to only check if the 
-// caller has permission to receive events for the guid
+// caller has permission to receive events for the guid.
 #define NOTIFICATION_CHECK_ACCESS 0x00000008
 // Enable lightweight notification.
 #define NOTIFICATION_LIGHTWEIGHT_FLAG 0x00000020

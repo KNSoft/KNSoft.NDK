@@ -2,6 +2,8 @@
 
 #include "../MinDef.h"
 
+#include "CpuPartition.h"
+
 EXTERN_C_START
 
 /* wdm.h */

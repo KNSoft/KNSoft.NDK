@@ -13,6 +13,15 @@ RtlFlsAlloc(
     _In_ PFLS_CALLBACK_FUNCTION Callback,
     _Out_ PULONG FlsIndex);
 
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlFlsAllocEx(
+    _In_ PFLS_CALLBACK_FUNCTION Callback,
+    _Out_ PULONG,
+    _Out_ PULONG FlsIndex);
+
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -40,6 +49,43 @@ NTAPI
 RtlFlsSetValue(
     _In_ ULONG FlsIndex,
     _In_ PVOID FlsData);
+
+NTSYSAPI
+NTSTATUS 
+NTAPI 
+RtlProcessFlsData(
+    _In_ HANDLE ProcessHandle,
+    _Out_ PVOID* FlsData);
+
+#endif
+
+#pragma endregion
+
+#pragma region TLS
+
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlTlsAlloc(
+    _Out_ PULONG TlsIndexx);
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlTlsFree(
+    _In_ ULONG TlsIndex);
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlTlsSetValue(
+    _In_ ULONG TlsIndex,
+    _In_ PVOID TlsData);
 
 #endif
 

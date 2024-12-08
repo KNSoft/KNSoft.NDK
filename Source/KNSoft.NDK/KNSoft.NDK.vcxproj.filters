@@ -451,6 +451,15 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\EventTrace.h">
       <Filter>NT\Ex</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Ke\CpuPartition.h">
+      <Filter>NT\Ke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Ps\KeepAlive.h">
+      <Filter>NT\Ps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">

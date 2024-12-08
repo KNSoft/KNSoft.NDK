@@ -371,4 +371,14 @@ RtlOverwriteFeatureConfigurationBuffer(
     );
 #endif
 
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlNotifyFeatureToggleUsage(
+    _In_ PRTL_FEATURE_USAGE_REPORT FeatureUsageReport,
+    _In_ RTL_FEATURE_ID FeatureId,
+    _In_ ULONG Flags
+    );
+
 EXTERN_C_END

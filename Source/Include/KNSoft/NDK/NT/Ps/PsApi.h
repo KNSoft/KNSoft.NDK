@@ -720,6 +720,7 @@ NtAlertThreadByThreadId(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -727,6 +728,18 @@ NtAlertThreadByThreadIdEx(
     _In_ HANDLE ThreadId,
     _In_opt_ PRTL_SRWLOCK Lock
     );
+
+// rev
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtAlertMultipleThreadByThreadId(
+    _In_ PHANDLE MultipleThreadId,
+    _In_ ULONG Count,
+    _In_ PVOID Boost,
+    _In_ ULONG BoostCount
+    );
+
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)

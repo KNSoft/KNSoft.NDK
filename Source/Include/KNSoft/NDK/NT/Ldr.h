@@ -1588,3 +1588,39 @@ NTAPI
 LdrFlushAlternateResourceModules(
     VOID
     );
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+LdrDllRedirectionCallback(
+    _In_ ULONG Flags,
+    _In_ PCWSTR DllName,
+    _In_opt_ PCWSTR DllPath,
+    _Inout_opt_ PULONG DllCharacteristics,
+    _In_ PVOID CallbackData,
+    _Out_ PCWSTR *EffectiveDllPath
+    );
+
+// rev
+NTSYSAPI
+VOID 
+NTAPI 
+LdrSetDllManifestProber(
+    _In_ PVOID Routine
+    );
+
+#if (NTDDI_VERSION >= NTDDI_WINTHRESHOLD)
+NTSYSAPI BOOLEAN LdrpChildNtdll; // DATA export
+#endif
+
+// rev
+NTSYSAPI
+VOID 
+NTAPI 
+LdrpResGetMappingSize(
+    _In_ PVOID BaseAddress, 
+    _Out_ PSIZE_T Size, 
+    _In_ ULONG Flags, 
+    _In_ BOOLEAN GetFileSizeFromLoadAsDataTable
+    );

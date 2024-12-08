@@ -37,18 +37,28 @@ DbgBreakPointWithStatus(
 
 #pragma region Debug Print
 
-/* phnt */
+/* ntddk.h */
 
 NTSYSAPI
 ULONG
-STDAPIVCALLTYPE
+NTAPI
+DbgPrompt(
+    _In_z_ PCCH Prompt,
+    _Out_writes_bytes_(Length) PCH Response,
+    _In_ ULONG Length);
+
+/* wdm.h */
+
+NTSYSAPI
+ULONG
+__cdecl
 DbgPrint(
     _In_z_ _Printf_format_string_ PCSTR Format,
     ...);
 
 NTSYSAPI
 ULONG
-STDAPIVCALLTYPE
+__cdecl
 DbgPrintEx(
     _In_ ULONG ComponentId,
     _In_ ULONG Level,
@@ -62,7 +72,7 @@ vDbgPrintEx(
     _In_ ULONG ComponentId,
     _In_ ULONG Level,
     _In_z_ PCCH Format,
-    _In_ va_list ArgList);
+    _In_ va_list arglist);
 
 NTSYSAPI
 ULONG
@@ -72,7 +82,14 @@ vDbgPrintExWithPrefix(
     _In_ ULONG ComponentId,
     _In_ ULONG Level,
     _In_z_ PCCH Format,
-    _In_ va_list ArgList);
+    _In_ va_list arglist);
+
+NTSYSAPI
+ULONG
+__cdecl
+DbgPrintReturnControlC(
+    _In_z_ _Printf_format_string_ PCCH Format,
+    ...);
 
 NTSYSAPI
 NTSTATUS
@@ -88,22 +105,6 @@ DbgSetDebugFilterState(
     _In_ ULONG ComponentId,
     _In_ ULONG Level,
     _In_ BOOLEAN State);
-
-NTSYSAPI
-ULONG
-NTAPI
-DbgPrompt(
-    _In_ PCCH Prompt,
-    _Out_writes_bytes_(Length) PCH Response,
-    _In_ ULONG Length);
-
-/* wdm.h */
-NTSYSAPI
-ULONG
-__cdecl
-DbgPrintReturnControlC(
-    _In_z_ _Printf_format_string_ PCCH Format,
-    ...);
 
 NTSYSCALLAPI
 NTSTATUS
@@ -268,7 +269,7 @@ NTAPI
 NtSetInformationDebugObject(
     _In_ HANDLE DebugObjectHandle,
     _In_ DEBUGOBJECTINFOCLASS DebugObjectInformationClass,
-    _In_ PVOID DebugInformation,
+    _In_reads_bytes_(DebugInformationLength) PVOID DebugInformation,
     _In_ ULONG DebugInformationLength,
     _Out_opt_ PULONG ReturnLength);
 

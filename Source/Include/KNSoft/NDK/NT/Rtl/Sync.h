@@ -104,6 +104,20 @@ RtlCheckForOrphanedCriticalSections(
     _In_ HANDLE ThreadHandle
 );
 
+/**
+ * Enables the creation of early critical section events.
+ *
+ * This function allows the system to create critical section events early in the process
+ * initialization. It is typically used to ensure that critical sections are properly
+ * initialized and can be used safely during the early stages of process startup.
+ * @remarks This function sets the FLG_CRITSEC_EVENT_CREATION flag in the PEB flags field.
+ * @return A pointer to the Process Environment Block (PEB).
+ */
+NTSYSAPI
+PPEB
+NTAPI
+RtlEnableEarlyCriticalSectionEventCreation(VOID);
+
 #pragma region RTL_CRITICAL_SECTION[_DEBUG](64/32)
 
 typedef struct _RTL_CRITICAL_SECTION64 RTL_CRITICAL_SECTION64, *PRTL_CRITICAL_SECTION64;
@@ -280,6 +294,13 @@ NTSYSAPI
 VOID
 NTAPI
 RtlConvertExclusiveToShared(
+    _Inout_ PRTL_RESOURCE Resource
+);
+
+NTSYSAPI
+ULONG
+NTAPI
+RtlDumpResource(
     _Inout_ PRTL_RESOURCE Resource
 );
 
@@ -501,6 +522,56 @@ RtlWakeAddressSingleNoFence(
 );
 
 #endif
+
+#pragma endregion phnt
+
+#pragma region RCU
+
+//
+// Read-Copy Update. 
+//
+// RCU synchronization allows concurrent access to shared data structures, 
+// such as linked lists, trees, or hash tables, without using traditional locking methods 
+// in scenarios where read operations are frequent and need to be fast.
+// @remarks RCU synchronization is not for general-purpose synchronization.
+// Teb->Rcu is used to store the RCU state.
+
+NTSYSAPI
+PVOID
+NTAPI
+RtlRcuAllocate(
+    _In_ SIZE_T Size
+);
+
+NTSYSAPI
+LOGICAL
+NTAPI
+RtlRcuFree(
+    _In_ PULONG Rcu
+);
+
+NTSYSAPI
+VOID
+NTAPI
+RtlRcuReadLock(
+    _Inout_ PRTL_SRWLOCK SRWLock,
+    _Out_ PULONG Rcu
+);
+
+NTSYSAPI
+VOID
+NTAPI
+RtlRcuReadUnlock(
+    _Inout_ PRTL_SRWLOCK SRWLock,
+    _Inout_ PULONG * Rcu
+);
+
+NTSYSAPI
+LONG
+NTAPI
+RtlRcuSynchronize(
+    _Inout_ PRTL_SRWLOCK SRWLock
+);
 
 #pragma endregion phnt
 

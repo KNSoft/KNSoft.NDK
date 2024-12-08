@@ -163,7 +163,7 @@ NTAPI
 NtReadVirtualMemory(
     _In_ HANDLE ProcessHandle,
     _In_ PVOID BaseAddress,
-    _Out_writes_bytes_(NumberOfBytesToRead) PVOID Buffer,
+    _Out_writes_bytes_to_(NumberOfBytesToRead, *NumberOfBytesRead) PVOID Buffer,
     _In_ SIZE_T NumberOfBytesToRead,
     _Out_opt_ PSIZE_T NumberOfBytesRead);
 
@@ -174,7 +174,7 @@ NTAPI
 NtReadVirtualMemoryEx(
     _In_ HANDLE ProcessHandle,
     _In_ PVOID BaseAddress,
-    _Out_writes_bytes_(NumberOfBytesToRead) PVOID Buffer,
+    _Out_writes_bytes_to_(NumberOfBytesToRead, *NumberOfBytesRead) PVOID Buffer,
     _In_ SIZE_T NumberOfBytesToRead,
     _Out_opt_ PSIZE_T NumberOfBytesRead,
     _In_ ULONG Flags);
@@ -185,7 +185,7 @@ NTSTATUS
 NTAPI
 NtWriteVirtualMemory(
     _In_ HANDLE ProcessHandle,
-    _In_opt_ PVOID BaseAddress,
+    _In_ PVOID BaseAddress,
     _In_reads_bytes_(NumberOfBytesToWrite) PVOID Buffer,
     _In_ SIZE_T NumberOfBytesToWrite,
     _Out_opt_ PSIZE_T NumberOfBytesWritten);
@@ -418,9 +418,9 @@ NTSTATUS
 NTAPI
 NtAllocateUserPhysicalPagesEx(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PSIZE_T NumberOfPages,
+    _Inout_ PULONG_PTR NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray,
-    _Inout_updates_opt_(ParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
+    _Inout_updates_opt_(ExtendedParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
 );
 #endif
@@ -430,7 +430,7 @@ NTSTATUS
 NTAPI
 NtFreeUserPhysicalPages(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PSIZE_T NumberOfPages,
+    _Inout_ PULONG_PTR NumberOfPages,
     _In_reads_(*NumberOfPages) PULONG_PTR UserPfnArray);
 
 #endif
@@ -450,7 +450,7 @@ NtGetWriteWatch(
     _In_ PVOID BaseAddress,
     _In_ SIZE_T RegionSize,
     _Out_writes_(*EntriesInUserAddressArray) PVOID* UserAddressArray,
-    _Inout_ PSIZE_T EntriesInUserAddressArray,
+    _Inout_ PULONG_PTR EntriesInUserAddressArray,
     _Out_ PULONG Granularity);
 
 NTSYSCALLAPI

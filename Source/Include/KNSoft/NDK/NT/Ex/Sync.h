@@ -102,7 +102,7 @@ NTAPI
 NtSetEventEx(
     _In_ HANDLE ThreadId,
     _In_opt_ PRTL_SRWLOCK Lock
-    );
+);
 #endif
 
 /**
@@ -678,5 +678,46 @@ NtWaitForKeyedEvent(
     _In_ BOOLEAN Alertable,
     _In_opt_ PLARGE_INTEGER Timeout
 );
+
+#pragma endregion
+
+#pragma region Cross Vm
+
+// rev
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCreateCrossVmEvent(
+    _Out_ PHANDLE CrossVmEvent,
+    _In_ ACCESS_MASK DesiredAccess,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_ ULONG CrossVmEventFlags,
+    _In_ LPCGUID VMID,
+    _In_ LPCGUID ServiceID
+);
+
+// rev
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCreateCrossVmMutant(
+    _Out_ PHANDLE EventHandle,
+    _In_ ACCESS_MASK DesiredAccess,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_ ULONG CrossVmEventFlags,
+    _In_ LPCGUID VMID,
+    _In_ LPCGUID ServiceID
+);
+
+// rev
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtAcquireCrossVmMutant(
+    _In_ HANDLE CrossVmMutant,
+    _In_ PLARGE_INTEGER Timeout
+);
+
+#pragma endregion
 
 EXTERN_C_END
