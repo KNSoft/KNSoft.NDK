@@ -29,15 +29,20 @@ MessageBoxTimeoutW(
     _In_ DWORD dwMilliseconds);
 
 WINUSERAPI
-BOOL
+HWND
 WINAPI
-IsTopLevelWindow(
-    _In_ HWND hWnd);
+GetShellChangeNotifyWindow(VOID);
 
 WINUSERAPI
 HWND
 WINAPI
 GetTaskmanWindow(VOID);
+
+WINUSERAPI
+BOOL
+WINAPI
+IsTopLevelWindow(
+    _In_ HWND hWnd);
 
 WINUSERAPI
 BOOL

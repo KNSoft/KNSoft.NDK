@@ -8,8 +8,9 @@
     <Export Name="CreateProcessInternalW" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr int int ptr ptr ptr ptr ptr" />
   </Dll>
   <Dll Name="USER32.dll">
-    <Export Name="IsTopLevelWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="GetShellChangeNotifyWindow" CallConv="__stdcall" />
     <Export Name="GetTaskmanWindow" CallConv="__stdcall" />
+    <Export Name="IsTopLevelWindow" CallConv="__stdcall" Arg="ptr" />
   </Dll>
   <Dll Name="SECHOST.dll">
     <Export Name="ChangeServiceConfig2A" CallConv="__stdcall" Arg="ptr int ptr" />
