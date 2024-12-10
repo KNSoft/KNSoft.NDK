@@ -5,10 +5,12 @@
  * Make C string routines a bit more safe and easy.
  * Not equals to the strsafe.h in Windows SDK.
  *
- * Usually, return value is the number of characters written, then:
- *     Return == 0: Error or no data
- *     Return < BufferCount: Success, returns the number of characters or bytes written, not including null-terminator
- *     Return >= BufferCount: Truncated, returns required size in character or byte, not including null-terminator
+ * Usually, the return value is the number of characters written, not including null-terminator, so:
+ *     Return == 0: No data or an error occurred (e.g. the buffer too small).
+ *     Return < BufferCount: Success, returns the number of characters or bytes written.
+ * Only if `BufferCount == 0`:
+ *     Return value is the required size of Buffer, including null-terminator, or 0 if no data or an error occurred.
+ * The output buffer is always null-terminated: `Buffer[return] == '\0'`, and won't be truncated.
  *
  * Define `_NO_CRT_STDIO_INLINE` to use `legacy_stdio_definitions.lib`.
  */
@@ -19,189 +21,116 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-__forceinline
-bool
-StrSafe_Ret(
-    _In_ unsigned long Ret,
-    _In_ size_t const BufferCount)
-{
-    return Ret > 0 && Ret < BufferCount;
-}
-
 #pragma region String PrintF
 
-_Success_(
-    return > 0 && return < BufferCount
-)
-__forceinline
-unsigned long
-__cdecl
-StrSafe_CchVPrintfA(
-    _Out_writes_opt_(BufferCount) _Always_(_Post_z_) char* const Buffer,
-    _In_ size_t const BufferCount,
-    _In_z_ _Printf_format_string_ const char* Format,
-    va_list ArgList)
-{
-    int i;
-
-#pragma warning(disable: 4996)
-    i = _vsnprintf(Buffer, BufferCount, Format, ArgList);
-#pragma warning(default: 4996)
-    if (i > 0)
-    {
-        if (Buffer != NULL && i == BufferCount)
-        {
-            Buffer[i - 1] = '\0';
-        }
-        return i;
-    } else if (i == 0)
-    {
-        return 0;
-    }
-
-#pragma warning(disable: 4996)
-    i = _vsnprintf(NULL, 0, Format, ArgList);
-#pragma warning(default: 4996)
-    if (i > 0)
-    {
-        if (Buffer != NULL && (size_t)i > BufferCount && BufferCount > 0)
-        {
-            Buffer[BufferCount - 1] = '\0';
-        }
-        return i;
-    }
-
-    return 0;
-}
-
-_Success_(
-    return > 0 && return < BufferCount
-)
+_Success_(return > 0)
 __forceinline
 unsigned long
 __cdecl
 StrSafe_CchVPrintfW(
-    _Out_writes_opt_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
     _In_ size_t const BufferCount,
     _In_z_ _Printf_format_string_ const wchar_t* Format,
     va_list ArgList)
 {
-    int i;
-
 #pragma warning(disable: 4996)
-    i = _vsnwprintf(Buffer, BufferCount, Format, ArgList);
+    int i = _vsnwprintf(Buffer, BufferCount, Format, ArgList);
 #pragma warning(default: 4996)
-    if (i > 0)
+    if (i > 0 && i == BufferCount)
     {
-        if (Buffer != NULL && i == BufferCount)
-        {
-            Buffer[i - 1] = L'\0';
-        }
-        return i;
-    } else if (i == 0)
+        i--;
+    } else if (i < 0)
     {
-        return 0;
+        i = 0;
+    } else
+    {
+        return BufferCount > 0 ? i : i + 1;
     }
-
-#pragma warning(disable: 4996)
-    i = _vsnwprintf(NULL, 0, Format, ArgList);
-#pragma warning(default: 4996)
-    if (i > 0)
-    {
-        if (Buffer != NULL && (size_t)i > BufferCount && BufferCount > 0)
-        {
-            Buffer[BufferCount - 1] = L'\0';
-        }
-        return i;
-    }
-
-    return 0;
+    Buffer[i] = L'\0';
+    return i;
 }
 
-_Success_(
-    return > 0 && return < BufferCount
-)
+_Success_(return > 0)
+__forceinline
+unsigned long
+__cdecl
+StrSafe_CchVPrintfA(
+    _Out_writes_(BufferCount) _Always_(_Post_z_) char* const Buffer,
+    _In_ size_t const BufferCount,
+    _In_z_ _Printf_format_string_ const char* Format,
+    va_list ArgList)
+{
+#pragma warning(disable: 4996)
+    int i = _vsnprintf(Buffer, BufferCount, Format, ArgList);
+#pragma warning(default: 4996)
+    if (i > 0 && i == BufferCount)
+    {
+        i--;
+    } else if (i < 0)
+    {
+        i = 0;
+    } else
+    {
+        return BufferCount > 0 ? i : i + 1;
+    }
+    Buffer[i] = '\0';
+    return i;
+}
+
+_Success_(return > 0)
+__forceinline
+unsigned long
+__cdecl
+StrSafe_CchPrintfW(
+    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
+    _In_ size_t const BufferCount,
+    _In_z_ _Printf_format_string_ const wchar_t* Format,
+    ...)
+{
+    va_list ArgList;
+    unsigned long i;
+
+    va_start(ArgList, Format);
+    i = StrSafe_CchVPrintfW(Buffer, BufferCount, Format, ArgList);
+    va_end(ArgList);
+
+    return i;
+}
+
+_Success_(return > 0)
 __forceinline
 unsigned long
 __cdecl
 StrSafe_CchPrintfA(
-    _Out_writes_opt_(BufferCount) _Always_(_Post_z_) char* const Buffer,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) char* const Buffer,
     _In_ size_t const BufferCount,
     _In_z_ _Printf_format_string_ const char* Format,
     ...)
 {
     va_list ArgList;
+    unsigned long i;
 
     va_start(ArgList, Format);
-    return StrSafe_CchVPrintfA(Buffer, BufferCount, Format, ArgList);
-}
+    i = StrSafe_CchVPrintfA(Buffer, BufferCount, Format, ArgList);
+    va_end(ArgList);
 
-_Success_(
-    return > 0 && return < BufferCount
-)
-__forceinline
-unsigned long
-__cdecl
-StrSafe_CchPrintfW(
-    _Out_writes_opt_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
-    _In_ size_t const BufferCount,
-    _In_z_ _Printf_format_string_ const wchar_t* Format,
-    ...)
-{
-    va_list ArgList;
-
-    va_start(ArgList, Format);
-    return StrSafe_CchVPrintfW(Buffer, BufferCount, Format, ArgList);
-}
-
-#pragma endregion StrSafe_Cch[V]Printf(A/W)
-
-#pragma region String Copy
-
-_Success_(
-    return > 0 && return < BufferCount
-)
-__forceinline
-size_t
-__cdecl
-StrSafe_CchCopyA(
-    _Out_writes_opt_(BufferCount) _When_(BufferCount > 0, _Notnull_) _Always_(_Post_z_) char* const Buffer,
-    _In_ size_t const BufferCount,
-    _In_z_ const char* Source)
-{
-    size_t i;
-
-    for (i = 0; i < BufferCount; i++)
-    {
-        if ((Buffer[i] = Source[i]) == '\0')
-        {
-            return i;
-        }
-    }
-
-    if (BufferCount > 0)
-    {
-        Buffer[BufferCount - 1] = '\0';
-    }
-    while (Source[i] != '\0')
-    {
-        i++;
-    }
     return i;
 }
 
-_Success_(
-    return > 0 && return < BufferCount
-)
+#pragma endregion StrSafe_Cch[V]Printf(W/A)
+
+#pragma region String Copy
+
+_Success_(return > 0)
 __forceinline
-size_t
+unsigned long
 __cdecl
 StrSafe_CchCopyW(
-    _Out_writes_opt_(BufferCount) _When_(BufferCount > 0, _Notnull_) _Always_(_Post_z_) wchar_t* const Buffer,
-    _In_ size_t const BufferCount,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
+    _In_range_(> , 0) size_t const BufferCount,
     _In_z_ const wchar_t* Source)
 {
-    size_t i;
+    unsigned long i;
 
     for (i = 0; i < BufferCount; i++)
     {
@@ -210,16 +139,30 @@ StrSafe_CchCopyW(
             return i;
         }
     }
-
-    if (BufferCount > 0)
-    {
-        Buffer[BufferCount - 1] = L'\0';
-    }
-    while (Source[i] != L'\0')
-    {
-        i++;
-    }
-    return i;
+    Buffer[0] = L'\0';
+    return 0;
 }
 
-#pragma endregion StrSafe_CchCopy(A/W)
+_Success_(return > 0)
+__forceinline
+unsigned long
+__cdecl
+StrSafe_CchCopyA(
+    _Out_writes_(BufferCount) _Always_(_Post_z_) char* const Buffer,
+    _In_range_(>, 0) size_t const BufferCount,
+    _In_z_ const char* Source)
+{
+    unsigned long i;
+
+    for (i = 0; i < BufferCount; i++)
+    {
+        if ((Buffer[i] = Source[i]) == '\0')
+        {
+            return i;
+        }
+    }
+    Buffer[0] = '\0';
+    return 0;
+}
+
+#pragma endregion StrSafe_CchCopy(W/A)
