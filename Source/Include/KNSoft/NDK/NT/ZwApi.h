@@ -3360,8 +3360,8 @@ NTAPI
 ZwQuerySystemEnvironmentValueEx(
     _In_ PUNICODE_STRING VariableName,
     _In_ PCGUID VendorGuid,
-    _Out_writes_bytes_opt_(*ValueLength) PVOID Value,
-    _Inout_ PULONG ValueLength,
+    _Out_writes_bytes_opt_(*BufferLength) PVOID Buffer,
+    _Inout_ PULONG BufferLength,
     _Out_opt_ PULONG Attributes // EFI_VARIABLE_*
     );
 
@@ -4332,8 +4332,8 @@ NTAPI
 ZwSetSystemEnvironmentValueEx(
     _In_ PUNICODE_STRING VariableName,
     _In_ PCGUID VendorGuid,
-    _In_reads_bytes_opt_(ValueLength) PVOID Value,
-    _In_ ULONG ValueLength, // 0 = delete variable
+    _In_reads_bytes_opt_(BufferLength) PVOID Buffer,
+    _In_ ULONG BufferLength, // 0 = delete variable
     _In_ ULONG Attributes // EFI_VARIABLE_*
     );
 

@@ -76,14 +76,14 @@ The following features **are enabled by default**, can be excluded by defining c
 
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) is licensed under the [MIT](https://github.com/KNSoft/KNSoft.NDK/blob/main/LICENSE) license.
 
-The content from the following public sources were lawfully used:
+The content from the following public project(s):
+- phnt (from [winsiderss/systeminformer](https://github.com/winsiderss/systeminformer/tree/master/phnt)) - [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
+
+And public sources were lawfully used:
 - Microsoft WDK/DDK/SDK
 - Microsoft Public Symbolic Data
 - Microsoft Learning
 - Microsoft Windows Protocols
 - Windows Internals
 
-And public projects:
-- phnt (from [winsiderss/systeminformer](https://github.com/winsiderss/systeminformer/tree/master/phnt), [commit 03afb6d5](https://github.com/winsiderss/systeminformer/commit/03afb6d550d79f9a9cedf925e3c8adbcfa91c804)) - [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
-
-[KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) also uses [KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C) to generate DLL import libraries.
+And [KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C) to generate DLL import libraries.

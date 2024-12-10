@@ -76,14 +76,14 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
 
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK)根据[MIT](https://github.com/KNSoft/KNSoft.NDK/blob/main/LICENSE)协议进行许可。
 
-合法使用了来自下列公开源的内容：
+合法使用了来自下列公开项目：
+- phnt（来自[winsiderss/systeminformer](https://github.com/winsiderss/systeminformer/tree/master/phnt)）- [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
+
+和公开源的内容：
 - Microsoft WDK/DDK/SDK
 - Microsoft Public Symbolic Data
 - Microsoft Learning
 - Microsoft Windows Protocols
 - Windows Internals
 
-和公开项目：
-- phnt（来自[winsiderss/systeminformer](https://github.com/winsiderss/systeminformer/tree/master/phnt)，[提交 03afb6d5](https://github.com/winsiderss/systeminformer/commit/03afb6d550d79f9a9cedf925e3c8adbcfa91c804)）- [MIT](https://github.com/winsiderss/phnt/blob/master/LICENSE)
-
-[KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK)也使用了[KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C)来生成DLL引入库。
+以及[KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C)用于生成DLL导入库。
