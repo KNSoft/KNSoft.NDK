@@ -127,7 +127,7 @@ unsigned long
 __cdecl
 StrSafe_CchCopyW(
     _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
-    _In_range_(> , 0) size_t const BufferCount,
+    _In_range_(>, 0) unsigned long const BufferCount,
     _In_z_ const wchar_t* Source)
 {
     unsigned long i;
@@ -149,7 +149,7 @@ unsigned long
 __cdecl
 StrSafe_CchCopyA(
     _Out_writes_(BufferCount) _Always_(_Post_z_) char* const Buffer,
-    _In_range_(>, 0) size_t const BufferCount,
+    _In_range_(>, 0) unsigned long const BufferCount,
     _In_z_ const char* Source)
 {
     unsigned long i;
