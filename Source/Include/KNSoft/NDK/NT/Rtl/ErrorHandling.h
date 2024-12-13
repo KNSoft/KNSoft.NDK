@@ -205,7 +205,7 @@ RtlKnownExceptionFilter(
 #pragma region Win32 Error and NTSTATUS
 
 _When_(Status < 0, _Out_range_(>, 0))
-_When_(Status >= 0, _Out_range_(== , 0))
+_When_(Status >= 0, _Out_range_(==, 0))
 NTSYSAPI
 ULONG
 NTAPI
@@ -213,7 +213,7 @@ RtlNtStatusToDosError(
     _In_ NTSTATUS Status);
 
 _When_(Status < 0, _Out_range_(>, 0))
-_When_(Status >= 0, _Out_range_(== , 0))
+_When_(Status >= 0, _Out_range_(==, 0))
 NTSYSAPI
 ULONG
 NTAPI
