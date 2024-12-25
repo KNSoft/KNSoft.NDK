@@ -4,40 +4,56 @@
 #include "../Rtl/Process/Process.h"
 #include "../Rtl/Process/EnvironmentBlock.h"
 
-#pragma region TEB Fast Access
+#pragma region TEB Fast Access (Without Pointer Reference)
 
-#if defined(_M_X64)
+#if !defined(_WIN64)
+
+__forceinline
+unsigned __int64
+NtReadCurrentTebUlonglong(
+    unsigned int Offset)
+{
+    ULARGE_INTEGER li;
+
+    li.LowPart = NtReadCurrentTebUlong(Offset);
+    li.HighPart = NtReadCurrentTebUlong(Offset + sizeof(ULONG));
+    return li.QuadPart;
+}
+
+#endif
 
 #ifdef FIELD_TYPE
-#define ReadTeb(m) ((FIELD_TYPE(TEB, m))(\
-    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? __readgsqword(UFIELD_OFFSET(TEB, m)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __readgsdword(UFIELD_OFFSET(TEB, m)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __readgsword(UFIELD_OFFSET(TEB, m)) : (\
-                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __readgsbyte(UFIELD_OFFSET(TEB, m)) :\
-                    (__fastfail(FAST_FAIL_INVALID_ARG), 0)\
+#define NtReadTeb(m) ((FIELD_TYPE(TEB, m))(\
+    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtReadCurrentTebUlonglong(UFIELD_OFFSET(TEB, m)) : (\
+        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtReadCurrentTebUlong(UFIELD_OFFSET(TEB, m)) : (\
+            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtReadCurrentTebUshort(UFIELD_OFFSET(TEB, m)) : (\
+                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtReadCurrentTebByte(UFIELD_OFFSET(TEB, m)) :\
+                    ((ULONGLONG)(NtCurrentTeb()->m))\
             )\
         )\
     )\
 ))
 #else
-#define ReadTeb(m) (\
-    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? __readgsqword(UFIELD_OFFSET(TEB, m)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __readgsdword(UFIELD_OFFSET(TEB, m)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __readgsword(UFIELD_OFFSET(TEB, m)) : (\
-                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __readgsbyte(UFIELD_OFFSET(TEB, m)) :\
-                    (__fastfail(FAST_FAIL_INVALID_ARG), 0)\
+#define NtReadTeb(m) (\
+    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtReadCurrentTebUlonglong(UFIELD_OFFSET(TEB, m)) : (\
+        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtReadCurrentTebUlong(UFIELD_OFFSET(TEB, m)) : (\
+            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtReadCurrentTebUshort(UFIELD_OFFSET(TEB, m)) : (\
+                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtReadCurrentTebByte(UFIELD_OFFSET(TEB, m)) :\
+                    ((ULONGLONG)(NtCurrentTeb()->m))\
             )\
         )\
     )\
 )
 #endif
 
-#define WriteTeb(m, val) (\
+#if defined(_M_X64)
+
+#define NtWriteTeb(m, val) (\
     FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? __writegsqword(UFIELD_OFFSET(TEB, m), (ULONGLONG)(val)) : (\
         FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writegsdword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
             FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writegsword(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
                 FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writegsbyte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
-                    __fastfail(FAST_FAIL_INVALID_ARG)\
+                    ((void)(NtCurrentTeb()->m = (val)))\
             )\
         )\
     )\
@@ -45,39 +61,31 @@
 
 #elif defined(_M_IX86)
 
-#ifdef FIELD_TYPE
-#define ReadTeb(m) ((FIELD_TYPE(TEB, m))(\
-    FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __readfsdword(UFIELD_OFFSET(TEB, m)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __readfsword(UFIELD_OFFSET(TEB, m)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __readfsbyte(UFIELD_OFFSET(TEB, m)) :\
-                (__fastfail(FAST_FAIL_INVALID_ARG), 0)\
-        )\
-    )\
-))
-#else
-#define ReadTeb(m) (\
-    FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __readfsdword(UFIELD_OFFSET(TEB, m)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __readfsword(UFIELD_OFFSET(TEB, m)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __readfsbyte(UFIELD_OFFSET(TEB, m)) :\
-                (__fastfail(FAST_FAIL_INVALID_ARG), 0)\
-        )\
-    )\
-)
-#endif
-
-#define WriteTeb(m, val) (\
+#define NtWriteTeb(m, val) (\
     FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writefsdword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
         FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writefsword(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
             FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writefsbyte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
-                __fastfail(FAST_FAIL_INVALID_ARG)\
+                ((void)(NtCurrentTeb()->m = (val)))\
+        )\
+    )\
+)
+
+#elif defined(_M_ARM64) || defined(_M_ARM64EC)
+
+#define NtWriteTeb(m, val) (\
+    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? __writex18qword(UFIELD_OFFSET(TEB, m), (ULONGLONG)(val)) : (\
+        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writex18dword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
+            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writex18word(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
+                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writex18byte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
+                    ((void)(NtCurrentTeb()->m = (val)))\
+            )\
         )\
     )\
 )
 
 #else
 
-#define ReadTeb(m) (NtCurrentTeb()->m)
-#define WriteTeb(m, val) (NtCurrentTeb()->m = (val))
+#define NtWriteTeb(m, val) (NtCurrentTeb()->m = (val))
 
 #endif
 
@@ -94,7 +102,7 @@ NtGetLastError(VOID)
 {
     ULONG Error;
 
-    Error = (ULONG)ReadTeb(LastErrorValue);
+    Error = (ULONG)NtReadTeb(LastErrorValue);
     _Analysis_assume_(Error > 0);
     return Error;
 }
@@ -104,7 +112,7 @@ VOID
 NtSetLastError(
     _In_ ULONG Error)
 {
-    WriteTeb(LastErrorValue, Error);
+    NtWriteTeb(LastErrorValue, Error);
 }
 
 /* Gets or sets the last status */
@@ -116,7 +124,7 @@ NtGetLastStatus(VOID)
 {
     NTSTATUS Status;
 
-    Status = (NTSTATUS)ReadTeb(LastStatusValue);
+    Status = (NTSTATUS)NtReadTeb(LastStatusValue);
     _Analysis_assume_(Status < 0);
     return Status;
 }
@@ -126,7 +134,7 @@ VOID
 NtSetLastStatus(
     _In_ NTSTATUS Status)
 {
-    WriteTeb(LastStatusValue, Status);
+    NtWriteTeb(LastStatusValue, Status);
 }
 
 /*
@@ -158,9 +166,9 @@ NtSetLastStatus(
 
 #pragma region Current runtime information
 
-#define NtCurrentPeb() ((PPEB)ReadTeb(ProcessEnvironmentBlock))
-#define NtCurrentProcessId() ((ULONG)(ULONG_PTR)ReadTeb(ClientId.UniqueProcess))
-#define NtCurrentThreadId() ((ULONG)(ULONG_PTR)ReadTeb(ClientId.UniqueThread))
+#define NtCurrentPeb() ((PPEB)NtReadTeb(ProcessEnvironmentBlock))
+#define NtCurrentProcessId() ((ULONG)(ULONG_PTR)NtReadTeb(ClientId.UniqueProcess))
+#define NtCurrentThreadId() ((ULONG)(ULONG_PTR)NtReadTeb(ClientId.UniqueThread))
 #define NtCurrentLogonId() (NtCurrentPeb()->LogonId)
 #define NtGetProcessHeap() (NtCurrentPeb()->ProcessHeap)
 #define NtGetNtdllBase() (CONTAINING_RECORD(NtCurrentPeb()->Ldr->InInitializationOrderModuleList.Flink, LDR_DATA_TABLE_ENTRY, InInitializationOrderLinks)->DllBase)
