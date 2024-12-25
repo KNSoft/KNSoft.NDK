@@ -14,10 +14,10 @@ EXTERN_C_START
 #define EFI_VARIABLE_RUNTIME_ACCESS                         0x00000004
 // Indicates hardware related errors encountered at runtime.
 #define EFI_VARIABLE_HARDWARE_ERROR_RECORD                  0x00000008
-// Indicates an authentication requirement that must be met before writing to this firmware environment variable. 
+// Indicates an authentication requirement that must be met before writing to this firmware environment variable.
 #define EFI_VARIABLE_AUTHENTICATED_WRITE_ACCESS             0x00000010
 // Indicates authentication and time stamp requirements that must be met before writing to this firmware environment variable.
-// When this attribute is set, the buffer, represented by Buffer, will begin with an instance of a complete (and serialized) EFI_VARIABLE_AUTHENTICATION_2 descriptor. 
+// When this attribute is set, the buffer, represented by Buffer, will begin with an instance of a complete (and serialized) EFI_VARIABLE_AUTHENTICATION_2 descriptor.
 #define EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS  0x00000020
 // Append an existing environment variable with the value of Buffer. If the firmware does not support the operation, the function returns ERROR_INVALID_FUNCTION.
 #define EFI_VARIABLE_APPEND_WRITE                           0x00000040

@@ -156,7 +156,7 @@ NTAPI
 NtYieldExecution(VOID);
 
 /**
- * The NtDelayExecution routine suspends the current thread until the specified condition is met. 
+ * The NtDelayExecution routine suspends the current thread until the specified condition is met.
  *
  * @param Alertable The function returns when either the time-out period has elapsed or when the APC function is called.
  * @param DelayInterval The time interval for which execution is to be suspended, in milliseconds.
