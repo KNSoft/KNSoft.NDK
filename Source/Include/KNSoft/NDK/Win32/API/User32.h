@@ -47,6 +47,12 @@ IsTopLevelWindow(
 WINUSERAPI
 BOOL
 WINAPI
+IsServerSideWindow(
+    _In_ HWND hWnd);
+
+WINUSERAPI
+BOOL
+WINAPI
 EndTask(
     HWND hWnd,
     BOOL fShutDown,
