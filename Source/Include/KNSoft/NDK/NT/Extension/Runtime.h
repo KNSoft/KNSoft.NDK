@@ -172,7 +172,7 @@ NtSetLastStatus(
 #define NtCurrentLogonId() (NtCurrentPeb()->LogonId)
 #define NtGetProcessHeap() (NtCurrentPeb()->ProcessHeap)
 #define NtGetNtdllBase() (CONTAINING_RECORD(NtCurrentPeb()->Ldr->InInitializationOrderModuleList.Flink, LDR_DATA_TABLE_ENTRY, InInitializationOrderLinks)->DllBase)
-#define NtGetImageNtHeader() ((PIMAGE_NT_HEADERS)Add2Ptr(&__ImageBase, __ImageBase.e_lfanew)
+#define NtGetImageNtHeader() ((PIMAGE_NT_HEADERS)Add2Ptr(&__ImageBase, __ImageBase.e_lfanew))
 
 #pragma endregion
 
