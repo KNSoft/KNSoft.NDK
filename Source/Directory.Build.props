@@ -8,7 +8,7 @@
         <ClCompile>
             <WarningLevel>Level3</WarningLevel>
             <LanguageStandard>stdcpplatest</LanguageStandard>
-            <LanguageStandard_C>stdc17</LanguageStandard_C>
+            <LanguageStandard_C>stdclatest</LanguageStandard_C>
             <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
             <ObjectFileName>$(IntDir)%(Directory)</ObjectFileName>
         </ClCompile>
@@ -37,6 +37,7 @@
     </ItemDefinitionGroup>
     <ItemDefinitionGroup>
         <ClCompile>
+            <PreprocessorDefinitions>_KNSOFT_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_CONFIGURATION_NAME="$(ConfigurationName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_MSBUILD_VERSION="$(MSBuildVersion)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_VCTOOLS_VERSION="$(VCToolsVersion)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
