@@ -34,3 +34,7 @@
 #ifndef _KNSOFT_NDK_NO_EXTENSION
 #include "Package/Extension.h"
 #endif
+
+/* Sanity checks */
+C_ASSERT(__alignof(LARGE_INTEGER) == 8);
+C_ASSERT(__alignof(PROCESS_CYCLE_TIME_INFORMATION) == 8);

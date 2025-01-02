@@ -62,23 +62,33 @@ typedef enum _MEMORY_INFORMATION_CLASS
 #define MEMORY_BLOCK_NON_CACHEABLE_GUARD_EXECUTABLE_READWRITE 30
 #define MEMORY_BLOCK_NON_CACHEABLE_GUARD_EXECUTABLE_COPYONWRITE 31
 
+/**
+ * The MEMORY_WORKING_SET_BLOCK structure contains working set information for a page.
+ *
+ * \ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_block
+ */
 typedef struct _MEMORY_WORKING_SET_BLOCK
 {
-    ULONG_PTR Protection : 5;
-    ULONG_PTR ShareCount : 3;
-    ULONG_PTR Shared : 1;
-    ULONG_PTR Node : 3;
+    ULONG_PTR Protection : 5;       // The protection attributes of the page. This member can be one of above MEMORY_BLOCK_* values.
+    ULONG_PTR ShareCount : 3;       // The number of processes that share this page. The maximum value of this member is 7.
+    ULONG_PTR Shared : 1;           // If this bit is 1, the page is sharable; otherwise, the page is not sharable.
+    ULONG_PTR Node : 3;             // The NUMA node where the physical memory should reside.
 #ifdef _WIN64
-    ULONG_PTR VirtualPage : 52;
+    ULONG_PTR VirtualPage : 52;     // The address of the page in the virtual address space.
 #else
-    ULONG VirtualPage : 20;
+    ULONG VirtualPage : 20;         // The address of the page in the virtual address space.
 #endif
 } MEMORY_WORKING_SET_BLOCK, *PMEMORY_WORKING_SET_BLOCK;
 
+/**
+ * The MEMORY_WORKING_SET_INFORMATION structure contains working set information for a process.
+ *
+ * \ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_information
+ */
 typedef struct _MEMORY_WORKING_SET_INFORMATION
 {
     ULONG_PTR NumberOfEntries;
-    _Field_size_(NumberOfEntries) MEMORY_WORKING_SET_BLOCK WorkingSetInfo[1];
+    _Field_size_(NumberOfEntries) MEMORY_WORKING_SET_BLOCK WorkingSetInfo[ANYSIZE_ARRAY];
 } MEMORY_WORKING_SET_INFORMATION, *PMEMORY_WORKING_SET_INFORMATION;
 
 // private
@@ -122,42 +132,47 @@ typedef enum _MEMORY_WORKING_SET_EX_LOCATION
     MemoryLocationReserved
 } MEMORY_WORKING_SET_EX_LOCATION;
 
-// private
-typedef struct _MEMORY_WORKING_SET_EX_BLOCK
+/**
+ * The MEMORY_WORKING_SET_EX_BLOCK structure contains extended working set information for a page.
+ *
+ * \ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_ex_block
+ */
+typedef union _MEMORY_WORKING_SET_EX_BLOCK
 {
+    ULONG_PTR Flags;
     union
     {
         struct
         {
-            ULONG_PTR Valid : 1;
-            ULONG_PTR ShareCount : 3;
-            ULONG_PTR Win32Protection : 11;
-            ULONG_PTR Shared : 1;
-            ULONG_PTR Node : 6;
-            ULONG_PTR Locked : 1;
-            ULONG_PTR LargePage : 1;
-            ULONG_PTR Priority : 3;
+            ULONG_PTR Valid : 1;                    // If this bit is 1, the subsequent members are valid; otherwise they should be ignored.
+            ULONG_PTR ShareCount : 3;               // The number of processes that share this page. The maximum value of this member is 7.
+            ULONG_PTR Win32Protection : 11;         // The memory protection attributes of the page.
+            ULONG_PTR Shared : 1;                   // If this bit is 1, the page can be shared.
+            ULONG_PTR Node : 6;                     // The NUMA node. The maximum value of this member is 63.
+            ULONG_PTR Locked : 1;                   // If this bit is 1, the virtual page is locked in physical memory.
+            ULONG_PTR LargePage : 1;                // If this bit is 1, the page is a large page.
+            ULONG_PTR Priority : 3;                 // The memory priority attributes of the page.
             ULONG_PTR Reserved : 3;
-            ULONG_PTR SharedOriginal : 1;
-            ULONG_PTR Bad : 1;
-            ULONG_PTR Win32GraphicsProtection : 4; // 19H1
+            ULONG_PTR SharedOriginal : 1;           // If this bit is 1, the page was not modified.
+            ULONG_PTR Bad : 1;                      // If this bit is 1, the page is has been reported as bad.
+            ULONG_PTR Win32GraphicsProtection : 4;  // The memory protection attributes of the page. // since 19H1
 #ifdef _WIN64
             ULONG_PTR ReservedUlong : 28;
 #endif
         };
         struct
         {
-            ULONG_PTR Valid : 1;
+            ULONG_PTR Valid : 1;                    // If this bit is 0, the subsequent members are valid; otherwise they should be ignored.
             ULONG_PTR Reserved0 : 14;
-            ULONG_PTR Shared : 1;
+            ULONG_PTR Shared : 1;                   // If this bit is 1, the page can be shared.
             ULONG_PTR Reserved1 : 5;
             ULONG_PTR PageTable : 1;
-            ULONG_PTR Location : 2;
-            ULONG_PTR Priority : 3;
+            ULONG_PTR Location : 2;                 // The memory location of the page.  MEMORY_WORKING_SET_EX_LOCATION
+            ULONG_PTR Priority : 3;                 // The memory priority of the page.
             ULONG_PTR ModifiedList : 1;
             ULONG_PTR Reserved2 : 2;
-            ULONG_PTR SharedOriginal : 1;
-            ULONG_PTR Bad : 1;
+            ULONG_PTR SharedOriginal : 1;           // If this bit is 1, the page was not modified.
+            ULONG_PTR Bad : 1;                      // If this bit is 1, the page is has been reported as bad.
 #ifdef _WIN64
             ULONG_PTR ReservedUlong : 32;
 #endif
@@ -165,15 +180,15 @@ typedef struct _MEMORY_WORKING_SET_EX_BLOCK
     };
 } MEMORY_WORKING_SET_EX_BLOCK, *PMEMORY_WORKING_SET_EX_BLOCK;
 
-// private
+/**
+ * The MEMORY_WORKING_SET_EX_INFORMATION structure contains extended working set information for a process.
+ *
+ * \ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_ex_information
+ */
 typedef struct _MEMORY_WORKING_SET_EX_INFORMATION
 {
-    PVOID VirtualAddress;
-    union
-    {
-        MEMORY_WORKING_SET_EX_BLOCK VirtualAttributes;
-        ULONG_PTR Long;
-    } u1;
+    PVOID VirtualAddress;                             // The virtual address.
+    MEMORY_WORKING_SET_EX_BLOCK VirtualAttributes;    // The attributes of the page at VirtualAddress.
 } MEMORY_WORKING_SET_EX_INFORMATION, *PMEMORY_WORKING_SET_EX_INFORMATION;
 
 // private
@@ -359,6 +374,17 @@ typedef struct _MEMORY_IMAGE_EXTENSION_INFORMATION
     SIZE_T ExtensionSize;
 } MEMORY_IMAGE_EXTENSION_INFORMATION, *PMEMORY_IMAGE_EXTENSION_INFORMATION;
 
+/**
+ * Queries information about a region of virtual memory in a process.
+ *
+ * @param ProcessHandle A handle to the process whose memory information is to be queried.
+ * @param BaseAddress A pointer to the base address of the region of pages to be queried.
+ * @param MemoryInformationClass The type of information to be queried.
+ * @param MemoryInformation A pointer to a buffer that receives the memory information.
+ * @param MemoryInformationLength The size of the buffer pointed to by the MemoryInformation parameter.
+ * @param ReturnLength A pointer to a variable that receives the number of bytes returned in the MemoryInformation buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

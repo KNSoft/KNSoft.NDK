@@ -130,7 +130,7 @@ NtAllocateVirtualMemory(
     _In_ ULONG_PTR ZeroBits,
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG AllocationType,
-    _In_ ULONG Protect);
+    _In_ ULONG PageProtection);
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
 _Must_inspect_result_
@@ -148,6 +148,15 @@ NtAllocateVirtualMemoryEx(
     _In_ ULONG ExtendedParameterCount);
 #endif
 
+/**
+ * Frees virtual memory allocated for a process.
+ *
+ * @param ProcessHandle A handle to the process whose virtual memory is to be freed.
+ * @param BaseAddress A pointer to the base address of the region of pages to be freed.
+ * @param RegionSize A pointer to a variable that specifies the size of the region of memory to be freed.
+ * @param FreeType The type of free operation. This parameter can be MEM_DECOMMIT or MEM_RELEASE.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -157,6 +166,16 @@ NtFreeVirtualMemory(
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG FreeType);
 
+/**
+ * Reads virtual memory from a process.
+ *
+ * @param ProcessHandle A handle to the process whose memory is to be read.
+ * @param BaseAddress A pointer to the base address in the specified process from which to read.
+ * @param Buffer A pointer to a buffer that receives the contents from the address space of the specified process.
+ * @param NumberOfBytesToRead The number of bytes to be read from the specified process.
+ * @param NumberOfBytesRead A pointer to a variable that receives the number of bytes transferred into the specified buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -168,6 +187,17 @@ NtReadVirtualMemory(
     _Out_opt_ PSIZE_T NumberOfBytesRead);
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+/**
+ * Reads virtual memory from a process with extended options.
+ *
+ * @param ProcessHandle A handle to the process whose memory is to be read.
+ * @param BaseAddress A pointer to the base address in the specified process from which to read.
+ * @param Buffer A pointer to a buffer that receives the contents from the address space of the specified process.
+ * @param NumberOfBytesToRead The number of bytes to be read from the specified process.
+ * @param NumberOfBytesRead A pointer to a variable that receives the number of bytes transferred into the specified buffer.
+ * @param Flags Additional flags for the read operation.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -180,6 +210,16 @@ NtReadVirtualMemoryEx(
     _In_ ULONG Flags);
 #endif
 
+/**
+ * Writes virtual memory to a process.
+ *
+ * @param ProcessHandle A handle to the process whose memory is to be written.
+ * @param BaseAddress A pointer to the base address in the specified process to which to write.
+ * @param Buffer A pointer to the buffer that contains the data to be written to the address space of the specified process.
+ * @param NumberOfBytesToWrite The number of bytes to be written to the specified process.
+ * @param NumberOfBytesWritten A pointer to a variable that receives the number of bytes transferred into the specified buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -190,6 +230,16 @@ NtWriteVirtualMemory(
     _In_ SIZE_T NumberOfBytesToWrite,
     _Out_opt_ PSIZE_T NumberOfBytesWritten);
 
+/**
+ * Changes the protection on a region of virtual memory.
+ *
+ * @param ProcessHandle A handle to the process whose memory protection is to be changed.
+ * @param BaseAddress A pointer to the base address of the region of pages whose access protection attributes are to be changed.
+ * @param RegionSize A pointer to a variable that specifies the size of the region whose access protection attributes are to be changed.
+ * @param NewProtection The memory protection option. This parameter can be one of the memory protection constants.
+ * @param OldProtection A pointer to a variable that receives the previous access protection of the first page in the specified region of pages.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -197,9 +247,18 @@ NtProtectVirtualMemory(
     _In_ HANDLE ProcessHandle,
     _Inout_ PVOID* BaseAddress,
     _Inout_ PSIZE_T RegionSize,
-    _In_ ULONG NewProtect,
-    _Out_ PULONG OldProtect);
+    _In_ ULONG NewProtection,
+    _Out_ PULONG OldProtection);
 
+/**
+ * Flushes the instruction cache for a specified process.
+ *
+ * @param ProcessHandle A handle to the process whose instruction cache is to be flushed.
+ * @param BaseAddress A pointer to the base address of the region of memory to be flushed.
+ * @param RegionSize A pointer to a variable that specifies the size of the region to be flushed.
+ * @param IoStatus A pointer to an IO_STATUS_BLOCK structure that receives the status of the flush operation.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -301,7 +360,7 @@ NtMapViewOfSection(
     _Inout_ PSIZE_T ViewSize,
     _In_ SECTION_INHERIT InheritDisposition,
     _In_ ULONG AllocationType,
-    _In_ ULONG Win32Protect);
+    _In_ ULONG PageProtection);
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
 NTSYSCALLAPI

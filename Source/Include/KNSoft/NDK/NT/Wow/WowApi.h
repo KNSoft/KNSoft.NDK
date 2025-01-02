@@ -43,6 +43,16 @@ NtWow64ReadVirtualMemory64(
     _In_ ULONGLONG NumberOfBytesToRead,
     _Out_opt_ PULONGLONG NumberOfBytesRead);
 
+/**
+ * Writes virtual memory to a 64-bit process from a 32-bit process.
+ *
+ * @param ProcessHandle A handle to the process whose memory is to be written.
+ * @param BaseAddress A pointer to the base address in the specified process to which to write.
+ * @param Buffer A pointer to the buffer that contains the data to be written to the address space of the specified process.
+ * @param NumberOfBytesToWrite The number of bytes to be written to the specified process.
+ * @param NumberOfBytesWritten A pointer to a variable that receives the number of bytes transferred into the specified buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

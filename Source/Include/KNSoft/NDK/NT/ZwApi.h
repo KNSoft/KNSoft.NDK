@@ -327,7 +327,7 @@ ZwAllocateVirtualMemory(
     _In_ ULONG_PTR ZeroBits,
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG AllocationType,
-    _In_ ULONG Protect
+    _In_ ULONG PageProtection
     );
 
 NTSYSCALLAPI
@@ -2309,7 +2309,7 @@ ZwMapViewOfSection(
     _Inout_ PSIZE_T ViewSize,
     _In_ SECTION_INHERIT InheritDisposition,
     _In_ ULONG AllocationType,
-    _In_ ULONG Win32Protect
+    _In_ ULONG PageProtection
     );
 
 NTSYSCALLAPI
@@ -2832,8 +2832,8 @@ ZwProtectVirtualMemory(
     _In_ HANDLE ProcessHandle,
     _Inout_ PVOID *BaseAddress,
     _Inout_ PSIZE_T RegionSize,
-    _In_ ULONG NewProtect,
-    _Out_ PULONG OldProtect
+    _In_ ULONG NewProtection,
+    _Out_ PULONG OldProtection
     );
 
 NTSYSCALLAPI
