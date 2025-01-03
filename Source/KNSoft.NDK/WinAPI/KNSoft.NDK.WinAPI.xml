@@ -65,4 +65,73 @@
     <Export Name="StartServiceCtrlDispatcherW" CallConv="__stdcall" Arg="ptr" />
     <Export Name="StartServiceW" CallConv="__stdcall" Arg="ptr int ptr" />
   </Dll>
+  <Dll Name="bcd.dll">
+    <Export Name="BcdCloseObject" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdCloseStore" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdCopyObject" CallConv="__stdcall" Arg="ptr ptr int ptr ptr" />
+    <Export Name="BcdCopyObjectEx" CallConv="__stdcall" Arg="ptr ptr int ptr ptr ptr" />
+    <Export Name="BcdCopyObjects" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="BcdCreateObject" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="BcdCreateStore" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="BcdDeleteElement" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="BcdDeleteObject" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdDeleteObjectReferences" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="BcdDeleteSystemStore" CallConv="__stdcall" />
+    <Export Name="BcdEnumerateAndUnpackElements" CallConv="__stdcall" Arg="ptr ptr int ptr ptr ptr" />
+    <Export Name="BcdEnumerateElementTypes" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="BcdEnumerateElements" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="BcdEnumerateElementsWithFlags" CallConv="__stdcall" Arg="ptr int ptr ptr ptr" />
+    <Export Name="BcdEnumerateObjects" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr" />
+    <Export Name="BcdExportStore" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdExportStoreEx" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="BcdFlushStore" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdForciblyUnloadStore" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdGetElementData" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+    <Export Name="BcdGetElementDataWithFlags" CallConv="__stdcall" Arg="ptr int int ptr ptr" />
+    <Export Name="BcdGetSystemStorePath" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdImportStore" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdImportStoreWithFlags" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="BcdMarkAsSystemStore" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdMigrateObjectElementValues" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="BcdOpenObject" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="BcdOpenStore" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="BcdOpenStoreFromFile" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="BcdOpenSystemStore" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="BcdQueryObject" CallConv="__stdcall" Arg="ptr int int ptr" />
+    <Export Name="BcdSetElementData" CallConv="__stdcall" Arg="ptr int ptr int" />
+    <Export Name="BcdSetElementDataWithFlags" CallConv="__stdcall" Arg="ptr int int ptr int" />
+    <Export Name="BcdSetLogging" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="BcdSetSystemStoreDevice" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="GUID_BAD_MEMORY_GROUP" Type="Const" />
+    <Export Name="GUID_BOOT_LOADER_SETTINGS_GROUP" Type="Const" />
+    <Export Name="GUID_CURRENT_BOOT_ENTRY" Type="Const" />
+    <Export Name="GUID_DEBUGGER_SETTINGS_GROUP" Type="Const" />
+    <Export Name="GUID_DEFAULT_BOOT_ENTRY" Type="Const" />
+    <Export Name="GUID_EMS_SETTINGS_GROUP" Type="Const" />
+    <Export Name="GUID_FIRMWARE_BOOTMGR" Type="Const" />
+    <Export Name="GUID_GLOBAL_SETTINGS_GROUP" Type="Const" />
+    <Export Name="GUID_HYPERVISOR_SETTINGS_GROUP" Type="Const" />
+    <Export Name="GUID_KERNEL_DEBUGGER_SETTINGS_GROUP" Type="Const" />
+    <Export Name="GUID_RESUME_LOADER_SETTINGS_GROUP" Type="Const" />
+    <Export Name="GUID_WINDOWS_BOOTMGR" Type="Const" />
+    <Export Name="GUID_WINDOWS_LEGACY_NTLDR" Type="Const" />
+    <Export Name="GUID_WINDOWS_MEMORY_TESTER" Type="Const" />
+    <Export Name="GUID_WINDOWS_OS_TARGET_TEMPLATE_EFI" Type="Const" />
+    <Export Name="GUID_WINDOWS_OS_TARGET_TEMPLATE_PCAT" Type="Const" />
+    <Export Name="GUID_WINDOWS_RESUME_TARGET_TEMPLATE_EFI" Type="Const" />
+    <Export Name="GUID_WINDOWS_RESUME_TARGET_TEMPLATE_PCAT" Type="Const" />
+    <Export Name="GUID_WINDOWS_SETUP_EFI" Type="Const" />
+    <Export Name="GUID_WINDOWS_SETUP_PCAT" Type="Const" />
+    <Export Name="GUID_WINDOWS_SETUP_RAMDISK_OPTIONS" Type="Const" />
+    <Export Name="PARTITION_BASIC_DATA_GUID" Type="Const" />
+    <Export Name="PARTITION_CLUSTER_GUID" Type="Const" />
+    <Export Name="PARTITION_ENTRY_UNUSED_GUID" Type="Const" />
+    <Export Name="PARTITION_LDM_DATA_GUID" Type="Const" />
+    <Export Name="PARTITION_LDM_METADATA_GUID" Type="Const" />
+    <Export Name="PARTITION_MSFT_RECOVERY_GUID" Type="Const" />
+    <Export Name="PARTITION_MSFT_RESERVED_GUID" Type="Const" />
+    <Export Name="PARTITION_MSFT_SNAPSHOT_GUID" Type="Const" />
+    <Export Name="PARTITION_SPACES_GUID" Type="Const" />
+    <Export Name="PARTITION_SYSTEM_GUID" Type="Const" />
+  </Dll>
 </LibCreate>

@@ -6,7 +6,7 @@ EXTERN_C_START
 
 /* phnt */
 
-#ifndef _KNSOFT_NDK_NO_INLINE
+#ifdef _KNSOFT_NDK_INLINE
 
 // 5189B25C-5558-4BF2-BCA4-289B11BD29E2 // {badmemory}
 DEFINE_GUID(GUID_BAD_MEMORY_GROUP, 0x5189B25C, 0x5558, 0x4BF2, 0xBC, 0xA4, 0x28, 0x9B, 0x11, 0xBD, 0x29, 0xE2);
@@ -574,7 +574,7 @@ NTSTATUS
 NTAPI
 BcdCopyObjects(
     _In_ HANDLE BcdStoreHandle,
-    _In_ BCD_OBJECT_DESCRIPTION Characteristics,
+    _In_ PBCD_OBJECT_DESCRIPTION Characteristics,
     _In_ BCD_COPY_FLAGS BcdCopyFlags,
     _In_ HANDLE TargetStoreHandle
     );
