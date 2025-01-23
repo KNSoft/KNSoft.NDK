@@ -25,11 +25,11 @@
 
 _Success_(return > 0)
 __forceinline
-unsigned long
+unsigned int
 __cdecl
 StrSafe_CchVPrintfW(
-    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
-    _In_ size_t const BufferCount,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* Buffer,
+    _In_ size_t BufferCount,
     _In_z_ _Printf_format_string_ const wchar_t* Format,
     va_list ArgList)
 {
@@ -52,11 +52,11 @@ StrSafe_CchVPrintfW(
 
 _Success_(return > 0)
 __forceinline
-unsigned long
+unsigned int
 __cdecl
 StrSafe_CchVPrintfA(
-    _Out_writes_(BufferCount) _Always_(_Post_z_) char* const Buffer,
-    _In_ size_t const BufferCount,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) char* Buffer,
+    _In_ size_t BufferCount,
     _In_z_ _Printf_format_string_ const char* Format,
     va_list ArgList)
 {
@@ -74,41 +74,41 @@ StrSafe_CchVPrintfA(
         return BufferCount > 0 ? i : i + 1;
     }
     Buffer[i] = '\0';
-    return i;
+    return (unsigned int)i;
 }
 
 _Success_(return > 0)
 __forceinline
-unsigned long
+unsigned int
 __cdecl
 StrSafe_CchPrintfW(
-    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
-    _In_ size_t const BufferCount,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* Buffer,
+    _In_ size_t BufferCount,
     _In_z_ _Printf_format_string_ const wchar_t* Format,
     ...)
 {
     va_list ArgList;
-    unsigned long i;
+    unsigned int i;
 
     va_start(ArgList, Format);
     i = StrSafe_CchVPrintfW(Buffer, BufferCount, Format, ArgList);
     va_end(ArgList);
 
-    return i;
+    return (unsigned int)i;
 }
 
 _Success_(return > 0)
 __forceinline
-unsigned long
+unsigned int
 __cdecl
 StrSafe_CchPrintfA(
-    _Out_writes_(BufferCount) _Always_(_Post_z_) char* const Buffer,
-    _In_ size_t const BufferCount,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) char* Buffer,
+    _In_ size_t BufferCount,
     _In_z_ _Printf_format_string_ const char* Format,
     ...)
 {
     va_list ArgList;
-    unsigned long i;
+    unsigned int i;
 
     va_start(ArgList, Format);
     i = StrSafe_CchVPrintfA(Buffer, BufferCount, Format, ArgList);
@@ -123,14 +123,14 @@ StrSafe_CchPrintfA(
 
 _Success_(return > 0)
 __forceinline
-unsigned long
+unsigned int
 __cdecl
 StrSafe_CchCopyW(
-    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* const Buffer,
-    _In_range_(>, 0) unsigned long const BufferCount,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) wchar_t* Buffer,
+    _In_range_(>, 0) unsigned int BufferCount,
     _In_z_ const wchar_t* Source)
 {
-    unsigned long i;
+    unsigned int i;
 
     for (i = 0; i < BufferCount; i++)
     {
@@ -145,14 +145,14 @@ StrSafe_CchCopyW(
 
 _Success_(return > 0)
 __forceinline
-unsigned long
+unsigned int
 __cdecl
 StrSafe_CchCopyA(
-    _Out_writes_(BufferCount) _Always_(_Post_z_) char* const Buffer,
-    _In_range_(>, 0) unsigned long const BufferCount,
+    _Out_writes_(BufferCount) _Always_(_Post_z_) char* Buffer,
+    _In_range_(>, 0) unsigned int BufferCount,
     _In_z_ const char* Source)
 {
-    unsigned long i;
+    unsigned int i;
 
     for (i = 0; i < BufferCount; i++)
     {
