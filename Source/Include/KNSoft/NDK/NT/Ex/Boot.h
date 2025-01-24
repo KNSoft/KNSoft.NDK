@@ -190,6 +190,13 @@ typedef struct _EFI_DRIVER_ENTRY_LIST
     EFI_DRIVER_ENTRY DriverEntry;
 } EFI_DRIVER_ENTRY_LIST, *PEFI_DRIVER_ENTRY_LIST;
 
+/**
+ * The NtAddBootEntry routine adds a new boot entry to the system boot configuration.
+ *
+ * @param BootEntry A pointer to a BOOT_ENTRY structure that specifies the boot entry to be added.
+ * @param Id A pointer to a variable that receives the identifier of the new boot entry.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -197,18 +204,37 @@ NtAddBootEntry(
     _In_ PBOOT_ENTRY BootEntry,
     _Out_opt_ PULONG Id);
 
+/**
+ * The NtDeleteBootEntry routine deletes an existing boot entry from the system boot configuration.
+ *
+ * @param Id The identifier of the boot entry to be deleted.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtDeleteBootEntry(
     _In_ ULONG Id);
 
+/**
+ * The NtModifyBootEntry routine modifies an existing boot entry in the system boot configuration.
+ *
+ * @param BootEntry A pointer to a BOOT_ENTRY structure that specifies the new boot entry information.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtModifyBootEntry(
     _In_ PBOOT_ENTRY BootEntry);
 
+/**
+ * The NtEnumerateBootEntries routine retrieves information about all boot entries in the system boot configuration.
+ *
+ * @param Buffer A pointer to a buffer that receives the boot entries information.
+ * @param BufferLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -216,6 +242,13 @@ NtEnumerateBootEntries(
     _Out_writes_bytes_opt_(*BufferLength) PVOID Buffer,
     _Inout_ PULONG BufferLength);
 
+/**
+ * The NtQueryBootEntryOrder routine retrieves the current boot entry order.
+ *
+ * @param Ids A pointer to a buffer that receives the identifiers of the boot entries in the current boot order.
+ * @param Count A pointer to a variable that specifies the number of entries in the buffer. On return, it contains the number of entries returned.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -223,6 +256,13 @@ NtQueryBootEntryOrder(
     _Out_writes_opt_(*Count) PULONG Ids,
     _Inout_ PULONG Count);
 
+/**
+ * The NtSetBootEntryOrder routine sets the boot entry order.
+ *
+ * @param Ids A pointer to a buffer that specifies the identifiers of the boot entries in the desired boot order.
+ * @param Count The number of entries in the buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -230,6 +270,13 @@ NtSetBootEntryOrder(
     _In_reads_(Count) PULONG Ids,
     _In_ ULONG Count);
 
+/**
+ * The NtQueryBootOptions routine retrieves the current boot options.
+ *
+ * @param BootOptions A pointer to a buffer that receives the boot options.
+ * @param BootOptionsLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -237,6 +284,13 @@ NtQueryBootOptions(
     _Out_writes_bytes_opt_(*BootOptionsLength) PBOOT_OPTIONS BootOptions,
     _Inout_ PULONG BootOptionsLength);
 
+/**
+ * The NtSetBootOptions routine sets the boot options.
+ *
+ * @param BootOptions A pointer to a BOOT_OPTIONS structure that specifies the new boot options.
+ * @param FieldsToChange A bitmask that specifies which fields in the BOOT_OPTIONS structure are to be changed.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -244,6 +298,15 @@ NtSetBootOptions(
     _In_ PBOOT_OPTIONS BootOptions,
     _In_ ULONG FieldsToChange);
 
+/**
+ * The NtTranslateFilePath routine translates a file path from one format to another.
+ *
+ * @param InputFilePath A pointer to a FILE_PATH structure that specifies the input file path.
+ * @param OutputType The type of the output file path.
+ * @param OutputFilePath A pointer to a buffer that receives the translated file path.
+ * @param OutputFilePathLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -253,6 +316,13 @@ NtTranslateFilePath(
     _Out_writes_bytes_opt_(*OutputFilePathLength) PFILE_PATH OutputFilePath,
     _Inout_opt_ PULONG OutputFilePathLength);
 
+/**
+ * The NtAddDriverEntry routine adds a new driver entry to the system boot configuration.
+ *
+ * @param DriverEntry A pointer to an EFI_DRIVER_ENTRY structure that specifies the driver entry to be added.
+ * @param Id A pointer to a variable that receives the identifier of the new driver entry.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -260,18 +330,37 @@ NtAddDriverEntry(
     _In_ PEFI_DRIVER_ENTRY DriverEntry,
     _Out_opt_ PULONG Id);
 
+/**
+ * The NtDeleteDriverEntry routine deletes an existing driver entry from the system boot configuration.
+ *
+ * @param Id The identifier of the driver entry to be deleted.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtDeleteDriverEntry(
     _In_ ULONG Id);
 
+/**
+ * The NtModifyDriverEntry routine modifies an existing driver entry in the system boot configuration.
+ *
+ * @param DriverEntry A pointer to an EFI_DRIVER_ENTRY structure that specifies the new driver entry information.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtModifyDriverEntry(
     _In_ PEFI_DRIVER_ENTRY DriverEntry);
 
+/**
+ * The NtEnumerateDriverEntries routine retrieves information about all driver entries in the system boot configuration.
+ *
+ * @param Buffer A pointer to a buffer that receives the driver entries information.
+ * @param BufferLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -279,6 +368,13 @@ NtEnumerateDriverEntries(
     _Out_writes_bytes_opt_(*BufferLength) PVOID Buffer,
     _Inout_ PULONG BufferLength);
 
+/**
+ * The NtQueryDriverEntryOrder routine retrieves the current driver entry order.
+ *
+ * @param Ids A pointer to a buffer that receives the identifiers of the driver entries in the current driver order.
+ * @param Count A pointer to a variable that specifies the number of entries in the buffer. On return, it contains the number of entries returned.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -286,6 +382,13 @@ NtQueryDriverEntryOrder(
     _Out_writes_opt_(*Count) PULONG Ids,
     _Inout_ PULONG Count);
 
+/**
+ * The NtSetDriverEntryOrder routine sets the driver entry order.
+ *
+ * @param Ids A pointer to a buffer that specifies the identifiers of the driver entries in the desired driver order.
+ * @param Count The number of entries in the buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -302,6 +405,16 @@ typedef enum _FILTER_BOOT_OPTION_OPERATION
 } FILTER_BOOT_OPTION_OPERATION;
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The NtFilterBootOption routine filters boot options based on the specified operation, object type, and element type.
+ *
+ * @param FilterOperation The operation to be performed on the boot option. This can be one of the values from the FILTER_BOOT_OPTION_OPERATION enumeration.
+ * @param ObjectType The type of the object to be filtered.
+ * @param ElementType The type of the element within the object to be filtered.
+ * @param Data A pointer to a buffer that contains the data to be used in the filter operation. This parameter is optional and can be NULL.
+ * @param DataSize The size, in bytes, of the data buffer pointed to by the Data parameter.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

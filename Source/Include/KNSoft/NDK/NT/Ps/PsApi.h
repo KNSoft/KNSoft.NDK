@@ -297,7 +297,7 @@ NtQueryInformationProcess(
  * @param DesiredAccess The access rights desired for the new process handle.
  * @param HandleAttributes The attributes for the new process handle.
  * @param Flags Flags that modify the behavior of the function. This can be a combination of the following flags:
- * - PROCESS_GET_NEXT_FLAGS_PREVIOUS_PROCESS (0x00000001): Retrieve the previous process in the system.
+ * - \ref PROCESS_GET_NEXT_FLAGS_PREVIOUS_PROCESS (0x00000001): Retrieve the previous process in the system.
  * @param NewProcessHandle A pointer to a variable that receives the handle to the next process.
  * @return NTSTATUS Successful or errant status.
  */
@@ -319,11 +319,11 @@ NtGetNextProcess(
  *
  * @param ProcessHandle A handle to the process for enumerateration of threads.
  * @param ThreadHandle An optional handle to a thread. If this parameter is NULL, the function retrieves the first thread in the process.
- * @param DesiredAccess The access rights desired for the new process handle.
- * @param HandleAttributes The attributes for the new process handle.
+ * @param DesiredAccess The access rights desired for the new thread handle.
+ * @param HandleAttributes The attributes for the new thread handle.
  * @param Flags Flags that modify the behavior of the function. This can be a combination of the following flags:
- * - THREAD_GET_NEXT_FLAGS_PREVIOUS_THREAD (0x00000001): Retrieve the previous thread in the process.
- * @param NewProcessHandle A pointer to a variable that receives the handle to the next process.
+ * - \ref THREAD_GET_NEXT_FLAGS_PREVIOUS_THREAD (0x00000001): Retrieve the previous thread in the process.
+ * @param NewThreadHandle A pointer to a variable that receives the handle to the next thread.
  * @return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
@@ -722,6 +722,13 @@ NtAlertThreadByThreadId(
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
+/**
+ * Sends an alert to the specified thread by its thread ID, with an optional lock.
+ *
+ * @param ThreadId The thread ID of the thread to be alerted.
+ * @param Lock An optional pointer to an SRW lock to be used during the alert.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -730,7 +737,15 @@ NtAlertThreadByThreadIdEx(
     _In_opt_ PRTL_SRWLOCK Lock
     );
 
-// rev
+/**
+ * Sends an alert to multiple threads by their thread IDs.
+ *
+ * @param MultipleThreadId A pointer to an array of thread IDs to be alerted.
+ * @param Count The number of thread IDs in the array.
+ * @param Boost A pointer to a boost value to be applied to the threads.
+ * @param BoostCount The number of boost values in the array.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

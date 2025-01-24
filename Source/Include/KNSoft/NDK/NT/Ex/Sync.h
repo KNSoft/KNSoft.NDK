@@ -190,65 +190,109 @@ NtQueryEvent(
 
 #define EVENT_PAIR_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE)
 
+/**
+ * The NtCreateEventPair routine creates an event pair object and opens a handle to the object with the specified desired access.
+ *
+ * @param EventPairHandle A pointer to a variable that receives the event pair object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the event pair object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtCreateEventPair(
     _Out_ PHANDLE EventPairHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes
-);
+    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtOpenEventPair routine opens a handle to an existing event pair object.
+ *
+ * @param EventPairHandle A pointer to a variable that receives the event pair object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the event pair object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtOpenEventPair(
     _Out_ PHANDLE EventPairHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
-);
+    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtSetLowEventPair routine sets the low event in an event pair to the signaled state.
+ *
+ * @param EventPairHandle A handle to the event pair object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtSetLowEventPair(
-    _In_ HANDLE EventPairHandle
-);
+    _In_ HANDLE EventPairHandle);
 
+/**
+ * The NtSetHighEventPair routine sets the high event in an event pair to the signaled state.
+ *
+ * @param EventPairHandle A handle to the event pair object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtSetHighEventPair(
-    _In_ HANDLE EventPairHandle
-);
+    _In_ HANDLE EventPairHandle);
 
+/**
+ * The NtWaitLowEventPair routine waits for the low event in an event pair to be set to the signaled state.
+ *
+ * @param EventPairHandle A handle to the event pair object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtWaitLowEventPair(
-    _In_ HANDLE EventPairHandle
-);
+    _In_ HANDLE EventPairHandle);
 
+/**
+ * The NtWaitHighEventPair routine waits for the high event in an event pair to be set to the signaled state.
+ *
+ * @param EventPairHandle A handle to the event pair object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtWaitHighEventPair(
-    _In_ HANDLE EventPairHandle
-);
+    _In_ HANDLE EventPairHandle);
 
+/**
+ * The NtSetLowWaitHighEventPair routine sets the low event in an event pair to the signaled state and waits for the high event to be set to the signaled state.
+ *
+ * @param EventPairHandle A handle to the event pair object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtSetLowWaitHighEventPair(
-    _In_ HANDLE EventPairHandle
-);
+    _In_ HANDLE EventPairHandle);
 
+/**
+ * The NtSetHighWaitLowEventPair routine sets the high event in an event pair to the signaled state and waits for the low event to be set to the signaled state.
+ *
+ * @param EventPairHandle A handle to the event pair object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtSetHighWaitLowEventPair(
-    _In_ HANDLE EventPairHandle
-);
+    _In_ HANDLE EventPairHandle);
 
 #pragma endregion
 
@@ -268,6 +312,9 @@ typedef enum _MUTANT_INFORMATION_CLASS
     MutantOwnerInformation // MUTANT_OWNER_INFORMATION
 } MUTANT_INFORMATION_CLASS;
 
+/**
+ * The MUTANT_BASIC_INFORMATION structure contains basic information about a mutant object.
+ */
 typedef struct _MUTANT_BASIC_INFORMATION
 {
     LONG CurrentCount;
@@ -275,11 +322,24 @@ typedef struct _MUTANT_BASIC_INFORMATION
     BOOLEAN AbandonedState;
 } MUTANT_BASIC_INFORMATION, *PMUTANT_BASIC_INFORMATION;
 
+/**
+ * The MUTANT_OWNER_INFORMATION structure contains information about the owner of a mutant object.
+ */
 typedef struct _MUTANT_OWNER_INFORMATION
 {
     CLIENT_ID ClientId;
 } MUTANT_OWNER_INFORMATION, *PMUTANT_OWNER_INFORMATION;
 
+/**
+ * The NtCreateMutant routine creates a mutant object, sets the initial state of the mutant to the specified value,
+ * and opens a handle to the object with the specified desired access.
+ *
+ * @param MutantHandle A pointer to a variable that receives the mutant object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the mutant object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @param InitialOwner If TRUE, the calling thread is the initial owner of the mutant object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -287,26 +347,48 @@ NtCreateMutant(
     _Out_ PHANDLE MutantHandle,
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
-    _In_ BOOLEAN InitialOwner
-);
+    _In_ BOOLEAN InitialOwner);
 
+/**
+ * The NtOpenMutant routine opens a handle to an existing mutant object.
+ *
+ * @param MutantHandle A pointer to a variable that receives the mutant object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the mutant object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtOpenMutant(
     _Out_ PHANDLE MutantHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
-);
+    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtReleaseMutant routine releases ownership of a mutant object.
+ *
+ * @param MutantHandle A handle to the mutant object.
+ * @param PreviousCount A pointer to a variable that receives the previous count of the mutant object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtReleaseMutant(
     _In_ HANDLE MutantHandle,
-    _Out_opt_ PLONG PreviousCount
-);
+    _Out_opt_ PLONG PreviousCount);
 
+/**
+ * The NtQueryMutant routine retrieves information about a mutant object.
+ *
+ * @param MutantHandle A handle to the mutant object.
+ * @param MutantInformationClass The type of information to be retrieved.
+ * @param MutantInformation A pointer to a buffer that receives the requested information.
+ * @param MutantInformationLength The size of the buffer pointed to by MutantInformation.
+ * @param ReturnLength A pointer to a variable that receives the size of the data returned in the buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -315,8 +397,7 @@ NtQueryMutant(
     _In_ MUTANT_INFORMATION_CLASS MutantInformationClass,
     _Out_writes_bytes_(MutantInformationLength) PVOID MutantInformation,
     _In_ ULONG MutantInformationLength,
-    _Out_opt_ PULONG ReturnLength
-);
+    _Out_opt_ PULONG ReturnLength);
 
 #pragma endregion
 
@@ -339,12 +420,26 @@ typedef enum _SEMAPHORE_INFORMATION_CLASS
     SemaphoreBasicInformation
 } SEMAPHORE_INFORMATION_CLASS;
 
+/**
+ * The SEMAPHORE_BASIC_INFORMATION structure contains basic information about a semaphore object.
+ */
 typedef struct _SEMAPHORE_BASIC_INFORMATION
 {
     LONG CurrentCount;
     LONG MaximumCount;
 } SEMAPHORE_BASIC_INFORMATION, *PSEMAPHORE_BASIC_INFORMATION;
 
+/**
+ * The NtCreateSemaphore routine creates a semaphore object, sets the initial count of the semaphore to the specified value,
+ * and opens a handle to the object with the specified desired access.
+ *
+ * @param SemaphoreHandle A pointer to a variable that receives the semaphore object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the semaphore object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @param InitialCount The initial count of the semaphore object.
+ * @param MaximumCount The maximum count of the semaphore object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -353,27 +448,50 @@ NtCreateSemaphore(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ LONG InitialCount,
-    _In_ LONG MaximumCount
-);
+    _In_ LONG MaximumCount);
 
+/**
+ * The NtOpenSemaphore routine opens a handle to an existing semaphore object.
+ *
+ * @param SemaphoreHandle A pointer to a variable that receives the semaphore object handle.
+ * @param DesiredAccess The access mask that specifies the requested access to the semaphore object.
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtOpenSemaphore(
     _Out_ PHANDLE SemaphoreHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
-);
+    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtReleaseSemaphore routine increases the count of the specified semaphore object by a specified amount.
+ *
+ * @param SemaphoreHandle A handle to the semaphore object.
+ * @param ReleaseCount The amount by which the semaphore object's count is to be increased.
+ * @param PreviousCount A pointer to a variable that receives the previous count of the semaphore object.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtReleaseSemaphore(
     _In_ HANDLE SemaphoreHandle,
     _In_ LONG ReleaseCount,
-    _Out_opt_ PLONG PreviousCount
-);
+    _Out_opt_ PLONG PreviousCount);
 
+/**
+ * The NtQuerySemaphore routine retrieves information about a semaphore object.
+ *
+ * @param SemaphoreHandle A handle to the semaphore object.
+ * @param SemaphoreInformationClass The type of information to be retrieved.
+ * @param SemaphoreInformation A pointer to a buffer that receives the requested information.
+ * @param SemaphoreInformationLength The size of the buffer pointed to by SemaphoreInformation.
+ * @param ReturnLength A pointer to a variable that receives the size of the data returned in the buffer.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -382,8 +500,7 @@ NtQuerySemaphore(
     _In_ SEMAPHORE_INFORMATION_CLASS SemaphoreInformationClass,
     _Out_writes_bytes_(SemaphoreInformationLength) PVOID SemaphoreInformation,
     _In_ ULONG SemaphoreInformationLength,
-    _Out_opt_ PULONG ReturnLength
-);
+    _Out_opt_ PULONG ReturnLength);
 
 #pragma endregion
 

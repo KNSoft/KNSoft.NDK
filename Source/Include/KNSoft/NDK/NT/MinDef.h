@@ -312,7 +312,7 @@ typedef DOUBLE *PDOUBLE;
 #define DECLSPEC_EXPORT __declspec(dllexport)
 #define DECLSPEC_NOALIAS __declspec(noalias)
 
-EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+EXTERN_C CONST IMAGE_DOS_HEADER __ImageBase;
 
 #if __STDC_VERSION__ >= 202311L
 #ifndef __cplusplus

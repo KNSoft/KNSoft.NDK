@@ -6,6 +6,10 @@ EXTERN_C_START
 
 /* phnt */
 
+// CURDIR Handle | Flags
+#define RTL_USER_PROC_CURDIR_CLOSE      0x00000002
+#define RTL_USER_PROC_CURDIR_INHERIT    0x00000003
+
 typedef struct _CURDIR
 {
     UNICODE_STRING DosPath;
@@ -24,8 +28,9 @@ typedef struct _CURDIR32
     VOID* POINTER_32 Handle;
 } CURDIR32, *PCURDIR32;
 
-#define RTL_USER_PROC_CURDIR_CLOSE      0x00000002
-#define RTL_USER_PROC_CURDIR_INHERIT    0x00000003
+// RTL_DRIVE_LETTER_CURDIR Flags
+#define RTL_MAX_DRIVE_LETTERS   32
+#define RTL_DRIVE_LETTER_VALID  ((USHORT)0x0001)
 
 typedef struct _RTL_DRIVE_LETTER_CURDIR
 {
@@ -51,8 +56,9 @@ typedef struct _RTL_DRIVE_LETTER_CURDIR32
     STRING32 DosPath;
 } RTL_DRIVE_LETTER_CURDIR32, *PRTL_DRIVE_LETTER_CURDIR32;
 
-#define RTL_MAX_DRIVE_LETTERS 32
-#define RTL_DRIVE_LETTER_VALID (USHORT)0x0001
+#define RTL_USER_PROC_DETACHED_PROCESS      ((HANDLE)(LONG_PTR)-1)
+#define RTL_USER_PROC_CREATE_NEW_CONSOLE    ((HANDLE)(LONG_PTR)-2)
+#define RTL_USER_PROC_CREATE_NO_WINDOW      ((HANDLE)(LONG_PTR)-3)
 
 typedef struct _RTL_USER_PROCESS_PARAMETERS
 {
@@ -217,6 +223,9 @@ typedef struct _INITIAL_TEB
     PVOID StackAllocationBase;
 } INITIAL_TEB, *PINITIAL_TEB;
 
+/**
+ * The PS_PROTECTION structure is used to define the protection level of a process.
+ */
 typedef struct _PS_PROTECTION
 {
     union

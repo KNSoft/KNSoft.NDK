@@ -69,7 +69,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlCreateProcessParameters(
-    _Out_ PRTL_USER_PROCESS_PARAMETERS *pProcessParameters,
+    _Out_ PRTL_USER_PROCESS_PARAMETERS *ProcessParameters,
     _In_ PUNICODE_STRING ImagePathName,
     _In_opt_ PUNICODE_STRING DllPath,
     _In_opt_ PUNICODE_STRING CurrentDirectory,
@@ -84,7 +84,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlCreateProcessParametersEx(
-    _Out_ PRTL_USER_PROCESS_PARAMETERS *pProcessParameters,
+    _Out_ PRTL_USER_PROCESS_PARAMETERS *ProcessParameters,
     _In_ PUNICODE_STRING ImagePathName,
     _In_opt_ PUNICODE_STRING DllPath,
     _In_opt_ PUNICODE_STRING CurrentDirectory,
@@ -103,7 +103,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlCreateProcessParametersWithTemplate(
-    _Out_ PRTL_USER_PROCESS_PARAMETERS *pProcessParameters,
+    _Out_ PRTL_USER_PROCESS_PARAMETERS *ProcessParameters,
     _In_ PUNICODE_STRING ImagePathName,
     _In_opt_ PUNICODE_STRING DllPath,
     _In_opt_ PUNICODE_STRING CurrentDirectory,
@@ -186,6 +186,7 @@ RtlCreateUserProcessEx(
     _Out_ PRTL_USER_PROCESS_INFORMATION ProcessInformation);
 #endif
 
+_Analysis_noreturn_
 DECLSPEC_NORETURN
 NTSYSAPI
 VOID
@@ -334,6 +335,7 @@ RtlUserThreadStart(
     _In_ PTHREAD_START_ROUTINE Function,
     _In_ PVOID Parameter);
 
+_Analysis_noreturn_
 DECLSPEC_NORETURN
 NTSYSAPI
 VOID

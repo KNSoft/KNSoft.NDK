@@ -78,6 +78,7 @@ RtlDispatchException(
     _In_ PCONTEXT ContextRecord);
 
 /* phnt */
+_Analysis_noreturn_
 NTSYSAPI
 DECLSPEC_NORETURN
 VOID
@@ -94,6 +95,7 @@ NTAPI
 RtlRaiseExceptionForReturnAddressHijack(VOID);
 
 /* phnt */
+_Analysis_noreturn_
 NTSYSAPI
 DECLSPEC_NORETURN
 VOID

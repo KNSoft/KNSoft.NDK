@@ -74,4 +74,29 @@ NTAPI
 QuerySendMessage(
     _Inout_ MSG* pMsg);
 
+/* See also NtUserSetWindowStationUser */
+NTSYSAPI
+LOGICAL
+NTAPI
+SetWindowStationUser(
+    _In_ HWINSTA WindowStationHandle,
+    _In_ PLUID UserLogonId,
+    _In_ PSID UserSid,
+    _In_ ULONG UserSidLength
+    );
+
+/* See also NtUserGhostWindowFromHungWindow */
+NTSYSAPI
+HWND
+NTAPI
+GhostWindowFromHungWindow(
+    _In_ HWND WindowHandle);
+
+/* See also NtUserHungWindowFromGhostWindow */
+NTSYSAPI
+HWND
+NTAPI
+HungWindowFromGhostWindow(
+    _In_ HWND WindowHandle);
+
 EXTERN_C_END

@@ -52,7 +52,7 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectServerSiloRunningState = 41,
     JobObjectIoAttribution = 42, // JOBOBJECT_IO_ATTRIBUTION_INFORMATION
     JobObjectMemoryPartitionInformation = 43,
-    JobObjectContainerTelemetryId = 44,
+    JobObjectContainerTelemetryId = 44, // GUID // NtSetInformationJobObject(_In_ PGUID, 44, _In_ PGUID, sizeof(GUID)); // daxexec
     JobObjectSiloSystemRoot = 45,
     JobObjectEnergyTrackingState = 46, // JOBOBJECT_ENERGY_TRACKING_STATE
     JobObjectThreadImpersonationInformation = 47,
