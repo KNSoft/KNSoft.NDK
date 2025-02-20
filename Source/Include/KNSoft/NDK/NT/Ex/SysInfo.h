@@ -505,7 +505,45 @@ typedef struct _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
 
 typedef struct _SYSTEM_FLAGS_INFORMATION
 {
-    ULONG Flags; // NtGlobalFlag
+    union
+    {
+        ULONG Flags; // NtGlobalFlag
+        struct
+        {
+            ULONG StopOnException : 1;          // FLG_STOP_ON_EXCEPTION
+            ULONG ShowLoaderSnaps : 1;          // FLG_SHOW_LDR_SNAPS
+            ULONG DebugInitialCommand : 1;      // FLG_DEBUG_INITIAL_COMMAND
+            ULONG StopOnHungGUI : 1;            // FLG_STOP_ON_HUNG_GUI
+            ULONG HeapEnableTailCheck : 1;      // FLG_HEAP_ENABLE_TAIL_CHECK
+            ULONG HeapEnableFreeCheck : 1;      // FLG_HEAP_ENABLE_FREE_CHECK
+            ULONG HeapValidateParameters : 1;   // FLG_HEAP_VALIDATE_PARAMETERS
+            ULONG HeapValidateAll : 1;          // FLG_HEAP_VALIDATE_ALL
+            ULONG ApplicationVerifier : 1;      // FLG_APPLICATION_VERIFIER
+            ULONG MonitorSilentProcessExit : 1; // FLG_MONITOR_SILENT_PROCESS_EXIT
+            ULONG PoolEnableTagging : 1;        // FLG_POOL_ENABLE_TAGGING
+            ULONG HeapEnableTagging : 1;        // FLG_HEAP_ENABLE_TAGGING
+            ULONG UserStackTraceDb : 1;         // FLG_USER_STACK_TRACE_DB
+            ULONG KernelStackTraceDb : 1;       // FLG_KERNEL_STACK_TRACE_DB
+            ULONG MaintainObjectTypeList : 1;   // FLG_MAINTAIN_OBJECT_TYPELIST
+            ULONG HeapEnableTagByDll : 1;       // FLG_HEAP_ENABLE_TAG_BY_DLL
+            ULONG DisableStackExtension : 1;    // FLG_DISABLE_STACK_EXTENSION
+            ULONG EnableCsrDebug : 1;           // FLG_ENABLE_CSRDEBUG
+            ULONG EnableKDebugSymbolLoad : 1;   // FLG_ENABLE_KDEBUG_SYMBOL_LOAD
+            ULONG DisablePageKernelStacks : 1;  // FLG_DISABLE_PAGE_KERNEL_STACKS
+            ULONG EnableSystemCritBreaks : 1;   // FLG_ENABLE_SYSTEM_CRIT_BREAKS
+            ULONG HeapDisableCoalescing : 1;    // FLG_HEAP_DISABLE_COALESCING
+            ULONG EnableCloseExceptions : 1;    // FLG_ENABLE_CLOSE_EXCEPTIONS
+            ULONG EnableExceptionLogging : 1;   // FLG_ENABLE_EXCEPTION_LOGGING
+            ULONG EnableHandleTypeTagging : 1;  // FLG_ENABLE_HANDLE_TYPE_TAGGING
+            ULONG HeapPageAllocs : 1;           // FLG_HEAP_PAGE_ALLOCS
+            ULONG DebugInitialCommandEx : 1;    // FLG_DEBUG_INITIAL_COMMAND_EX
+            ULONG DisableDbgPrint : 1;          // FLG_DISABLE_DBGPRINT
+            ULONG CritSecEventCreation : 1;     // FLG_CRITSEC_EVENT_CREATION
+            ULONG LdrTopDown : 1;               // FLG_LDR_TOP_DOWN
+            ULONG EnableHandleExceptions : 1;   // FLG_ENABLE_HANDLE_EXCEPTIONS
+            ULONG DisableProtDlls : 1;          // FLG_DISABLE_PROTDLLS
+        };
+    };
 } SYSTEM_FLAGS_INFORMATION, *PSYSTEM_FLAGS_INFORMATION;
 
 // private
@@ -1023,7 +1061,16 @@ typedef enum _WATCHDOG_HANDLER_ACTION
     WdActionQueryState
 } WATCHDOG_HANDLER_ACTION;
 
-typedef NTSTATUS(NTAPI *PSYSTEM_WATCHDOG_HANDLER)(_In_ WATCHDOG_HANDLER_ACTION Action, _In_ PVOID Context, _Inout_ PULONG DataValue, _In_ BOOLEAN NoLocks);
+typedef
+_Function_class_(SYSTEM_WATCHDOG_HANDLER)
+NTSTATUS
+NTAPI
+SYSTEM_WATCHDOG_HANDLER(
+    _In_ WATCHDOG_HANDLER_ACTION Action,
+    _In_ PVOID Context,
+    _Inout_ PULONG DataValue,
+    _In_ BOOLEAN NoLocks);
+typedef SYSTEM_WATCHDOG_HANDLER* PSYSTEM_WATCHDOG_HANDLER;
 
 // private
 typedef struct _SYSTEM_WATCHDOG_HANDLER_INFORMATION
@@ -1356,7 +1403,30 @@ typedef struct _SYSTEM_PROCESSOR_PERFORMANCE_DISTRIBUTION
 typedef struct _SYSTEM_CODEINTEGRITY_INFORMATION
 {
     ULONG Length;
-    ULONG CodeIntegrityOptions;
+    union
+    {
+        ULONG CodeIntegrityOptions;
+        struct
+        {
+            ULONG Enabled : 1;
+            ULONG TestSign : 1;
+            ULONG UmciEnabled : 1;
+            ULONG UmciAuditModeEnabled : 1;
+            ULONG UmciExclusionPathsEnabled : 1;
+            ULONG TestBuild : 1;
+            ULONG PreproductionBuild : 1;
+            ULONG DebugModeEnabled : 1;
+            ULONG FlightBuild : 1;
+            ULONG FlightingEnabled : 1;
+            ULONG HvciKmciEnabled : 1;
+            ULONG HvciKmciAuditModeEnabled : 1;
+            ULONG HvciKmciStrictModeEnabled : 1;
+            ULONG HvciIumEnabled : 1;
+            ULONG WhqlEnforcementEnabled : 1;
+            ULONG WhqlAuditModeEnabled : 1;
+            ULONG Spare : 16;
+        };
+    };
 } SYSTEM_CODEINTEGRITY_INFORMATION, *PSYSTEM_CODEINTEGRITY_INFORMATION;
 
 // private
@@ -2585,8 +2655,38 @@ typedef struct _SYSTEM_KERNEL_DEBUGGER_FLAGS
 // private
 typedef struct _SYSTEM_CODEINTEGRITYPOLICY_INFORMATION
 {
-    ULONG Options;
-    ULONG HVCIOptions;
+    union
+    {
+        ULONG Options;
+        struct
+        {
+            ULONG Enabled : 1;
+            ULONG Audit : 1;
+            ULONG RequireWHQL : 1;
+            ULONG DisabledFlightSigning : 1;
+            ULONG EnabledUMCI : 1;
+            ULONG EnabledUpdatePolicyNoReboot : 1;
+            ULONG EnabledSecureSettingPolicy : 1;
+            ULONG EnabledUnsignedSystemIntegrityPolicy : 1;
+            ULONG DynamicCodePolicyEnabled : 1;
+            ULONG Spare : 19;
+            ULONG ReloadPolicyNoReboot : 1;
+            ULONG ConditionalLockdown : 1;
+            ULONG NoLockdown : 1;
+            ULONG Lockdown : 1;
+        };
+    };
+    union
+    {
+        ULONG HVCIOptions;
+        struct
+        {
+            ULONG HVCIEnabled : 1;
+            ULONG HVCIStrict : 1;
+            ULONG HVCIDebug : 1;
+            ULONG HVCISpare : 29;
+        };
+    };
     ULONGLONG Version;
     GUID PolicyGuid;
 } SYSTEM_CODEINTEGRITYPOLICY_INFORMATION, *PSYSTEM_CODEINTEGRITYPOLICY_INFORMATION;
@@ -2791,6 +2891,18 @@ typedef struct _SYSTEM_ACTIVITY_MODERATION_INFO
     SYSTEM_ACTIVITY_MODERATION_STATE ModerationState;
     SYSTEM_ACTIVITY_MODERATION_APP_TYPE AppType;
 } SYSTEM_ACTIVITY_MODERATION_INFO, *PSYSTEM_ACTIVITY_MODERATION_INFO;
+
+// rev
+#include <pshpack1.h>
+typedef struct _SYSTEM_ACTIVITY_MODERATION_APP_SETTINGS
+{
+    LARGE_INTEGER LastUpdatedTime; // QuerySystemTime
+    SYSTEM_ACTIVITY_MODERATION_STATE ModerationState;
+    UCHAR Reserved[4];
+    SYSTEM_ACTIVITY_MODERATION_APP_TYPE AppType;
+    UCHAR Flags[4];
+} SYSTEM_ACTIVITY_MODERATION_APP_SETTINGS, *PSYSTEM_ACTIVITY_MODERATION_APP_SETTINGS;
+#include <poppack.h>
 
 // private
 typedef struct _SYSTEM_ACTIVITY_MODERATION_USER_SETTINGS

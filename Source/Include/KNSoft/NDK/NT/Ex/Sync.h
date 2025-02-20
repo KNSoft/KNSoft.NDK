@@ -529,11 +529,15 @@ typedef struct _TIMER_BASIC_INFORMATION
     BOOLEAN TimerState;
 } TIMER_BASIC_INFORMATION, *PTIMER_BASIC_INFORMATION;
 
-typedef VOID(NTAPI *PTIMER_APC_ROUTINE)(
+typedef
+_Function_class_(TIMER_APC_ROUTINE)
+VOID
+NTAPI
+TIMER_APC_ROUTINE(
     _In_ PVOID TimerContext,
     _In_ ULONG TimerLowValue,
-    _In_ LONG TimerHighValue
-    );
+    _In_ LONG TimerHighValue);
+typedef TIMER_APC_ROUTINE* PTIMER_APC_ROUTINE;
 
 typedef enum _TIMER_SET_INFORMATION_CLASS
 {
@@ -800,6 +804,8 @@ NtWaitForKeyedEvent(
 
 #pragma region Cross Vm
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
+
 // rev
 NTSYSCALLAPI
 NTSTATUS
@@ -834,6 +840,8 @@ NtAcquireCrossVmMutant(
     _In_ HANDLE CrossVmMutant,
     _In_ PLARGE_INTEGER Timeout
 );
+
+#endif
 
 #pragma endregion
 

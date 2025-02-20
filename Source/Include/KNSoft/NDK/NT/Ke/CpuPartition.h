@@ -6,6 +6,8 @@ EXTERN_C_START
 
 /* phnt */
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_GA)
+
 // rev
 NTSYSCALLAPI
 NTSTATUS
@@ -36,5 +38,7 @@ NtSetInformationCpuPartition(
     _Reserved_ PVOID, 
     _Reserved_ ULONG, 
     _Reserved_ ULONG);
+
+#endif
 
 EXTERN_C_END

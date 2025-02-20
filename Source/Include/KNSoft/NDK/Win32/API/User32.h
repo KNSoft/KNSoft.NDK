@@ -59,7 +59,7 @@ EndTask(
     BOOL fForce);
 
 /* See also NtUserConsoleControl */
-NTSYSCALLAPI
+WINUSERAPI
 NTSTATUS
 NTAPI
 ConsoleControl(
@@ -68,14 +68,14 @@ ConsoleControl(
     _In_ ULONG ConsoleInformationLength);
 
 /* See also NtQuerySendMessage */
-NTSYSCALLAPI
+WINUSERAPI
 BOOL
 NTAPI
 QuerySendMessage(
     _Inout_ MSG* pMsg);
 
 /* See also NtUserSetWindowStationUser */
-NTSYSAPI
+WINUSERAPI
 LOGICAL
 NTAPI
 SetWindowStationUser(
@@ -86,14 +86,14 @@ SetWindowStationUser(
     );
 
 /* See also NtUserGhostWindowFromHungWindow */
-NTSYSAPI
+WINUSERAPI
 HWND
 NTAPI
 GhostWindowFromHungWindow(
     _In_ HWND WindowHandle);
 
 /* See also NtUserHungWindowFromGhostWindow */
-NTSYSAPI
+WINUSERAPI
 HWND
 NTAPI
 HungWindowFromGhostWindow(

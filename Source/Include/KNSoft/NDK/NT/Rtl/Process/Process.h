@@ -434,7 +434,7 @@ RtlSetProxiedProcessId(
     _In_ ULONG ProxiedProcessId);
 #endif
 
-NTSYSCALLAPI
+NTSYSAPI
 NTSTATUS
 NTAPI
 RtlDelayExecution(
