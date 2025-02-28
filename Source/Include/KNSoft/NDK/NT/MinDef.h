@@ -434,9 +434,6 @@ typedef struct _RTL_BALANCED_NODE64
             struct _RTL_BALANCED_NODE64* POINTER_64 Right;
         } DUMMYSTRUCTNAME;
     } DUMMYUNIONNAME;
-
-#define RTL_BALANCED_NODE_RESERVED_PARENT_MASK 3
-
     union
     {
         UCHAR Red : 1;
@@ -456,9 +453,6 @@ typedef struct _RTL_BALANCED_NODE32
             struct _RTL_BALANCED_NODE32* POINTER_32 Right;
         } DUMMYSTRUCTNAME;
     } DUMMYUNIONNAME;
-
-#define RTL_BALANCED_NODE_RESERVED_PARENT_MASK 3
-
     union
     {
         UCHAR Red : 1;

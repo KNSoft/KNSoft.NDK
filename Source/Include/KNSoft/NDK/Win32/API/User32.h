@@ -99,4 +99,12 @@ NTAPI
 HungWindowFromGhostWindow(
     _In_ HWND WindowHandle);
 
+/* See also NtUserGetSendMessageReceiver */
+NTSYSAPI
+HWND
+NTAPI
+GetSendMessageReceiver(
+    _In_ HANDLE ThreadId
+    );
+
 EXTERN_C_END
