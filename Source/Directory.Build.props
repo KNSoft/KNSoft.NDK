@@ -64,8 +64,10 @@
     <!-- Import $(MSBuildProjectName).Build.props if exists -->
     <PropertyGroup>
         <ProjectNameBuildPropsPath>$(MSBuildProjectDirectory)\$(MSBuildProjectName).Build.props</ProjectNameBuildPropsPath>
+        <ProjectNameBuildTargetsPath>$(MSBuildProjectDirectory)\$(MSBuildProjectName).Build.targets</ProjectNameBuildTargetsPath>
     </PropertyGroup>
     <Import Project="$(ProjectNameBuildPropsPath)" Condition="Exists('$(ProjectNameBuildPropsPath)')"/>
+    <Import Project="$(ProjectNameBuildTargetsPath)" Condition="Exists('$(ProjectNameBuildTargetsPath)')"/>
     
     <!-- Import outer Directory.Build.props if exists -->
     <PropertyGroup>

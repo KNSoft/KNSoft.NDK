@@ -500,6 +500,19 @@ NtFreeUserPhysicalPages(
 
 #if !defined(_KERNEL_MODE)
 
+/**
+ * Retrieves the addresses of the pages that are written to in a region of virtual memory.
+ *
+ * @param ProcessHandle A handle to the process whose watch information is to be queried.
+ * @param Flags Additional flags for the operation. To reset the write-tracking state, set this parameter to WRITE_WATCH_FLAG_RESET. Otherwise, set this parameter to zero.
+ * @param BaseAddress The base address of the memory region for which to retrieve write-tracking information. This address must a region that is allocated using MEM_WRITE_WATCH.
+ * @param RegionSize The size of the memory region for which to retrieve write-tracking information, in bytes.
+ * @param UserAddressArray A pointer to a buffer that receives an array of page addresses that have been written to since the region has been allocated or the write-tracking state has been reset.
+ * @param EntriesInUserAddressArray On input, this variable indicates the size of the UserAddressArray array. On output, the variable receives the number of page addresses that are returned in the array.
+ * @param Granularity A pointer to a variable that receives the page size, in bytes.
+ * @return NTSTATUS Successful or errant status.
+ * @see https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-getwritewatch
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -512,6 +525,15 @@ NtGetWriteWatch(
     _Inout_ PULONG_PTR EntriesInUserAddressArray,
     _Out_ PULONG Granularity);
 
+/**
+ * Resets the write-tracking state for a region of virtual memory.
+ *
+ * @param ProcessHandle A handle to the process whose watch information is to be reset.
+ * @param BaseAddress A pointer to the base address of the memory region for which to reset the write-tracking state.
+ * @param RegionSize The size of the memory region for which to reset the write-tracking information, in bytes.
+ * @return NTSTATUS Successful or errant status.
+ * @see https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-resetwritewatch
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

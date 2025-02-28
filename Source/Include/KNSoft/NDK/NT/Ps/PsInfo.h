@@ -69,7 +69,7 @@ typedef enum _PROCESSINFOCLASS
     ProcessHandleCheckingMode, // qs: ULONG; s: 0 disables, otherwise enables
     ProcessKeepAliveCount, // q: PROCESS_KEEPALIVE_COUNT_INFORMATION
     ProcessRevokeFileHandles, // s: PROCESS_REVOKE_FILE_HANDLES_INFORMATION
-    ProcessWorkingSetControl, // s: PROCESS_WORKING_SET_CONTROL (requires SeDebugPrivilege)
+    ProcessWorkingSetControl, // s: PROCESS_WORKING_SET_CONTROL
     ProcessHandleTable, // q: ULONG[] // since WINBLUE
     ProcessCheckStackExtentsMode, // qs: ULONG // KPROCESS->CheckStackExtents (CFG)
     ProcessCommandLineInformation, // q: UNICODE_STRING // 60
@@ -128,6 +128,8 @@ typedef enum _PROCESSINFOCLASS
     ProcessSlistRollbackInformation,
     ProcessNetworkIoCounters, // q: PROCESS_NETWORK_COUNTERS
     ProcessFindFirstThreadByTebValue, // PROCESS_TEB_VALUE_INFORMATION
+    ProcessEnclaveAddressSpaceRestriction, // since 25H2
+    ProcessAvailableCpus,
     MaxProcessInfoClass
 } PROCESSINFOCLASS;
 
@@ -172,11 +174,11 @@ typedef enum _THREADINFOCLASS
     ThreadHeterogeneousCpuPolicy, // q: KHETERO_CPU_POLICY // since THRESHOLD
     ThreadContainerId, // q: GUID
     ThreadNameInformation, // qs: THREAD_NAME_INFORMATION (requires THREAD_SET_LIMITED_INFORMATION)
-    ThreadSelectedCpuSets,
+    ThreadSelectedCpuSets, // q: ULONG[]
     ThreadSystemThreadInformation, // q: SYSTEM_THREAD_INFORMATION // 40
     ThreadActualGroupAffinity, // q: GROUP_AFFINITY // since THRESHOLD2
     ThreadDynamicCodePolicyInfo, // q: ULONG; s: ULONG (NtCurrentThread)
-    ThreadExplicitCaseSensitivity, // qs: ULONG; s: 0 disables, otherwise enables
+    ThreadExplicitCaseSensitivity, // qs: ULONG; s: 0 disables, otherwise enables // (requires SeDebugPrivilege and PsProtectedSignerAntimalware)
     ThreadWorkOnBehalfTicket, // RTL_WORK_ON_BEHALF_TICKET_EX
     ThreadSubsystemInformation, // q: SUBSYSTEM_INFORMATION_TYPE // since REDSTONE2
     ThreadDbgkWerReportActive, // s: ULONG; s: 0 disables, otherwise enables
@@ -186,7 +188,7 @@ typedef enum _THREADINFOCLASS
     ThreadWorkloadClass, // THREAD_WORKLOAD_CLASS // since REDSTONE5 // 50
     ThreadCreateStateChange, // since WIN11
     ThreadApplyStateChange,
-    ThreadStrongerBadHandleChecks, // since 22H1
+    ThreadStrongerBadHandleChecks, // NtCurrentThread // since 22H1
     ThreadEffectiveIoPriority, // q: IO_PRIORITY_HINT
     ThreadEffectivePagePriority, // q: ULONG
     ThreadUpdateLockOwnership, // THREAD_LOCK_OWNERSHIP // since 24H2
@@ -854,7 +856,7 @@ typedef struct _PROCESS_REVOKE_FILE_HANDLES_INFORMATION
     UNICODE_STRING TargetDevicePath;
 } PROCESS_REVOKE_FILE_HANDLES_INFORMATION, *PPROCESS_REVOKE_FILE_HANDLES_INFORMATION;
 
-// begin_private
+// rev
 
 #define PROCESS_WORKING_SET_CONTROL_VERSION 3
 
@@ -863,10 +865,33 @@ typedef struct _PROCESS_REVOKE_FILE_HANDLES_INFORMATION
  */
 typedef enum _PROCESS_WORKING_SET_OPERATION
 {
-    ProcessWorkingSetSwap,
-    ProcessWorkingSetEmpty,
+    ProcessWorkingSetSwap,              // Swap the working set of a process to disk. // (requires SeDebugPrivilege)
+    ProcessWorkingSetEmpty,             // Remove all pages from the working set of a process.
+    ProcessWorkingSetEmptyPrivatePages, // Remove private pages from the working set of a process.
     ProcessWorkingSetOperationMax
 } PROCESS_WORKING_SET_OPERATION;
+
+/**
+ * The PROCESS_WORKING_SET_FLAG_EMPTY_PRIVATE_PAGES flag indicates that the operation should target private pages in the working set.
+ * Private pages are those that are not shared with other processes.
+ */
+#define PROCESS_WORKING_SET_FLAG_EMPTY_PRIVATE_PAGES 0x01
+/**
+ * The PROCESS_WORKING_SET_FLAG_EMPTY_SHARED_PAGES flag indicates that the operation should target shared pages in the working set.
+ * Shared pages are those that are shared between multiple processes.
+ */
+#define PROCESS_WORKING_SET_FLAG_EMPTY_SHARED_PAGES  0x02
+/**
+ * The PROCESS_WORKING_SET_FLAG_COMPRESS flag indicates that the operation should compress the pages before they are removed from the working set.
+ * Compression is typically used in conjunction with other flags to specify that the pages should be compressed as part of the operation.
+ */
+#define PROCESS_WORKING_SET_FLAG_COMPRESS            0x08
+/**
+ * The PROCESS_WORKING_SET_FLAG_STORE flag indicates that the operation should store the compressed pages.
+ * This is useful when the compressed data might be needed later, allowing for efficient retrieval and decompression when required.
+ * This flag is typically used in conjunction with the PROCESS_WORKING_SET_FLAG_COMPRESS flag to specify that the compressed pages should be stored.
+ */
+#define PROCESS_WORKING_SET_FLAG_STORE               0x10
 
 /**
  * The PROCESS_WORKING_SET_CONTROL structure is used to control the working set of a process.
@@ -1193,8 +1218,6 @@ typedef struct _PROCESS_TEB_VALUE_INFORMATION
     ULONG_PTR Value;
 } PROCESS_TEB_VALUE_INFORMATION, *PPROCESS_TEB_VALUE_INFORMATION;
 
-// end_private
-
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1202,7 +1225,7 @@ NtQueryPortInformationProcess(
     VOID
     );
 
-#endif
+#endif /* !defined(_KERNEL_MODE) */
 
 // Thread information structures
 

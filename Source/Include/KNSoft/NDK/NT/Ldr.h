@@ -232,7 +232,7 @@ typedef struct _LDR_DATA_TABLE_ENTRY
     PVOID SwitchBackContext;
     RTL_BALANCED_NODE BaseAddressIndexNode;
     RTL_BALANCED_NODE MappingInfoIndexNode;
-    ULONG_PTR OriginalBase;
+    PVOID OriginalBase;
     LARGE_INTEGER LoadTime;
     ULONG BaseNameHashValue;
     LDR_DLL_LOAD_REASON LoadReason; // since WIN8
@@ -305,7 +305,7 @@ typedef struct _LDR_DATA_TABLE_ENTRY64
     VOID* POINTER_64 SwitchBackContext;
     RTL_BALANCED_NODE64 BaseAddressIndexNode;
     RTL_BALANCED_NODE64 MappingInfoIndexNode;
-    ULONGLONG OriginalBase;
+    VOID* POINTER_64 OriginalBase;
     LARGE_INTEGER LoadTime;
     ULONG BaseNameHashValue;
     LDR_DLL_LOAD_REASON LoadReason;
@@ -378,7 +378,7 @@ typedef struct _LDR_DATA_TABLE_ENTRY32
     VOID* POINTER_32 SwitchBackContext;
     RTL_BALANCED_NODE32 BaseAddressIndexNode;
     RTL_BALANCED_NODE32 MappingInfoIndexNode;
-    ULONG OriginalBase;
+    VOID* POINTER_32 OriginalBase;
     LARGE_INTEGER LoadTime;
     ULONG BaseNameHashValue;
     LDR_DLL_LOAD_REASON LoadReason;
