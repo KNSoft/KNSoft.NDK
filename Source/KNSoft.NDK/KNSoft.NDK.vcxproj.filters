@@ -436,9 +436,6 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h">
       <Filter>Package</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Package\SMBIOS.h">
-      <Filter>Package</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.h">
       <Filter>Package</Filter>
     </ClInclude>

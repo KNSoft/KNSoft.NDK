@@ -17,7 +17,6 @@
   - Addendum to Windows SDK
   - Extension macros and definitions, e.g. `NtCurrentPeb()`, `PEB(64/32)`, `TEB(64/32)`, ...
 - Packages
-  - SMBIOS Specification
   - CPUID Specification
   - Unit Test Framework
   - StrSafe.h (different from `strsafe.h` in Windows SDK)
@@ -41,7 +40,6 @@ The following features **are NOT enabled by default**, reference corresponding h
 
 - Specifications
   - CPUID: [CPUID.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/CPUID.h)
-  - SMBIOS: [SMBIOS.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/SMBIOS.h)
 - Ntdll Hash API (`(A_SHA/MD4/MD5)(Init/Update/Final)`)
   - [Ntdll.Hash.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Win32/API/Ntdll.Hash.h)
   - KNSoft.NDK.Ntdll.Hash.lib (Generated from [KNSoft.NDK.Ntdll.Hash.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.Hash.xml))
