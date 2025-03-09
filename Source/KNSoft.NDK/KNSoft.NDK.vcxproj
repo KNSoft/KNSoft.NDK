@@ -131,6 +131,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Boot.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\EventTrace.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Ex.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Hotpatching.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Processor.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\SharedData.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Sync.h" />

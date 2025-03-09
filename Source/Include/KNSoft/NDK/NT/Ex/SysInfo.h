@@ -466,7 +466,7 @@ typedef struct _SYSTEM_PROCESS_INFORMATION
     LARGE_INTEGER ReadTransferCount;        // The total number of bytes read during a read operation.
     LARGE_INTEGER WriteTransferCount;       // The total number of bytes written during a write operation.
     LARGE_INTEGER OtherTransferCount;       // The total number of bytes transferred during operations other than read and write operations.
-    SYSTEM_THREAD_INFORMATION Threads[1];   // This type is not defined in the structure but was added for convenience.
+    SYSTEM_THREAD_INFORMATION Threads[];    // This type is not defined in the structure but was added for convenience.
 } SYSTEM_PROCESS_INFORMATION, *PSYSTEM_PROCESS_INFORMATION;
 
 // private
@@ -516,7 +516,7 @@ typedef struct _SYSTEM_EXTENDED_PROCESS_INFORMATION
     HANDLE InheritedFromUniqueProcessId;
     ULONG HandleCount;
     ULONG SessionId;
-    ULONG_PTR UniqueProcessKey; // since VISTA
+    HANDLE UniqueProcessKey; // since VISTA
     SIZE_T PeakVirtualSize;
     SIZE_T VirtualSize;
     ULONG PageFaultCount;
@@ -535,7 +535,7 @@ typedef struct _SYSTEM_EXTENDED_PROCESS_INFORMATION
     ULONGLONG ReadTransferCount;
     ULONGLONG WriteTransferCount;
     ULONGLONG OtherTransferCount;
-    SYSTEM_EXTENDED_THREAD_INFORMATION Threads[1];
+    SYSTEM_EXTENDED_THREAD_INFORMATION Threads[];
     // SYSTEM_PROCESS_INFORMATION_EXTENSION // SystemFullProcessInformation
 } SYSTEM_EXTENDED_PROCESS_INFORMATION, *PSYSTEM_EXTENDED_PROCESS_INFORMATION;
 
