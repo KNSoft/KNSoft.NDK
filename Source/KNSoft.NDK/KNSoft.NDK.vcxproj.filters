@@ -457,6 +457,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ps\KeepAlive.h">
       <Filter>NT\Ps</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Hotpatching.h">
+      <Filter>NT\Ex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">

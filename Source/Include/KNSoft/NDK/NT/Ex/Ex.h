@@ -3,6 +3,7 @@
 #include "Atom.h"
 #include "Boot.h"
 #include "EventTrace.h"
+#include "Hotpatching.h"
 #include "Misc.h"
 #include "Processor.h"
 #include "SharedData.h"
