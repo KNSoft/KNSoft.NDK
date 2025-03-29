@@ -654,10 +654,11 @@ NtThawRegistry(
  * @param CreateOptions Reserved for future use.
  * @return NTSTATUS Successful or errant status.
  */
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtCreateRegistryTransaction(
-    _Out_ HANDLE *RegistryTransactionHandle,
+    _Out_ PHANDLE RegistryTransactionHandle,
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ POBJECT_ATTRIBUTES ObjAttributes,
     _Reserved_ ULONG CreateOptions);
@@ -670,10 +671,11 @@ NtCreateRegistryTransaction(
  * @param ObjAttributes Pointer to object attributes.
  * @return NTSTATUS Successful or errant status.
  */
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtOpenRegistryTransaction(
-    _Out_ HANDLE *RegistryTransactionHandle,
+    _Out_ PHANDLE RegistryTransactionHandle,
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjAttributes);
 
@@ -684,6 +686,7 @@ NtOpenRegistryTransaction(
  * @param Flags Reserved for future use.
  * @return NTSTATUS Successful or errant status.
  */
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtCommitRegistryTransaction(
@@ -697,6 +700,7 @@ NtCommitRegistryTransaction(
  * @param Flags Reserved for future use.
  * @return NTSTATUS Successful or errant status.
  */
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtRollbackRegistryTransaction(

@@ -12,6 +12,16 @@ EXTERN_C_START
 
 #pragma region Thread Profiling
 
+/**
+ * Enables thread profiling on the specified thread.
+ *
+ * @param ThreadHandle The handle to the thread on which you want to enable profiling. This must be the current thread.
+ * @param Flags To receive thread profiling data such as context switch count, set this parameter to THREAD_PROFILING_FLAG_DISPATCH; otherwise, set to 0.
+ * @param HardwareCounters To receive hardware performance counter data, set this parameter to a bitmask that identifies the hardware counters to collect.
+ * @param PerformanceDataHandle An opaque handle that you use when calling the RtlReadThreadProfilingData and RtlDisableThreadProfiling functions.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-enablethreadprofiling
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -21,12 +31,27 @@ RtlEnableThreadProfiling(
     _In_ ULONG64 HardwareCounters,
     _Out_ PVOID* PerformanceDataHandle);
 
+/**
+ * Disables thread profiling.
+ *
+ * @param PerformanceDataHandle The handle that the RtlEnableThreadProfiling function returned.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querythreadprofiling
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlDisableThreadProfiling(
     _In_ PVOID PerformanceDataHandle);
 
+/**
+ * Determines whether thread profiling is enabled for the specified thread.
+ *
+ * @param ThreadHandle The handle to the thread on which you want to enable profiling. This must be the current thread.
+ * @param Enabled Is TRUE if thread profiling is enabled for the specified thread; otherwise, FALSE.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querythreadprofiling
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -34,6 +59,15 @@ RtlQueryThreadProfiling(
     _In_ HANDLE ThreadHandle,
     _Out_ PBOOLEAN Enabled);
 
+/**
+ * Reads the specified profiling data associated with the thread.
+ *
+ * @param PerformanceDataHandle The handle that the RtlEnableThreadProfiling function returned.
+ * @param Flags One or more flags set when you called the RtlEnableThreadProfiling function that specify the counter data to read.
+ * @param PerformanceData A PERFORMANCE_DATA structure that contains the thread profiling and hardware counter data.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readthreadprofilingdata
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -113,12 +147,27 @@ RtlDeleteTimerQueueEx(
 
 #pragma region QPC
 
+/**
+ * Retrieves the current value of the performance counter, which is a high resolution (<1us) time stamp that can be used for time-interval measurements.
+ *
+ * @param PerformanceCounter A pointer to a variable that receives the current performance-counter value, in counts.
+ * @return Returns TRUE if the function succeeds, otherwise FALSE. On systems that run Windows XP or later, the function will always succeed and will thus never return zero.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter
+ */
 NTSYSAPI
 LOGICAL
 NTAPI
 RtlQueryPerformanceCounter(
     _Out_ PLARGE_INTEGER PerformanceCounter);
 
+/**
+ * Retrieves the frequency of the performance counter. The frequency of the performance counter is fixed at system boot and is consistent across all processors.
+ * Therefore, the frequency need only be queried upon application initialization, and the result can be cached.
+ *
+ * @param PerformanceFrequency A pointer to a variable that receives the current performance-counter frequency, in counts per second. 
+ * @return Returns TRUE if the function succeeds, otherwise FALSE. On systems that run Windows XP or later, the function will always succeed and will thus never return zero.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency
+ */
 NTSYSAPI
 LOGICAL
 NTAPI
@@ -146,24 +195,52 @@ RtlSetCurrentTransaction(
 
 #pragma region Pointer Encode/Decode
 
+/**
+ * Encodes the specified pointer. Encoded pointers can be used to provide another layer of protection for pointer values.
+ *
+ * @param Ptr The system pointer to be encoded.
+ * @return The function returns the encoded pointer.
+ * @sa https://learn.microsoft.com/en-us/previous-versions/bb432254(v=vs.85)
+ */
 NTSYSAPI
 PVOID
 NTAPI
 RtlEncodePointer(
     _In_ PVOID Ptr);
 
+/**
+ * Decodes a pointer that was previously encoded with RtlEncodePointer.
+ *
+ * @param Ptr The system pointer to be decoded.
+ * @return The function returns the decoded pointer.
+ * @sa https://learn.microsoft.com/en-us/previous-versions/bb432242(v=vs.85)
+ */
 NTSYSAPI
 PVOID
 NTAPI
 RtlDecodePointer(
     _In_ PVOID Ptr);
 
+/**
+ * Encodes the specified pointer with a system-specific value. Encoded pointers can be used to provide another layer of protection for pointer values.
+ *
+ * @param Ptr The system pointer to be encoded.
+ * @return The function returns the encoded pointer.
+ * @sa https://learn.microsoft.com/en-us/previous-versions/bb432255(v=vs.85)
+ */
 NTSYSAPI
 PVOID
 NTAPI
 RtlEncodeSystemPointer(
     _In_ PVOID Ptr);
 
+/**
+ * Decodes a pointer that was previously encoded with RtlEncodeSystemPointer.
+ *
+ * @param Ptr The pointer to be decoded.
+ * @return The function returns the decoded pointer.
+ * @sa https://learn.microsoft.com/en-us/previous-versions/bb432243(v=vs.85)
+ */
 NTSYSAPI
 PVOID
 NTAPI
@@ -172,6 +249,15 @@ RtlDecodeSystemPointer(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+/**
+ * Encodes the specified pointer of the specified process. Encoded pointers can be used to provide another layer of protection for pointer values.
+ *
+ * @param ProcessHandle Handle to the remote process that owns the pointer.
+ * @param Pointer The pointer to be encoded.
+ * @param EncodedPointer The encoded pointer.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/previous-versions/dn877135(v=vs.85)
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -180,6 +266,15 @@ RtlEncodeRemotePointer(
     _In_ PVOID Pointer,
     _Out_ PVOID* EncodedPointer);
 
+/**
+ * Decodes a pointer in a specified process that was previously encoded with RtlEncodePointer or RtlEncodeRemotePointer.
+ *
+ * @param ProcessHandle Handle to the remote process that owns the pointer.
+ * @param Pointer The pointer to be decoded.
+ * @param EncodedPointer The decoded pointer.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/previous-versions/dn877133(v=vs.85)
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

@@ -151,11 +151,6 @@ NtCallbackReturn(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
-NtFlushProcessWriteBuffers(VOID);
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
 NtYieldExecution(VOID);
 
 /**

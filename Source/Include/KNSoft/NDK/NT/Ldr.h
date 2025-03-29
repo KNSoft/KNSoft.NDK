@@ -871,6 +871,16 @@ LdrGetFileNameFromLoadAsDataTable(
 
 #pragma region Resource
 
+/**
+ * The LdrAccessResource function returns a pointer to the first byte of the specified resource in memory.
+ *
+ * @param DllHandle A handle to the DLL.
+ * @param ResourceDataEntry The resource information block.
+ * @param ResourceBuffer The pointer to the specified resource in memory.
+ * @param ResourceLength The size, in bytes, of the specified resource.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadresource
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -892,6 +902,16 @@ typedef struct _LDR_RESOURCE_INFO
 #define RESOURCE_LANGUAGE_LEVEL 2
 #define RESOURCE_DATA_LEVEL 3
 
+/**
+ * The LdrFindResource_U function determines the location of a resource in a DLL.
+ *
+ * @param DllHandle A handle to the DLL.
+ * @param ResourceInfo The type and name of the resource.
+ * @param Level The level of resource information.
+ * @param ResourceDataEntry The resource information block.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-findresourceexw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1082,13 +1102,22 @@ LdrEnumResources(
     _Inout_ ULONG* ResourceCount,
     _Out_writes_to_opt_(*ResourceCount, *ResourceCount) PLDR_ENUM_RESOURCE_ENTRY Resources);
 
+/**
+ * Returns a handle to the language-specific dynamic-link library (DLL) resource module associated with a DLL that is already loaded for the calling process.
+ *
+ * \param DllHandle A handle to the DLL module to search for a MUI resource. If the language-specific DLL for the MUI is available, loads the specified module into the address space of the calling process and returns a handle to the module.
+ * \param BaseAddress The base address of the mapped view.
+ * \param Size The size of the mapped view.
+ * \param Flags Reserved
+ * \return Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 LdrLoadAlternateResourceModule(
     _In_ PVOID DllHandle,
-    _Out_ PVOID* ResourceDllBase,
-    _Out_opt_ ULONG_PTR* ResourceOffset,
+    _Out_ PVOID *BaseAddress,
+    _Out_opt_ PSIZE_T Size,
     _In_ ULONG Flags);
 
 NTSYSAPI
@@ -1097,10 +1126,16 @@ NTAPI
 LdrLoadAlternateResourceModuleEx(
     _In_ PVOID DllHandle,
     _In_ LANGID LanguageId,
-    _Out_ PVOID* ResourceDllBase,
-    _Out_opt_ ULONG_PTR* ResourceOffset,
+    _Out_ PVOID *BaseAddress,
+    _Out_opt_ PSIZE_T Size,
     _In_ ULONG Flags);
 
+/**
+ * Frees the language-specific dynamic-link library (DLL) resource module previously loaded by LdrLoadAlternateResourceModule function.
+ *
+ * @param DllHandle The base address of the mapped view.
+ * @return Successful or errant status.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI

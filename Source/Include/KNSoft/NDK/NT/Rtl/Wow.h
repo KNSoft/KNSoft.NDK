@@ -100,6 +100,13 @@ RtlQueueApcWow64Thread(
     _In_opt_ PVOID ApcArgument3
 );
 
+/**
+ * Enables or disables file system redirection for the calling thread.
+ *
+ * @param Wow64FsEnableRedirection If TRUE, requests redirection be enabled; if FALSE, requests redirection be disabled.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/wow64apiset/nf-wow64apiset-wow64enablewow64fsredirection
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -107,6 +114,14 @@ RtlWow64EnableFsRedirection(
     _In_ BOOLEAN Wow64FsEnableRedirection
 );
 
+/**
+ * Enables or disables file system redirection for the calling thread.
+ *
+ * @param Wow64FsEnableRedirection If TRUE, requests redirection be enabled; if FALSE, requests redirection be disabled.
+ * @param OldFsRedirectionLevel The WOW64 file system redirection value. The system uses this parameter to store information necessary to revert (re-enable) file system redirection.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/wow64apiset/nf-wow64apiset-wow64disablewow64fsredirection
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

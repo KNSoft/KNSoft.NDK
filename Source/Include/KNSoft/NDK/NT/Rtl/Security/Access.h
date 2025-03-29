@@ -22,8 +22,8 @@ RtlMapGenericMask(
  * This function determines whether all the accesses specified in the DesiredAccess
  * mask are granted by the GrantedAccess mask.
  *
- * \param GrantedAccess The access mask that specifies the granted accesses.
- * \param DesiredAccess The access mask that specifies the desired accesses.
+ * @param GrantedAccess The access mask that specifies the granted accesses.
+ * @param DesiredAccess The access mask that specifies the desired accesses.
  * @return Returns TRUE if all desired accesses are granted, otherwise FALSE.
  */
 NTSYSAPI
@@ -39,8 +39,8 @@ RtlAreAllAccessesGranted(
  * This function determines if any of the access rights specified in the DesiredAccess
  * mask are present in the GrantedAccess mask.
  *
- * \param GrantedAccess The access mask that specifies the granted access rights.
- * \param DesiredAccess The access mask that specifies the desired access rights.
+ * @param GrantedAccess The access mask that specifies the granted access rights.
+ * @param DesiredAccess The access mask that specifies the desired access rights.
  * @return Returns TRUE if any of the desired access rights are granted, otherwise FALSE.
  */
 NTSYSAPI

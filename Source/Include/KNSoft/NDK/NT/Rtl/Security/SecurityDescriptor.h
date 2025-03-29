@@ -10,8 +10,8 @@ EXTERN_C_START
  * The RtlCreateSecurityDescriptor routine initializes a new absolute-format security descriptor.
  * On return, the security descriptor is initialized with no system ACL, no discretionary ACL, no owner, no primary group, and all control flags set to zero.
  * 
- * \param SecurityDescriptor Pointer to the buffer for the \ref SECURITY_DESCRIPTOR to be initialized.
- * \param Revision Specifies the revision level to assign to the security descriptor. Set this parameter to SECURITY_DESCRIPTOR_REVISION.
+ * @param SecurityDescriptor Pointer to the buffer for the \ref SECURITY_DESCRIPTOR to be initialized.
+ * @param Revision Specifies the revision level to assign to the security descriptor. Set this parameter to SECURITY_DESCRIPTOR_REVISION.
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcreatesecuritydescriptor
  */
@@ -32,7 +32,7 @@ RtlCreateSecurityDescriptorRelative(
 /**
  * The RtlValidSecurityDescriptor routine checks a given security descriptor's validity.
  * 
- * \param SecurityDescriptor Pointer to the \ref SECURITY_DESCRIPTOR to be checked.
+ * @param SecurityDescriptor Pointer to the \ref SECURITY_DESCRIPTOR to be checked.
  * @return Returns TRUE if the security descriptor is valid, or FALSE otherwise.
  * @remarks The routine checks the validity of an absolute-format security descriptor. To check the validity of a self-relative security descriptor, use the \ref RtlValidRelativeSecurityDescriptor routine instead.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlvalidsecuritydescriptor
@@ -47,7 +47,7 @@ RtlValidSecurityDescriptor(
 /**
  * The RtlLengthSecurityDescriptor routine returns the size of a given security descriptor.
  * 
- * \param SecurityDescriptor A pointer to a \ref SECURITY_DESCRIPTOR structure whose length the function retrieves.
+ * @param SecurityDescriptor A pointer to a \ref SECURITY_DESCRIPTOR structure whose length the function retrieves.
  * @return Returns the length, in bytes, of the SECURITY_DESCRIPTOR structure.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtllengthsecuritydescriptor
  */
@@ -60,10 +60,10 @@ RtlLengthSecurityDescriptor(
 /**
  * The RtlValidRelativeSecurityDescriptor routine checks the validity of a self-relative security descriptor.
  *
- * \param SecurityDescriptorInput A pointer to the buffer that contains the security descriptor in self-relative format.
+ * @param SecurityDescriptorInput A pointer to the buffer that contains the security descriptor in self-relative format.
  * The buffer must begin with a SECURITY_DESCRIPTOR structure, which is followed by the rest of the security descriptor data.
- * \param SecurityDescriptorLength The size of the SecurityDescriptorInput structure.
- * \param RequiredInformation A SECURITY_INFORMATION value that specifies the information that is required to be contained in the security descriptor.
+ * @param SecurityDescriptorLength The size of the SecurityDescriptorInput structure.
+ * @param RequiredInformation A SECURITY_INFORMATION value that specifies the information that is required to be contained in the security descriptor.
  * @return RtlValidRelativeSecurityDescriptor returns TRUE if the security descriptor is valid and includes the information that the RequiredInformation parameter specifies. Otherwise, this routine returns FALSE.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlvalidrelativesecuritydescriptor
  */
@@ -100,9 +100,9 @@ RtlSetDaclSecurityDescriptor(
 /**
  * The RtlGetOwnerSecurityDescriptor routine returns the owner information for a given security descriptor.
  *
- * \param SecurityDescriptor Pointer to the SECURITY_DESCRIPTOR structure.
- * \param Owner Pointer to an address to receive a pointer to the owner security identifier (SID). If the security descriptor does not currently contain an owner SID, Owner receives NULL.
- * \param OwnerDefaulted Pointer to a Boolean variable that receives TRUE if the owner information is derived from a default mechanism, FALSE otherwise. Valid only if Owner receives a non-NULL value.
+ * @param SecurityDescriptor Pointer to the SECURITY_DESCRIPTOR structure.
+ * @param Owner Pointer to an address to receive a pointer to the owner security identifier (SID). If the security descriptor does not currently contain an owner SID, Owner receives NULL.
+ * @param OwnerDefaulted Pointer to a Boolean variable that receives TRUE if the owner information is derived from a default mechanism, FALSE otherwise. Valid only if Owner receives a non-NULL value.
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlgetownersecuritydescriptor
  */
@@ -119,13 +119,13 @@ RtlGetOwnerSecurityDescriptor(
 /**
  * The RtlSetOwnerSecurityDescriptor routine sets the owner information of an absolute-format security descriptor. It replaces any owner information that is already present in the security descriptor.
  *
- * \param SecurityDescriptor Pointer to the SECURITY_DESCRIPTOR structure whose owner is to be set. RtlSetOwnerSecurityDescriptor replaces any existing owner with the new owner.
- * \param Owner Pointer to a security identifier (SID) structure for the security descriptor's new primary owner.
- * \li \c This pointer, not the SID structure itself, is copied into the security descriptor.
- * \li \c If this parameter is NULL, RtlSetOwnerSecurityDescriptor clears the security descriptor's owner information. This marks the security descriptor as having no owner.
- * \param OwnerDefaulted Set to TRUE if the owner information is derived from a default mechanism.
- * \li \c If this value is TRUE, it is default information. RtlSetOwnerSecurityDescriptor sets the SE_OWNER_DEFAULTED flag in the security descriptor's SECURITY_DESCRIPTOR_CONTROL field.
- * \li \c If this parameter is FALSE, the SE_OWNER_DEFAULTED flag is cleared.
+ * @param SecurityDescriptor Pointer to the SECURITY_DESCRIPTOR structure whose owner is to be set. RtlSetOwnerSecurityDescriptor replaces any existing owner with the new owner.
+ * @param Owner Pointer to a security identifier (SID) structure for the security descriptor's new primary owner.
+ * @li \c This pointer, not the SID structure itself, is copied into the security descriptor.
+ * @li \c If this parameter is NULL, RtlSetOwnerSecurityDescriptor clears the security descriptor's owner information. This marks the security descriptor as having no owner.
+ * @param OwnerDefaulted Set to TRUE if the owner information is derived from a default mechanism.
+ * @li \c If this value is TRUE, it is default information. RtlSetOwnerSecurityDescriptor sets the SE_OWNER_DEFAULTED flag in the security descriptor's SECURITY_DESCRIPTOR_CONTROL field.
+ * @li \c If this parameter is FALSE, the SE_OWNER_DEFAULTED flag is cleared.
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlsetownersecuritydescriptor
  */
@@ -151,13 +151,13 @@ RtlGetGroupSecurityDescriptor(
 /**
  * The RtlSetGroupSecurityDescriptor routine sets the primary group information of an absolute-format security descriptor. It replaces any primary group information that is already present in the security descriptor.
  *
- * \param SecurityDescriptor Pointer to the SECURITY_DESCRIPTOR structure whose primary group is to be set. RtlSetGroupSecurityDescriptor replaces any existing primary group with the new primary group.
- * \param Group Pointer to a security identifier (SID) structure for the security descriptor's new primary owner.
- * \li \c This pointer, not the SID structure itself, is copied into the security descriptor.
- * \li \c If Group is NULL, RtlSetGroupSecurityDescriptor clears the security descriptor's primary group information. This marks the security descriptor as having no primary group.
- * \param GroupDefaulted Set this Boolean variable to TRUE if the primary group information is derived from a default mechanism.
- * \li \c If this parameter is TRUE, RtlSetGroupSecurityDescriptor sets the SE_GROUP_DEFAULTED flag in the security descriptor's SECURITY_DESCRIPTOR_CONTROL field.
- * \li \c If this parameter is FALSE, RtlSetGroupSecurityDescriptor clears the SE_GROUP_DEFAULTED flag.
+ * @param SecurityDescriptor Pointer to the SECURITY_DESCRIPTOR structure whose primary group is to be set. RtlSetGroupSecurityDescriptor replaces any existing primary group with the new primary group.
+ * @param Group Pointer to a security identifier (SID) structure for the security descriptor's new primary owner.
+ * @li \c This pointer, not the SID structure itself, is copied into the security descriptor.
+ * @li \c If Group is NULL, RtlSetGroupSecurityDescriptor clears the security descriptor's primary group information. This marks the security descriptor as having no primary group.
+ * @param GroupDefaulted Set this Boolean variable to TRUE if the primary group information is derived from a default mechanism.
+ * @li \c If this parameter is TRUE, RtlSetGroupSecurityDescriptor sets the SE_GROUP_DEFAULTED flag in the security descriptor's SECURITY_DESCRIPTOR_CONTROL field.
+ * @li \c If this parameter is FALSE, RtlSetGroupSecurityDescriptor clears the SE_GROUP_DEFAULTED flag.
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlsetgroupsecuritydescriptor
  */

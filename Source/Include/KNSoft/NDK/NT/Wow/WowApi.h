@@ -23,7 +23,7 @@ NtWow64AllocateVirtualMemory64(
     _In_ ULONG AllocationType,
     _In_ ULONG Protect);
 
-NTSYSAPI
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtWow64QueryInformationProcess64(
@@ -33,7 +33,7 @@ NtWow64QueryInformationProcess64(
     _In_ ULONG ProcessInformationLength,
     _Out_opt_ PULONG ReturnLength);
 
-NTSYSAPI
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtWow64ReadVirtualMemory64(
@@ -53,7 +53,7 @@ NtWow64ReadVirtualMemory64(
  * @param NumberOfBytesWritten A pointer to a variable that receives the number of bytes transferred into the specified buffer.
  * @return NTSTATUS Successful or errant status.
  */
-NTSYSAPI
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtWow64WriteVirtualMemory64(
@@ -70,7 +70,7 @@ NtWow64IsProcessorFeaturePresent(
     _In_ ULONG ProcessorFeature);
 
 // rev
-NTSYSAPI
+NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtWow64GetNativeSystemInformation(

@@ -7,9 +7,9 @@ EXTERN_C_START
 #pragma region Driver
 
 /**
- * \brief The NtLoadDriver function loads a driver specified by the DriverServiceName parameter.
- * \param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to load.
- * \return NTSTATUS The status code returned by the function. Possible values include, but are not limited to:
+ * @brief The NtLoadDriver function loads a driver specified by the DriverServiceName parameter.
+ * @param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to load.
+ * @return NTSTATUS The status code returned by the function. Possible values include, but are not limited to:
  * - STATUS_SUCCESS: The driver was successfully loaded.
  * - STATUS_INVALID_PARAMETER: The DriverServiceName parameter is invalid.
  * - STATUS_INSUFFICIENT_RESOURCES: There are insufficient resources to load the driver.
@@ -24,9 +24,9 @@ NtLoadDriver(
     _In_ PUNICODE_STRING DriverServiceName);
 
 /**
- * \brief The NtUnloadDriver function unloads a driver specified by the DriverServiceName parameter.
- * \param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to unload.
- * \return NTSTATUS The status code returned by the function. Possible values include, but are not limited to:
+ * @brief The NtUnloadDriver function unloads a driver specified by the DriverServiceName parameter.
+ * @param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to unload.
+ * @return NTSTATUS The status code returned by the function. Possible values include, but are not limited to:
  * - STATUS_SUCCESS: The driver was successfully unloaded.
  * - STATUS_INVALID_PARAMETER: The DriverServiceName parameter is invalid.
  * - STATUS_OBJECT_NAME_NOT_FOUND: The specified driver service name was not found.

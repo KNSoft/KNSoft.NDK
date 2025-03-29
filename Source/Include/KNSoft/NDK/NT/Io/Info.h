@@ -98,10 +98,10 @@ typedef enum _FILE_INFORMATION_CLASS
 
 /**
  * The FILE_BASIC_INFORMATION structure contains timestamps and basic attributes of a file.
- * \li If you specify a value of zero for any of the XxxTime members, the file system keeps a file's current value for that time.
- * \li If you specify a value of -1 for any of the XxxTime members, time stamp updates are disabled for I/O operations preformed on the file handle.
- * \li If you specify a value of -2 for any of the XxxTime members, time stamp updates are enabled for I/O operations preformed on the file handle.
- * \remarks To set the members of this structure, the caller must have FILE_WRITE_ATTRIBUTES access to the file.
+ * @li If you specify a value of zero for any of the XxxTime members, the file system keeps a file's current value for that time.
+ * @li If you specify a value of -1 for any of the XxxTime members, time stamp updates are disabled for I/O operations preformed on the file handle.
+ * @li If you specify a value of -2 for any of the XxxTime members, time stamp updates are enabled for I/O operations preformed on the file handle.
+ * @remarks To set the members of this structure, the caller must have FILE_WRITE_ATTRIBUTES access to the file.
  */
 typedef struct _FILE_BASIC_INFORMATION
 {
@@ -114,7 +114,7 @@ typedef struct _FILE_BASIC_INFORMATION
 
 /**
  * The FILE_STANDARD_INFORMATION structure contains standard information of a file.
- * \remarks EndOfFile specifies the byte offset to the end of the file.
+ * @remarks EndOfFile specifies the byte offset to the end of the file.
  * Because this value is zero-based, it actually refers to the first free byte in the file; that is, it is the offset to the byte immediately following the last valid byte in the file.
  */
 typedef struct _FILE_STANDARD_INFORMATION

@@ -10,10 +10,13 @@
 
 /* Windows.h */
 
+#define _WINSOCKAPI_ // Use WinSock2.h
 #include <Windows.h>
+
 #include "Win32/Def/WinUser.h"
 #include "Win32/Def/CommCtrl.h"
 #include "Win32/Def/UxTheme.h"
+#include "NT/Afd.h"
 
 /* APIs */
 

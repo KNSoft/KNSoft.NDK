@@ -22,7 +22,6 @@
 #include "Security/Sid.h"
 #include "Security/Token.h"
 
-#include "ActCtx.h"
 #include "Bits.h"
 #include "BootStatus.h"
 #include "Compress.h"

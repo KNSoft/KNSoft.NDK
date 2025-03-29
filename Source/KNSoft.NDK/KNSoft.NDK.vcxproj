@@ -118,6 +118,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Afd.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\AppHelp.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Bcd.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\Cm.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\Reg.h" />

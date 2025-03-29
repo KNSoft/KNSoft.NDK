@@ -460,6 +460,12 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Hotpatching.h">
       <Filter>NT\Ex</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\AppHelp.h">
+      <Filter>NT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Afd.h">
+      <Filter>NT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">

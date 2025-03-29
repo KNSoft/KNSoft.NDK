@@ -595,6 +595,14 @@ ZwAlpcSetInformation(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
+ZwApphelpCacheControl(
+    _In_ ULONG ServiceClass,
+    _Inout_opt_ PVOID ServiceContext // AHC_SERVICE_DATA
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
 ZwAreMappedFilesTheSame(
     _In_ PVOID File1MappedAsAnImage,
     _In_ PVOID File2MappedAsFile
@@ -752,6 +760,14 @@ NTAPI
 ZwCommitEnlistment(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCommitRegistryTransaction(
+    _In_ HANDLE RegistryTransactionHandle,
+    _Reserved_ ULONG Flags
     );
 
 NTSYSCALLAPI
@@ -1240,6 +1256,16 @@ ZwCreateProfileEx(
     _In_ KPROFILE_SOURCE ProfileSource,
     _In_ USHORT GroupCount,
     _In_reads_(GroupCount) PGROUP_AFFINITY GroupAffinity
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCreateRegistryTransaction(
+    _Out_ PHANDLE RegistryTransactionHandle,
+    _In_ ACCESS_MASK DesiredAccess,
+    _In_opt_ POBJECT_ATTRIBUTES ObjAttributes,
+    _Reserved_ ULONG CreateOptions
     );
 
 NTSYSCALLAPI
@@ -1824,7 +1850,7 @@ NTAPI
 ZwFlushInstructionCache(
     _In_ HANDLE ProcessHandle,
     _In_opt_ PVOID BaseAddress,
-    _In_ SIZE_T Length
+    _In_ SIZE_T RegionSize
     );
 
 NTSYSCALLAPI
@@ -2615,6 +2641,15 @@ ZwOpenProcessTokenEx(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
+ZwOpenRegistryTransaction(
+    _Out_ PHANDLE RegistryTransactionHandle,
+    _In_ ACCESS_MASK DesiredAccess,
+    _In_ POBJECT_ATTRIBUTES ObjAttributes
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
 ZwOpenResourceManager(
     _Out_ PHANDLE ResourceManagerHandle,
     _In_ ACCESS_MASK DesiredAccess,
@@ -3017,6 +3052,17 @@ ZwQueryInformationByName(
     _Out_writes_bytes_(Length) PVOID FileInformation,
     _In_ ULONG Length,
     _In_ FILE_INFORMATION_CLASS FileInformationClass
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwQueryInformationCpuPartition(
+    _In_ HANDLE CpuPartitionHandle,
+    _In_ ULONG CpuPartitionInformationClass,
+    _Out_writes_bytes_opt_(CpuPartitionInformationLength) PVOID CpuPartitionInformation,
+    _In_ ULONG CpuPartitionInformationLength,
+    _Out_opt_ PULONG ReturnLength
     );
 
 NTSYSCALLAPI
@@ -3457,8 +3503,8 @@ ZwQueryWnfStateData(
     _In_opt_ PCWNF_TYPE_ID TypeId,
     _In_opt_ const VOID* ExplicitScope,
     _Out_ PWNF_CHANGE_STAMP ChangeStamp,
-    _Out_writes_bytes_opt_(*BufferSize) PVOID Buffer,
-    _Inout_ PULONG BufferSize
+    _Out_writes_bytes_opt_(*BufferLength) PVOID Buffer,
+    _Inout_ PULONG BufferLength
     );
 
 NTSYSCALLAPI
@@ -3468,8 +3514,8 @@ ZwQueryWnfStateNameInformation(
     _In_ PCWNF_STATE_NAME StateName,
     _In_ WNF_STATE_NAME_INFORMATION NameInfoClass,
     _In_opt_ const VOID* ExplicitScope,
-    _Out_writes_bytes_(InfoBufferSize) PVOID InfoBuffer,
-    _In_ ULONG InfoBufferSize
+    _Out_writes_bytes_(BufferLength) PVOID Buffer,
+    _In_ ULONG BufferLength
     );
 
 NTSYSCALLAPI
@@ -3871,6 +3917,14 @@ NTAPI
 ZwRollbackEnlistment(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRollbackRegistryTransaction(
+    _In_ HANDLE RegistryTransactionHandle,
+    _Reserved_ ULONG Flags
     );
 
 NTSYSCALLAPI

@@ -240,7 +240,7 @@ typedef VOID(NTAPI* PPS_POST_PROCESS_INIT_ROUTINE)(
 /**
  * Process Environment Block (PEB) structure.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb
  */
 typedef struct _PEB
 {
@@ -1188,7 +1188,7 @@ struct _TEB_ACTIVE_FRAME32
 /**
  * Thread Environment Block (TEB) structure.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb
  */
 typedef struct _TEB
 {

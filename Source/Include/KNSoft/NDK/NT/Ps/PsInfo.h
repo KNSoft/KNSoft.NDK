@@ -210,7 +210,7 @@ typedef struct _PAGE_PRIORITY_INFORMATION
 /**
  * The PROCESS_BASIC_INFORMATION structure contains basic information about a process.
  * 
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntqueryinformationprocess#process_basic_information
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntqueryinformationprocess#process_basic_information
  */
 typedef struct _PROCESS_BASIC_INFORMATION
 {
@@ -261,7 +261,7 @@ typedef struct _PROCESS_EXTENDED_BASIC_INFORMATION {
 /**
  * The VM_COUNTERS structure contains various memory usage statistics for a process.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters
  */
 typedef struct _VM_COUNTERS
 {
@@ -281,7 +281,7 @@ typedef struct _VM_COUNTERS
 /**
  * The VM_COUNTERS_EX structure extends VM_COUNTERS to include private memory usage.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex2
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex2
  */
 typedef struct _VM_COUNTERS_EX
 {
@@ -302,7 +302,7 @@ typedef struct _VM_COUNTERS_EX
 /**
  * The VM_COUNTERS_EX2 structure extends VM_COUNTERS_EX to include private working set size and shared commit usage.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex2
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex2
  */
 typedef struct _VM_COUNTERS_EX2
 {
@@ -332,7 +332,7 @@ typedef struct _VM_COUNTERS_EX2
 /**
  * The KERNEL_USER_TIMES structure contains timing information for a process or thread.
  * 
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadtimes
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadtimes
  */
 typedef struct _KERNEL_USER_TIMES
 {
@@ -423,7 +423,7 @@ typedef struct _PROCESS_LDT_SIZE
 /**
  * The PROCESS_WS_WATCH_INFORMATION structure is used to store information about working set watch events for a process.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_ws_watch_information
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_ws_watch_information
  */
 typedef struct _PROCESS_WS_WATCH_INFORMATION
 {
@@ -436,7 +436,7 @@ typedef struct _PROCESS_WS_WATCH_INFORMATION
 /**
  * The PROCESS_WS_WATCH_INFORMATION_EX structure contains extended information about a page added to a process working set.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_ws_watch_information_ex
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_ws_watch_information_ex
  */
 typedef struct _PROCESS_WS_WATCH_INFORMATION_EX
 {
@@ -1002,7 +1002,7 @@ typedef struct _PROCESS_COMMIT_RELEASE_INFORMATION
 /**
  * The PROCESS_JOB_MEMORY_INFO structure contains Represents app memory usage at a single point in time.
  *
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-app_memory_information
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-app_memory_information
  */
 typedef struct _PROCESS_JOB_MEMORY_INFO
 {
@@ -1307,7 +1307,7 @@ typedef struct _COUNTER_READING
 /**
  * The THREAD_PERFORMANCE_DATA structure aggregates various performance metrics for a thread.
  * 
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-performance_data
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-performance_data
  */
 typedef struct _THREAD_PERFORMANCE_DATA
 {
@@ -1411,8 +1411,8 @@ typedef struct _THREAD_UMS_INFORMATION
 /**
  * The THREAD_NAME_INFORMATION structure assigns a description to a thread.
  *
- * \remarks The handle must have THREAD_SET_LIMITED_INFORMATION access.
- * \remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreaddescription
+ * @remarks The handle must have THREAD_SET_LIMITED_INFORMATION access.
+ * @remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreaddescription
  */
 typedef struct _THREAD_NAME_INFORMATION
 {

@@ -24,8 +24,8 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectLimitViolationInformation = 13, // JOBOBJECT_LIMIT_VIOLATION_INFORMATION
     JobObjectGroupInformationEx = 14, // GROUP_AFFINITY (ARRAY)
     JobObjectCpuRateControlInformation = 15, // JOBOBJECT_CPU_RATE_CONTROL_INFORMATION
-    JobObjectCompletionFilter = 16,
-    JobObjectCompletionCounter = 17,
+    JobObjectCompletionFilter = 16, // q; s: ULONG
+    JobObjectCompletionCounter = 17, // q; s: ULONG
     JobObjectFreezeInformation = 18, // JOBOBJECT_FREEZE_INFORMATION
     JobObjectExtendedAccountingInformation = 19, // JOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION
     JobObjectWakeInformation = 20, // JOBOBJECT_WAKE_INFORMATION
@@ -43,7 +43,7 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectNetRateControlInformation = 32, // JOBOBJECT_NET_RATE_CONTROL_INFORMATION
     JobObjectNotificationLimitInformation2 = 33, // JOBOBJECT_NOTIFICATION_LIMIT_INFORMATION_2
     JobObjectLimitViolationInformation2 = 34, // JOBOBJECT_LIMIT_VIOLATION_INFORMATION_2
-    JobObjectCreateSilo = 35,
+    JobObjectCreateSilo = 35, // s: NULL
     JobObjectSiloBasicInformation = 36, // SILOOBJECT_BASIC_INFORMATION
     JobObjectSiloRootDirectory = 37, // SILOOBJECT_ROOT_DIRECTORY
     JobObjectServerSiloBasicInformation = 38, // SERVERSILO_BASIC_INFORMATION
@@ -52,10 +52,10 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectServerSiloRunningState = 41,
     JobObjectIoAttribution = 42, // JOBOBJECT_IO_ATTRIBUTION_INFORMATION
     JobObjectMemoryPartitionInformation = 43,
-    JobObjectContainerTelemetryId = 44, // GUID // NtSetInformationJobObject(_In_ PGUID, 44, _In_ PGUID, sizeof(GUID)); // daxexec
-    JobObjectSiloSystemRoot = 45,
+    JobObjectContainerTelemetryId = 44, // s: GUID // NtSetInformationJobObject(_In_ PGUID, 44, _In_ PGUID, sizeof(GUID)); // daxexec
+    JobObjectSiloSystemRoot = 45, // s: UNICODE_STRING
     JobObjectEnergyTrackingState = 46, // JOBOBJECT_ENERGY_TRACKING_STATE
-    JobObjectThreadImpersonationInformation = 47,
+    JobObjectThreadImpersonationInformation = 47, // q; s: BOOLEAN
     JobObjectIoPriorityLimit = 48, // JOBOBJECT_IO_PRIORITY_LIMIT
     JobObjectPagePriorityLimit = 49, // JOBOBJECT_PAGE_PRIORITY_LIMIT
     JobObjectServerSiloDiagnosticInformation = 50, // SERVERSILO_DIAGNOSTIC_INFORMATION, // since 24H2
