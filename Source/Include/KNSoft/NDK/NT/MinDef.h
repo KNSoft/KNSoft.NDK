@@ -96,6 +96,12 @@
 #define JobObjectSiloBasicInformation MS_JobObjectSiloBasicInformation
 #define JobObjectNetworkAccountingInformation MS_JobObjectNetworkAccountingInformation
 #define MaxJobObjectInfoClass MS_MaxJobObjectInfoClass
+#define _HEAP_INFORMATION_CLASS _MS_HEAP_INFORMATION_CLASS
+#define HEAP_INFORMATION_CLASS MS_HEAP_INFORMATION_CLASS
+#define HeapCompatibilityInformation MS_HeapCompatibilityInformation
+#define HeapEnableTerminationOnCorruption MS_HeapEnableTerminationOnCorruption
+#define HeapOptimizeResources MS_HeapOptimizeResources
+#define HeapTag MS_HeapTag
 
 #endif
 
@@ -133,6 +139,12 @@ typedef SID* PSID;
 #undef JobObjectSiloBasicInformation
 #undef JobObjectNetworkAccountingInformation
 #undef MaxJobObjectInfoClass
+#undef _HEAP_INFORMATION_CLASS
+#undef HEAP_INFORMATION_CLASS
+#undef HeapCompatibilityInformation
+#undef HeapEnableTerminationOnCorruption
+#undef HeapOptimizeResources
+#undef HeapTag
 
 #endif
 

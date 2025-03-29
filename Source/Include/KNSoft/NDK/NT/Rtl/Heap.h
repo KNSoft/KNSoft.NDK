@@ -561,24 +561,25 @@ RtlWalkHeap(
     _Inout_ PRTL_HEAP_WALK_ENTRY Entry
 );
 
-// HEAP_INFORMATION_CLASS
-#define HeapCompatibilityInformation 0x0 // q; s: ULONG
-#define HeapEnableTerminationOnCorruption 0x1 // q; s: NULL
-#define HeapExtendedInformation 0x2 // q; s: HEAP_EXTENDED_INFORMATION
-#define HeapOptimizeResources 0x3 // q; s: HEAP_OPTIMIZE_RESOURCES_INFORMATION
-#define HeapTaggingInformation 0x4
-#define HeapStackDatabase 0x5 // q: RTL_HEAP_STACK_QUERY; s: RTL_HEAP_STACK_CONTROL
-#define HeapMemoryLimit 0x6 // since 19H2
-#define HeapTag 0x7 // since 20H1
-#define HeapDetailedFailureInformation 0x80000001
-#define HeapSetDebuggingInformation 0x80000002 // q; s: HEAP_DEBUGGING_INFORMATION
-
-typedef enum _HEAP_COMPATIBILITY_MODE
+typedef enum _HEAP_INFORMATION_CLASS
 {
-    HEAP_COMPATIBILITY_STANDARD = 0UL,
-    HEAP_COMPATIBILITY_LAL = 1UL,
-    HEAP_COMPATIBILITY_LFH = 2UL,
-} HEAP_COMPATIBILITY_MODE;
+    HeapCompatibilityInformation = 0, // q; s: ULONG
+    HeapEnableTerminationOnCorruption = 1, // q; s: NULL
+    HeapExtendedInformation = 2, // q; s: HEAP_EXTENDED_INFORMATION
+    HeapOptimizeResources = 3, // q; s: HEAP_OPTIMIZE_RESOURCES_INFORMATION
+    HeapTaggingInformation = 4,
+    HeapStackDatabase = 5, // q: RTL_HEAP_STACK_QUERY; s: RTL_HEAP_STACK_CONTROL
+    HeapMemoryLimit = 6, // since 19H2
+    HeapTag = 7, // since 20H1
+    HeapDetailedFailureInformation = 0x80000001,
+    HeapSetDebuggingInformation = 0x80000002 // q; s: HEAP_DEBUGGING_INFORMATION
+} HEAP_INFORMATION_CLASS;
+
+/* HeapCompatibilityInformation */
+
+#define HEAP_STANDARD   0UL
+#define HEAP_LAL        1UL
+#define HEAP_LFH        2UL
 
 typedef struct _RTLP_TAG_INFO
 {
