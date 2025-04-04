@@ -1,0 +1,69 @@
+﻿#pragma once
+
+#include "../MinDef.h"
+
+EXTERN_C_START
+
+/* wdm.h */
+
+#ifndef DEFINE_GUIDEX
+    #define DEFINE_GUIDEX(name) EXTERN_C const CDECL GUID name
+#endif // !defined(DEFINE_GUIDEX)
+
+#ifndef STATICGUIDOF
+    #define STATICGUIDOF(guid) STATIC_##guid
+#endif // !defined(STATICGUIDOF)
+
+#ifndef __IID_ALIGNED__
+    #define __IID_ALIGNED__
+    #ifdef __cplusplus
+        inline int IsEqualGUIDAligned(REFGUID guid1, REFGUID guid2)
+        {
+            return ((*(PLONGLONG)(&guid1) == *(PLONGLONG)(&guid2)) && (*((PLONGLONG)(&guid1) + 1) == *((PLONGLONG)(&guid2) + 1)));
+        }
+    #else // !__cplusplus
+        #define IsEqualGUIDAligned(guid1, guid2) \
+            ((*(PLONGLONG)(guid1) == *(PLONGLONG)(guid2)) && (*((PLONGLONG)(guid1) + 1) == *((PLONGLONG)(guid2) + 1)))
+    #endif // !__cplusplus
+#endif // !__IID_ALIGNED__
+
+//
+// Length in characters of the GUID represented as string not including the
+// null terminator.
+//
+
+#define RTL_GUID_STRING_SIZE 38
+
+_IRQL_requires_max_(PASSIVE_LEVEL)
+_Must_inspect_result_
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlStringFromGUID(
+    _In_ REFGUID Guid,
+    _Out_ _At_(GuidString->Buffer, __drv_allocatesMem(Mem))
+        PUNICODE_STRING GuidString);
+
+_IRQL_requires_max_(PASSIVE_LEVEL)
+_Must_inspect_result_
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlGUIDFromString(
+    _In_ PCUNICODE_STRING GuidString,
+    _Out_ GUID* Guid);
+
+/* phnt */
+
+#if (NTDDI_VERSION >= NTDDI_WINBLUE)
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlStringFromGUIDEx(
+    _In_ PGUID Guid,
+    _Inout_ PUNICODE_STRING GuidString,
+    _In_ BOOLEAN AllocateGuidString);
+#endif
+
+EXTERN_C_END

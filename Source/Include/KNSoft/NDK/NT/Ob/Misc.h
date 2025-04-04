@@ -155,6 +155,15 @@ NtQueryObject(
     _Out_opt_ PULONG ReturnLength
     );
 
+/**
+ * The NtSetInformationObject routine changes various kinds of information about a object.
+ *
+ * @param Handle The handle of the object for which information is being changed.
+ * @param ObjectInformationClass The type of information, supplied in the buffer pointed to by ObjectInformation, to set for the object.
+ * @param ObjectInformation Pointer to a buffer that contains the information to set for the object.
+ * @param ObjectInformationLength The size of the buffer pointed to by the ObjectInformation parameter, in bytes.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -170,7 +179,7 @@ NtSetInformationObject(
 #define DUPLICATE_SAME_ATTRIBUTES 0x00000004    // Instead of using the HandleAttributes parameter, copy the attributes from the source handle to the target handle.
 
 /**
- * 
+ * The NtDuplicateObject routine creates a handle that is a duplicate of the specified source handle.
  *
  * @param SourceProcessHandle A handle to the source process for the handle being duplicated.
  * @param SourceHandle The handle to duplicate.
@@ -354,6 +363,14 @@ NtClose(
     );
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+/**
+ * Compares two object handles to determine if they refer to the same underlying kernel object.
+ *
+ * @param FirstObjectHandle The first object handle to compare.
+ * @param SecondObjectHandle The second object handle to compare.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-compareobjecthandles
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -369,6 +386,15 @@ NtCompareObjects(
 
 #if !defined(_KERNEL_MODE)
 
+/**
+ * The NtCreateDirectoryObject routine creates or opens an object-directory object.
+ *
+ * @param DirectoryHandle Pointer to a HANDLE variable that receives a handle to the object directory.
+ * @param DesiredAccess An ACCESS_MASK that specifies the requested access to the directory object.
+ * @param ObjectAttributes The attributes for the directory object.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatedirectoryobject
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -409,6 +435,9 @@ NtOpenDirectoryObject(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes
     );
 
+/**
+ * The OBJECT_DIRECTORY_INFORMATION structure contains information about the directory object.
+ */
 typedef struct _OBJECT_DIRECTORY_INFORMATION
 {
     UNICODE_STRING Name;
@@ -493,6 +522,16 @@ typedef struct _OBJECT_BOUNDARY_DESCRIPTOR
 
 #if (NTDDI_VERSION >= NTDDI_VISTA)
 
+/**
+ * Creates a private namespace.
+ *
+ * @param NamespaceHandle A handle to the newly created private namespace.
+ * @param DesiredAccess An ACCESS_MASK that specifies the requested access to the private namespace.
+ * @param ObjectAttributes The attributes for the private namespace.
+ * @param BoundaryDescriptor A descriptor that defines how the namespace is to be isolated. The RtlCreateBoundaryDescriptor function creates a boundary descriptor.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createprivatenamespacea
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -503,6 +542,16 @@ NtCreatePrivateNamespace(
     _In_ POBJECT_BOUNDARY_DESCRIPTOR BoundaryDescriptor
     );
 
+/**
+ * Opens a private namespace.
+ *
+ * @param NamespaceHandle A handle to the newly opened private namespace.
+ * @param DesiredAccess An ACCESS_MASK that specifies the requested access to the private namespace.
+ * @param ObjectAttributes The attributes for the private namespace.
+ * @param BoundaryDescriptor A descriptor that defines how the namespace is to be isolated. The RtlCreateBoundaryDescriptor function creates a boundary descriptor.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-openprivatenamespacea
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -513,6 +562,13 @@ NtOpenPrivateNamespace(
     _In_ POBJECT_BOUNDARY_DESCRIPTOR BoundaryDescriptor
     );
 
+/**
+ * Deletes an open namespace handle.
+ *
+ * @param NamespaceHandle A handle to the private namespace.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/namespaceapi/nf-namespaceapi-closeprivatenamespace
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

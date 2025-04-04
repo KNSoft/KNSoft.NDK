@@ -29,6 +29,7 @@
 #include "Environment.h"
 #include "ErrorHandling.h"
 #include "Feature.h"
+#include "Guid.h"
 #include "Heap.h"
 #include "Image.h"
 #include "Memory.h"

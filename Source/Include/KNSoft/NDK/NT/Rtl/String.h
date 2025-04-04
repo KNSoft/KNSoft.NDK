@@ -784,36 +784,6 @@ RtlDnsHostNameToComputerName(
 );
 
 NTSYSAPI
-NTSTATUS
-NTAPI
-RtlStringFromGUID(
-    _In_ PGUID Guid,
-    _Out_ PUNICODE_STRING GuidString
-);
-
-#if (NTDDI_VERSION >= NTDDI_WINBLUE)
-
-// rev
-NTSYSAPI
-NTSTATUS
-NTAPI
-RtlStringFromGUIDEx(
-    _In_ PGUID Guid,
-    _Inout_ PUNICODE_STRING GuidString,
-    _In_ BOOLEAN AllocateGuidString
-);
-
-#endif
-
-NTSYSAPI
-NTSTATUS
-NTAPI
-RtlGUIDFromString(
-    _In_ PUNICODE_STRING GuidString,
-    _Out_ PGUID Guid
-);
-
-NTSYSAPI
 LONG
 NTAPI
 RtlCompareAltitudes(

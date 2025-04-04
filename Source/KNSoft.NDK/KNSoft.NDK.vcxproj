@@ -191,6 +191,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Environment.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\ErrorHandling.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Feature.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Guid.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Heap.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Image.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Memory.h" />
