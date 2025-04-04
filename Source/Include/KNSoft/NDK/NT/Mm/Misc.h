@@ -4,6 +4,8 @@
 
 #include <minwinbase.h>
 
+EXTERN_C_START
+
 /* phnt */
 
 typedef enum _MMLISTS
@@ -846,3 +848,5 @@ NtCallEnclave(
 #endif
 
 #pragma endregion
+
+EXTERN_C_END

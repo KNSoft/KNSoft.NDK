@@ -2,6 +2,8 @@
 
 #include "../MinDef.h"
 
+EXTERN_C_START
+
 typedef struct _PORT_MESSAGE
 {
     union
@@ -34,3 +36,5 @@ typedef struct _PORT_MESSAGE
         ULONG CallbackId; // only valid for LPC_REQUEST messages
     };
 } PORT_MESSAGE, *PPORT_MESSAGE;
+
+EXTERN_C_END

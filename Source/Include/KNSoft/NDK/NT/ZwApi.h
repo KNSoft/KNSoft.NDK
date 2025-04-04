@@ -1,5 +1,7 @@
 ﻿#include "NT.h"
 
+EXTERN_C_START
+
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -4936,3 +4938,5 @@ NTAPI
 ZwYieldExecution(
     VOID
     );
+
+EXTERN_C_END

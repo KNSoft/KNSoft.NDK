@@ -5,6 +5,8 @@
 #include <minwinbase.h>
 #include <libloaderapi.h>
 
+EXTERN_C_START
+
 /* KNSoft.NDK & PDB & phnt */
 
 typedef enum _LDR_DDAG_STATE
@@ -1663,3 +1665,5 @@ LdrpResGetMappingSize(
     _In_ ULONG Flags, 
     _In_ BOOLEAN GetFileSizeFromLoadAsDataTable
     );
+
+EXTERN_C_END
