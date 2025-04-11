@@ -6,8 +6,21 @@
 
 #pragma region TEB Fast Access (Without Pointer Reference)
 
-#if !defined(_WIN64)
-
+__forceinline
+UCHAR
+NtReadCurrentTebByte(unsigned int Offset) {
+    return *(PUCHAR)((PBYTE)NtCurrentTeb() + Offset);
+}
+__forceinline
+USHORT
+NtReadCurrentTebUshort(unsigned int Offset) {
+    return *(PUSHORT)((PBYTE)NtCurrentTeb() + Offset);
+}
+__forceinline
+ULONG
+NtReadCurrentTebUlong(unsigned int Offset) {
+    return *(PULONG)((PBYTE)NtCurrentTeb() + Offset);
+}
 __forceinline
 unsigned __int64
 NtReadCurrentTebUlonglong(
@@ -19,8 +32,6 @@ NtReadCurrentTebUlonglong(
     li.HighPart = NtReadCurrentTebUlong(Offset + sizeof(ULONG));
     return li.QuadPart;
 }
-
-#endif
 
 #ifdef FIELD_TYPE
 #define NtReadTeb(m) ((FIELD_TYPE(TEB, m))(\
