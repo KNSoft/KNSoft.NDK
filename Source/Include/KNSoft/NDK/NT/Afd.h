@@ -168,7 +168,7 @@ typedef struct _AFD_SWITCH_OPEN_PACKET
 
 // private // Note: different bit layout from CTL_CODE
 #define FSCTL_AFD_BASE  FILE_DEVICE_NETWORK
-#define _AFD_CONTROL_CODE(request, method) (FSCTL_AFD_BASE << 12 | request << 2 | method)
+#define _AFD_CONTROL_CODE(Request, Method) (FSCTL_AFD_BASE << 12 | (Request) << 2 | (Method))
 
 // private // IOCTLs
 #define IOCTL_AFD_BIND                        _AFD_CONTROL_CODE(AFD_BIND, METHOD_NEITHER) // 0x12003
@@ -387,7 +387,6 @@ typedef struct _AFD_SEND_DATAGRAM_INFO
     _Field_size_(BufferCount) LPWSABUF BufferArray;
     ULONG BufferCount;
     ULONG AfdFlags;
-    ULONG TdiFlags; // TDI_RECEIVE_*
     TDI_REQUEST_SEND_DATAGRAM TdiRequest;
     TDI_CONNECTION_INFORMATION TdiConnInfo;
 } AFD_SEND_DATAGRAM_INFO, *PAFD_SEND_DATAGRAM_INFO;
@@ -552,26 +551,26 @@ typedef struct _SOCK_SHARED_INFO
     ULONG SendBufferSize;
     union
     {
+        USHORT Flags;
         struct
         {
-            UCHAR Listening : 1;
-            UCHAR Broadcast : 1;
-            UCHAR Debug : 1;
-            UCHAR OobInline : 1;
-            UCHAR ReuseAddresses : 1;
-            UCHAR ExclusiveAddressUse : 1;
-            UCHAR NonBlocking : 1;
-            UCHAR DontUseWildcard : 1;
-            UCHAR ReceiveShutdown : 1;
-            UCHAR SendShutdown : 1;
-            UCHAR ConditionalAccept : 1;
-            UCHAR IsSANSocket : 1;
-            UCHAR fIsTLI : 1;
-            UCHAR Rio : 1;
-            UCHAR ReceiveBufferSizeSet : 1;
-            UCHAR SendBufferSizeSet : 1;
+            USHORT Listening : 1;
+            USHORT Broadcast : 1;
+            USHORT Debug : 1;
+            USHORT OobInline : 1;
+            USHORT ReuseAddresses : 1;
+            USHORT ExclusiveAddressUse : 1;
+            USHORT NonBlocking : 1;
+            USHORT DontUseWildcard : 1;
+            USHORT ReceiveShutdown : 1;
+            USHORT SendShutdown : 1;
+            USHORT ConditionalAccept : 1;
+            USHORT IsSANSocket : 1;
+            USHORT fIsTLI : 1;
+            USHORT Rio : 1;
+            USHORT ReceiveBufferSizeSet : 1;
+            USHORT SendBufferSizeSet : 1;
         };
-        WORD Flags;
     };
     ULONG CreationFlags; // WSA_FLAG_*
     ULONG CatalogEntryId;
@@ -681,22 +680,25 @@ typedef struct _AFD_TRANSPORT_IOCTL_INFO
     ULONG PollEvent;
 } AFD_TRANSPORT_IOCTL_INFO, *PAFD_TRANSPORT_IOCTL_INFO;
 
+// rev - HV_PROTOCOL_RAW-level option in addition to ones in hvsocket.h
+#define HVSOCKET_CONTAINER_PASSTHRU     0x02 // q: ULONG
+
 // private
 typedef enum TL_IO_CONTROL_TYPE
 {
-    TlEndpointIoControlType = 0,
-    TlSetSockOptIoControlType = 1,
-    TlGetSockOptIoControlType = 2,
-    TlSocketIoControlType = 3,
+    TlEndpointIoControlType = 0,   // not supported
+    TlSetSockOptIoControlType = 1, // setsockopt
+    TlGetSockOptIoControlType = 2, // getsockopt
+    TlSocketIoControlType = 3,     // ioctlsocket // Level must be 0
 } TL_IO_CONTROL_TYPE, *PTL_IO_CONTROL_TYPE;
 
 // private
 typedef struct _AFD_TL_IO_CONTROL_INFO
 {
     TL_IO_CONTROL_TYPE Type;
-    ULONG Level; // SOL_* or IPPROTO_*
-    ULONG IoControlCode; // SIO_*, SO_*, IP_*, IPV6_*, TCP_*, UDP_*, etc. (depending on type and level)
-    BOOLEAN EndpointIoctl;
+    ULONG Level; // SOL_* or IPPROTO_* or HV_PROTOCOL_RAW
+    ULONG IoControlCode; // SIO_*, SO_*, IP_*, IPV6_*, TCP_*, UDP_*, HVSOCKET_*, etc. (depending on type and level)
+    BOOLEAN EndpointIoctl; // must be TRUE
     _Field_size_bytes_(InputBufferLength) PVOID InputBuffer;
     SIZE_T InputBufferLength;
 } AFD_TL_IO_CONTROL_INFO, *PAFD_TL_IO_CONTROL_INFO;

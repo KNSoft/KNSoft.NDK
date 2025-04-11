@@ -7,6 +7,32 @@
   <Dll Name="KERNEL32.dll">
     <Export Name="CreateProcessInternalW" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr int int ptr ptr ptr ptr ptr" />
   </Dll>
+  <Dll Name="KERNELBASE.dll">
+      <Export Name="GetCurrentPackageContext" CallConv="__stdcall" Arg="int ptr ptr" />
+      <Export Name="GetPackageContext" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackageProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackagePropertyString" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackageOSMaxVersionTested" CallConv="__stdcall" Arg="ptr ptr" />
+      <Export Name="GetCurrentPackageApplicationContext" CallConv="__stdcall" Arg="int ptr ptr" />
+      <Export Name="GetPackageApplicationContext" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackageApplicationProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackageApplicationPropertyString" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetCurrentPackageResourcesContext" CallConv="__stdcall" Arg="int ptr ptr" />
+      <Export Name="GetPackageResourcesContext" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetCurrentPackageApplicationResourcesContext" CallConv="__stdcall" Arg="int ptr ptr" />
+      <Export Name="GetPackageApplicationResourcesContext" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackageResourcesProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetCurrentPackageSecurityContext" CallConv="__stdcall" Arg="ptr ptr" />
+      <Export Name="GetPackageSecurityContext" CallConv="__stdcall" Arg="ptr ptr ptr" />
+      <Export Name="GetPackageSecurityProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetCurrentTargetPlatformContext" CallConv="__stdcall" Arg="ptr ptr" />
+      <Export Name="GetTargetPlatformContext" CallConv="__stdcall" Arg="ptr int ptr" />
+      <Export Name="GetPackageTargetPlatformProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetCurrentPackageInfo3" CallConv="__stdcall" Arg="int int ptr ptr ptr" />
+      <Export Name="GetCurrentPackageGlobalizationContext" CallConv="__stdcall" Arg="int ptr ptr" />
+      <Export Name="GetPackageGlobalizationContext" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackageGlobalizationProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+  </Dll>
   <Dll Name="USER32.dll">
     <Export Name="GetShellChangeNotifyWindow" CallConv="__stdcall" />
     <Export Name="GetTaskmanWindow" CallConv="__stdcall" />

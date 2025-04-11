@@ -10,7 +10,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlFlsAlloc(
-    _In_ PFLS_CALLBACK_FUNCTION Callback,
+    _In_opt_ PFLS_CALLBACK_FUNCTION Callback,
     _Out_ PULONG FlsIndex);
 
 // rev
@@ -18,7 +18,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlFlsAllocEx(
-    _In_ PFLS_CALLBACK_FUNCTION Callback,
+    _In_opt_ PFLS_CALLBACK_FUNCTION Callback,
     _Out_ PULONG,
     _Out_ PULONG FlsIndex);
 

@@ -18,6 +18,11 @@ typedef struct _LEAP_SECOND_DATA
     _Field_size_(Count) LARGE_INTEGER Data[ANYSIZE_ARRAY];
 } LEAP_SECOND_DATA, *PLEAP_SECOND_DATA;
 
+/**
+ * The PEB_LDR_DATA structure contains information about the loaded modules for the process.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb_ldr_data
+ */
+
 typedef struct _PEB_LDR_DATA
 {
     ULONG Length;
@@ -233,9 +238,11 @@ typedef struct _WER_PEB_HEADER_BLOCK
     PVOID Reserved;
 } WER_PEB_HEADER_BLOCK, *PWER_PEB_HEADER_BLOCK;
 
-typedef VOID(NTAPI* PPS_POST_PROCESS_INIT_ROUTINE)(
+typedef _Function_class_(PS_POST_PROCESS_INIT_ROUTINE)
+VOID NTAPI PS_POST_PROCESS_INIT_ROUTINE(
     VOID
     );
+typedef PS_POST_PROCESS_INIT_ROUTINE* PPS_POST_PROCESS_INIT_ROUTINE;
 
 /**
  * Process Environment Block (PEB) structure.

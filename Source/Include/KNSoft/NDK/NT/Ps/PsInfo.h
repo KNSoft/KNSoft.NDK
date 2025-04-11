@@ -10,6 +10,8 @@ EXTERN_C_START
 typedef struct _TEB *PTEB;
 typedef struct _PEB *PPEB;
 
+/* NtQueryInformationProcess / NtSetInformationProcess types */
+
 typedef enum _PROCESSINFOCLASS
 {
     ProcessBasicInformation, // q: PROCESS_BASIC_INFORMATION, PROCESS_EXTENDED_BASIC_INFORMATION
@@ -25,7 +27,7 @@ typedef enum _PROCESSINFOCLASS
     ProcessLdtInformation, // qs: PROCESS_LDT_INFORMATION // 10
     ProcessLdtSize, // s: PROCESS_LDT_SIZE
     ProcessDefaultHardErrorMode, // qs: ULONG
-    ProcessIoPortHandlers, // (kernel-mode only) // s: PROCESS_IO_PORT_HANDLER_INFORMATION
+    ProcessIoPortHandlers, // s: PROCESS_IO_PORT_HANDLER_INFORMATION // (kernel-mode only)
     ProcessPooledUsageAndLimits, // q: POOLED_USAGE_AND_LIMITS
     ProcessWorkingSetWatch, // q: PROCESS_WS_WATCH_INFORMATION[]; s: void
     ProcessUserModeIOPL, // qs: ULONG (requires SeTcbPrivilege)
@@ -131,7 +133,9 @@ typedef enum _PROCESSINFOCLASS
     ProcessEnclaveAddressSpaceRestriction, // since 25H2
     ProcessAvailableCpus,
     MaxProcessInfoClass
-} PROCESSINFOCLASS;
+} PROCESSINFOCLASS, *PPROCESSINFOCLASS;
+
+/* NtQueryInformationThread/NtSetInformationThread type */
 
 typedef enum _THREADINFOCLASS
 {
@@ -196,7 +200,7 @@ typedef enum _THREADINFOCLASS
     ThreadTebInformationAtomic, // q: THREAD_TEB_INFORMATION (requires THREAD_GET_CONTEXT + THREAD_QUERY_INFORMATION)
     ThreadIndexInformation, // THREAD_INDEX_INFORMATION
     MaxThreadInfoClass
-} THREADINFOCLASS;
+} THREADINFOCLASS, *PTHREADINFOCLASS;
 
 #if !defined(_KERNEL_MODE)
 // Use with both ProcessPagePriority and ThreadPagePriority

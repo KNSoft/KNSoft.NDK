@@ -11,7 +11,7 @@ typedef enum _FILE_INFORMATION_CLASS
     FileDirectoryInformation = 1, // q: FILE_DIRECTORY_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex])
     FileFullDirectoryInformation, // q: FILE_FULL_DIR_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex])
     FileBothDirectoryInformation, // q: FILE_BOTH_DIR_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex])
-    FileBasicInformation, // q; s: FILE_BASIC_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
+    FileBasicInformation, // qs: FILE_BASIC_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
     FileStandardInformation, // q: FILE_STANDARD_INFORMATION, FILE_STANDARD_INFORMATION_EX
     FileInternalInformation, // q: FILE_INTERNAL_INFORMATION
     FileEaInformation, // q: FILE_EA_INFORMATION
@@ -21,18 +21,18 @@ typedef enum _FILE_INFORMATION_CLASS
     FileLinkInformation, // s: FILE_LINK_INFORMATION
     FileNamesInformation, // q: FILE_NAMES_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex])
     FileDispositionInformation, // s: FILE_DISPOSITION_INFORMATION (requires DELETE)
-    FilePositionInformation, // q; s: FILE_POSITION_INFORMATION
+    FilePositionInformation, // qs: FILE_POSITION_INFORMATION
     FileFullEaInformation, // FILE_FULL_EA_INFORMATION
-    FileModeInformation, // q; s: FILE_MODE_INFORMATION
+    FileModeInformation, // qs: FILE_MODE_INFORMATION
     FileAlignmentInformation, // q: FILE_ALIGNMENT_INFORMATION
     FileAllInformation, // q: FILE_ALL_INFORMATION (requires FILE_READ_ATTRIBUTES)
     FileAllocationInformation, // s: FILE_ALLOCATION_INFORMATION (requires FILE_WRITE_DATA)
     FileEndOfFileInformation, // s: FILE_END_OF_FILE_INFORMATION (requires FILE_WRITE_DATA) // 20
     FileAlternateNameInformation, // q: FILE_NAME_INFORMATION
     FileStreamInformation, // q: FILE_STREAM_INFORMATION
-    FilePipeInformation, // q; s: FILE_PIPE_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
+    FilePipeInformation, // qs: FILE_PIPE_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
     FilePipeLocalInformation, // q: FILE_PIPE_LOCAL_INFORMATION (requires FILE_READ_ATTRIBUTES)
-    FilePipeRemoteInformation, // q; s: FILE_PIPE_REMOTE_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
+    FilePipeRemoteInformation, // qs: FILE_PIPE_REMOTE_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
     FileMailslotQueryInformation, // q: FILE_MAILSLOT_QUERY_INFORMATION
     FileMailslotSetInformation, // s: FILE_MAILSLOT_SET_INFORMATION
     FileCompressionInformation, // q: FILE_COMPRESSION_INFORMATION
@@ -48,10 +48,10 @@ typedef enum _FILE_INFORMATION_CLASS
     FileIdFullDirectoryInformation, // q: FILE_ID_FULL_DIR_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex])
     FileValidDataLengthInformation, // s: FILE_VALID_DATA_LENGTH_INFORMATION (requires FILE_WRITE_DATA and/or SeManageVolumePrivilege)
     FileShortNameInformation, // s: FILE_NAME_INFORMATION (requires DELETE) // 40
-    FileIoCompletionNotificationInformation, // q; s: FILE_IO_COMPLETION_NOTIFICATION_INFORMATION (q: requires FILE_READ_ATTRIBUTES) // since VISTA
+    FileIoCompletionNotificationInformation, // qs: FILE_IO_COMPLETION_NOTIFICATION_INFORMATION (q: requires FILE_READ_ATTRIBUTES) // since VISTA
     FileIoStatusBlockRangeInformation, // s: FILE_IOSTATUSBLOCK_RANGE_INFORMATION (requires SeLockMemoryPrivilege)
-    FileIoPriorityHintInformation, // q; s: FILE_IO_PRIORITY_HINT_INFORMATION, FILE_IO_PRIORITY_HINT_INFORMATION_EX (q: requires FILE_READ_DATA)
-    FileSfioReserveInformation, // q; s: FILE_SFIO_RESERVE_INFORMATION (q: requires FILE_READ_DATA)
+    FileIoPriorityHintInformation, // qs: FILE_IO_PRIORITY_HINT_INFORMATION, FILE_IO_PRIORITY_HINT_INFORMATION_EX (q: requires FILE_READ_DATA)
+    FileSfioReserveInformation, // qs: FILE_SFIO_RESERVE_INFORMATION (q: requires FILE_READ_DATA)
     FileSfioVolumeInformation, // q: FILE_SFIO_VOLUME_INFORMATION (requires FILE_READ_ATTRIBUTES)
     FileHardLinkInformation, // q: FILE_LINKS_INFORMATION
     FileProcessIdsUsingFileInformation, // q: FILE_PROCESS_IDS_USING_FILE_INFORMATION (requires FILE_READ_ATTRIBUTES)
@@ -63,8 +63,8 @@ typedef enum _FILE_INFORMATION_CLASS
     FileNumaNodeInformation, // q: FILE_NUMA_NODE_INFORMATION
     FileStandardLinkInformation, // q: FILE_STANDARD_LINK_INFORMATION
     FileRemoteProtocolInformation, // q: FILE_REMOTE_PROTOCOL_INFORMATION
-    FileRenameInformationBypassAccessCheck, // (kernel-mode only); s: FILE_RENAME_INFORMATION // since WIN8
-    FileLinkInformationBypassAccessCheck, // (kernel-mode only); s: FILE_LINK_INFORMATION
+    FileRenameInformationBypassAccessCheck, // s: FILE_RENAME_INFORMATION // (kernel-mode only) // since WIN8
+    FileLinkInformationBypassAccessCheck, // s: FILE_LINK_INFORMATION // (kernel-mode only)
     FileVolumeNameInformation, // q: FILE_VOLUME_NAME_INFORMATION
     FileIdInformation, // q: FILE_ID_INFORMATION
     FileIdExtdDirectoryInformation, // q: FILE_ID_EXTD_DIR_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex]) // 60
@@ -73,18 +73,18 @@ typedef enum _FILE_INFORMATION_CLASS
     FileIdExtdBothDirectoryInformation, // q: FILE_ID_EXTD_BOTH_DIR_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex]) // since THRESHOLD
     FileDispositionInformationEx, // s: FILE_DISPOSITION_INFO_EX (requires DELETE) // since REDSTONE
     FileRenameInformationEx, // s: FILE_RENAME_INFORMATION_EX
-    FileRenameInformationExBypassAccessCheck, // (kernel-mode only); s: FILE_RENAME_INFORMATION_EX
-    FileDesiredStorageClassInformation, // q; s: FILE_DESIRED_STORAGE_CLASS_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES) // since REDSTONE2
+    FileRenameInformationExBypassAccessCheck, // s: FILE_RENAME_INFORMATION_EX // (kernel-mode only)
+    FileDesiredStorageClassInformation, // qs: FILE_DESIRED_STORAGE_CLASS_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES) // since REDSTONE2
     FileStatInformation, // q: FILE_STAT_INFORMATION (requires FILE_READ_ATTRIBUTES)
     FileMemoryPartitionInformation, // s: FILE_MEMORY_PARTITION_INFORMATION // since REDSTONE3
     FileStatLxInformation, // q: FILE_STAT_LX_INFORMATION (requires FILE_READ_ATTRIBUTES and FILE_READ_EA) // since REDSTONE4 // 70
-    FileCaseSensitiveInformation, // q; s: FILE_CASE_SENSITIVE_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
+    FileCaseSensitiveInformation, // qs: FILE_CASE_SENSITIVE_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
     FileLinkInformationEx, // s: FILE_LINK_INFORMATION_EX // since REDSTONE5
-    FileLinkInformationExBypassAccessCheck, // (kernel-mode only); s: FILE_LINK_INFORMATION_EX
-    FileStorageReserveIdInformation, // q; s: FILE_STORAGE_RESERVE_ID_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
-    FileCaseSensitiveInformationForceAccessCheck, // q; s: FILE_CASE_SENSITIVE_INFORMATION
-    FileKnownFolderInformation, // q; s: FILE_KNOWN_FOLDER_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES) // since WIN11
-    FileStatBasicInformation, // since 23H2
+    FileLinkInformationExBypassAccessCheck, // s: FILE_LINK_INFORMATION_EX // (kernel-mode only)
+    FileStorageReserveIdInformation, // qs: FILE_STORAGE_RESERVE_ID_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES)
+    FileCaseSensitiveInformationForceAccessCheck, // qs: FILE_CASE_SENSITIVE_INFORMATION
+    FileKnownFolderInformation, // qs: FILE_KNOWN_FOLDER_INFORMATION (q: requires FILE_READ_ATTRIBUTES; s: requires FILE_WRITE_ATTRIBUTES) // since WIN11
+    FileStatBasicInformation, // qs: FILE_STAT_BASIC_INFORMATION // since 23H2
     FileId64ExtdDirectoryInformation, // FILE_ID_64_EXTD_DIR_INFORMATION
     FileId64ExtdBothDirectoryInformation, // FILE_ID_64_EXTD_BOTH_DIR_INFORMATION
     FileIdAllExtdDirectoryInformation, // FILE_ID_ALL_EXTD_DIR_INFORMATION
@@ -102,6 +102,7 @@ typedef enum _FILE_INFORMATION_CLASS
  * @li If you specify a value of -1 for any of the XxxTime members, time stamp updates are disabled for I/O operations preformed on the file handle.
  * @li If you specify a value of -2 for any of the XxxTime members, time stamp updates are enabled for I/O operations preformed on the file handle.
  * @remarks To set the members of this structure, the caller must have FILE_WRITE_ATTRIBUTES access to the file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_basic_information
  */
 typedef struct _FILE_BASIC_INFORMATION
 {
@@ -116,6 +117,7 @@ typedef struct _FILE_BASIC_INFORMATION
  * The FILE_STANDARD_INFORMATION structure contains standard information of a file.
  * @remarks EndOfFile specifies the byte offset to the end of the file.
  * Because this value is zero-based, it actually refers to the first free byte in the file; that is, it is the offset to the byte immediately following the last valid byte in the file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_standard_information
  */
 typedef struct _FILE_STANDARD_INFORMATION
 {
@@ -127,6 +129,10 @@ typedef struct _FILE_STANDARD_INFORMATION
 } FILE_STANDARD_INFORMATION, *PFILE_STANDARD_INFORMATION;
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+/**
+ * The FILE_STANDARD_INFORMATION_EX structure is used as an argument to routines that query or set file information
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_standard_information_ex
+ */
 typedef struct _FILE_STANDARD_INFORMATION_EX
 {
     LARGE_INTEGER AllocationSize;
@@ -139,6 +145,10 @@ typedef struct _FILE_STANDARD_INFORMATION_EX
 } FILE_STANDARD_INFORMATION_EX, *PFILE_STANDARD_INFORMATION_EX;
 #endif
 
+/**
+ * The FILE_INTERNAL_INFORMATION structure is used to query for the file system's 8-byte file reference number for a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_internal_information
+ */
 typedef struct _FILE_INTERNAL_INFORMATION
 {
     union
@@ -152,37 +162,65 @@ typedef struct _FILE_INTERNAL_INFORMATION
     };
 } FILE_INTERNAL_INFORMATION, *PFILE_INTERNAL_INFORMATION;
 
+/**
+ * The FILE_EA_INFORMATION structure is used to query for the size of the extended attributes (EA) for a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_ea_information
+ */
 typedef struct _FILE_EA_INFORMATION
 {
     ULONG EaSize;
 } FILE_EA_INFORMATION, *PFILE_EA_INFORMATION;
 
+/**
+ * The FILE_ACCESS_INFORMATION structure is used to query for or set the access rights of a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_access_information
+ */
 typedef struct _FILE_ACCESS_INFORMATION
 {
     ACCESS_MASK AccessFlags;
 } FILE_ACCESS_INFORMATION, *PFILE_ACCESS_INFORMATION;
 
+/**
+ * The FILE_POSITION_INFORMATION structure is used as an argument to routines that query or set file information.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_position_information
+ */
 typedef struct _FILE_POSITION_INFORMATION
 {
     LARGE_INTEGER CurrentByteOffset;
 } FILE_POSITION_INFORMATION, *PFILE_POSITION_INFORMATION;
 
+/**
+ * The FILE_MODE_INFORMATION structure is used to query or set the access mode of a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_mode_information
+ */
 typedef struct _FILE_MODE_INFORMATION
 {
     ULONG Mode;
 } FILE_MODE_INFORMATION, *PFILE_MODE_INFORMATION;
 
+/**
+ * The FILE_ALIGNMENT_INFORMATION structure is used to query or set the buffer alignment required by the underlying device.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_alignment_information
+ */
 typedef struct _FILE_ALIGNMENT_INFORMATION
 {
     ULONG AlignmentRequirement;
 } FILE_ALIGNMENT_INFORMATION, *PFILE_ALIGNMENT_INFORMATION;
 
+/**
+ * The FILE_NAME_INFORMATION structure is used to query or set the file name and/or new short name for a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_name_information
+ */
 typedef struct _FILE_NAME_INFORMATION
 {
     ULONG FileNameLength;
     _Field_size_bytes_(FileNameLength) WCHAR FileName[1];
 } FILE_NAME_INFORMATION, *PFILE_NAME_INFORMATION;
 
+/**
+ * The FILE_ALL_INFORMATION structure is used as a container for several FILE_XXX_INFORMATION structures.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_all_information
+ */
 typedef struct _FILE_ALL_INFORMATION
 {
     FILE_BASIC_INFORMATION BasicInformation;
@@ -196,6 +234,10 @@ typedef struct _FILE_ALL_INFORMATION
     FILE_NAME_INFORMATION NameInformation;
 } FILE_ALL_INFORMATION, *PFILE_ALL_INFORMATION;
 
+/**
+ * The FILE_NETWORK_OPEN_INFORMATION structure is used to query for information that is commonly needed when a file is opened across a network.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_network_open_information
+ */
 typedef struct _FILE_NETWORK_OPEN_INFORMATION
 {
     LARGE_INTEGER CreationTime;
@@ -207,17 +249,29 @@ typedef struct _FILE_NETWORK_OPEN_INFORMATION
     ULONG FileAttributes;
 } FILE_NETWORK_OPEN_INFORMATION, *PFILE_NETWORK_OPEN_INFORMATION;
 
+/**
+ * The FILE_ATTRIBUTE_TAG_INFORMATION structure is used to query for attribute and reparse tag information for a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_attribute_tag_information
+ */
 typedef struct _FILE_ATTRIBUTE_TAG_INFORMATION
 {
     ULONG FileAttributes;
     ULONG ReparseTag;
 } FILE_ATTRIBUTE_TAG_INFORMATION, *PFILE_ATTRIBUTE_TAG_INFORMATION;
 
+/**
+ * The FILE_ALLOCATION_INFORMATION structure is used to set the allocation size for a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_allocation_information
+ */
 typedef struct _FILE_ALLOCATION_INFORMATION
 {
     LARGE_INTEGER AllocationSize;
 } FILE_ALLOCATION_INFORMATION, *PFILE_ALLOCATION_INFORMATION;
 
+/**
+ * The FILE_COMPRESSION_INFORMATION structure describes the state of a compressed data buffer.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_compression_information
+ */
 typedef struct _FILE_COMPRESSION_INFORMATION
 {
     LARGE_INTEGER CompressedFileSize;
@@ -228,6 +282,10 @@ typedef struct _FILE_COMPRESSION_INFORMATION
     UCHAR Reserved[3];
 } FILE_COMPRESSION_INFORMATION, *PFILE_COMPRESSION_INFORMATION;
 
+/**
+ * The FILE_DISPOSITION_INFORMATION structure is used to mark a file for deletion.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_disposition_information
+ */
 #pragma push_macro("DeleteFile")
 typedef struct _FILE_DISPOSITION_INFORMATION
 {
@@ -235,6 +293,10 @@ typedef struct _FILE_DISPOSITION_INFORMATION
 } FILE_DISPOSITION_INFORMATION, *PFILE_DISPOSITION_INFORMATION;
 #pragma pop_macro("DeleteFile")
 
+/**
+ * The FILE_END_OF_FILE_INFORMATION structure is used to set end-of-file information for a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_end_of_file_information
+ */
 typedef struct _FILE_END_OF_FILE_INFORMATION
 {
     LARGE_INTEGER EndOfFile;
@@ -256,6 +318,10 @@ typedef struct _FILE_END_OF_FILE_INFORMATION_EX
 } FILE_END_OF_FILE_INFORMATION_EX, *PFILE_END_OF_FILE_INFORMATION_EX;
 //#endif
 
+/**
+ * The FILE_VALID_DATA_LENGTH_INFORMATION structure is used to set the valid data length information for a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_valid_data_length_information
+ */
 typedef struct _FILE_VALID_DATA_LENGTH_INFORMATION
 {
     LARGE_INTEGER ValidDataLength;
@@ -273,6 +339,10 @@ typedef struct _FILE_VALID_DATA_LENGTH_INFORMATION
 #define FILE_LINK_FORCE_RESIZE_SOURCE_SR                0x00000100
 #define FILE_LINK_FORCE_RESIZE_SR                       0x00000180
 
+/**
+ * The FILE_LINK_INFORMATION structure is used to create an NTFS hard link to an existing file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_link_information
+ */
 typedef struct _FILE_LINK_INFORMATION
 {
     BOOLEAN ReplaceIfExists;
@@ -297,6 +367,10 @@ typedef struct _FILE_MOVE_CLUSTER_INFORMATION
     _Field_size_bytes_(FileNameLength) WCHAR FileName[1];
 } FILE_MOVE_CLUSTER_INFORMATION, *PFILE_MOVE_CLUSTER_INFORMATION;
 
+/**
+ * The FILE_RENAME_INFORMATION structure is used to rename a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_rename_information
+ */
 typedef struct _FILE_RENAME_INFORMATION
 {
     BOOLEAN ReplaceIfExists;
@@ -317,6 +391,10 @@ typedef struct _FILE_RENAME_INFORMATION
 #define FILE_RENAME_FORCE_RESIZE_SOURCE_SR                  0x00000100
 #define FILE_RENAME_FORCE_RESIZE_SR                         0x00000180
 
+/**
+ * The FILE_RENAME_INFORMATION_EX structure is used to rename a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_rename_information
+ */
 typedef struct _FILE_RENAME_INFORMATION_EX
 {
     ULONG Flags;
@@ -325,6 +403,10 @@ typedef struct _FILE_RENAME_INFORMATION_EX
     _Field_size_bytes_(FileNameLength) WCHAR FileName[1];
 } FILE_RENAME_INFORMATION_EX, *PFILE_RENAME_INFORMATION_EX;
 
+/**
+ * The FILE_STREAM_INFORMATION structure contains information about a file stream.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_stream_information
+ */
 typedef struct _FILE_STREAM_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -341,18 +423,39 @@ typedef struct _FILE_TRACKING_INFORMATION
     _Field_size_bytes_(ObjectInformationLength) CHAR ObjectInformation[1];
 } FILE_TRACKING_INFORMATION, *PFILE_TRACKING_INFORMATION;
 
+/**
+ * The FILE_COMPLETION_INFORMATION structure contains the port handle and key for an I/O completion port created for a file handle.
+ *
+ * @remarks he FILE_COMPLETION_INFORMATION structure is used to replace the completion information for a port handle set in Port.
+ * Completion information is replaced with the ZwSetInformationFile routine with the FileInformationClass parameter set to FileReplaceCompletionInformation.
+ * The Port and Key members of FILE_COMPLETION_INFORMATION are set to their new values. To remove an existing completion port for a file handle, Port is set to NULL.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_completion_information
+ */
 typedef struct _FILE_COMPLETION_INFORMATION
 {
     HANDLE Port;
     PVOID Key;
 } FILE_COMPLETION_INFORMATION, *PFILE_COMPLETION_INFORMATION;
 
+/**
+ * The FILE_PIPE_INFORMATION structure contains information about a named pipe that is not specific to the local or the remote end of the pipe.
+ *
+ * @remarks If ReadMode is set to FILE_PIPE_BYTE_STREAM_MODE, any attempt to change it must fail with a STATUS_INVALID_PARAMETER error code.
+ * When CompletionMode is set to FILE_PIPE_QUEUE_OPERATION, if the pipe is connected to, read to, or written from,
+ * the operation is not completed until there is data to read, all data is written, or a client is connected.
+ * When CompletionMode is set to FILE_PIPE_COMPLETE_OPERATION, if the pipe is being connected to, read to, or written from, the operation is completed immediately.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_pipe_information
+ */
 typedef struct _FILE_PIPE_INFORMATION
 {
     ULONG ReadMode;
     ULONG CompletionMode;
 } FILE_PIPE_INFORMATION, *PFILE_PIPE_INFORMATION;
 
+/**
+ * The FILE_PIPE_LOCAL_INFORMATION structure contains information about the local end of a named pipe.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_pipe_local_information
+ */
 typedef struct _FILE_PIPE_LOCAL_INFORMATION
 {
     ULONG NamedPipeType;
@@ -367,12 +470,22 @@ typedef struct _FILE_PIPE_LOCAL_INFORMATION
     ULONG NamedPipeEnd;
 } FILE_PIPE_LOCAL_INFORMATION, *PFILE_PIPE_LOCAL_INFORMATION;
 
+/**
+ * The FILE_PIPE_REMOTE_INFORMATION structure contains information about the remote end of a named pipe.
+ *
+ * @remarks Remote information is not available for local pipes or for the server end of a remote pipe.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_pipe_remote_information
+ */
 typedef struct _FILE_PIPE_REMOTE_INFORMATION
 {
     LARGE_INTEGER CollectDataTime;
     ULONG MaximumCollectionCount;
 } FILE_PIPE_REMOTE_INFORMATION, *PFILE_PIPE_REMOTE_INFORMATION;
 
+/**
+ * The FILE_MAILSLOT_QUERY_INFORMATION structure contains information about a mailslot.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_mailslot_query_information
+ */
 typedef struct _FILE_MAILSLOT_QUERY_INFORMATION
 {
     ULONG MaximumMessageSize;
@@ -382,11 +495,19 @@ typedef struct _FILE_MAILSLOT_QUERY_INFORMATION
     LARGE_INTEGER ReadTimeout;
 } FILE_MAILSLOT_QUERY_INFORMATION, *PFILE_MAILSLOT_QUERY_INFORMATION;
 
+/**
+ * The FILE_MAILSLOT_SET_INFORMATION structure is used to set a value on a mailslot.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_mailslot_set_information
+ */
 typedef struct _FILE_MAILSLOT_SET_INFORMATION
 {
     PLARGE_INTEGER ReadTimeout;
 } FILE_MAILSLOT_SET_INFORMATION, *PFILE_MAILSLOT_SET_INFORMATION;
 
+/**
+ * The FILE_REPARSE_POINT_INFORMATION structure contains information about a reparse point.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_reparse_point_information
+ */
 typedef struct _FILE_REPARSE_POINT_INFORMATION
 {
     LONGLONG FileReference;
@@ -408,12 +529,20 @@ typedef struct _FILE_LINKS_INFORMATION
     FILE_LINK_ENTRY_INFORMATION Entry;
 } FILE_LINKS_INFORMATION, *PFILE_LINKS_INFORMATION;
 
+/**
+ * The FILE_NETWORK_PHYSICAL_NAME_INFORMATION structure contains information about the network physical name of a file.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_network_physical_name_information
+ */
 typedef struct _FILE_NETWORK_PHYSICAL_NAME_INFORMATION
 {
     ULONG FileNameLength;
     _Field_size_bytes_(FileNameLength) WCHAR FileName[1];
 } FILE_NETWORK_PHYSICAL_NAME_INFORMATION, *PFILE_NETWORK_PHYSICAL_NAME_INFORMATION;
 
+/**
+ * The FILE_STANDARD_LINK_INFORMATION structure contains standard information about a file link.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-file_standard_link_information
+ */
 typedef struct _FILE_STANDARD_LINK_INFORMATION
 {
     ULONG NumberOfAccessibleLinks;
@@ -449,11 +578,19 @@ typedef enum _IO_PRIORITY_HINT
     MaxIoPriorityTypes
 } IO_PRIORITY_HINT;
 
+/**
+ * The FILE_IO_PRIORITY_HINT_INFORMATION structure is used to query and set the default IRP priority hint for requests on the specified file handle.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_io_priority_hint_information
+ */
 typedef struct DECLSPEC_ALIGN(8) _FILE_IO_PRIORITY_HINT_INFORMATION
 {
     IO_PRIORITY_HINT PriorityHint;
 } FILE_IO_PRIORITY_HINT_INFORMATION, *PFILE_IO_PRIORITY_HINT_INFORMATION;
 
+/**
+ * The FILE_IO_PRIORITY_HINT_INFORMATION_EX structure is used to query and set the default IRP priority hint for requests on the specified file handle.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_io_priority_hint_information
+ */
 typedef struct _FILE_IO_PRIORITY_HINT_INFORMATION_EX
 {
     IO_PRIORITY_HINT PriorityHint;
@@ -477,6 +614,7 @@ typedef struct _FILE_PROCESS_IDS_USING_FILE_INFORMATION
 
 /**
  * The FILE_IS_REMOTE_DEVICE_INFORMATION structure indicates whether the file system that contains the file is a remote file system.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_is_remote_device_information
  */
 typedef struct _FILE_IS_REMOTE_DEVICE_INFORMATION
 {
@@ -615,6 +753,10 @@ typedef struct _FILE_VOLUME_NAME_INFORMATION
     ((FID128).Identifier[15] = (UCHAR)-1); \
 }
 
+/**
+ * The FILE_ID_INFORMATION structure is used to query file identification information.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-file_id_information
+ */
 typedef struct _FILE_ID_INFORMATION
 {
     ULONGLONG VolumeSerialNumber;
@@ -629,6 +771,10 @@ typedef struct _FILE_ID_INFORMATION
     };
 } FILE_ID_INFORMATION, *PFILE_ID_INFORMATION;
 
+/**
+ * The FILE_ID_EXTD_DIR_INFORMATION structure is used to query 128-bit file reference number information for the files in a directory.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-file_id_extd_dir_information
+ */
 typedef struct _FILE_ID_EXTD_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -838,6 +984,10 @@ typedef struct _FILE_STAT_BASIC_INFORMATION
 } FILE_STAT_BASIC_INFORMATION, *PFILE_STAT_BASIC_INFORMATION;
 #endif
 
+/**
+ * The FILE_MEMORY_PARTITION_INFORMATION structure is used to query information about a memory partition.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_memory_partition_information
+ */
 typedef struct _FILE_MEMORY_PARTITION_INFORMATION
 {
     HANDLE OwnerPartitionHandle;
@@ -1423,6 +1573,14 @@ NtSetInformationFile(
     _In_ ULONG Length,
     _In_ FILE_INFORMATION_CLASS FileInformationClass);
 
+/**
+ * The NtQueryAttributesFile function retrieves basic attributes for the specified file.
+ *
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that supplies the attributes to be used for the file object.
+ * @param FileInformation A pointer to a FILE_BASIC_INFORMATION structure to receive the returned file attribute information.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/ntqueryattributesfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1430,6 +1588,14 @@ NtQueryAttributesFile(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
     _Out_ PFILE_BASIC_INFORMATION FileInformation);
 
+/**
+ * The NtQueryFullAttributesFile function retrieves network open information for the specified file.
+ *
+ * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that supplies the attributes to be used for the file object.
+ * @param FileInformation A pointer to a FILE_NETWORK_OPEN_INFORMATION structure that receives the returned file attributes information.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwqueryfullattributesfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1535,6 +1701,8 @@ NtSetVolumeInformationFile(
     _In_reads_bytes_(Length) PVOID FsInformation,
     _In_ ULONG Length,
     _In_ FSINFOCLASS FsInformationClass);
+
+/* NtNotifyChangeDirectoryFile information */
 
 #define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001   // winnt
 #define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002   // winnt

@@ -385,6 +385,22 @@ NtCancelSynchronousIoFile(
     _Out_ PIO_STATUS_BLOCK IoStatusBlock);
 #endif
 
+/**
+ * The NtDeviceIoControlFile function sends a control code directly to a specified device driver, causing the corresponding driver to perform the specified operation.
+ *
+ * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
+ * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * @param IoControlCode IOCTL_XXX code that indicates which device I/O control operation is to be carried out on, usually by the underlying device driver.
+ * @param InputBuffer Pointer to a caller-allocated input buffer that contains device-specific information to be given to the target driver.
+ * @param InputBufferLength Size, in bytes, of the buffer at InputBuffer. This value is ignored if InputBuffer is NULL.
+ * @param OutputBuffer Pointer to a caller-allocated output buffer in which information is returned from the target driver.
+ * @param OutputBufferLength Size, in bytes, of the buffer at OutputBuffer. This value is ignored if OutputBuffer is NULL.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwdeviceiocontrolfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -400,6 +416,22 @@ NtDeviceIoControlFile(
     _Out_writes_bytes_opt_(OutputBufferLength) PVOID OutputBuffer,
     _In_ ULONG OutputBufferLength);
 
+/**
+ * The NtFsControlFile function sends a control code directly to a file system or filter driver, causing the corresponding driver to perform the specified action.
+ *
+ * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object. 
+ * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * @param FsControlCode FSCTL_XXX code that indicates which file system control operation is to be carried out.
+ * @param InputBuffer Pointer to a caller-allocated input buffer that contains device-specific information to be given to the target driver.
+ * @param InputBufferLength Size, in bytes, of the buffer at InputBuffer. This value is ignored if InputBuffer is NULL.
+ * @param OutputBuffer Pointer to a caller-allocated output buffer in which information is returned from the target driver.
+ * @param OutputBufferLength Size, in bytes, of the buffer at OutputBuffer. This value is ignored if OutputBuffer is NULL.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwfscontrolfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -415,6 +447,21 @@ NtFsControlFile(
     _Out_writes_bytes_opt_(OutputBufferLength) PVOID OutputBuffer,
     _In_ ULONG OutputBufferLength);
 
+/**
+ * The NtReadFile function reads data from an open file.
+ *
+ * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
+ * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * @param Buffer Pointer to a caller-allocated buffer that receives the data read from the file.
+ * @param Length The size, in bytes, of the buffer pointed to by Buffer.
+ * @param ByteOffset Pointer to a variable that specifies the starting byte offset in the file where the read operation will begin.
+ * @param Key Device and intermediate drivers should set this pointer to NULL.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwreadfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -429,6 +476,21 @@ NtReadFile(
     _In_opt_ PLARGE_INTEGER ByteOffset,
     _In_opt_ PULONG Key);
 
+/**
+ * The NtWriteFile function writes data to an open file.
+ *
+ * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
+ * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * @param Buffer Pointer to a caller-allocated buffer that contains the data to write to the file.
+ * @param Length The size, in bytes, of the buffer pointed to by Buffer.
+ * @param ByteOffset Pointer to a variable that specifies the starting byte offset in the file for beginning the write operation.
+ * @param Key Device and intermediate drivers should set this pointer to NULL.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwwritefile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
