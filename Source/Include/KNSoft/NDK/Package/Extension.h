@@ -3,7 +3,7 @@
 #pragma once
 
 #ifdef _KNSOFT_NDK_NO_EXTENSION
-#pragma message("KNSoft.NDK: Extension.h is included but _KNSOFT_NDK_NO_EXTENSION is defined.")
+#pragma message("KNSoft.NDK: Extension.h is included but _KNSOFT_NDK_NO_EXTENSION is defineded.")
 #endif
 
 #include "../NT/MinDef.h"

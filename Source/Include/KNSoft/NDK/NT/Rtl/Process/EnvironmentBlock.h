@@ -1747,6 +1747,8 @@ typedef struct _TEB32
     ULONGLONG ExtendedFeatureDisableMask;
 } TEB32, *PTEB32;
 
+#ifndef _KNSOFT_NDK_INLINE_IMPLEMENT
+
 NTSYSAPI
 PPEB
 NTAPI
@@ -1766,5 +1768,7 @@ NTSYSAPI
 LOGICAL
 NTAPI
 RtlTryAcquirePebLock(VOID);
+
+#endif
 
 EXTERN_C_END

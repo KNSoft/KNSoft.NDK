@@ -39,6 +39,11 @@
 #include "Package/Extension.h"
 #endif
 
+#if !defined(_KNSOFT_NDK_NO_EXTENSION) && defined(_KNSOFT_NDK_INLINE_IMPLEMENT)
+#include "NT/InlineImpl.inl"
+#include "Win32/InlineImpl.inl"
+#endif
+
 /* Sanity checks */
 C_ASSERT(__alignof(LARGE_INTEGER) == 8);
 C_ASSERT(__alignof(PROCESS_CYCLE_TIME_INFORMATION) == 8);

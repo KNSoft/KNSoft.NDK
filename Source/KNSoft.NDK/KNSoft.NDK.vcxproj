@@ -255,7 +255,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Include\KNSoft\NDK\NT\InlineImpl.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\InlineImpl.inl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
