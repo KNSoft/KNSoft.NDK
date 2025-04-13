@@ -211,7 +211,7 @@ _When_(Status >= 0, _Out_range_(==, 0))
 NTSYSAPI
 ULONG
 NTAPI
-RtlNtStatusToDosError(
+RtlNtStatusToDosErrorNoTeb(
     _In_ NTSTATUS Status);
 
 _When_(Status < 0, _Out_range_(>, 0))
@@ -219,7 +219,7 @@ _When_(Status >= 0, _Out_range_(==, 0))
 NTSYSAPI
 ULONG
 NTAPI
-RtlNtStatusToDosErrorNoTeb(
+RtlNtStatusToDosError(
     _In_ NTSTATUS Status);
 
 NTSYSAPI
@@ -235,12 +235,6 @@ RtlGetLastWin32Error(VOID);
 NTSYSAPI
 VOID
 NTAPI
-RtlSetLastWin32ErrorAndNtStatusFromNtStatus(
-    _In_ NTSTATUS Status);
-
-NTSYSAPI
-VOID
-NTAPI
 RtlSetLastWin32Error(
     _In_ ULONG Win32Error);
 
@@ -249,6 +243,17 @@ VOID
 NTAPI
 RtlRestoreLastWin32Error(
     _In_ ULONG Win32Error);
+
+NTSYSAPI
+VOID
+NTAPI
+RtlSetLastWin32ErrorAndNtStatusFromNtStatus(
+    _In_ NTSTATUS Status);
+
+/*
+ * Error code conversion (NOT translation) Win32 Error/NTSTATUS/HRESULT 
+ * HRESULT_FROM_WIN32 / NTSTATUS_FROM_WIN32 / HRESULT_FROM_NT
+ */
 
 #define RTL_ERRORMODE_FAILCRITICALERRORS 0x0010
 #define RTL_ERRORMODE_NOGPFAULTERRORBOX 0x0020

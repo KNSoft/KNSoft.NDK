@@ -1322,7 +1322,7 @@ typedef struct _TEB
     PVOID DeallocationStack;
 
     // Data for Thread Local Storage. (TlsGetValue)
-    PVOID TlsSlots[64];
+    PVOID TlsSlots[TLS_MINIMUM_AVAILABLE];
 
     LIST_ENTRY TlsLinks;
 
@@ -1502,7 +1502,7 @@ typedef struct _TEB64
     WCHAR StaticUnicodeBuffer[261];
     UCHAR Padding3[6];
     VOID* POINTER_64 DeallocationStack;
-    VOID* POINTER_64 TlsSlots[64];
+    VOID* POINTER_64 TlsSlots[TLS_MINIMUM_AVAILABLE];
     LIST_ENTRY64 TlsLinks;
     VOID* POINTER_64 Vdm;
     VOID* POINTER_64 ReservedForNtRpc;
@@ -1654,7 +1654,7 @@ typedef struct _TEB32
     UNICODE_STRING32 StaticUnicodeString;
     WCHAR StaticUnicodeBuffer[261];
     VOID* POINTER_32 DeallocationStack;
-    VOID* POINTER_32 TlsSlots[64];
+    VOID* POINTER_32 TlsSlots[TLS_MINIMUM_AVAILABLE];
     LIST_ENTRY32 TlsLinks;
     VOID* POINTER_32 Vdm;
     VOID* POINTER_32 ReservedForNtRpc;

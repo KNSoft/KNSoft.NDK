@@ -472,12 +472,21 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\KernelBase.h">
       <Filter>Win32\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinBase.h">
+      <Filter>Win32\Def</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">
       <Filter>Package</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="..\Include\KNSoft\NDK\NT\InlineImpl.inl">
+      <Filter>NT</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\InlineImpl.inl">
+      <Filter>Win32</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">

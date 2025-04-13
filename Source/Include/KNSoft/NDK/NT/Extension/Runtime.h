@@ -91,59 +91,6 @@ NtReadCurrentTebUlonglong(
 
 #pragma endregion
 
-#pragma region Error codes
-
-/* Gets or sets the last error */
-
-_Ret_range_(>, 0)
-FORCEINLINE
-ULONG
-NtGetLastError(VOID)
-{
-    ULONG Error;
-
-    Error = (ULONG)NtReadTeb(LastErrorValue);
-    _Analysis_assume_(Error > 0);
-    return Error;
-}
-
-FORCEINLINE
-VOID
-NtSetLastError(
-    _In_ ULONG Error)
-{
-    NtWriteTeb(LastErrorValue, Error);
-}
-
-/* Gets or sets the last status */
-
-_Ret_range_(<, 0)
-FORCEINLINE
-NTSTATUS
-NtGetLastStatus(VOID)
-{
-    NTSTATUS Status;
-
-    Status = (NTSTATUS)NtReadTeb(LastStatusValue);
-    _Analysis_assume_(Status < 0);
-    return Status;
-}
-
-FORCEINLINE
-VOID
-NtSetLastStatus(
-    _In_ NTSTATUS Status)
-{
-    NtWriteTeb(LastStatusValue, Status);
-}
-
-/*
- * Error code conversion (NOT translation) Win32 Error/NTSTATUS/HRESULT 
- * HRESULT_FROM_WIN32 / NTSTATUS_FROM_WIN32 / HRESULT_FROM_NT
- */
-
-#pragma endregion
-
 #pragma region Pseudo Handles
 
 #define NtCurrentProcess() ((HANDLE)(LONG_PTR)-1)

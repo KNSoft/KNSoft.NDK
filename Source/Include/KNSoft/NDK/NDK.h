@@ -13,6 +13,7 @@
 #define _WINSOCKAPI_ // Use WinSock2.h
 #include <Windows.h>
 
+#include "Win32/Def/WinBase.h"
 #include "Win32/Def/WinUser.h"
 #include "Win32/Def/CommCtrl.h"
 #include "Win32/Def/UxTheme.h"
@@ -38,6 +39,9 @@
 #ifndef _KNSOFT_NDK_NO_EXTENSION
 #include "Package/Extension.h"
 #endif
+
+#include "NT/InlineImpl.inl"
+#include "Win32/InlineImpl.inl"
 
 /* Sanity checks */
 C_ASSERT(__alignof(LARGE_INTEGER) == 8);
