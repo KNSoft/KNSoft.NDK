@@ -334,14 +334,12 @@ typedef __typeof__(nullptr) nullptr_t;
 #endif
 
 #if defined(__cplusplus)
-#define TYPE_OF decltype
-#elif _MSC_FULL_VER >= 193933428
-#define TYPE_OF __typeof__
+#define typeof decltype
+#elif __STDC_VERSION__ < 202311L && _MSC_FULL_VER >= 193933428
+#define typeof __typeof__
 #endif
 
-#if defined(TYPE_OF)
-#define FIELD_TYPE(type, field) TYPE_OF(((type*)NULL)->field)
-#endif
+#define FIELD_TYPE(type, field) typeof(((type*)NULL)->field)
 
 #pragma endregion
 
