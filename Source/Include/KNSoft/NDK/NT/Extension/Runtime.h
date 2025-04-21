@@ -6,10 +6,13 @@
 
 #pragma region TEB Fast Access (Without Pointer Reference)
 
+/* Read TEB */
+
 #if !defined(_WIN64)
 
 __forceinline
-unsigned __int64
+unsigned
+__int64
 NtReadCurrentTebUlonglong(
     unsigned int Offset)
 {
@@ -22,7 +25,6 @@ NtReadCurrentTebUlonglong(
 
 #endif
 
-#ifdef FIELD_TYPE
 #define NtReadTeb(m) ((FIELD_TYPE(TEB, m))(\
     FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtReadCurrentTebUlonglong(UFIELD_OFFSET(TEB, m)) : (\
         FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtReadCurrentTebUlong(UFIELD_OFFSET(TEB, m)) : (\
@@ -33,61 +35,107 @@ NtReadCurrentTebUlonglong(
         )\
     )\
 ))
-#else
-#define NtReadTeb(m) (\
-    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtReadCurrentTebUlonglong(UFIELD_OFFSET(TEB, m)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtReadCurrentTebUlong(UFIELD_OFFSET(TEB, m)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtReadCurrentTebUshort(UFIELD_OFFSET(TEB, m)) : (\
-                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtReadCurrentTebByte(UFIELD_OFFSET(TEB, m)) :\
-                    ((ULONGLONG)(NtCurrentTeb()->m))\
-            )\
-        )\
-    )\
-)
-#endif
 
+/* Write TEB */
+
+__forceinline
+void
+NtWriteCurrentTebByte(
+    unsigned int Offset,
+    unsigned char Value)
+{
 #if defined(_M_X64)
-
-#define NtWriteTeb(m, val) (\
-    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? __writegsqword(UFIELD_OFFSET(TEB, m), (ULONGLONG)(val)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writegsdword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writegsword(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
-                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writegsbyte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
-                    ((void)(NtCurrentTeb()->m = (val)))\
-            )\
-        )\
-    )\
-)
-
+    __writegsbyte
 #elif defined(_M_IX86)
-
-#define NtWriteTeb(m, val) (\
-    FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writefsdword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writefsword(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writefsbyte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
-                ((void)(NtCurrentTeb()->m = (val)))\
-        )\
-    )\
-)
-
+    __writefsbyte
 #elif defined(_M_ARM64) || defined(_M_ARM64EC)
+    __writex18byte
+#endif
+        (Offset, Value);
+}
+
+__forceinline
+void
+NtWriteCurrentTebUshort(
+    unsigned int Offset,
+    unsigned short Value)
+{
+#if defined(_M_X64)
+    __writegsword
+#elif defined(_M_IX86)
+    __writefsword
+#elif defined(_M_ARM64) || defined(_M_ARM64EC)
+    __writex18word
+#endif
+        (Offset, Value);
+}
+
+__forceinline
+void
+NtWriteCurrentTebUlong(
+    unsigned int Offset,
+    unsigned int Value
+    )
+{
+#if defined(_M_X64)
+    __writegsdword
+#elif defined(_M_IX86)
+    __writefsdword
+#elif defined(_M_ARM64) || defined(_M_ARM64EC)
+    __writex18dword
+#endif
+        (Offset, Value);
+}
+
+__forceinline
+void
+NtWriteCurrentTebUlonglong(
+    unsigned int Offset,
+    unsigned __int64 Value)
+{
+#if !defined(_WIN64)
+    ULARGE_INTEGER li;
+
+    li.QuadPart = Value;
+    NtWriteCurrentTebUlong(Offset, li.LowPart);
+    NtWriteCurrentTebUlong(Offset + sizeof(ULONG), li.HighPart);
+#else
+#if defined(_M_X64)
+    __writegsqword
+#elif defined(_M_IX86)
+    __writefsqword
+#elif defined(_M_ARM64) || defined(_M_ARM64EC)
+    __writex18qword
+#endif
+        (Offset, Value);
+#endif
+}
+
+#if defined(_WIN64)
+#define NtWriteCurrentTebUlongPtr NtWriteCurrentTebUlonglong
+#else
+#define NtWriteCurrentTebUlongPtr NtWriteCurrentTebUlong
+#endif
+
+__forceinline
+void
+NtWriteCurrentTebPVOID(
+    unsigned int Offset,
+    void* Value)
+{
+    NtWriteCurrentTebUlongPtr(Offset, (ULONG_PTR)Value);
+}
 
 #define NtWriteTeb(m, val) (\
-    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? __writex18qword(UFIELD_OFFSET(TEB, m), (ULONGLONG)(val)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? __writex18dword(UFIELD_OFFSET(TEB, m), (ULONG)(val)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? __writex18word(UFIELD_OFFSET(TEB, m), (USHORT)(val)) : (\
-                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? __writex18byte(UFIELD_OFFSET(TEB, m), (UCHAR)(val)) :\
+    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtWriteCurrentTebUlonglong(UFIELD_OFFSET(TEB, m), (ULONGLONG)(ULONG_PTR)(val)) : (\
+        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtWriteCurrentTebUlong(UFIELD_OFFSET(TEB, m), (ULONG)(ULONG_PTR)(val)) : (\
+            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtWriteCurrentTebUshort(UFIELD_OFFSET(TEB, m), (USHORT)(ULONG_PTR)(val)) : (\
+                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtWriteCurrentTebByte(UFIELD_OFFSET(TEB, m), (UCHAR)(ULONG_PTR)(val)) :\
                     ((void)(NtCurrentTeb()->m = (val)))\
             )\
         )\
     )\
 )
-
-#else
-
-#define NtWriteTeb(m, val) (NtCurrentTeb()->m = (val))
-
-#endif
 
 #pragma endregion
 
