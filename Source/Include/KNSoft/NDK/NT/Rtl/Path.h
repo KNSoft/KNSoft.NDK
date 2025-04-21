@@ -251,15 +251,15 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlDosApplyFileIsolationRedirection_Ustr(
-    _In_ ULONG                  Flags,
-    _In_ PUNICODE_STRING        OriginalName,
-    _In_ PUNICODE_STRING        Extension,
-    _In_opt_ PUNICODE_STRING    StaticString,
-    _In_opt_ PUNICODE_STRING    DynamicString,
-    _In_opt_ PUNICODE_STRING*   NewName,
-    _In_ PULONG                 NewFlags,
-    _In_ PSIZE_T                FileNameSize,
-    _In_ PSIZE_T                RequiredLength
+    _In_ ULONG Flags,
+    _In_ PCUNICODE_STRING OriginalName,
+    _In_ PCUNICODE_STRING Extension,
+    _In_opt_ PCUNICODE_STRING StaticString,
+    _In_opt_ PCUNICODE_STRING DynamicString,
+    _In_opt_ PCUNICODE_STRING* NewName,
+    _In_ PULONG NewFlags,
+    _In_ PSIZE_T FileNameSize,
+    _In_ PSIZE_T RequiredLength
 );
 
 NTSYSAPI
@@ -367,7 +367,7 @@ PWSTR
 NTAPI
 RtlGetNtSystemRoot(
     VOID
-    );
+);
 #endif
 
 NTSYSAPI
@@ -375,6 +375,6 @@ BOOLEAN
 NTAPI
 RtlAreLongPathsEnabled(
     VOID
-    );
+);
 
 EXTERN_C_END

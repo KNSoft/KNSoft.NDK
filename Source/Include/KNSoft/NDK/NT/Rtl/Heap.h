@@ -276,12 +276,12 @@ RtlDestroyHeap(
     _In_ _Post_invalid_ PVOID HeapHandle
 );
 
-NTSYSAPI
 _Success_(return != 0)
 _Must_inspect_result_
 _Ret_maybenull_
 _Post_writable_byte_size_(Size)
 __drv_allocatesMem(Mem)
+NTSYSAPI
 DECLSPEC_ALLOCATOR
 DECLSPEC_NOALIAS
 DECLSPEC_RESTRICT
@@ -356,12 +356,12 @@ RtlUnlockHeap(
     _In_ PVOID HeapHandle
 );
 
-NTSYSAPI
 _Success_(return != 0)
 _Must_inspect_result_
 _Ret_maybenull_
 _Post_writable_byte_size_(Size)
 _When_(Size > 0, __drv_allocatesMem(Mem))
+NTSYSAPI
 DECLSPEC_ALLOCATOR
 DECLSPEC_NOALIAS
 DECLSPEC_RESTRICT
@@ -447,7 +447,7 @@ RtlExtendHeap(
 );
 
 NTSYSAPI
-ULONG
+SIZE_T
 NTAPI
 RtlCompactHeap(
     _In_ PVOID HeapHandle,

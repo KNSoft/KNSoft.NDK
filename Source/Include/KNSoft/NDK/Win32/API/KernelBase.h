@@ -255,7 +255,7 @@ WINAPI
 GetCurrentPackageApplicationResourcesContext(
     _In_ ULONG Index,
     _Reserved_ ULONG_PTR Unused,
-    _Out_ PACKAGE_APPLICATION_CONTEXT_REFERENCE *PackageResourcesContext
+    _Out_ PACKAGE_RESOURCES_CONTEXT_REFERENCE *PackageResourcesContext
 );
 
 // rev
@@ -266,7 +266,7 @@ GetPackageApplicationResourcesContext(
     _In_ PVOID PackageInfoReference, // PACKAGE_INFO_REFERENCE
     _In_ ULONG Index,
     _Reserved_ ULONG_PTR Unused,
-    _Out_ PACKAGE_APPLICATION_CONTEXT_REFERENCE *PackageResourcesContext
+    _Out_ PACKAGE_RESOURCES_CONTEXT_REFERENCE *PackageResourcesContext
 );
 
 // rev
@@ -274,10 +274,11 @@ WINBASEAPI
 LONG
 WINAPI
 GetPackageResourcesProperty(
-    _In_ PACKAGE_APPLICATION_CONTEXT_REFERENCE PackageResourcesContext,
+    _In_ PACKAGE_RESOURCES_CONTEXT_REFERENCE PackageResourcesContext,
     _In_ PackageResourcesProperty PropertyId,
     _Inout_ PULONG BufferSize,
-    _Out_writes_bytes_(BufferSize) PVOID Buffer
+    _Out_writes_bytes_(BufferSize) PVOID Buffer,
+    _Out_opt_ PULONG Flags
 );
 
 //

@@ -1192,6 +1192,96 @@ struct _TEB_ACTIVE_FRAME32
     TEB_ACTIVE_FRAME_CONTEXT32* POINTER_32 Context;
 };
 
+
+#define OLETLSF_LOCALTID 0x01 // This TID is in the current process.
+#define OLETLSF_UUIDINITIALIZED 0x02 // This Logical thread is init'd.
+#define OLETLSF_INTHREADDETACH 0x04 // This is in thread detach.
+#define OLETLSF_CHANNELTHREADINITIALZED 0x08,// This channel has been init'd
+#define OLETLSF_WOWTHREAD 0x10 // This thread is a 16-bit WOW thread.
+#define OLETLSF_THREADUNINITIALIZING 0x20 // This thread is in CoUninitialize.
+#define OLETLSF_DISABLE_OLE1DDE 0x40 // This thread can't use a DDE window.
+#define OLETLSF_APARTMENTTHREADED 0x80 // This is an STA apartment thread
+#define OLETLSF_MULTITHREADED 0x100 // This is an MTA apartment thread
+#define OLETLSF_IMPERSONATING 0x200 // This thread is impersonating
+#define OLETLSF_DISABLE_EVENTLOGGER 0x400 // Prevent recursion in event logger
+#define OLETLSF_INNEUTRALAPT 0x800 // This thread is in the NTA
+#define OLETLSF_DISPATCHTHREAD 0x1000 // This is a dispatch thread
+#define OLETLSF_HOSTTHREAD 0x2000 // This is a host thread
+#define OLETLSF_ALLOWCOINIT 0x4000 // This thread allows inits
+#define OLETLSF_PENDINGUNINIT 0x8000 // This thread has pending uninit
+#define OLETLSF_FIRSTMTAINIT 0x10000,// First thread to attempt an MTA init
+#define OLETLSF_FIRSTNTAINIT 0x20000,// First thread to attempt an NTA init
+#define OLETLSF_APTINITIALIZING 0x40000 // Apartment Object is initializing
+#define OLETLSF_UIMSGSINMODALLOOP 0x80000,
+#define OLETLSF_MARSHALING_ERROR_OBJECT 0x100000 // since WIN8
+#define OLETLSF_WINRT_INITIALIZE 0x200000 // This thread called RoInitialize
+#define OLETLSF_APPLICATION_STA 0x400000,
+#define OLETLSF_IN_SHUTDOWN_CALLBACKS 0x800000,
+#define OLETLSF_POINTER_INPUT_BLOCKED 0x1000000,
+#define OLETLSF_IN_ACTIVATION_FILTER 0x2000000 // since WINBLUE
+#define OLETLSF_ASTATOASTAEXEMPT_QUIRK 0x4000000,
+#define OLETLSF_ASTATOASTAEXEMPT_PROXY 0x8000000,
+#define OLETLSF_ASTATOASTAEXEMPT_INDOUBT 0x10000000,
+#define OLETLSF_DETECTED_USER_INITIALIZED 0x20000000 // since RS3
+#define OLETLSF_BRIDGE_STA 0x40000000 // since RS5
+#define OLETLSF_NAINITIALIZING 0x80000000UL // since 19H1
+
+// private
+typedef struct _OLE_TLS_DATA
+{
+    PVOID ThreadBase;
+    PVOID SmAllocator;
+    ULONG ApartmentID;
+    ULONG Flags; // OLETLSF_*
+    LONG TlsMapIndex;
+    PVOID *TlsSlot;
+    ULONG ComInits;
+    ULONG OleInits;
+    ULONG Calls;
+    PVOID ServerCall; // previously CallInfo (before TH1)
+    PVOID CallObjectCache; // previously FreeAsyncCall (before TH1)
+    PVOID ContextStack; // previously FreeClientCall (before TH1)
+    PVOID ObjServer;
+    ULONG TIDCaller;
+    // ... (other fields are version-dependant)
+} OLE_TLS_DATA, *POLE_TLS_DATA;
+
+typedef struct _OLE_TLS_DATA64
+{
+    VOID* POINTER_64 ThreadBase;
+    VOID* POINTER_64 SmAllocator;
+    ULONG ApartmentID;
+    ULONG Flags;
+    LONG TlsMapIndex;
+    PVOID64* POINTER_64 TlsSlot;
+    ULONG ComInits;
+    ULONG OleInits;
+    ULONG Calls;
+    VOID* POINTER_64 ServerCall;
+    VOID* POINTER_64 CallObjectCache;
+    VOID* POINTER_64 ContextStack;
+    VOID* POINTER_64 ObjServer;
+    ULONG TIDCaller;
+} OLE_TLS_DATA64, *POLE_TLS_DATA64;
+
+typedef struct _OLE_TLS_DATA32
+{
+    VOID* POINTER_32 ThreadBase;
+    VOID* POINTER_32 SmAllocator;
+    ULONG ApartmentID;
+    ULONG Flags;
+    LONG TlsMapIndex;
+    PVOID32* POINTER_32 TlsSlot;
+    ULONG ComInits;
+    ULONG OleInits;
+    ULONG Calls;
+    VOID* POINTER_32 ServerCall;
+    VOID* POINTER_32 CallObjectCache;
+    VOID* POINTER_32 ContextStack;
+    VOID* POINTER_32 ObjServer;
+    ULONG TIDCaller;
+} OLE_TLS_DATA32, *POLE_TLS_DATA32;
+
 /**
  * Thread Environment Block (TEB) structure.
  *
@@ -1373,8 +1463,8 @@ typedef struct _TEB
 
     PVOID ReservedForPerf;
 
-    // tagSOleTlsData
-    PVOID ReservedForOle;
+    // Per-thread COM/OLE state
+    POLE_TLS_DATA ReservedForOle;
 
     ULONG WaitingOnLoaderLock;
     PVOID SavedPriorityState;
@@ -1534,7 +1624,7 @@ typedef struct _TEB64
     ULONG GuaranteedStackBytes;
     UCHAR Padding5[4];
     VOID* POINTER_64 ReservedForPerf;
-    VOID* POINTER_64 ReservedForOle;
+    OLE_TLS_DATA64* POINTER_64 ReservedForOle;
     ULONG WaitingOnLoaderLock;
     UCHAR Padding6[4];
     VOID* POINTER_64 SavedPriorityState;
@@ -1684,7 +1774,7 @@ typedef struct _TEB32
     };
     ULONG GuaranteedStackBytes;
     VOID* POINTER_32 ReservedForPerf;
-    VOID* POINTER_32 ReservedForOle;
+    OLE_TLS_DATA32* POINTER_32 ReservedForOle;
     ULONG WaitingOnLoaderLock;
     VOID* POINTER_32 SavedPriorityState;
     ULONG ReservedForCodeCoverage;

@@ -527,7 +527,7 @@ typedef enum _VIRTUAL_MEMORY_INFORMATION_CLASS
     VmCfgCallTargetInformation, // CFG_CALL_TARGET_LIST_INFORMATION // REDSTONE2
     VmPageDirtyStateInformation, // MEMORY_PAGE_DIRTY_STATE_INFORMATION // REDSTONE3
     VmImageHotPatchInformation, // 19H1
-    VmPhysicalContiguityInformation, // 20H1 // (requires SeLockMemoryPrivilege)
+    VmPhysicalContiguityInformation, // MEMORY_PHYSICAL_CONTIGUITY_INFORMATION // 20H1 // (requires SeLockMemoryPrivilege)
     VmVirtualMachinePrepopulateInformation,
     VmRemoveFromWorkingSetInformation, // MEMORY_REMOVE_WORKING_SET_INFORMATION
     MaxVmInfoClass

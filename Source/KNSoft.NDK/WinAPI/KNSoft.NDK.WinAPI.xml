@@ -21,7 +21,7 @@
       <Export Name="GetPackageResourcesContext" CallConv="__stdcall" Arg="ptr int ptr ptr" />
       <Export Name="GetCurrentPackageApplicationResourcesContext" CallConv="__stdcall" Arg="int ptr ptr" />
       <Export Name="GetPackageApplicationResourcesContext" CallConv="__stdcall" Arg="ptr int ptr ptr" />
-      <Export Name="GetPackageResourcesProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+      <Export Name="GetPackageResourcesProperty" CallConv="__stdcall" Arg="ptr int ptr ptr ptr" />
       <Export Name="GetCurrentPackageSecurityContext" CallConv="__stdcall" Arg="ptr ptr" />
       <Export Name="GetPackageSecurityContext" CallConv="__stdcall" Arg="ptr ptr ptr" />
       <Export Name="GetPackageSecurityProperty" CallConv="__stdcall" Arg="ptr int ptr ptr" />

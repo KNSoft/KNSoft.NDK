@@ -134,9 +134,19 @@ RtlGetInterruptTimePrecise(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 NTSYSAPI
-BOOLEAN
+ULONGLONG
 NTAPI
 RtlQueryUnbiasedInterruptTime(
+    _Out_ PLARGE_INTEGER InterruptTime
+);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN11_GE)
+// rev
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlQueryUnbiasedInterruptTimePrecise(
     _Out_ PLARGE_INTEGER InterruptTime
 );
 #endif

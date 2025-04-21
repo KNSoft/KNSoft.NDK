@@ -3,6 +3,7 @@
 #include "../../MinDef.h"
 #include "../../Ps/Basic.h"
 #include "../../Mm/Info.h"
+#include "../../Ex/SysInfo.h"
 
 #include <minwinbase.h>
 
@@ -115,7 +116,7 @@ RtlCreateProcessParametersWithTemplate(
     _In_opt_ PUNICODE_STRING RuntimeData,
     _In_opt_ PUNICODE_STRING RedirectionDllName,
     _In_ ULONG Flags // pass RTL_USER_PROC_PARAMS_NORMALIZED to keep parameters normalized
-    );
+);
 #endif
 
 NTSYSAPI
@@ -145,6 +146,22 @@ typedef struct _RTL_USER_PROCESS_INFORMATION
     SECTION_IMAGE_INFORMATION ImageInformation;
 } RTL_USER_PROCESS_INFORMATION, *PRTL_USER_PROCESS_INFORMATION;
 
+/**
+ * Creates a new process and its primary thread. The new process runs in the security context of the calling process.
+ *
+ * @param NtImagePathName The path of the image to be executed.
+ * @param ExtendedParameters Reserved
+ * @param ProcessParameters The process parameter information.
+ * @param ProcessSecurityDescriptor The security descriptor for the new process. If NULL, the process gets a default security descriptor.
+ * @param ThreadSecurityDescriptor The security descriptor for the initial thread. If NULL, the thread gets a default security descriptor.
+ * @param ParentProcess The handle of a process to use (instead of the calling process) as the parent for the process being created.
+ * @param InheritHandles If this parameter is TRUE, each inheritable handle in the calling process is inherited by the new process.
+ * @param DebugPort The handle of an ALPC port for debug messages. If NULL, the process gets a default port. (WindowsErrorReportingServicePort)
+ * @param TokenHandle The handle of a Token to use as the security context.
+ * @param ProcessInformation The user process information.
+ * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -198,6 +215,16 @@ RtlExitUserProcess(
 #define RTL_CLONE_PROCESS_FLAGS_INHERIT_HANDLES     0x00000002
 #define RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE      0x00000004 // don't update synchronization objects
 
+/**
+ * Creates a new process from the current process.
+ *
+ * @param ProcessFlags The path of the image to be executed.
+ * @param ProcessSecurityDescriptor The security descriptor for the new process. If NULL, the process gets a default security descriptor.
+ * @param ThreadSecurityDescriptor The security descriptor for the initial thread. If NULL, the thread gets a default security descriptor.
+ * @param DebugPort The handle of an ALPC port for debug messages. If NULL, the process gets a default port. (WindowsErrorReportingServicePort)
+ * @param ProcessInformation The new process information.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -213,7 +240,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlPrepareForProcessCloning(VOID);
-    
+
 // rev
 NTSYSAPI
 NTSTATUS
@@ -445,5 +472,30 @@ NTSYSAPI
 USHORT
 NTAPI
 RtlGetCurrentThreadPrimaryGroup(VOID);
+
+#if (NTDDI_VERSION >= NTDDI_WIN11_GE)
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryProcessAvailableCpus(
+    _In_ HANDLE ProcessHandle,
+    _In_ PKAFFINITY_EX Affinity,
+    _In_ ULONG64 ObservedSequenceNumber,
+    _Out_opt_ PULONG64 SequenceNumber
+);
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryProcessAvailableCpusCount(
+    _In_ HANDLE ProcessHandle,
+    _Out_ PULONG AvailableCpusCount,
+    _Out_opt_ PULONG64 SequenceNumber
+);
+
+#endif
 
 EXTERN_C_END

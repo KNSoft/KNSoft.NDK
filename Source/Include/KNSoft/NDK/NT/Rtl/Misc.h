@@ -275,7 +275,7 @@ RtlEncodeRemotePointer(
  *
  * @param ProcessHandle Handle to the remote process that owns the pointer.
  * @param Pointer The pointer to be decoded.
- * @param EncodedPointer The decoded pointer.
+ * @param DecodedPointer The decoded pointer.
  * @return HRESULT Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/previous-versions/dn877133(v=vs.85)
  */
@@ -472,6 +472,16 @@ typedef struct _PS_PKG_CLAIM
     ULONG Flags;  // PSM_ACTIVATION_TOKEN_*
     ULONG Origin; // PackageOrigin
 } PS_PKG_CLAIM, *PPS_PKG_CLAIM;
+
+// private // WIN://BGKD
+typedef enum _PSM_ACTIVATE_BACKGROUND_TYPE
+{
+  PsmActNotBackground = 0,
+  PsmActMixedHost = 1,
+  PsmActPureHost = 2,
+  PsmActSystemHost = 3,
+  PsmActInvalidType = 4,
+} PSM_ACTIVATE_BACKGROUND_TYPE;
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 NTSYSAPI
@@ -735,6 +745,16 @@ RtlDeregisterWait(
 
 #define RTL_WAITER_DEREGISTER_WAIT_FOR_COMPLETION ((HANDLE)(LONG_PTR)-1)
 
+/**
+ * Releases all resources used by a wait object.
+ *
+ * @param WaitHandle The access mask that specifies the granted access rights.
+ * @param CompletionEvent Optional completion event for wait callback completion.
+ * @remarks RTL_WAITER_DEREGISTER_WAIT_FOR_COMPLETION: blocking wait for wait callback completion.
+ * NULL: non-blocking wait for wait callback completion.
+ * EventHandle: caller wait for wait callback completion.
+ * @return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

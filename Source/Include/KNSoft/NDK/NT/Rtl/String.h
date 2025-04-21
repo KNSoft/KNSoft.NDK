@@ -6,7 +6,7 @@
 
 EXTERN_C_START
 
-/* phnt */
+/* phnt & wdm.h */
 
 NTSYSAPI
 VOID
@@ -41,6 +41,71 @@ RtlInitAnsiStringEx(
     _Out_ PANSI_STRING DestinationString,
     _In_opt_z_ PCSZ SourceString
 );
+
+_At_(UnicodeString->Buffer, _Post_equal_to_(Buffer))
+_At_(UnicodeString->Length, _Post_equal_to_(0))
+_At_(UnicodeString->MaximumLength, _Post_equal_to_(BufferSize))
+FORCEINLINE
+VOID
+RtlInitEmptyUnicodeString(
+    _Out_ PUNICODE_STRING UnicodeString,
+    _Writable_bytes_(BufferSize)
+    _When_(BufferSize != 0, _Notnull_)
+    __drv_aliasesMem PWCHAR Buffer,
+    _In_ USHORT BufferSize
+    )
+{
+    memset(UnicodeString, 0, sizeof(*UnicodeString));
+    UnicodeString->MaximumLength = BufferSize;
+    UnicodeString->Buffer = Buffer;
+}
+
+_At_(AnsiString->Buffer, _Post_equal_to_(Buffer))
+_At_(AnsiString->Length, _Post_equal_to_(0))
+_At_(AnsiString->MaximumLength, _Post_equal_to_(BufferSize))
+FORCEINLINE
+VOID
+RtlInitEmptyAnsiString(
+    _Out_ PANSI_STRING AnsiString,
+    _Pre_maybenull_ _Pre_readable_size_(BufferSize) __drv_aliasesMem PCHAR Buffer,
+    _In_ USHORT BufferSize
+    )
+{
+    memset(AnsiString, 0, sizeof(*AnsiString));
+    AnsiString->MaximumLength = BufferSize;
+    AnsiString->Buffer = Buffer;
+}
+
+#pragma prefast(push)
+#pragma prefast(disable : 6101, "Out parameter is not written fully or at all.")
+
+FORCEINLINE
+VOID
+RtlSanitizeUnicodeStringPadding(
+    _Out_ PUNICODE_STRING String
+    )
+{
+#if defined(_WIN64)
+
+    ULONG PaddingSize;
+    ULONG PaddingStart;
+
+    PaddingStart = FIELD_OFFSET(UNICODE_STRING, MaximumLength) +
+                   sizeof(String->MaximumLength);
+
+    PaddingSize = FIELD_OFFSET(UNICODE_STRING, Buffer) - PaddingStart;
+
+    memset((PCH)String + PaddingStart, 0, PaddingSize);
+
+#else
+
+    UNREFERENCED_PARAMETER(String);
+
+#endif
+
+}
+
+#pragma prefast(pop)
 
 NTSYSAPI
 VOID

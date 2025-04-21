@@ -305,6 +305,7 @@ MAKE_NTSTATUS(
 
 typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
 typedef DOUBLE *PDOUBLE;
+typedef void * POINTER_32 PVOID32;
 
 #define MAKEDWORD(l, h) ((DWORD)(((WORD)(((DWORD_PTR)(l)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(h)) & 0xffff))) << 16))
 #define MAKEQWORD(l, h) ((QWORD)(((DWORD)(((DWORD_PTR)(l)) & 0xffffffff)) | ((QWORD)((DWORD)(((DWORD_PTR)(h)) & 0xffffffff))) << 32))

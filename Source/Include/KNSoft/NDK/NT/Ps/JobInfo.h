@@ -87,10 +87,23 @@ typedef struct _JOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION
     PROCESS_ENERGY_VALUES EnergyValues;
 } JOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION, *PJOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION;
 
+// private
+typedef enum _PS_WAKE_REASON
+{
+    PsWakeReasonUser = 0,
+    PsWakeReasonExecutionRequired = 1,
+    PsWakeReasonKernel = 2,
+    PsWakeReasonInstrumentation = 3,
+    PsWakeReasonPreserveProcess = 4,
+    PsWakeReasonActivityReference = 5,
+    PsWakeReasonWorkOnBehalf = 6,
+    PsMaxWakeReasons = 7,
+} PS_WAKE_REASON, *PPS_WAKE_REASON;
+
 typedef struct _JOBOBJECT_WAKE_INFORMATION
 {
     HANDLE NotificationChannel;
-    ULONG64 WakeCounters[7];
+    ULONG64 WakeCounters[PsMaxWakeReasons];
 } JOBOBJECT_WAKE_INFORMATION, *PJOBOBJECT_WAKE_INFORMATION;
 
 typedef struct _JOBOBJECT_WAKE_INFORMATION_V1

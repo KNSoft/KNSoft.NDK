@@ -2,6 +2,7 @@
 
 #include "../MinDef.h"
 #include "../Ke/Ke.h"
+#include "JobInfo.h"
 
 EXTERN_C_START
 
@@ -154,7 +155,7 @@ typedef enum _THREADINFOCLASS
     ThreadAmILastThread, // q: ULONG
     ThreadIdealProcessor, // s: ULONG
     ThreadPriorityBoost, // qs: ULONG
-    ThreadSetTlsArrayAddress, // s: ULONG_PTR // Obsolete
+    ThreadSetTlsArrayAddress, // s: ULONG_PTR
     ThreadIsIoPending, // q: ULONG
     ThreadHideFromDebugger, // q: BOOLEAN; s: void
     ThreadBreakOnTermination, // qs: ULONG
@@ -183,7 +184,7 @@ typedef enum _THREADINFOCLASS
     ThreadActualGroupAffinity, // q: GROUP_AFFINITY // since THRESHOLD2
     ThreadDynamicCodePolicyInfo, // q: ULONG; s: ULONG (NtCurrentThread)
     ThreadExplicitCaseSensitivity, // qs: ULONG; s: 0 disables, otherwise enables // (requires SeDebugPrivilege and PsProtectedSignerAntimalware)
-    ThreadWorkOnBehalfTicket, // RTL_WORK_ON_BEHALF_TICKET_EX
+    ThreadWorkOnBehalfTicket, // ALPC_WORK_ON_BEHALF_TICKET // RTL_WORK_ON_BEHALF_TICKET_EX // NtCurrentThread
     ThreadSubsystemInformation, // q: SUBSYSTEM_INFORMATION_TYPE // since REDSTONE2
     ThreadDbgkWerReportActive, // s: ULONG; s: 0 disables, otherwise enables
     ThreadAttachContainer, // s: HANDLE (job object) // NtCurrentThread
@@ -1054,13 +1055,11 @@ typedef struct _WIN32K_SYSCALL_FILTER
     ULONG FilterSet;
 } WIN32K_SYSCALL_FILTER, *PWIN32K_SYSCALL_FILTER;
 
-typedef struct _JOBOBJECT_WAKE_FILTER *PJOBOBJECT_WAKE_FILTER; // from ntpsapi.h
-
 typedef struct _PROCESS_WAKE_INFORMATION
 {
     ULONGLONG NotificationChannel;
-    ULONG WakeCounters[7];
-    PJOBOBJECT_WAKE_FILTER WakeFilter;
+    ULONG WakeCounters[PsMaxWakeReasons];
+    JOBOBJECT_WAKE_FILTER WakeFilter;
 } PROCESS_WAKE_INFORMATION, *PPROCESS_WAKE_INFORMATION;
 
 typedef struct _PROCESS_ENERGY_TRACKING_STATE
@@ -1221,6 +1220,15 @@ typedef struct _PROCESS_TEB_VALUE_INFORMATION
     ULONG TebOffset;
     ULONG_PTR Value;
 } PROCESS_TEB_VALUE_INFORMATION, *PPROCESS_TEB_VALUE_INFORMATION;
+
+// rev
+typedef struct _PROCESS_AVAILABLE_CPUS_INFORMATION
+{
+    ULONG64 ObservedSequenceNumber;
+    ULONG64 SequenceNumber;
+    ULONG AvailableCpusCount;
+    PKAFFINITY_EX Affinity;
+} PROCESS_AVAILABLE_CPUS_INFORMATION, *PPROCESS_AVAILABLE_CPUS_INFORMATION;
 
 NTSYSCALLAPI
 NTSTATUS

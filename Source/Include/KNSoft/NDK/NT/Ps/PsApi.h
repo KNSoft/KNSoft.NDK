@@ -1871,6 +1871,7 @@ PssNtFreeSnapshot(
 /**
  * Frees a snapshot.
  * 
+ * @param ProcessHandle A handle to the process that contains the snapshot. The handle must have PROCESS_VM_READ, PROCESS_VM_OPERATION, and PROCESS_DUP_HANDLE rights.
  * @param SnapshotHandle Handle to the snapshot to free.
  * @return NTSTATUS Successful or errant status.
  */

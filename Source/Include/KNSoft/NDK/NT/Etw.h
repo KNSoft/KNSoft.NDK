@@ -6000,7 +6000,7 @@ NtTraceEvent(
 // private
 typedef struct _TELEMETRY_COVERAGE_POINT
 {
-    PWSTR Name;
+    PSTR Name;
     ULONG Hash;
     ULONG LastCoveredRound;
     ULONG Flags;
