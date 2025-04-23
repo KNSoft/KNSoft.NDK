@@ -481,11 +481,27 @@
       <Filter>Package</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="..\Include\KNSoft\NDK\NT\InlineImpl.inl">
+    <None Include="..\Include\KNSoft\NDK\NT\NT.inl">
       <Filter>NT</Filter>
     </None>
-    <None Include="..\Include\KNSoft\NDK\Win32\InlineImpl.inl">
-      <Filter>Win32</Filter>
+    <None Include="..\Include\KNSoft\NDK\NDK.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.inl">
+      <Filter>Win32\API</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Process\EnvironmentBlock.inl">
+      <Filter>NT\Rtl\Process</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\ErrorHandling.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Misc.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\DataStructures\Bitmap.inl">
+      <Filter>NT\Rtl\DataStructures</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\String.inl">
+      <Filter>NT\Rtl</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

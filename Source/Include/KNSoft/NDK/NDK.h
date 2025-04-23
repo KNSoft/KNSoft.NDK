@@ -40,9 +40,6 @@
 #include "Package/Extension.h"
 #endif
 
-#include "NT/InlineImpl.inl"
-#include "Win32/InlineImpl.inl"
-
 /* Sanity checks */
 C_ASSERT(__alignof(LARGE_INTEGER) == 8);
 C_ASSERT(__alignof(PROCESS_CYCLE_TIME_INFORMATION) == 8);

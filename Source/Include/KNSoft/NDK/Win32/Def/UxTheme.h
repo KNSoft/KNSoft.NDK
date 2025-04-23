@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "../../NT/MinDef.h"
+
 #define UXTHEME_ATOM_SUBIDLIST  ((ATOM)0xA910) // #43280
 #define UXTHEME_ATOM_SUBAPPNAME ((ATOM)0xA911) // #43281
 

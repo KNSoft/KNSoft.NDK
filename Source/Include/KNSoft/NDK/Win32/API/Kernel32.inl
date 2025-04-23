@@ -1,18 +1,9 @@
-﻿/* KNSoft.NDK inline implementations */
+﻿#pragma once
 
-#pragma once
-
-#ifdef _KNSOFT_NDK_NO_EXTENSION
-#errro("KNSoft.NDK: InlineImpl.inl conflicts with _KNSOFT_NDK_NO_EXTENSION.")
-#endif
-
-#include "../NT/NT.h"
-
-#include "../NT/InlineImpl.inl"
+#include "../../NDK.h"
+#include "../../NT/NT.inl"
 
 EXTERN_C_START
-
-/* Kernel32.dll / KernelBase.dll */
 
 #pragma region Internal functions
 
@@ -236,14 +227,12 @@ _Inline_TlsSetValue(
     _In_ DWORD dwTlsIndex,
     _In_opt_ LPVOID lpTlsValue)
 {
-    PVOID* Slots;
-
     if (dwTlsIndex < TLS_MINIMUM_AVAILABLE)
     {
         NtWriteTeb(TlsSlots[dwTlsIndex], lpTlsValue);
     } else if (dwTlsIndex < TLS_MINIMUM_AVAILABLE + TLS_EXPANSION_SLOTS)
     {
-        Slots = NtReadTeb(TlsExpansionSlots);
+        PVOID* Slots = NtReadTeb(TlsExpansionSlots);
         if (Slots == NULL)
         {
             Slots = (PVOID*)RtlAllocateHeap(NtGetProcessHeap(), HEAP_ZERO_MEMORY, TLS_EXPANSION_SLOTS * sizeof(PVOID));
@@ -272,7 +261,7 @@ _Inline_TlsGetValue(
 
     if (dwTlsIndex < TLS_MINIMUM_AVAILABLE)
     {
-        Value = NtReadTeb(TlsSlots[dwTlsIndex]);
+        Value = NtReadCurrentTebPVOID(FIELD_OFFSET(TEB, TlsSlots) + dwTlsIndex * sizeof(PVOID));
     } else if (dwTlsIndex < TLS_MINIMUM_AVAILABLE + TLS_EXPANSION_SLOTS)
     {
         PVOID* Slots = NtReadTeb(TlsExpansionSlots);
@@ -333,6 +322,67 @@ _Inline_FlsFree(
 #pragma endregion
 
 #pragma region Heap
+
+__inline
+HANDLE
+WINAPI
+_Inline_GetProcessHeap(VOID)
+{
+    return NtGetProcessHeap();
+}
+
+__inline
+_Ret_maybenull_
+_Post_writable_byte_size_(dwBytes)
+DECLSPEC_ALLOCATOR
+LPVOID
+WINAPI
+_Inline_HeapAlloc(
+    _In_ HANDLE hHeap,
+    _In_ DWORD dwFlags,
+    _In_ SIZE_T dwBytes)
+{
+    return RtlAllocateHeap(hHeap, dwFlags, dwBytes);
+}
+
+__inline
+_Success_(return != 0)
+_Ret_maybenull_
+_Post_writable_byte_size_(dwBytes)
+DECLSPEC_ALLOCATOR
+LPVOID
+WINAPI
+_Inline_HeapReAlloc(
+    _Inout_ HANDLE hHeap,
+    _In_ DWORD dwFlags,
+    _Frees_ptr_opt_ LPVOID lpMem,
+    _In_ SIZE_T dwBytes)
+{
+    return RtlReAllocateHeap(hHeap, dwFlags, lpMem, dwBytes);
+}
+
+__inline
+_Success_(return != FALSE)
+BOOL
+WINAPI
+_Inline_HeapFree(
+    _Inout_ HANDLE hHeap,
+    _In_ DWORD dwFlags,
+    __drv_freesMem(Mem) _Frees_ptr_opt_ LPVOID lpMem)
+{
+    return RtlFreeHeap(hHeap, dwFlags, lpMem);
+}
+
+__inline
+SIZE_T
+WINAPI
+_Inline_HeapSize(
+    _In_ HANDLE hHeap,
+    _In_ DWORD dwFlags,
+    _In_ LPCVOID lpMem)
+{
+    return RtlSizeHeap(hHeap, dwFlags, (PVOID)lpMem);
+}
 
 __inline
 BOOL
