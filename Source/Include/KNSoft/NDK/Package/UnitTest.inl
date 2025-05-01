@@ -138,9 +138,18 @@ UnitTest_RunEntry(
     RtlZeroMemory(Result, sizeof(*Result));
 
     /* NtQueryPerformanceCounter writes frequency after counter */
-    NtQueryPerformanceCounter(&PrefCounter1, NULL);
+    RtlQueryPerformanceCounter(&PrefCounter1);
     Entry->Proc(Result, ArgC, ArgV);
-    NtQueryPerformanceCounter(&PrefCounter2, &PrefFreq);
+    RtlQueryPerformanceCounter(&PrefCounter2);
+    if (SharedUserData->NtMajorVersion > 6 ||
+        SharedUserData->NtMajorVersion == 6 && SharedUserData->NtMinorVersion >= 2)
+    {
+        PrefFreq.QuadPart = SharedUserData->QpcFrequency;
+    } else
+    {
+        LARGE_INTEGER PerformanceCounter;
+        NtQueryPerformanceCounter(&PerformanceCounter, &PrefFreq);
+    }
 
     /* Convert to microseconds before dividing for avoiding loss-of-precision */
     ElapsedMicroseconds = (ULONGLONG)PrefCounter2.QuadPart - (ULONGLONG)PrefCounter1.QuadPart;
