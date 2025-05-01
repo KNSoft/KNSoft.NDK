@@ -241,6 +241,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ComBase.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\KernelBase.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.h" />

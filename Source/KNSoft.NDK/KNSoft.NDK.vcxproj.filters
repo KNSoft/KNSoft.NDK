@@ -475,6 +475,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinBase.h">
       <Filter>Win32\Def</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ComBase.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">
