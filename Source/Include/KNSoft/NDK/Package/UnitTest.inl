@@ -7,6 +7,24 @@
 #pragma region Prints
 
 static
+HANDLE
+UnitTest_GetStdOutput(VOID)
+{
+    HANDLE StdOutputHandle;
+
+    if (NtCurrentPeb()->ProcessParameters->WindowFlags & STARTF_USEMONITOR)
+    {
+        return NULL;
+    }
+    StdOutputHandle = NtCurrentPeb()->ProcessParameters->StandardOutput;
+    if (StdOutputHandle == INVALID_HANDLE_VALUE)
+    {
+        return NULL;
+    }
+    return StdOutputHandle;
+}
+
+static
 VOID
 UnitTest_PrintTitle(VOID)
 {
@@ -257,7 +275,7 @@ UnitTest_PrintFV(
     IO_STATUS_BLOCK IoStatusBlock;
 
     /* Write standard output if exists */
-    hStdOut = NtCurrentPeb()->ProcessParameters->StandardOutput;
+    hStdOut = UnitTest_GetStdOutput();
     if (hStdOut == NULL)
     {
         return;
@@ -308,7 +326,7 @@ UnitTest_PrintEx(
     HANDLE StdOutHandle;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    StdOutHandle = NtCurrentPeb()->ProcessParameters->StandardOutput;
+    StdOutHandle = UnitTest_GetStdOutput();
     if (StdOutHandle != NULL)
     {
         NtWriteFile(StdOutHandle, NULL, NULL, NULL, &IoStatusBlock, (PVOID)Text, TextSize, NULL, NULL);
