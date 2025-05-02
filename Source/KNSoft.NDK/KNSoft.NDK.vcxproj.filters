@@ -506,6 +506,9 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\String.inl">
       <Filter>NT\Rtl</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\AVX.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">

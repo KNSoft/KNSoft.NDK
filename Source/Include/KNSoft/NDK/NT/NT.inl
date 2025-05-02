@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Rtl/AVX.inl"
 #include "Rtl/DataStructures/Bitmap.inl"
 #include "Rtl/Process/EnvironmentBlock.inl"
 #include "Rtl/ErrorHandling.inl"

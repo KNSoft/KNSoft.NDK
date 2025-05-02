@@ -17,6 +17,22 @@ _Inline_BaseSetLastNTError(
     return Error;
 }
 
+__inline
+PLARGE_INTEGER
+_Inline_BaseFormatTimeOut(
+    PLARGE_INTEGER Timeout,
+    _In_ ULONG Milliseconds)
+{
+    if (Milliseconds == INFINITE)
+    {
+        return NULL;
+    } else
+    {
+        Timeout->QuadPart = Milliseconds * -10000LL;
+        return Timeout;
+    }
+}
+
 #pragma endregion
 
 #pragma region Process Environment
@@ -494,5 +510,79 @@ _Inline_SetStdHandle(
 }
 
 #pragma endregion
+
+#pragma region AVX
+
+__inline
+DWORD64
+WINAPI
+_Inline_GetEnabledXStateFeatures(VOID)
+{
+    ULONG64 u = _Inline_RtlGetEnabledExtendedFeatures(MAXULONGLONG);
+    if (u)
+    {
+        return u;
+    }
+
+    /*
+     * Geoff Chappell:
+     * The PF_XMMI_INSTRUCTIONS_AVAILABLE feature is necessarily TRUE in x86 version 6.2 and higher,
+     * and in all x64 versions.
+     */
+    return
+#if !defined(_WIN64) || (NTDDI_VERSION < NTDDI_WIN8)
+        !SharedUserData->ProcessorFeatures[PF_XMMI_INSTRUCTIONS_AVAILABLE] ?
+        XSTATE_MASK_LEGACY_FLOATING_POINT :
+#endif
+        XSTATE_MASK_LEGACY;
+}
+
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+__inline
+DWORD64
+WINAPI
+_Inline_GetThreadEnabledXStateFeatures(VOID)
+{
+    return _Inline_GetEnabledXStateFeatures() &
+#if defined(_WIN64)
+        NtReadTeb(ExtendedFeatureDisableMask)
+#else
+        ~XSTATE_MASK_AMX_TILE_DATA
+#endif
+        ;
+}
+#endif
+
+#pragma endregion
+
+__inline
+_Check_return_
+_Post_equals_last_error_
+DWORD
+WINAPI
+_Inline_GetLastError(VOID)
+{
+    return _Inline_RtlGetLastWin32Error();
+}
+
+__inline
+VOID
+WINAPI
+_Inline_SetLastError(
+    _In_ DWORD dwErrCode)
+{
+    return _Inline_RtlSetLastWin32Error(dwErrCode);
+}
+
+__inline
+BOOL
+WINAPI
+_Inline_IsProcessorFeaturePresent(
+    _In_ DWORD ProcessorFeature)
+{
+    return ProcessorFeature < PROCESSOR_FEATURE_MAX ?
+        SharedUserData->ProcessorFeatures[ProcessorFeature] :
+        FALSE;
+}
 
 EXTERN_C_END
