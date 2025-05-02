@@ -93,39 +93,35 @@
 #define __A2W(quote) L##quote
 #define _A2W(quote) __A2W(quote)
 
-#if _WIN64
-#define MSVC_VARDNAME(x) x
-#define MSVC_INCLUDE_VAR(x) __pragma(comment(linker, "/include:"#x))
-#else
-#define MSVC_VARDNAME(x) _##x
-#define MSVC_INCLUDE_VAR(x) __pragma(comment(linker, "/include:_"#x))
+/* _CRT_LINKER_SYMBOL_PREFIX and _CRT_LINKER_FORCE_INCLUDE */
+
+#if defined _M_IX86
+#define MSVC_LINKER_SYMBOL_PREFIX "_"
+#elif defined _M_X64 || defined _M_ARM || defined _M_ARM64
+#define MSVC_LINKER_SYMBOL_PREFIX ""
 #endif
+
+#define MSVC_LINKER_FORCE_INCLUDE(name) __pragma(comment(linker, "/include:" MSVC_LINKER_SYMBOL_PREFIX #name))
 
 /*
  * Initializer support
  * See also:
  *   https://devblogs.microsoft.com/cppblog/new-compiler-warnings-for-dynamic-initialization/
  *   https://learn.microsoft.com/en-us/cpp/c-runtime-library/crt-initialization
- * 
- * ** FIXME: Not support C++ yet **
  */
-
-#ifndef __cplusplus
 
 // Section 'section-name' is reserved for C++ dynamic initialization.
 #pragma warning(error: 5247 5248)
 
 typedef int(__cdecl* _PIFV)(void);
 
-#pragma section(".CRT$XINDK", long, read)
+#pragma section(".CRT$XCVNDK", long, read)
 
 #define MSVC_INITIALIZER(x)\
 int __cdecl x(void);\
-__declspec(allocate(".CRT$XINDK")) _PIFV _KNSoft_NDK_Initializer_User_##x = &x;\
-MSVC_INCLUDE_VAR(_KNSoft_NDK_Initializer_User_##x)\
+EXTERN_C __declspec(allocate(".CRT$XCVNDK")) _PIFV const _KNSoft_NDK_Initializer_User_##x = &x;\
+MSVC_LINKER_FORCE_INCLUDE(_KNSoft_NDK_Initializer_User_##x)\
 int __cdecl x(void)
-
-#endif
 
 #pragma endregion
 

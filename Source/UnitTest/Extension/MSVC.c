@@ -20,7 +20,7 @@ MSVC_INITIALIZER(Init2)
     return 0;
 }
 
-TEST_FUNC(MSToolChain)
+TEST_FUNC(MSVC)
 {
     TEST_OK(g_lInit == 666);
 }

@@ -2,7 +2,7 @@
 #include <KNSoft/NDK/Package/UnitTest.inl>
 
 TEST_DECL_FUNC(UnitTestFramework);
-TEST_DECL_FUNC(MSToolChain);
+TEST_DECL_FUNC(MSVC);
 TEST_DECL_FUNC(PebLdrStruct);
 TEST_DECL_FUNC(PebStruct);
 TEST_DECL_FUNC(TebStruct);
@@ -11,7 +11,7 @@ TEST_DECL_FUNC(StrSafeFunc);
 
 CONST UNITTEST_ENTRY UnitTestList[] = {
     TEST_DECL_ENTRY(UnitTestFramework),
-    TEST_DECL_ENTRY(MSToolChain),
+    TEST_DECL_ENTRY(MSVC),
     TEST_DECL_ENTRY(PebLdrStruct),
     TEST_DECL_ENTRY(PebStruct),
     TEST_DECL_ENTRY(TebStruct),

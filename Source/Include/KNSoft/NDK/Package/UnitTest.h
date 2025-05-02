@@ -124,7 +124,7 @@ EXTERN_C CONST UNITTEST_ENTRY UnitTestList[];
 #define TEST_RESULT(r) (TEST_PARAMETER_RESULT->r++)
 
 /* Pass if Expr is True, or fail and print assertion otherwise */
-#define TEST_OK(Expr) (Expr ? TEST_RESULT(Pass) : (TEST_RESULT(Fail), UnitTest_FormatMessage("%hs (Line %d) Assertion failed: %hs\n", __FILE__, __LINE__, #Expr)))
+#define TEST_OK(Expr) (Expr ? (VOID)TEST_RESULT(Pass) : (TEST_RESULT(Fail), UnitTest_FormatMessage("%hs (Line %d) Assertion failed: %hs\n", __FILE__, __LINE__, #Expr)))
 
 /* Skip and print message */
 #define TEST_SKIP(Format, ...) (TEST_RESULT(Skip), UnitTest_FormatMessage("%hs (Line %d) Skipped: "Format"\n", __FILE__, __LINE__, ##__VA_ARGS__))
