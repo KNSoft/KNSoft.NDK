@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../NT/NT.h"
+#include "../Win32/Def/WinBase.h"
 #include "StrSafe.h"
 #include "UnitTest.h"
 
@@ -156,7 +157,7 @@ UnitTest_RunEntry(
     ElapsedMicroseconds *= 1000000;
     ElapsedMicroseconds = (ULONGLONG)((ElapsedMicroseconds / (DOUBLE)PrefFreq.QuadPart) + (DOUBLE)0.5);
     Result->Elapsed = ElapsedMicroseconds;
-    UnitTest_FormatMessage("<<<< Result: %lu tests executed (%lu passed, %lu failed, %lu skipped) in %llu ms (%llu μs)\n\n",
+    UnitTest_FormatMessage("<<<< Result: %lu tests executed (%lu passed, %lu failed, %lu skipped) in %llu ms (%llu us)\n\n",
                            Result->Pass + Result->Fail + Result->Skip,
                            Result->Pass,
                            Result->Fail,
