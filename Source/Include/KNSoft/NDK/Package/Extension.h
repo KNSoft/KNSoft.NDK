@@ -111,13 +111,22 @@
  */
 
 // Section 'section-name' is reserved for C++ dynamic initialization.
-#pragma warning(error: 5247 5248)
+#pragma warning(disable: 5247 5248)
+#pragma section(".CRT$XCTNDK", long, read)
+#pragma section(".CRT$XCVNDK", long, read)
+#pragma warning(default: 5247 5248)
 
 typedef int(__cdecl* _PIFV)(void);
 
-#pragma section(".CRT$XCVNDK", long, read)
+// Will be called BEFORE any compiler generated C++ dynamic initializer
+#define MSVC_PRE_INITIALIZER(x)\
+int __cdecl x(void);\
+EXTERN_C __declspec(allocate(".CRT$XCTNDK")) _PIFV const _KNSoft_NDK_Initializer_User_##x = &x;\
+MSVC_LINKER_FORCE_INCLUDE(_KNSoft_NDK_Initializer_User_##x)\
+int __cdecl x(void)
 
-#define MSVC_INITIALIZER(x)\
+// Will be called AFTER any compiler generated C++ dynamic initializer
+#define MSVC_POST_INITIALIZER(x)\
 int __cdecl x(void);\
 EXTERN_C __declspec(allocate(".CRT$XCVNDK")) _PIFV const _KNSoft_NDK_Initializer_User_##x = &x;\
 MSVC_LINKER_FORCE_INCLUDE(_KNSoft_NDK_Initializer_User_##x)\

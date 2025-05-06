@@ -7,14 +7,14 @@
 static volatile LONG g_lInit = 0;
 
 static
-MSVC_INITIALIZER(Init1)
+MSVC_POST_INITIALIZER(Init1)
 {
     InterlockedAdd(&g_lInit, 234);
     return 0;
 }
 
 static
-MSVC_INITIALIZER(Init2)
+MSVC_POST_INITIALIZER(Init2)
 {
     InterlockedAdd(&g_lInit, 432);
     return 0;
