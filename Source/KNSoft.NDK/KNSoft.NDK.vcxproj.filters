@@ -430,9 +430,6 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Misc.h">
       <Filter>NT\Win32K</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Package\CPUID.h">
-      <Filter>Package</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h">
       <Filter>Package</Filter>
     </ClInclude>

@@ -237,7 +237,6 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Wow\Wow.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Wow\WowApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\ZwApi.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Package\CPUID.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h" />
