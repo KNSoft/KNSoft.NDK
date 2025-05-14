@@ -213,6 +213,7 @@ NtCreateProcessEx(
  * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the attributes of the new process.
  * @param ClientId Optional. A pointer to a CLIENT_ID structure that specifies the client ID of the process to be opened.
  * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-ntopenprocess
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -230,6 +231,7 @@ NtOpenProcess(
  * @param ProcessHandle Optional. A handle to the process to be terminated. If this parameter is NULL, the calling process is terminated.
  * @param ExitStatus The exit status to be used by the process and the process's termination status.
  * @return NTSTATUS Successful or errant status.
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-zwterminateprocess
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -244,6 +246,7 @@ NtTerminateProcess(
  *
  * @param ProcessHandle A handle to the process to be suspended.
  * @return NTSTATUS Successful or errant status.
+ * @remarks Use NtCreateProcessStateChange instead.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -257,6 +260,7 @@ NtSuspendProcess(
  *
  * @param ProcessHandle A handle to the process to be resumed.
  * @return NTSTATUS Successful or errant status.
+ * @remarks Use NtCreateProcessStateChange instead.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -389,7 +393,7 @@ NtCreateProcessStateChange(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ HANDLE ProcessHandle,
-    _In_opt_ _Reserved_ ULONG64 Reserved
+    _In_opt_ _Reserved_ ULONG Reserved
     );
 
 /**
@@ -412,7 +416,7 @@ NtChangeProcessState(
     _In_ PROCESS_STATE_CHANGE_TYPE StateChangeType,
     _In_opt_ _Reserved_ PVOID ExtendedInformation,
     _In_opt_ _Reserved_ SIZE_T ExtendedInformationLength,
-    _In_opt_ _Reserved_ ULONG64 Reserved
+    _In_opt_ _Reserved_ ULONG Reserved
     );
 
 #endif
@@ -444,7 +448,7 @@ NtCreateThreadStateChange(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ HANDLE ThreadHandle,
-    _In_opt_ ULONG64 Reserved
+    _In_opt_ _Reserved_ ULONG Reserved
     );
 
 /**

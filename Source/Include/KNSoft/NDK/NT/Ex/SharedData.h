@@ -134,6 +134,11 @@ EXTERN_C_START
 #define SHARED_GLOBAL_FLAGS_QPC_BYPASS_A73_ERRATA (0x40)
 #define SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_RDTSCP (0x80)
 
+/**
+ * The KUSER_SHARED_DATA structure contains information shared with user-mode.
+ *
+ * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-kuser_shared_data
+ */
 typedef struct _KUSER_SHARED_DATA
 {
     //

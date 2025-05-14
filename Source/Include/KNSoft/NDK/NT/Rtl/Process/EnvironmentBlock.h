@@ -88,42 +88,133 @@ typedef struct _PEB_LDR_DATA32
 #define KACF_ALLOWMAXIMIZEDWINDOWGAMMA 0x01000000
 #define KACF_DONOTADDTOCACHE 0x80000000
 
-// PEB->ApiSetMap
-typedef struct _API_SET_NAMESPACE
+// private
+#define API_SET_SECTION_NAME ".apiset"
+
+// private
+#define API_SET_SCHEMA_VERSION_V2 0x00000002 // WIN7, WIN8
+#define API_SET_SCHEMA_VERSION_V4 0x00000004 // WINBLUE
+#define API_SET_SCHEMA_VERSION_V6 0x00000006 // since THRESHOLD
+#define API_SET_SCHEMA_VERSION API_SET_SCHEMA_VERSION_V6
+
+// private
+#define API_SET_SCHEMA_FLAGS_SEALED 0x00000001
+#define API_SET_SCHEMA_FLAGS_HOST_EXTENSION 0x00000002
+
+// private
+#define API_SET_SCHEMA_ENTRY_FLAGS_SEALED 0x00000001
+#define API_SET_SCHEMA_ENTRY_FLAGS_EXTENSION 0x00000002
+
+// private
+typedef struct _API_SET_VALUE_ENTRY_V2
 {
-    ULONG Version;
-    ULONG Size;
+    ULONG NameOffset; // to WCHAR[NameLength / sizeof(WCHAR)], from schema base
+    ULONG NameLength;
+    ULONG ValueOffset; // to WCHAR[ValueLength / sizeof(WCHAR)], from schema base
+    ULONG ValueLength;
+} API_SET_VALUE_ENTRY_V2, *PAPI_SET_VALUE_ENTRY_V2;
+
+// private
+typedef struct _API_SET_VALUE_ARRAY_V2
+{
+    ULONG Count;
+    _Field_size_full_(Count) API_SET_VALUE_ENTRY_V2 Array[ANYSIZE_ARRAY];
+} API_SET_VALUE_ARRAY_V2, *PAPI_SET_VALUE_ARRAY_V2;
+
+// private
+typedef struct _API_SET_NAMESPACE_ENTRY_V2
+{
+    ULONG NameOffset; // to WCHAR[NameLength / sizeof(WCHAR)], from schema base
+    ULONG NameLength;
+    ULONG DataOffset; // to API_SET_VALUE_ARRAY_V2, from schema base
+} API_SET_NAMESPACE_ENTRY_V2, *PAPI_SET_NAMESPACE_ENTRY_V2;
+
+// private // PEB->ApiSetMap on WIN7, WIN8
+typedef struct _API_SET_NAMESPACE_ARRAY_V2
+{
+    ULONG Version; // API_SET_SCHEMA_VERSION_V2
+    ULONG Count;
+    _Field_size_full_(Count) API_SET_NAMESPACE_ENTRY_V2 Array[ANYSIZE_ARRAY];
+} API_SET_NAMESPACE_ARRAY_V2, *PAPI_SET_NAMESPACE_ARRAY_V2;
+
+// private
+typedef struct _API_SET_VALUE_ENTRY_V4
+{
+    ULONG Flags;
+    ULONG NameOffset; // to WCHAR[NameLength / sizeof(WCHAR)], from schema base
+    ULONG NameLength;
+    ULONG ValueOffset; // to WCHAR[ValueLength / sizeof(WCHAR)], from schema base
+    ULONG ValueLength;
+} API_SET_VALUE_ENTRY_V4, *PAPI_SET_VALUE_ENTRY_V4;
+
+// private
+typedef struct _API_SET_VALUE_ARRAY_V4
+{
     ULONG Flags;
     ULONG Count;
-    ULONG EntryOffset;
-    ULONG HashOffset;
-    ULONG HashFactor;
-} API_SET_NAMESPACE, *PAPI_SET_NAMESPACE;
+    _Field_size_full_(Count) API_SET_VALUE_ENTRY_V4 Array[ANYSIZE_ARRAY];
+} API_SET_VALUE_ARRAY_V4, *PAPI_SET_VALUE_ARRAY_V4;
 
+// private
+typedef struct _API_SET_NAMESPACE_ENTRY_V4
+{
+    ULONG Flags; // API_SET_SCHEMA_ENTRY_FLAGS_*
+    ULONG NameOffset; // to WCHAR[NameLength / sizeof(WCHAR)], from schema base
+    ULONG NameLength;
+    ULONG AliasOffset; // to WCHAR[AliasLength / sizeof(WCHAR)], from schema base
+    ULONG AliasLength;
+    ULONG DataOffset; // to API_SET_VALUE_ARRAY_V4, from schema base
+} API_SET_NAMESPACE_ENTRY_V4, *PAPI_SET_NAMESPACE_ENTRY_V4;
+
+// private // PEB->ApiSetMap on WINBLUE
+typedef struct _API_SET_NAMESPACE_ARRAY_V4
+{
+    ULONG Version; // API_SET_SCHEMA_VERSION_V4
+    ULONG Size;
+    ULONG Flags; // API_SET_SCHEMA_FLAGS_*
+    ULONG Count;
+    _Field_size_full_(Count) API_SET_NAMESPACE_ENTRY_V4 Array[ANYSIZE_ARRAY];
+} API_SET_NAMESPACE_ARRAY_V4, *PAPI_SET_NAMESPACE_ARRAY_V4;
+
+// private
+typedef struct _API_SET_VALUE_ENTRY
+{
+    ULONG Flags;
+    ULONG NameOffset; // to WCHAR[NameLength / sizeof(WCHAR)], from schema base
+    ULONG NameLength;
+    ULONG ValueOffset; // to WCHAR[ValueLength / sizeof(WCHAR)], from schema base
+    ULONG ValueLength;
+} API_SET_VALUE_ENTRY, *PAPI_SET_VALUE_ENTRY;
+
+// private
+typedef struct _API_SET_NAMESPACE_ENTRY
+{
+    ULONG Flags; // API_SET_SCHEMA_ENTRY_FLAGS_*
+    ULONG NameOffset; // to WCHAR[NameLength / sizeof(WCHAR)], from schema base
+    ULONG NameLength;
+    ULONG HashedLength;
+    ULONG ValueOffset; // to API_SET_VALUE_ENTRY[ValueCount], from schema base
+    ULONG ValueCount;
+} API_SET_NAMESPACE_ENTRY, *PAPI_SET_NAMESPACE_ENTRY;
+
+// private
 typedef struct _API_SET_HASH_ENTRY
 {
     ULONG Hash;
     ULONG Index;
 } API_SET_HASH_ENTRY, *PAPI_SET_HASH_ENTRY;
 
-typedef struct _API_SET_NAMESPACE_ENTRY
+// private // PEB->ApiSetMap since THRESHOLD
+typedef struct _API_SET_NAMESPACE
 {
-    ULONG Flags;
-    ULONG NameOffset;
-    ULONG NameLength;
-    ULONG HashedLength;
-    ULONG ValueOffset;
-    ULONG ValueCount;
-} API_SET_NAMESPACE_ENTRY, *PAPI_SET_NAMESPACE_ENTRY;
-
-typedef struct _API_SET_VALUE_ENTRY
-{
-    ULONG Flags;
-    ULONG NameOffset;
-    ULONG NameLength;
-    ULONG ValueOffset;
-    ULONG ValueLength;
-} API_SET_VALUE_ENTRY, *PAPI_SET_VALUE_ENTRY;
+    ULONG Version; // API_SET_SCHEMA_VERSION_V6
+    ULONG Size;
+    ULONG Flags; // API_SET_SCHEMA_FLAGS_*
+    ULONG Count;
+    ULONG EntryOffset; // to API_SET_NAMESPACE_ENTRY[Count], from this struct base
+    ULONG HashOffset; // to API_SET_HASH_ENTRY[Count], from this struct base
+    ULONG HashFactor;
+} API_SET_NAMESPACE, *PAPI_SET_NAMESPACE;
 
 // PEB->TelemetryCoverageHeader
 typedef struct _TELEMETRY_COVERAGE_HEADER
@@ -1463,25 +1554,46 @@ typedef struct _TEB
 
     PVOID ReservedForPerf;
 
-    // Per-thread COM/OLE state
+    // Per-thread COM/OLE state.
     POLE_TLS_DATA ReservedForOle;
 
+    // Indicates whether the thread is waiting on the loader lock.
     ULONG WaitingOnLoaderLock;
+
+    // The saved priority state for the thread.
     PVOID SavedPriorityState;
+
     ULONG_PTR ReservedForCodeCoverage;
     PVOID ThreadPoolData;
-    PVOID *TlsExpansionSlots;
+
+    // Pointer to the TLS (Thread Local Storage) expansion slots for the thread.
+    PVOID* TlsExpansionSlots;
+
 #ifdef _WIN64
-    struct CHPEV2_CPUAREA_INFO* ChpeV2CpuAreaInfo; // previously DeallocationBStore
+    struct CHPEV2_CPUAREA_INFO* ChpeV2CpuAreaInfo; // CHPEV2_CPUAREA_INFO // previously DeallocationBStore
     PVOID Unused; // previously BStoreLimit
 #endif
+
+    // The generation of the MUI (Multilingual User Interface) data.
     ULONG MuiGeneration;
+
+    // Indicates whether the thread is impersonating another security context.
     ULONG IsImpersonating;
+
+    // Pointer to the NLS (National Language Support) cache.
     PVOID NlsCache;
+
+    // Pointer to the AppCompat/Shim Engine data.
     PVOID pShimData;
+
     ULONG HeapData;
+
+    // Handle to the current transaction associated with the thread.
     HANDLE CurrentTransactionHandle;
+
+    // Pointer to the active frame for the thread.
     PTEB_ACTIVE_FRAME ActiveFrame;
+
     PVOID FlsData;
 
     PVOID PreferredLanguages;
@@ -1527,12 +1639,21 @@ typedef struct _TEB
     PVOID ReservedForWdf;
     ULONGLONG ReservedForCrt;
     GUID EffectiveContainerId;
+
+    // Reserved for Kernel32!Sleep (SpinWait).
     ULONGLONG LastSleepCounter; // Win11
     ULONG SpinCallCount;
+
+    // Extended feature disable mask (AVX).
     ULONGLONG ExtendedFeatureDisableMask;
+
     PVOID SchedulerSharedDataSlot; // 24H2
     PVOID HeapWalkContext;
+
+    // The primary processor group affinity of the thread.
     GROUP_AFFINITY PrimaryGroupAffinity;
+
+    // Read-copy-update (RCU) synchronization context.
     ULONG Rcu[2];
 } TEB, *PTEB;
 

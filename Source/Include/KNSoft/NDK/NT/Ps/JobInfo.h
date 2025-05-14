@@ -29,7 +29,7 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectFreezeInformation = 18, // JOBOBJECT_FREEZE_INFORMATION
     JobObjectExtendedAccountingInformation = 19, // JOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION
     JobObjectWakeInformation = 20, // JOBOBJECT_WAKE_INFORMATION
-    JobObjectBackgroundInformation = 21,
+    JobObjectBackgroundInformation = 21, // s: BOOLEAN
     JobObjectSchedulingRankBiasInformation = 22,
     JobObjectTimerVirtualizationInformation = 23,
     JobObjectCycleTimeNotification = 24,

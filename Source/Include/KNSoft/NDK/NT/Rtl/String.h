@@ -1179,4 +1179,22 @@ RtlFindClosestEncodableLength(
 
 #pragma endregion
 
+typedef struct _RTL_UNICODE_STRING_BUFFER RTL_UNICODE_STRING_BUFFER, *PRTL_UNICODE_STRING_BUFFER;
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlMultiAppendUnicodeStringBuffer(
+    _Inout_ PRTL_UNICODE_STRING_BUFFER Buffer,
+    _In_ ULONG BufferCount,
+    _In_ PCUNICODE_STRING Source);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlAppendPathElement(
+    _In_ ULONG Flags,
+    _Inout_ PRTL_UNICODE_STRING_BUFFER Buffer,
+    _In_ PCUNICODE_STRING Source);
+
 EXTERN_C_END

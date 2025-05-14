@@ -256,7 +256,7 @@ typedef struct _RTL_HEAP_PARAMETERS
 
 _Must_inspect_result_
 NTSYSAPI
-PVOID
+HANDLE
 NTAPI
 RtlCreateHeap(
     _In_ ULONG Flags,
@@ -273,7 +273,7 @@ NTSYSAPI
 PVOID
 NTAPI
 RtlDestroyHeap(
-    _In_ _Post_invalid_ PVOID HeapHandle
+    _In_ _Post_invalid_ HANDLE HeapHandle
 );
 
 _Success_(return != 0)
@@ -288,7 +288,7 @@ DECLSPEC_RESTRICT
 PVOID
 NTAPI
 RtlAllocateHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_opt_ ULONG Flags,
     _In_ SIZE_T Size
 );
@@ -299,7 +299,7 @@ NTSYSAPI
 LOGICAL
 NTAPI
 RtlFreeHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_opt_ ULONG Flags,
     _Frees_ptr_opt_ _Post_invalid_ PVOID BaseAddress
 );
@@ -309,7 +309,7 @@ NTSYSAPI
 BOOLEAN
 NTAPI
 RtlFreeHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_opt_ ULONG Flags,
     _Frees_ptr_opt_ PVOID BaseAddress
 );
@@ -319,7 +319,7 @@ NTSYSAPI
 SIZE_T
 NTAPI
 RtlSizeHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ PVOID BaseAddress
 );
@@ -328,7 +328,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlZeroHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags
 );
 
@@ -336,7 +336,7 @@ NTSYSAPI
 VOID
 NTAPI
 RtlProtectHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ BOOLEAN MakeReadOnly
 );
 
@@ -346,14 +346,14 @@ NTSYSAPI
 BOOLEAN
 NTAPI
 RtlLockHeap(
-    _In_ PVOID HeapHandle
+    _In_ HANDLE HeapHandle
 );
 
 NTSYSAPI
 BOOLEAN
 NTAPI
 RtlUnlockHeap(
-    _In_ PVOID HeapHandle
+    _In_ HANDLE HeapHandle
 );
 
 _Success_(return != 0)
@@ -368,7 +368,7 @@ DECLSPEC_RESTRICT
 PVOID
 NTAPI
 RtlReAllocateHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _Frees_ptr_opt_ PVOID BaseAddress,
     _In_ SIZE_T Size
@@ -378,7 +378,7 @@ NTSYSAPI
 BOOLEAN
 NTAPI
 RtlGetUserInfoHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ PVOID BaseAddress,
     _Out_opt_ PVOID * UserValue,
@@ -389,7 +389,7 @@ NTSYSAPI
 BOOLEAN
 NTAPI
 RtlSetUserValueHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ PVOID BaseAddress,
     _In_ PVOID UserValue
@@ -399,7 +399,7 @@ NTSYSAPI
 BOOLEAN
 NTAPI
 RtlSetUserFlagsHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ PVOID BaseAddress,
     _In_ ULONG UserFlagsReset,
@@ -419,7 +419,7 @@ NTSYSAPI
 ULONG
 NTAPI
 RtlCreateTagHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_opt_ PCWSTR TagPrefix,
     _In_ PCWSTR TagNames
@@ -429,7 +429,7 @@ NTSYSAPI
 PWSTR
 NTAPI
 RtlQueryTagHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ USHORT TagIndex,
     _In_ BOOLEAN ResetCounters,
@@ -440,7 +440,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlExtendHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ PVOID Base,
     _In_ SIZE_T Size
@@ -450,7 +450,7 @@ NTSYSAPI
 SIZE_T
 NTAPI
 RtlCompactHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags
 );
 
@@ -458,7 +458,7 @@ NTSYSAPI
 BOOLEAN
 NTAPI
 RtlValidateHeap(
-    _In_opt_ PVOID HeapHandle,
+    _In_opt_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_opt_ PVOID BaseAddress
 );
@@ -475,12 +475,15 @@ ULONG
 NTAPI
 RtlGetProcessHeaps(
     _In_ ULONG NumberOfHeaps,
-    _Out_ PVOID * ProcessHeaps
+    _Out_ PVOID* ProcessHeaps
 );
 
+typedef
 _Function_class_(RTL_ENUM_HEAPS_ROUTINE)
-typedef NTSTATUS(NTAPI RTL_ENUM_HEAPS_ROUTINE)(
-    _In_ PVOID HeapHandle,
+NTSTATUS
+NTAPI
+RTL_ENUM_HEAPS_ROUTINE(
+    _In_ HANDLE HeapHandle,
     _In_ PVOID Parameter
     );
 typedef RTL_ENUM_HEAPS_ROUTINE *PRTL_ENUM_HEAPS_ROUTINE;
@@ -522,7 +525,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlUsageHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _Inout_ PRTL_HEAP_USAGE Usage
 );
@@ -557,7 +560,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlWalkHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _Inout_ PRTL_HEAP_WALK_ENTRY Entry
 );
 
@@ -578,8 +581,8 @@ typedef enum _HEAP_INFORMATION_CLASS
 /* HeapCompatibilityInformation */
 
 #define HEAP_STANDARD   0UL
-#define HEAP_LAL        1UL
-#define HEAP_LFH        2UL
+#define HEAP_LAL        1UL // Lookaside list heap (LAL) compatibility mode.
+#define HEAP_LFH        2UL // Low-fragmentation heap (LFH) compatibility mode.
 
 typedef struct _RTLP_TAG_INFO
 {
@@ -711,7 +714,7 @@ typedef NTSTATUS(NTAPI *PRTL_HEAP_EXTENDED_ENUMERATION_ROUTINE)(
 typedef struct _HEAP_EXTENDED_INFORMATION
 {
     HANDLE ProcessHandle;
-    PVOID HeapHandle;
+    HANDLE HeapHandle;
     ULONG Level;
     PRTL_HEAP_EXTENDED_ENUMERATION_ROUTINE CallbackRoutine;
     PVOID CallbackContext;
@@ -785,22 +788,32 @@ typedef struct _RTL_HEAP_STACK_CONTROL
 } RTL_HEAP_STACK_CONTROL, *PRTL_HEAP_STACK_CONTROL;
 
 // rev
-typedef NTSTATUS(NTAPI *PRTL_HEAP_DEBUGGING_INTERCEPTOR_ROUTINE)(
-    _In_ PVOID HeapHandle,
+typedef
+_Function_class_(RTL_HEAP_DEBUGGING_INTERCEPTOR_ROUTINE)
+NTSTATUS
+NTAPI
+RTL_HEAP_DEBUGGING_INTERCEPTOR_ROUTINE(
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Action,
     _In_ ULONG StackFramesToCapture,
-    _In_ PVOID *StackTrace
+    _In_ PVOID* StackTrace
     );
+typedef RTL_HEAP_DEBUGGING_INTERCEPTOR_ROUTINE* PRTL_HEAP_DEBUGGING_INTERCEPTOR_ROUTINE;
 
 // rev
-typedef NTSTATUS(NTAPI *PRTL_HEAP_LEAK_ENUMERATION_ROUTINE)(
+typedef
+_Function_class_(RTL_HEAP_LEAK_ENUMERATION_ROUTINE)
+NTSTATUS
+NTAPI
+RTL_HEAP_LEAK_ENUMERATION_ROUTINE(
     _In_ LONG Reserved,
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ PVOID BaseAddress,
     _In_ SIZE_T BlockSize,
     _In_ ULONG StackTraceDepth,
-    _In_ PVOID *StackTrace
+    _In_ PVOID* StackTrace
     );
+typedef RTL_HEAP_LEAK_ENUMERATION_ROUTINE* PRTL_HEAP_LEAK_ENUMERATION_ROUTINE;
 
 // symbols
 typedef struct _HEAP_DEBUGGING_INFORMATION
@@ -818,7 +831,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlQueryHeapInformation(
-    _In_opt_ PVOID HeapHandle,
+    _In_opt_ HANDLE HeapHandle,
     _In_ HEAP_INFORMATION_CLASS HeapInformationClass,
     _Out_opt_ PVOID HeapInformation,
     _In_opt_ SIZE_T HeapInformationLength,
@@ -829,7 +842,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlSetHeapInformation(
-    _In_opt_ PVOID HeapHandle,
+    _In_opt_ HANDLE HeapHandle,
     _In_ HEAP_INFORMATION_CLASS HeapInformationClass,
     _In_opt_ PVOID HeapInformation,
     _In_opt_ SIZE_T HeapInformationLength
@@ -839,21 +852,21 @@ NTSYSAPI
 ULONG
 NTAPI
 RtlMultipleAllocateHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ SIZE_T Size,
     _In_ ULONG Count,
-    _Out_ PVOID * Array
+    _Out_ PVOID* Array
 );
 
 NTSYSAPI
 ULONG
 NTAPI
 RtlMultipleFreeHeap(
-    _In_ PVOID HeapHandle,
+    _In_ HANDLE HeapHandle,
     _In_ ULONG Flags,
     _In_ ULONG Count,
-    _In_ PVOID * Array
+    _In_ PVOID* Array
 );
 
 #if (NTDDI_VERSION >= NTDDI_WIN7)

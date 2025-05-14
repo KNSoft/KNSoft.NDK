@@ -561,9 +561,12 @@ typedef struct _PROCESS_SESSION_INFORMATION
  */
 typedef struct _PROCESS_HANDLE_TRACING_ENABLE
 {
-    ULONG Flags;
+    ULONG Flags;        // Flags that control handle tracing.
 } PROCESS_HANDLE_TRACING_ENABLE, *PPROCESS_HANDLE_TRACING_ENABLE;
 
+/**
+ * The PROCESS_HANDLE_TRACING_MAX_SLOTS macro specifies the maximum number of slots.
+ */
 #define PROCESS_HANDLE_TRACING_MAX_SLOTS 0x20000
 
 /**
@@ -575,20 +578,24 @@ typedef struct _PROCESS_HANDLE_TRACING_ENABLE_EX
     ULONG TotalSlots;   // Total number of handle tracing slots.
 } PROCESS_HANDLE_TRACING_ENABLE_EX, *PPROCESS_HANDLE_TRACING_ENABLE_EX;
 
-#define PROCESS_HANDLE_TRACING_MAX_STACKS 16
-
 #define PROCESS_HANDLE_TRACE_TYPE_OPEN 1
 #define PROCESS_HANDLE_TRACE_TYPE_CLOSE 2
 #define PROCESS_HANDLE_TRACE_TYPE_BADREF 3
 
+/**
+ * The PROCESS_HANDLE_TRACING_ENTRY structure contains information about the handle operation associated with the event.
+ */
 typedef struct _PROCESS_HANDLE_TRACING_ENTRY
 {
-    HANDLE Handle;
-    CLIENT_ID ClientId;
-    ULONG Type;
-    PVOID Stacks[PROCESS_HANDLE_TRACING_MAX_STACKS];
+    HANDLE Handle;          // The handle associated with the event.
+    CLIENT_ID ClientId;     // The process and thread associated with the event.
+    ULONG Type;             // The type of handle operation associated with the event.
+    PVOID Stacks[16];
 } PROCESS_HANDLE_TRACING_ENTRY, *PPROCESS_HANDLE_TRACING_ENTRY;
 
+/**
+ * The PROCESS_HANDLE_TRACING_QUERY structure is used to query all handle events or a specific handle event for a process.
+ */
 typedef struct _PROCESS_HANDLE_TRACING_QUERY
 {
     _In_opt_ HANDLE Handle;
@@ -796,28 +803,33 @@ typedef struct _PROCESS_MITIGATION_ACTIVATION_CONTEXT_TRUST_POLICY2
 
 // enum PROCESS_MITIGATION_POLICY
 #define PROCESS_MITIGATION_POLICY ULONG
-#define ProcessDEPPolicy 0
-#define ProcessASLRPolicy 1
-#define ProcessDynamicCodePolicy 2
-#define ProcessStrictHandleCheckPolicy 3
-#define ProcessSystemCallDisablePolicy 4
-#define ProcessMitigationOptionsMask 5
-#define ProcessExtensionPointDisablePolicy 6
+#define ProcessDEPPolicy 0                      // The data execution prevention (DEP) policy of the process.
+#define ProcessASLRPolicy 1                     // The Address Space Layout Randomization (ASLR) policy of the process.
+#define ProcessDynamicCodePolicy 2              // Disables the ability to generate dynamic code or modify existing executable code.
+#define ProcessStrictHandleCheckPolicy 3        // Enables the ability to generate a fatal error if the process manipulates an invalid handle.
+#define ProcessSystemCallDisablePolicy 4        // Disables the ability of the process to use NTUser/GDI functions at the lowest layer.
+#define ProcessMitigationOptionsMask 5          // Returns the mask of valid bits for all the mitigation options on the system.
+#define ProcessExtensionPointDisablePolicy 6    // Disables the ability of the process to load legacy extension point DLLs.
 #define ProcessControlFlowGuardPolicy 7
-#define ProcessSignaturePolicy 8
-#define ProcessFontDisablePolicy 9
-#define ProcessImageLoadPolicy 10
+#define ProcessSignaturePolicy 8                // Disables the ability of the process to load images not signed by Microsoft, the Windows Store and the Windows Hardware Quality Labs (WHQL).
+#define ProcessFontDisablePolicy 9              // Disables the ability of the process to load non-system fonts.
+#define ProcessImageLoadPolicy 10               // Disables the ability of the process to load images from some locations, such a remote devices or files that have the low mandatory label.
 #define ProcessSystemCallFilterPolicy 11
 #define ProcessPayloadRestrictionPolicy 12
-#define ProcessChildProcessPolicy 13
+#define ProcessChildProcessPolicy 13            // Disables the ability to create child processes.
 #define ProcessSideChannelIsolationPolicy 14
-#define ProcessUserShadowStackPolicy 15
+#define ProcessUserShadowStackPolicy 15         // since 20H1
 #define ProcessRedirectionTrustPolicy 16
 #define ProcessUserPointerAuthPolicy 17
 #define ProcessSEHOPPolicy 18
 #define ProcessActivationContextTrustPolicy 19
 #define MaxProcessMitigationPolicy 20
 
+/**
+ * The PROCESS_MITIGATION_POLICY_INFORMATION structure represents the different process mitigation policies.
+ *
+ * \remarks https://learn.microsoft.com/en-us/windows/win32/api/winnt/ne-winnt-process_mitigation_policy
+ */
 typedef struct _PROCESS_MITIGATION_POLICY_INFORMATION
 {
     PROCESS_MITIGATION_POLICY Policy;
@@ -844,9 +856,12 @@ typedef struct _PROCESS_MITIGATION_POLICY_INFORMATION
 } PROCESS_MITIGATION_POLICY_INFORMATION, *PPROCESS_MITIGATION_POLICY_INFORMATION;
 
 // private
+typedef struct _DYNAMIC_FUNCTION_TABLE DYNAMIC_FUNCTION_TABLE, *PDYNAMIC_FUNCTION_TABLE;
+
+// private
 typedef struct _PROCESS_DYNAMIC_FUNCTION_TABLE_INFORMATION
 {
-    struct _DYNAMIC_FUNCTION_TABLE* DynamicFunctionTable;
+    PDYNAMIC_FUNCTION_TABLE DynamicFunctionTable;
     BOOLEAN Remove;
 } PROCESS_DYNAMIC_FUNCTION_TABLE_INFORMATION, *PPROCESS_DYNAMIC_FUNCTION_TABLE_INFORMATION;
 
@@ -856,6 +871,9 @@ typedef struct _PROCESS_KEEPALIVE_COUNT_INFORMATION
     ULONG NoWakeCount;
 } PROCESS_KEEPALIVE_COUNT_INFORMATION, *PPROCESS_KEEPALIVE_COUNT_INFORMATION;
 
+/**
+ * The PROCESS_REVOKE_FILE_HANDLES_INFORMATION structure revokes handles to the specified device from a process. 
+ */
 typedef struct _PROCESS_REVOKE_FILE_HANDLES_INFORMATION
 {
     UNICODE_STRING TargetDevicePath;
@@ -1084,11 +1102,16 @@ typedef struct _MANAGE_WRITES_TO_EXECUTABLE_MEMORY
 #define POWER_THROTTLING_THREAD_EXECUTION_SPEED 0x1
 #define POWER_THROTTLING_THREAD_VALID_FLAGS (POWER_THROTTLING_THREAD_EXECUTION_SPEED)
 
+/**
+ * The POWER_THROTTLING_THREAD_STATE structure contains the throttling policies of a thread subject to power management.
+ *
+ * \remarks https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_power_throttling_thread_state
+ */
 typedef struct _POWER_THROTTLING_THREAD_STATE
 {
-    ULONG Version;
-    ULONG ControlMask;
-    ULONG StateMask;
+    ULONG Version;          // The version of this structure. Set to THREAD_POWER_THROTTLING_CURRENT_VERSION.
+    ULONG ControlMask;      // Flags that enable the caller to take control of the power throttling mechanism.
+    ULONG StateMask;        // Flags that manage the power throttling mechanism on/off state.
 } POWER_THROTTLING_THREAD_STATE, *PPOWER_THROTTLING_THREAD_STATE;
 
 #define PROCESS_READWRITEVM_LOGGING_ENABLE_READVM 1
@@ -1204,6 +1227,11 @@ typedef struct _PROCESS_SYSCALL_PROVIDER_INFORMATION
 //    PPROCESS_DYNAMIC_ENFORCED_ADDRESS_RANGE Ranges;
 //} PROCESS_DYNAMIC_ENFORCED_ADDRESS_RANGES_INFORMATION, *PPROCESS_DYNAMIC_ENFORCED_ADDRESS_RANGES_INFORMATION;
 
+/**
+ * The PROCESS_MEMBERSHIP_INFORMATION structure contains the Silo identifier of the process.
+ *
+ * \remarks https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-process_membership_information
+ */
 typedef struct _PROCESS_MEMBERSHIP_INFORMATION
 {
     ULONG ServerSiloId;
@@ -1244,12 +1272,15 @@ NtQueryPortInformationProcess(
 
 // Thread information structures
 
+/**
+ * The THREAD_BASIC_INFORMATION structure contains basic information about the thread.
+ */
 typedef struct _THREAD_BASIC_INFORMATION
 {
-    NTSTATUS ExitStatus;
-    PTEB TebBaseAddress;
-    CLIENT_ID ClientId;
-    KAFFINITY AffinityMask;
+    NTSTATUS ExitStatus;        // The exit status of the thread or STATUS_PENDING when the thread has not terminated. (GetExitCodeThread)
+    PTEB TebBaseAddress;        // The base address of the memory region containing the TEB structure. (NtCurrentTeb)
+    CLIENT_ID ClientId;         // The process and thread identifier of the thread.
+    KAFFINITY AffinityMask;     // The affinity mask of the thread. (deprecated) (SetThreadAffinityMask)
     KPRIORITY Priority;
     KPRIORITY BasePriority;
 } THREAD_BASIC_INFORMATION, *PTHREAD_BASIC_INFORMATION;

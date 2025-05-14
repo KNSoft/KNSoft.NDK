@@ -578,6 +578,8 @@ RtlPublishWnfStateData(
 
 typedef struct WNF_USER_SUBSCRIPTION *PWNF_USER_SUBSCRIPTION;
 
+#define WNF_CREATE_SERIALIZATION_GROUP_FLAG 0x00000001L
+
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -589,7 +591,7 @@ RtlSubscribeWnfStateChangeNotification(
     _In_opt_ PVOID CallbackContext,
     _In_opt_ PCWNF_TYPE_ID TypeId,
     _In_opt_ ULONG SerializationGroup,
-    _Reserved_ ULONG Flags
+    _In_ ULONG Flags
 );
 
 NTSYSAPI
@@ -614,14 +616,20 @@ RtlWnfDllUnloadCallback(
 
 #define RTL_UNLOAD_EVENT_TRACE_NUMBER 64
 
+// private
+/**
+ * The RTL_UNLOAD_EVENT_TRACE structure contains the unloaded module event information.
+ *
+ * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtrace
+ */
 typedef struct _RTL_UNLOAD_EVENT_TRACE
 {
-    PVOID BaseAddress;
-    ULONG_PTR SizeOfImage;
-    ULONG Sequence;
-    ULONG TimeDateStamp;
-    ULONG CheckSum;
-    WCHAR ImageName[32];
+    PVOID BaseAddress;   // Base address of dll
+    SIZE_T SizeOfImage;  // Size of image
+    ULONG Sequence;      // Sequence number for this event
+    ULONG TimeDateStamp; // Time and date of image
+    ULONG CheckSum;      // Image checksum
+    WCHAR ImageName[32]; // Image name
     ULONG Version[2];
 } RTL_UNLOAD_EVENT_TRACE, *PRTL_UNLOAD_EVENT_TRACE;
 
@@ -647,11 +655,26 @@ typedef struct _RTL_UNLOAD_EVENT_TRACE32
     ULONG Version[2];
 } RTL_UNLOAD_EVENT_TRACE32, *PRTL_UNLOAD_EVENT_TRACE32;
 
+/**
+ * Enables the dump code to get the unloaded module information from Ntdll.dll for storage in the minidump.
+ *
+ * @return A pointer to an array of unload events.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtrace
+ */
 NTSYSAPI
 PRTL_UNLOAD_EVENT_TRACE
 NTAPI
 RtlGetUnloadEventTrace(VOID);
 
+/**
+ * Retrieves the size and location of the dynamically unloaded module list for the current process.
+ *
+ * @param ElementSize A pointer to a variable that contains the size of an element in the list.
+ * @param ElementCount A pointer to a variable that contains the number of elements in the list.
+ * @param EventTrace A pointer to an array of RTL_UNLOAD_EVENT_TRACE structures.
+ * @return A pointer to an array of unload events.
+ * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtraceex
+ */
 NTSYSAPI
 PRTL_UNLOAD_EVENT_TRACE
 NTAPI

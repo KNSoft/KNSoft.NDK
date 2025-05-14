@@ -4,6 +4,60 @@
 
 EXTERN_C_START
 
+/* phnt */
+
+// rev
+typedef struct _RTL_OSVERSIONINFOEX2
+{
+    ULONG OSVersionInfoSize;
+    ULONG MajorVersion;
+    ULONG MinorVersion;
+    ULONG BuildNumber;
+    ULONG PlatformId;
+    WCHAR CSDVersion[128];
+    USHORT ServicePackMajor;
+    USHORT ServicePackMinor;
+    USHORT SuiteMask;
+    UCHAR ProductType;
+    UCHAR Reserved;
+    ULONG SuiteMaskEx;
+    ULONG Reserved2;
+} RTL_OSVERSIONINFOEX2, *PRTL_OSVERSIONINFOEX2;
+
+// rev
+typedef struct _RTL_OSVERSIONINFOEX3
+{
+    ULONG OSVersionInfoSize;
+    ULONG MajorVersion;
+    ULONG MinorVersion;
+    ULONG BuildNumber;
+    union
+    {
+        ULONG PlatformId;
+        ULONG QfeNumber;
+    };
+    union
+    {
+        WCHAR CSDVersion[128];
+        WCHAR LayerAttrib[128];
+    };
+    USHORT ServicePackMajor;
+    USHORT ServicePackMinor;
+    USHORT SuiteMask;
+    UCHAR ProductType;
+    UCHAR Reserved;
+    ULONG SuiteMaskEx;
+    ULONG Reserved2;
+    union
+    {
+        USHORT RawInput16;
+        USHORT LayerNumber : 12;
+        USHORT AttribSelector : 4;
+    } Input;
+    USHORT LayerCount;
+    ULONG LayerFlags;
+} RTL_OSVERSIONINFOEX3, *PRTL_OSVERSIONINFOEX3;
+
 /* wdm.h */
 
 NTSYSAPI
