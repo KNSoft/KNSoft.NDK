@@ -162,8 +162,8 @@ NtWriteCurrentTebPVOID(
 #pragma region Current runtime information
 
 #define NtCurrentPeb() ((PPEB)NtReadTeb(ProcessEnvironmentBlock))
-#define NtCurrentProcessId() ((ULONG)(ULONG_PTR)NtReadTeb(ClientId.UniqueProcess))
-#define NtCurrentThreadId() ((ULONG)(ULONG_PTR)NtReadTeb(ClientId.UniqueThread))
+#define NtCurrentProcessId() ((HANDLE)NtReadTeb(ClientId.UniqueProcess))
+#define NtCurrentThreadId() ((HANDLE)NtReadTeb(ClientId.UniqueThread))
 #define NtCurrentLogonId() (NtCurrentPeb()->LogonId)
 #define NtGetNtdllBase() (CONTAINING_RECORD(NtCurrentPeb()->Ldr->InInitializationOrderModuleList.Flink, LDR_DATA_TABLE_ENTRY, InInitializationOrderLinks)->DllBase)
 #define NtGetImageNtHeader() ((PIMAGE_NT_HEADERS)Add2Ptr(&__ImageBase, __ImageBase.e_lfanew))
