@@ -18,19 +18,87 @@
 #pragma region Size in bytes
 
 #define BYTE_BIT 8UL
-#define KB_TO_BYTES(x) ((x) * 1024UL)
-#define MB_TO_KB(x) ((x) * 1024UL)
-#define MB_TO_BYTES(x) (KB_TO_BYTES(MB_TO_KB(x)))
-#define GB_TO_MB(x) ((x) * 1024UL)
-#define GB_TO_BYTES(x) (MB_TO_BYTES(GB_TO_MB(x)))
-#define TB_TO_GB(x) ((x) * 1024UL)
-#define TB_TO_BYTES(x) (GB_TO_BYTES(TB_TO_GB(x)))
 
-#if defined(_WIN64)
-#define SIZE_OF_POINTER 8
-#else
-#define SIZE_OF_POINTER 4
-#endif
+#define _1KB (1024ULL)
+#define _1MB (1024ULL * _1KB)
+#define _1GB (1024ULL * _1MB)
+#define _1TB (1024ULL * _1GB)
+#define _1PB (1024ULL * _1TB)
+#define _1EB (1024ULL * _1PB)
+
+#define _KB(x) ((x) * _1KB)
+#define _MB(x) ((x) * _1MB)
+#define _GB(x) ((x) * _1GB)
+#define _TB(x) ((x) * _1TB)
+#define _PB(x) ((x) * _1PB)
+#define _EB(x) ((x) * _1EB)
+
+#define _2KB    _KB(2)
+#define _4KB    _KB(4)
+#define _8KB    _KB(8)
+#define _16KB   _KB(16)
+#define _32KB   _KB(32)
+#define _64KB   _KB(64)
+#define _128KB  _KB(128)
+#define _256KB  _KB(256)
+#define _512KB  _KB(512)
+#define _1024KB _KB(1024)
+
+#define _2MB    _MB(2)
+#define _4MB    _MB(4)
+#define _8MB    _MB(8)
+#define _16MB   _MB(16)
+#define _32MB   _MB(32)
+#define _64MB   _MB(64)
+#define _128MB  _MB(128)
+#define _256MB  _MB(256)
+#define _512MB  _MB(512)
+#define _1024MB _MB(1024)
+
+#define _2GB    _GB(2)
+#define _4GB    _GB(4)
+#define _8GB    _GB(8)
+#define _16GB   _GB(16)
+#define _32GB   _GB(32)
+#define _64GB   _GB(64)
+#define _128GB  _GB(128)
+#define _256GB  _GB(256)
+#define _512GB  _GB(512)
+#define _1024GB _GB(1024)
+
+#define _2TB    _TB(2)
+#define _4TB    _TB(4)
+#define _8TB    _TB(8)
+#define _16TB   _TB(16)
+#define _32TB   _TB(32)
+#define _64TB   _TB(64)
+#define _128TB  _TB(128)
+#define _256TB  _TB(256)
+#define _512TB  _TB(512)
+#define _1024TB _TB(1024)
+
+#define _2PB    _PB(2)
+#define _4PB    _PB(4)
+#define _8PB    _PB(8)
+#define _16PB   _PB(16)
+#define _32PB   _PB(32)
+#define _64PB   _PB(64)
+#define _128PB  _PB(128)
+#define _256PB  _PB(256)
+#define _512PB  _PB(512)
+#define _1024PB _PB(1024)
+
+#define _2EB    _EB(2)
+#define _4EB    _EB(4)
+#define _8EB    _EB(8)
+#define _16EB   _EB(16)
+
+C_ASSERT(_1024KB == _1MB &&
+         _1024MB == _1GB &&
+         _1024GB == _1TB &&
+         _1024TB == _1PB &&
+         _1024PB == _1EB &&
+         _16EB - 1 == MAXULONGLONG);
 
 #pragma endregion
 
