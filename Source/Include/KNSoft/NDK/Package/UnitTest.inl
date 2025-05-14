@@ -301,7 +301,7 @@ UnitTest_PrintFV(
     /* Allocate buffer if sz too small */
     if (u >= ARRAYSIZE(sz))
     {
-        psz = (PSTR)RtlAllocateHeap(NtGetProcessHeap(), 0, (SIZE_T)u + 1);
+        psz = (PSTR)RtlAllocateHeap(RtlProcessHeap(), 0, (SIZE_T)u + 1);
         if (psz != NULL)
         {
             uNew = StrSafe_CchVPrintfA(psz, (SIZE_T)u + 1, Format, ArgList);
@@ -310,7 +310,7 @@ UnitTest_PrintFV(
                 u = uNew;
                 goto _Print_Stdout;
             }
-            RtlFreeHeap(NtGetProcessHeap(), 0, psz);
+            RtlFreeHeap(RtlProcessHeap(), 0, psz);
         }
 
         /* New allocated buffer unavailable, fallback to sz (truncated) */
@@ -323,7 +323,7 @@ _Print_Stdout:
     NtWriteFile(hStdOut, NULL, NULL, NULL, &IoStatusBlock, psz, u, NULL, NULL);
     if (psz != sz)
     {
-        RtlFreeHeap(NtGetProcessHeap(), 0, psz);
+        RtlFreeHeap(RtlProcessHeap(), 0, psz);
     }
 }
 

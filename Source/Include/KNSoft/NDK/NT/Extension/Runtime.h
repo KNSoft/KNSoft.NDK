@@ -165,9 +165,10 @@ NtWriteCurrentTebPVOID(
 #define NtCurrentProcessId() ((ULONG)(ULONG_PTR)NtReadTeb(ClientId.UniqueProcess))
 #define NtCurrentThreadId() ((ULONG)(ULONG_PTR)NtReadTeb(ClientId.UniqueThread))
 #define NtCurrentLogonId() (NtCurrentPeb()->LogonId)
-#define NtGetProcessHeap() (NtCurrentPeb()->ProcessHeap)
 #define NtGetNtdllBase() (CONTAINING_RECORD(NtCurrentPeb()->Ldr->InInitializationOrderModuleList.Flink, LDR_DATA_TABLE_ENTRY, InInitializationOrderLinks)->DllBase)
 #define NtGetImageNtHeader() ((PIMAGE_NT_HEADERS)Add2Ptr(&__ImageBase, __ImageBase.e_lfanew))
+
+#define RtlProcessHeap() (NtCurrentPeb()->ProcessHeap)
 
 #pragma endregion
 

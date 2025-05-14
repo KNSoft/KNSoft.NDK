@@ -340,8 +340,6 @@ RtlProtectHeap(
     _In_ BOOLEAN MakeReadOnly
 );
 
-#define RtlProcessHeap() (NtCurrentPeb()->ProcessHeap)
-
 NTSYSAPI
 BOOLEAN
 NTAPI

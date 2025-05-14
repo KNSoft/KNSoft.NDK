@@ -251,7 +251,7 @@ _Inline_TlsSetValue(
         PVOID* Slots = NtReadTeb(TlsExpansionSlots);
         if (Slots == NULL)
         {
-            Slots = (PVOID*)RtlAllocateHeap(NtGetProcessHeap(), HEAP_ZERO_MEMORY, TLS_EXPANSION_SLOTS * sizeof(PVOID));
+            Slots = (PVOID*)RtlAllocateHeap(RtlProcessHeap(), HEAP_ZERO_MEMORY, TLS_EXPANSION_SLOTS * sizeof(PVOID));
             if (Slots == NULL)
             {
                 _Inline_BaseSetLastNTError(STATUS_NO_MEMORY);
@@ -344,7 +344,7 @@ HANDLE
 WINAPI
 _Inline_GetProcessHeap(VOID)
 {
-    return NtGetProcessHeap();
+    return RtlProcessHeap();
 }
 
 __inline
