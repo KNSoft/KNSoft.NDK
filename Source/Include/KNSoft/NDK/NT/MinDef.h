@@ -324,6 +324,12 @@ typedef void * POINTER_32 PVOID32;
 #define DECLSPEC_EXPORT __declspec(dllexport)
 #define DECLSPEC_NOALIAS __declspec(noalias)
 
+#if defined(_WIN64)
+#define DECLSPEC_POINTERALIGN DECLSPEC_ALIGN(8)
+#else
+#define DECLSPEC_POINTERALIGN DECLSPEC_ALIGN(4)
+#endif
+
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 #if __STDC_VERSION__ >= 202311L
