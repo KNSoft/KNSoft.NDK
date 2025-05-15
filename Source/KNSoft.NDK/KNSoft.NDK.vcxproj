@@ -257,12 +257,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\NDK.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Dbg.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\NT.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\AVX.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\DataStructures\Bitmap.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\ErrorHandling.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Misc.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Process\EnvironmentBlock.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Access.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Luid.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Sid.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\String.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.inl" />
