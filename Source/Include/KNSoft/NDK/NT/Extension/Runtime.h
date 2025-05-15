@@ -170,6 +170,15 @@ NtWriteCurrentTebPVOID(
 
 #define RtlProcessHeap() (NtCurrentPeb()->ProcessHeap)
 
+__inline
+VOID
+NTAPI
+RtlSetLastNtStatus(
+    _In_ NTSTATUS Status)
+{
+    NtWriteTeb(LastStatusValue, Status);
+}
+
 #pragma endregion
 
 #pragma region Machine
