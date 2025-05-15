@@ -349,13 +349,11 @@ RtlFindMostSignificantBit(
 // value.
 //
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSAPI
 ULONG
 NTAPI
 RtlNumberOfSetBitsUlongPtr(
     _In_ ULONG_PTR Target);
-#endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 

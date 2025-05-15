@@ -29,8 +29,6 @@ VOID NTAPI TP_ALPC_CALLBACK_EX(
     );
 typedef TP_ALPC_CALLBACK_EX *PTP_ALPC_CALLBACK_EX;
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
-
 // winbase:CreateThreadpool
 NTSYSAPI
 NTSTATUS
@@ -66,7 +64,6 @@ TpSetPoolMinThreads(
     _In_ ULONG MinThreads
     );
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 // winbase:QueryThreadpoolStackInformation
 NTSYSAPI
 NTSTATUS
@@ -93,7 +90,6 @@ TpSetPoolThreadBasePriority(
     _Inout_ PTP_POOL Pool,
     _In_ ULONG BasePriority
     );
-#endif
 
 // winbase:CreateThreadpoolCleanupGroup
 NTSYSAPI
@@ -408,7 +404,6 @@ TpAllocAlpcCompletion(
     _In_opt_ PTP_CALLBACK_ENVIRON CallbackEnviron
     );
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 // rev
 NTSYSAPI
 NTSTATUS
@@ -420,7 +415,6 @@ TpAllocAlpcCompletionEx(
     _Inout_opt_ PVOID Context,
     _In_opt_ PTP_CALLBACK_ENVIRON CallbackEnviron
     );
-#endif
 
 // private
 NTSYSAPI
@@ -477,7 +471,5 @@ NTAPI
 TpCheckTerminateWorker(
     _In_ HANDLE Thread
     );
-
-#endif
 
 EXTERN_C_END

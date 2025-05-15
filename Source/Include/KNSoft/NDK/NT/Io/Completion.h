@@ -73,7 +73,6 @@ NtSetIoCompletion(
     _In_ NTSTATUS IoStatus,
     _In_ ULONG_PTR IoStatusInformation);
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -84,7 +83,6 @@ NtSetIoCompletionEx(
     _In_opt_ PVOID ApcContext,
     _In_ NTSTATUS IoStatus,
     _In_ ULONG_PTR IoStatusInformation);
-#endif
 
 NTSYSCALLAPI
 NTSTATUS
@@ -96,7 +94,6 @@ NtRemoveIoCompletion(
     _Out_ PIO_STATUS_BLOCK IoStatusBlock,
     _In_opt_ PLARGE_INTEGER Timeout);
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -107,7 +104,6 @@ NtRemoveIoCompletionEx(
     _Out_ PULONG NumEntriesRemoved,
     _In_opt_ PLARGE_INTEGER Timeout,
     _In_ BOOLEAN Alertable);
-#endif
 
 #pragma endregion
 

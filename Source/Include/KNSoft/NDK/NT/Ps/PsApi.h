@@ -583,7 +583,6 @@ NtGetCurrentProcessorNumber(
     VOID
     );
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 /**
  * Retrieves the number of the current processor.
  *
@@ -596,7 +595,6 @@ NTAPI
 NtGetCurrentProcessorNumberEx(
     _Out_opt_ PPROCESSOR_NUMBER ProcessorNumber
     );
-#endif
 
 /**
  * Retrieves the context of the specified thread.
@@ -908,8 +906,6 @@ NtQueueApcThread(
  */
 #define QUEUE_USER_APC_SPECIAL_USER_APC ((HANDLE)0x1)
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
-
 /**
  * Queues an APC (Asynchronous Procedure Call) to a thread.
  *
@@ -934,8 +930,6 @@ NtQueueApcThreadEx(
     _In_opt_ PVOID ApcArgument2,
     _In_opt_ PVOID ApcArgument3
     );
-
-#endif
 
 /**
  * The APC_CALLBACK_DATA_CONTEXT structure is used to pass information to the APC callback routine.
@@ -1741,7 +1735,6 @@ typedef enum _MEMORY_RESERVE_TYPE
     MemoryReserveTypeMax
 } MEMORY_RESERVE_TYPE;
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 /**
  * Allocates a memory reserve object.
  *
@@ -1758,7 +1751,6 @@ NtAllocateReserveObject(
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ MEMORY_RESERVE_TYPE Type
     );
-#endif
 
 // Process snapshotting
 

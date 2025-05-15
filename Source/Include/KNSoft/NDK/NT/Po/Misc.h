@@ -915,20 +915,6 @@ NtSetThreadExecutionState(
     _In_ EXECUTION_STATE NewFlags, // ES_* flags
     _Out_ EXECUTION_STATE *PreviousFlags);
 
-#if (NTDDI_VERSION < NTDDI_WIN7)
-/**
- * Requests the system resume latency.
- *
- * @param latency The desired latency time.
- * @return Successful or errant status.
- */
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
-NtRequestWakeupLatency(
-    _In_ LATENCY_TIME latency);
-#endif
-
 /**
  * Initiates a power action of the current system.
  *

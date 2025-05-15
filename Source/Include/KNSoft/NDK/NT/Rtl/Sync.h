@@ -201,7 +201,7 @@ RtlRunOnceExecuteOnce(
     _Inout_ PRTL_RUN_ONCE RunOnce,
     _In_ __callback PRTL_RUN_ONCE_INIT_FN InitFn,
     _Inout_opt_ PVOID Parameter,
-    _Outptr_opt_result_maybenull_ PVOID * Context
+    _Outptr_opt_result_maybenull_ PVOID* Context
 );
 
 _Must_inspect_result_
@@ -211,7 +211,7 @@ NTAPI
 RtlRunOnceBeginInitialize(
     _Inout_ PRTL_RUN_ONCE RunOnce,
     _In_ ULONG Flags,
-    _Outptr_opt_result_maybenull_ PVOID * Context
+    _Outptr_opt_result_maybenull_ PVOID* Context
 );
 
 NTSYSAPI

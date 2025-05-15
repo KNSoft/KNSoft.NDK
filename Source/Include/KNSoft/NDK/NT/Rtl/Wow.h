@@ -127,7 +127,7 @@ NTSTATUS
 NTAPI
 RtlWow64EnableFsRedirectionEx(
     _In_ PVOID Wow64FsEnableRedirection,
-    _Out_ PVOID *OldFsRedirectionLevel
+    _Out_ PVOID* OldFsRedirectionLevel
 );
 
 EXTERN_C_END

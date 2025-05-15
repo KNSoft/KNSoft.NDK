@@ -180,7 +180,6 @@ typedef RTL_AVL_TABLE *PRTL_AVL_TABLE;
 //  This must be called for every individual generic table variable before
 //  it can be used.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 NTSYSAPI
 VOID
 NTAPI
@@ -190,7 +189,6 @@ RtlInitializeGenericTableAvl(
     _In_ PRTL_AVL_ALLOCATE_ROUTINE AllocateRoutine,
     _In_ PRTL_AVL_FREE_ROUTINE FreeRoutine,
     _In_opt_ PVOID TableContext);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function InsertElementGenericTable will insert a new element
@@ -204,7 +202,6 @@ RtlInitializeGenericTableAvl(
 //  contents are copied to the newly created element.  This means that
 //  pointer to the input buffer will not point to the new element.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 NTSYSAPI
 PVOID
 NTAPI
@@ -213,7 +210,6 @@ RtlInsertElementGenericTableAvl(
     _In_reads_bytes_(BufferSize) PVOID Buffer,
     _In_ CLONG BufferSize,
     _Out_opt_ PBOOLEAN NewElement);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function InsertElementGenericTableFull will insert a new element
@@ -229,7 +225,6 @@ RtlInsertElementGenericTableAvl(
 //  This routine is passed the NodeOrParent and SearchResult from a
 //  previous RtlLookupElementGenericTableFull.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 NTSYSAPI
 PVOID
 NTAPI
@@ -240,7 +235,6 @@ RtlInsertElementGenericTableFullAvl(
     _Out_opt_ PBOOLEAN NewElement,
     _In_ PVOID NodeOrParent,
     _In_ TABLE_SEARCH_RESULT SearchResult);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function DeleteElementGenericTable will find and delete an element
@@ -249,14 +243,12 @@ RtlInsertElementGenericTableFullAvl(
 //  is FALSE.  The user supplied input buffer is only used as a key in
 //  locating the element in the table.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 NTSYSAPI
 BOOLEAN
 NTAPI
 RtlDeleteElementGenericTableAvl(
     _In_ PRTL_AVL_TABLE Table,
     _In_ PVOID Buffer);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function DeleteElementGenericTableAvxEx deletes the element specified
@@ -279,7 +271,6 @@ RtlDeleteElementGenericTableAvlEx(
 //  the element is not located the return value is NULL.  The user supplied
 //  input buffer is only used as a key in locating the element in the table.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -287,7 +278,6 @@ NTAPI
 RtlLookupElementGenericTableAvl(
     _In_ PRTL_AVL_TABLE Table,
     _In_ PVOID Buffer);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function LookupElementGenericTableFull will find an element in a generic
@@ -298,7 +288,6 @@ RtlLookupElementGenericTableAvl(
 //  The user can use the SearchResult and parent for a subsequent FullInsertElement
 //  call to optimize the insert.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 NTSYSAPI
 PVOID
 NTAPI
@@ -307,7 +296,6 @@ RtlLookupElementGenericTableFullAvl(
     _In_ PVOID Buffer,
     _Out_ PVOID* NodeOrParent,
     _Out_ TABLE_SEARCH_RESULT* SearchResult);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function EnumerateGenericTable will return to the caller one-by-one
@@ -329,7 +317,6 @@ RtlLookupElementGenericTableFullAvl(
 //          reason requires exclusive access to the table for the duration of
 //          the enumeration.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -337,7 +324,6 @@ NTAPI
 RtlEnumerateGenericTableAvl(
     _In_ PRTL_AVL_TABLE Table,
     _In_ BOOLEAN Restart);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function EnumerateGenericTableWithoutSplaying will return to the
@@ -364,7 +350,6 @@ RtlEnumerateGenericTableAvl(
 //          occur for the duration of the enumeration, typically by having
 //          at least shared access to the table for the duration.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -372,7 +357,6 @@ NTAPI
 RtlEnumerateGenericTableWithoutSplayingAvl(
     _In_ PRTL_AVL_TABLE Table,
     _Inout_ PVOID* RestartKey);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  RtlLookupFirstMatchingElementGenericTableAvl will return the left-most
@@ -382,7 +366,6 @@ RtlEnumerateGenericTableWithoutSplayingAvl(
 //  first match, and use an enumeration routine (such as RtlEnumerateGenericTableWithoutSplayingAvl
 //  to return each subsequent match.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -391,7 +374,6 @@ RtlLookupFirstMatchingElementGenericTableAvl(
     _In_ PRTL_AVL_TABLE Table,
     _In_ PVOID Buffer,
     _Out_ PVOID* RestartKey);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function EnumerateGenericTableLikeADirectory will return to the
@@ -424,7 +406,6 @@ RtlLookupFirstMatchingElementGenericTableAvl(
 //          requires more thought.  Also need the match pattern and IgnoreCase.
 //          Should some structure be introduced to carry it all?
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -437,7 +418,6 @@ RtlEnumerateGenericTableLikeADirectory(
     _Inout_ PVOID* RestartKey,
     _Inout_ PULONG DeleteCount,
     _In_ PVOID Buffer);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 // The function GetElementGenericTable will return the i'th element
@@ -447,7 +427,6 @@ RtlEnumerateGenericTableLikeADirectory(
 // of I > than (NumberGenericTableElements(Table)-1) will return NULL.  If
 // an arbitrary element is deleted from the generic table it will cause
 // all elements inserted after the deleted element to "move up".
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -455,19 +434,16 @@ NTAPI
 RtlGetElementGenericTableAvl(
     _In_ PRTL_AVL_TABLE Table,
     _In_ ULONG I);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 // The function NumberGenericTableElements returns a ULONG value
 // which is the number of generic table elements currently inserted
 // in the generic table.
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 NTSYSAPI
 ULONG
 NTAPI
 RtlNumberGenericTableElementsAvl(
     _In_ PRTL_AVL_TABLE Table);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  The function IsGenericTableEmpty will return to the caller TRUE if
@@ -478,14 +454,12 @@ RtlNumberGenericTableElementsAvl(
 //
 // Generic extensions for using generic structures with the avl libraries.
 //
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
 NTAPI
 RtlIsGenericTableEmptyAvl(
     _In_ PRTL_AVL_TABLE Table);
-#endif // NTDDI_VERSION >= NTDDI_WINXP
 
 //
 //  As an aid to allowing existing generic table users to do (in most

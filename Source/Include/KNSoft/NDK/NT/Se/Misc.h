@@ -728,7 +728,6 @@ NtImpersonateAnonymousToken(
     _In_ HANDLE ThreadHandle
 );
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 // rev
 NTSYSCALLAPI
 NTSTATUS
@@ -741,7 +740,6 @@ NtQuerySecurityAttributesToken(
     _In_ ULONG Length,
     _Out_ PULONG ReturnLength
 );
-#endif
 
 // Access checking
 

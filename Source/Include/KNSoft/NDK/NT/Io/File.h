@@ -365,7 +365,6 @@ NtCancelIoFile(
     _In_ HANDLE FileHandle,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock);
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -373,9 +372,7 @@ NtCancelIoFileEx(
     _In_ HANDLE FileHandle,
     _In_opt_ PIO_STATUS_BLOCK IoRequestToCancel,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock);
-#endif
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -383,7 +380,6 @@ NtCancelSynchronousIoFile(
     _In_ HANDLE ThreadHandle,
     _In_opt_ PIO_STATUS_BLOCK IoRequestToCancel,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock);
-#endif
 
 /**
  * The NtDeviceIoControlFile function sends a control code directly to a specified device driver, causing the corresponding driver to perform the specified operation.

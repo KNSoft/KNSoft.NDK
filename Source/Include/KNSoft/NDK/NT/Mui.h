@@ -59,8 +59,6 @@ NTSYSAPI BOOLEAN NlsMbCodePageTag;
 NTSYSAPI BOOLEAN NlsMbOemCodePageTag;
 #endif
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
-
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -80,23 +78,6 @@ NtGetNlsSectionPtr(
     _Out_ PVOID *SectionPointer,
     _Out_ PULONG SectionSize);
 
-#if (NTDDI_VERSION < NTDDI_WIN7)
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
-NtAcquireCMFViewOwnership(
-    _Out_ PULONGLONG TimeStamp,
-    _Out_ PBOOLEAN tokenTaken,
-    _In_ BOOLEAN replaceExisting);
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
-NtReleaseCMFViewOwnership(VOID);
-
-#endif
-
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -115,8 +96,6 @@ NtGetMUIRegistryInfo(
     _In_ ULONG Flags,
     _Inout_ PULONG DataSize,
     _Out_ PVOID Data);
-
-#endif /* (NTDDI_VERSION >= NTDDI_WIN6) */
 
 #pragma endregion
 
@@ -142,14 +121,12 @@ NTAPI
 NtQueryInstallUILanguage(
     _Out_ LANGID* InstallUILanguageId);
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtFlushInstallUILanguage(
     _In_ LANGID InstallUILanguage,
     _In_ ULONG SetComittedFlag);
-#endif
 
 NTSYSCALLAPI
 NTSTATUS
@@ -163,12 +140,10 @@ NTAPI
 NtSetDefaultUILanguage(
     _In_ LANGID DefaultUILanguageId);
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtIsUILanguageComitted(VOID);
-#endif
 
 #pragma endregion phnt
 

@@ -149,15 +149,6 @@ ZwAccessCheckByTypeResultListAndAuditAlarmByHandle(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
-ZwAcquireCMFViewOwnership(
-    _Out_ PULONGLONG TimeStamp,
-    _Out_ PBOOLEAN tokenTaken,
-    _In_ BOOLEAN replaceExisting
-    );
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
 ZwAcquireCrossVmMutant(
     _In_ HANDLE CrossVmMutant,
     _In_ PLARGE_INTEGER Timeout
@@ -3693,13 +3684,6 @@ ZwRegisterThreadTerminatePort(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
-ZwReleaseCMFViewOwnership(
-    VOID
-    );
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
 ZwReleaseKeyedEvent(
     _In_opt_ HANDLE KeyedEventHandle,
     _In_ PVOID KeyValue,
@@ -3848,13 +3832,6 @@ ZwRequestWaitReplyPort(
     _In_ HANDLE PortHandle,
     _In_reads_bytes_(RequestMessage->u1.s1.TotalLength) PPORT_MESSAGE RequestMessage,
     _Out_ PPORT_MESSAGE ReplyMessage
-    );
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
-ZwRequestWakeupLatency(
-    _In_ LATENCY_TIME latency
     );
 
 NTSYSCALLAPI

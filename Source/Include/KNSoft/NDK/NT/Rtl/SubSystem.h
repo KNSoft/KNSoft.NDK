@@ -212,12 +212,10 @@ NTAPI
 CsrGetProcessId(VOID);
 
 /* phnt */
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlRegisterThreadWithCsrss(VOID);
-#endif
 
 #pragma endregion 
 

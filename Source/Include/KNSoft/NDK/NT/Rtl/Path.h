@@ -319,7 +319,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlGetSearchPath(
-    _Out_ PWSTR *SearchPath
+    _Out_ PWSTR* SearchPath
 );
 
 // rev

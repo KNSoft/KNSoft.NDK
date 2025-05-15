@@ -5971,7 +5971,6 @@ typedef enum _ETWTRACECONTROLCODE
     EtwGetPmcSessions = 46,
 } ETWTRACECONTROLCODE;
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -5983,9 +5982,7 @@ NtTraceControl(
     _In_ ULONG OutputBufferLength,
     _Out_ PULONG ReturnLength
 );
-#endif
 
-#if (NTDDI_VERSION >= NTDDI_WINXP)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -5995,7 +5992,6 @@ NtTraceEvent(
     _In_ ULONG FieldSize,
     _In_ PVOID Fields
 );
-#endif
 
 // private
 typedef struct _TELEMETRY_COVERAGE_POINT

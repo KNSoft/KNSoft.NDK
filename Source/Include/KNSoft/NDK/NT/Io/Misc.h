@@ -59,7 +59,6 @@ typedef enum _IO_SESSION_STATE
     IoSessionStateMax
 } IO_SESSION_STATE;
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -67,9 +66,7 @@ NtOpenSession(
     _Out_ PHANDLE SessionHandle,
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes);
-#endif
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -82,7 +79,6 @@ NtNotifyChangeSession(
     _In_ IO_SESSION_STATE PreviousState,
     _In_reads_bytes_opt_(PayloadSize) PVOID Payload,
     _In_ ULONG PayloadSize);
-#endif
 
 #pragma endregion
 

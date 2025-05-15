@@ -167,8 +167,6 @@ NtPlugPlayControl(
     _Inout_updates_bytes_(PnPControlDataLength) PVOID PnPControlData,
     _In_ ULONG PnPControlDataLength);
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
-
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -184,9 +182,6 @@ NTSTATUS
 NTAPI
 NtDisableLastKnownGood(VOID);
 
-#endif
-
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -194,6 +189,5 @@ NtReplacePartitionUnit(
     _In_ PUNICODE_STRING TargetInstancePath,
     _In_ PUNICODE_STRING SpareInstancePath,
     _In_ ULONG Flags);
-#endif
 
 EXTERN_C_END

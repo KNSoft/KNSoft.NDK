@@ -520,8 +520,6 @@ typedef struct _OBJECT_BOUNDARY_DESCRIPTOR
     //OBJECT_BOUNDARY_ENTRY Entries[1];
 } OBJECT_BOUNDARY_DESCRIPTOR, *POBJECT_BOUNDARY_DESCRIPTOR;
 
-#if (NTDDI_VERSION >= NTDDI_VISTA)
-
 /**
  * Creates a private namespace.
  *
@@ -575,8 +573,6 @@ NTAPI
 NtDeletePrivateNamespace(
     _In_ HANDLE NamespaceHandle
     );
-
-#endif
 
 #endif
 

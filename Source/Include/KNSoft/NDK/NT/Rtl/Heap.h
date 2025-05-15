@@ -867,14 +867,12 @@ RtlMultipleFreeHeap(
     _In_ PVOID* Array
 );
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 NTSYSAPI
 VOID
 NTAPI
 RtlDetectHeapLeaks(
     VOID
 );
-#endif
 
 NTSYSAPI
 VOID

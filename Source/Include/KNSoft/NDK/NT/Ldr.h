@@ -449,8 +449,6 @@ LdrGetDllHandleEx(
     _In_ PUNICODE_STRING DllName,
     _Out_ PVOID *DllHandle);
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
-
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -465,8 +463,6 @@ LdrGetDllHandleByName(
     _In_opt_ PUNICODE_STRING BaseDllName,
     _In_opt_ PUNICODE_STRING FullDllName,
     _Out_ PVOID* DllHandle);
-
-#endif
 
 #define LDR_ADDREF_DLL_PIN 0x00000001
 
@@ -488,7 +484,6 @@ LdrGetProcedureAddress(
 
 #define LDR_GET_PROCEDURE_ADDRESS_DONT_RECORD_FORWARDER 0x00000001
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -498,7 +493,6 @@ LdrGetProcedureAddressEx(
     _In_opt_ ULONG ProcedureNumber,
     _Out_ PVOID *ProcedureAddress,
     _In_ ULONG Flags);
-#endif
 
 NTSYSAPI
 NTSTATUS
@@ -719,14 +713,12 @@ typedef struct _LDR_VERIFY_IMAGE_INFO
     USHORT ImageCharacteristics;
 } LDR_VERIFY_IMAGE_INFO, *PLDR_VERIFY_IMAGE_INFO;
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 NTSYSAPI
 NTSTATUS
 NTAPI
 LdrVerifyImageMatchesChecksumEx(
     _In_ HANDLE ImageFileHandle,
     _Inout_ PLDR_VERIFY_IMAGE_INFO VerifyInfo);
-#endif
 
 #pragma endregion
 
@@ -909,7 +901,6 @@ NTSYSAPI RTL_SCPCFG_NTDLL_EXPORTS RtlpScpCfgNtdllExports;
 
 #pragma region Load as Data Table
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 
 NTSYSAPI
 NTSTATUS
@@ -936,8 +927,6 @@ NTAPI
 LdrGetFileNameFromLoadAsDataTable(
     _In_ PVOID Module,
     _Out_ PVOID *pFileNamePrt);
-
-#endif
 
 #pragma endregion
 
@@ -1476,7 +1465,6 @@ LdrShutdownThread(VOID);
 
 #pragma region DLL Load Notification
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 
 #define LDR_DLL_NOTIFICATION_REASON_LOADED 1
 #define LDR_DLL_NOTIFICATION_REASON_UNLOADED 2
@@ -1529,8 +1517,6 @@ NTSTATUS
 NTAPI
 LdrUnregisterDllNotification(
     _In_ PVOID Cookie);
-
-#endif
 
 #pragma endregion Microsoft Learning: DLL Load Notification
 
@@ -1613,7 +1599,6 @@ LdrLoadEnclaveModule(
 
 #pragma endregion
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1621,7 +1606,6 @@ LdrQueryModuleServiceTags(
     _In_ PVOID DllHandle,
     _Out_writes_(*BufferSize) PULONG ServiceTagBuffer,
     _Inout_ PULONG BufferSize);
-#endif
 
 #if (NTDDI_VERSION >= NTDDI_WINBLUE)
 NTSYSAPI

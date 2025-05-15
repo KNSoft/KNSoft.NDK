@@ -95,8 +95,6 @@ typedef struct _RTL_DYNAMIC_HASH_TABLE
 // Inline functions first.
 //
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
-
 FORCEINLINE
 VOID
 RtlInitHashTableContext(
@@ -165,8 +163,6 @@ RtlActiveEnumeratorsHashTable(
     return HashTable->NumEnumerators;
 }
 
-#endif
-
 //
 // Almost all the hash functions take in a Context.
 // If a valid context is passed in, it will be used
@@ -188,8 +184,6 @@ RtlCreateHashTableEx(
     _In_ ULONG Shift,
     _Reserved_ ULONG Flags);
 #endif
-
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 
 _Must_inspect_result_
 _Success_(return != 0)
@@ -298,8 +292,6 @@ BOOLEAN
 NTAPI
 RtlContractHashTable(
     _In_ PRTL_DYNAMIC_HASH_TABLE HashTable);
-
-#endif
 
 #if (NTDDI_VERSION >= NTDDI_WINTHRESHOLD)
 

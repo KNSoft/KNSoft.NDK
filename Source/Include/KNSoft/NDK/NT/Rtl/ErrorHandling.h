@@ -275,7 +275,6 @@ RtlSetThreadErrorMode(
 
 #pragma region WER
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -283,7 +282,6 @@ RtlReportException(
     _In_ PEXCEPTION_RECORD ExceptionRecord,
     _In_ PCONTEXT ContextRecord,
     _In_ ULONG Flags);
-#endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 NTSYSAPI
@@ -296,7 +294,6 @@ RtlReportExceptionEx(
     _In_ PLARGE_INTEGER Timeout);
 #endif
 
-#if (NTDDI_VERSION >= NTDDI_WIN6)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -305,16 +302,13 @@ RtlWerpReportException(
     _In_ HANDLE CrashReportSharedMem,
     _In_ ULONG Flags,
     _Out_ PHANDLE CrashVerticalProcessHandle);
-#endif
 
-#if (NTDDI_VERSION >= NTDDI_WIN7)
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlReportSilentProcessExit(
     _In_ HANDLE ProcessHandle,
     _In_ NTSTATUS ExitStatus);
-#endif
 
 #pragma endregion phnt
 
