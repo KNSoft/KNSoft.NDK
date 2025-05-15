@@ -44,6 +44,13 @@
 #define _512KB  _KB(512)
 #define _1024KB _KB(1024)
 
+#define _20KB    _KB(20)
+#define _40KB    _KB(40)
+#define _80KB    _KB(80)
+#define _160KB   _KB(160)
+#define _320KB   _KB(320)
+#define _640KB   _KB(640)
+
 #define _2MB    _MB(2)
 #define _4MB    _MB(4)
 #define _8MB    _MB(8)
@@ -54,6 +61,13 @@
 #define _256MB  _MB(256)
 #define _512MB  _MB(512)
 #define _1024MB _MB(1024)
+
+#define _20MB    _MB(20)
+#define _40MB    _MB(40)
+#define _80MB    _MB(80)
+#define _160MB   _MB(160)
+#define _320MB   _MB(320)
+#define _640MB   _MB(640)
 
 #define _2GB    _GB(2)
 #define _4GB    _GB(4)
@@ -66,6 +80,13 @@
 #define _512GB  _GB(512)
 #define _1024GB _GB(1024)
 
+#define _20GB    _GB(20)
+#define _40GB    _GB(40)
+#define _80GB    _GB(80)
+#define _160GB   _GB(160)
+#define _320GB   _GB(320)
+#define _640GB   _GB(640)
+
 #define _2TB    _TB(2)
 #define _4TB    _TB(4)
 #define _8TB    _TB(8)
@@ -77,6 +98,13 @@
 #define _512TB  _TB(512)
 #define _1024TB _TB(1024)
 
+#define _20TB    _TB(20)
+#define _40TB    _TB(40)
+#define _80TB    _TB(80)
+#define _160TB   _TB(160)
+#define _320TB   _TB(320)
+#define _640TB   _TB(640)
+
 #define _2PB    _PB(2)
 #define _4PB    _PB(4)
 #define _8PB    _PB(8)
@@ -87,6 +115,13 @@
 #define _256PB  _PB(256)
 #define _512PB  _PB(512)
 #define _1024PB _PB(1024)
+
+#define _20PB    _PB(20)
+#define _40PB    _PB(40)
+#define _80PB    _PB(80)
+#define _160PB   _PB(160)
+#define _320PB   _PB(320)
+#define _640PB   _PB(640)
 
 #define _2EB    _EB(2)
 #define _4EB    _EB(4)
