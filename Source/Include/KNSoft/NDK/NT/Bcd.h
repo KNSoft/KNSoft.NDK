@@ -491,7 +491,7 @@ typedef struct _BCD_OBJECT_DESCRIPTION
 
 typedef struct _BCD_OBJECT
 {
-    GUID Identifer;
+    GUID Identifier;
     PBCD_OBJECT_DESCRIPTION Description;
 } BCD_OBJECT, *PBCD_OBJECT;
 
@@ -1563,86 +1563,86 @@ typedef enum _BcdTemplateElementTypes
 } BcdTemplateElementTypes;
 
 /**
- * @brief Specifies the no-execute page protection policies.
+ * Specifies the no-execute page protection policies.
  */
 typedef enum _BcdOSLoader_NxPolicy
 {
     /**
-     * @brief The no-execute page protection is off by default.
+     * The no-execute page protection is off by default.
      */
     NxPolicyOptIn = 0,
     /**
-     * @brief The no-execute page protection is on by default.
+     * The no-execute page protection is on by default.
      */
     NxPolicyOptOut = 1,
     /**
-     * @brief The no-execute page protection is always off.
+     * The no-execute page protection is always off.
      */
     NxPolicyAlwaysOff = 2,
     /**
-     * @brief The no-execute page protection is always on.
+     * The no-execute page protection is always on.
      */
     NxPolicyAlwaysOn = 3
 } BcdOSLoader_NxPolicy;
 
 /**
- * @brief Specifies the Physical Address Extension (PAE) policies.
+ * Specifies the Physical Address Extension (PAE) policies.
  */
 typedef enum _BcdOSLoader_PAEPolicy
 {
     /**
-     * @brief Enable PAE if hot-pluggable memory is defined above 4GB.
+     * Enable PAE if hot-pluggable memory is defined above 4GB.
      */
     PaePolicyDefault = 0,
     /**
-     * @brief PAE is enabled.
+     * PAE is enabled.
      */
     PaePolicyForceEnable = 1,
     /**
-     * @brief PAE is disabled.
+     * PAE is disabled.
      */
     PaePolicyForceDisable = 2
 } BcdOSLoader_PAEPolicy;
 
 /**
- * @brief Specifies the boot status policies.
+ * Specifies the boot status policies.
  */
 typedef enum _BcdOSLoader_BootStatusPolicy
 {
     /**
-     * @brief Display all boot failures.
+     * Display all boot failures.
      */
     BootStatusPolicyDisplayAllFailures = 0,
     /**
-     * @brief Ignore all boot failures.
+     * Ignore all boot failures.
      */
     BootStatusPolicyIgnoreAllFailures = 1,
     /**
-     * @brief Ignore all shutdown failures.
+     * Ignore all shutdown failures.
      */
     BootStatusPolicyIgnoreShutdownFailures = 2,
     /**
-     * @brief Ignore all boot failures.
+     * Ignore all boot failures.
      */
     BootStatusPolicyIgnoreBootFailures = 3,
     /**
-     * @brief Ignore checkpoint failures.
+     * Ignore checkpoint failures.
      */
     BootStatusPolicyIgnoreCheckpointFailures = 4,
     /**
-     * @brief Display shutdown failures.
+     * Display shutdown failures.
      */
     BootStatusPolicyDisplayShutdownFailures = 5,
     /**
-     * @brief Display boot failures.
+     * Display boot failures.
      */
     BootStatusPolicyDisplayBootFailures = 6,
     /**
-     * @brief Display checkpoint failures.
+     * Display checkpoint failures.
      */
     BootStatusPolicyDisplayCheckpointFailures = 7,
     /**
-     * @brief Always display startup failures.
+     * Always display startup failures.
      */
     BootStatusPolicyAlwaysDisplayStartupFailures = 8
 } BcdOSLoaderBootStatusPolicy;

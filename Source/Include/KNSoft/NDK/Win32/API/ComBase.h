@@ -27,7 +27,7 @@ typedef struct _MTA_USAGE_GLOBALS
     _Reserved_ PLIST_ENTRY ListEntryHeadMTAUsageIncrementor;
     _Reserved_ PULONG MTAIncrementorCompleted;
     _Reserved_ PVOID* MTAUsageCompletedIncrementorHead;
-    PMTA_HOST_USAGE_FLAGS MTAHostUsageFlags; // A pointer to the MTA usage flags // since TRESHOLD
+    PMTA_HOST_USAGE_FLAGS MTAHostUsageFlags; // A pointer to the MTA usage flags // since THRESHOLD
 } MTA_USAGE_GLOBALS, *PMTA_USAGE_GLOBALS;
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)

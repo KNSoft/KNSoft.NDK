@@ -8,10 +8,14 @@ EXTERN_C_START
 
 #pragma region Initialize
 
+//
+// Boot condition flags (NtInitializeRegistry)
+//
+
 #define REG_INIT_BOOT_SM 0x0000
 #define REG_INIT_BOOT_SETUP 0x0001
 #define REG_INIT_BOOT_ACCEPTED_BASE 0x0002
-#define REG_INIT_BOOT_ACCEPTED_MAX REG_INIT_BOOT_ACCEPTED_BASE + 999
+#define REG_INIT_BOOT_ACCEPTED_MAX (REG_INIT_BOOT_ACCEPTED_BASE + 999)
 
 /**
  * Initializes the registry.
@@ -569,6 +573,18 @@ NtQueryOpenSubKeys(
     _In_ POBJECT_ATTRIBUTES TargetKey,
     _Out_ PULONG HandleCount
     );
+
+typedef struct _KEY_PID_ARRAY
+{
+    HANDLE ProcessId;
+    UNICODE_STRING KeyName;
+} KEY_PID_ARRAY, *PKEY_PID_ARRAY;
+
+typedef struct _KEY_OPEN_SUBKEYS_INFORMATION
+{
+    ULONG Count;
+    _Field_size_(Count) KEY_PID_ARRAY KeyArray[ANYSIZE_ARRAY];
+} KEY_OPEN_SUBKEYS_INFORMATION, *PKEY_OPEN_SUBKEYS_INFORMATION;
 
 /**
  * Queries the open subkeys of a registry key with additional information.
