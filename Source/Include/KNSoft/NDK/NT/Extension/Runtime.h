@@ -25,11 +25,18 @@ NtReadCurrentTebUlonglong(
 
 #endif
 
+#define NtReadTebByte(m) NtReadCurrentTebByte(UFIELD_OFFSET(TEB, m))
+#define NtReadTebUshort(m) NtReadCurrentTebUshort(UFIELD_OFFSET(TEB, m))
+#define NtReadTebUlong(m) NtReadCurrentTebUlong(UFIELD_OFFSET(TEB, m))
+#define NtReadTebUlonglong(m) NtReadCurrentTebUlonglong(UFIELD_OFFSET(TEB, m))
+#define NtReadTebUlongPtr(m) NtReadCurrentTebUlongPtr(UFIELD_OFFSET(TEB, m))
+#define NtReadTebPVOID(m) NtReadCurrentTebPVOID(UFIELD_OFFSET(TEB, m))
+
 #define NtReadTeb(m) ((FIELD_TYPE(TEB, m))(\
-    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtReadCurrentTebUlonglong(UFIELD_OFFSET(TEB, m)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtReadCurrentTebUlong(UFIELD_OFFSET(TEB, m)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtReadCurrentTebUshort(UFIELD_OFFSET(TEB, m)) : (\
-                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtReadCurrentTebByte(UFIELD_OFFSET(TEB, m)) :\
+    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtReadTebUlonglong(m) : (\
+        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtReadTebUlong(m) : (\
+            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtReadTebUshort(m) : (\
+                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtReadTebByte(m) :\
                     ((ULONGLONG)(NtCurrentTeb()->m))\
             )\
         )\
@@ -126,11 +133,18 @@ NtWriteCurrentTebPVOID(
     NtWriteCurrentTebUlongPtr(Offset, (ULONG_PTR)Value);
 }
 
+#define NtWriteTebByte(m, val) NtWriteCurrentTebByte(UFIELD_OFFSET(TEB, m), val)
+#define NtWriteTebUshort(m, val) NtWriteCurrentTebUshort(UFIELD_OFFSET(TEB, m), val)
+#define NtWriteTebUlong(m, val) NtWriteCurrentTebUlong(UFIELD_OFFSET(TEB, m), val)
+#define NtWriteTebUlonglong(m, val) NtWriteCurrentTebUlonglong(UFIELD_OFFSET(TEB, m), val)
+#define NtWriteTebUlongPtr(m, val) NtWriteCurrentTebUlongPtr(UFIELD_OFFSET(TEB, m), val)
+#define NtWriteTebPVOID(m, val) NtWriteCurrentTebPVOID(UFIELD_OFFSET(TEB, m), val)
+
 #define NtWriteTeb(m, val) (\
-    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtWriteCurrentTebUlonglong(UFIELD_OFFSET(TEB, m), (ULONGLONG)(ULONG_PTR)(val)) : (\
-        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtWriteCurrentTebUlong(UFIELD_OFFSET(TEB, m), (ULONG)(ULONG_PTR)(val)) : (\
-            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtWriteCurrentTebUshort(UFIELD_OFFSET(TEB, m), (USHORT)(ULONG_PTR)(val)) : (\
-                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtWriteCurrentTebByte(UFIELD_OFFSET(TEB, m), (UCHAR)(ULONG_PTR)(val)) :\
+    FIELD_SIZE(TEB, m) == sizeof(ULONGLONG) ? NtWriteTebUlonglong(m, (ULONGLONG)(ULONG_PTR)(val)) : (\
+        FIELD_SIZE(TEB, m) == sizeof(ULONG) ? NtWriteTebUlong(m, (ULONG)(ULONG_PTR)(val)) : (\
+            FIELD_SIZE(TEB, m) == sizeof(USHORT) ? NtWriteTebUshort(m, (USHORT)(ULONG_PTR)(val)) : (\
+                FIELD_SIZE(TEB, m) == sizeof(UCHAR) ? NtWriteTebByte(m, (UCHAR)(ULONG_PTR)(val)) :\
                     ((void)(NtCurrentTeb()->m = (val)))\
             )\
         )\
@@ -170,15 +184,6 @@ NtWriteCurrentTebPVOID(
 
 #define RtlProcessHeap() (NtCurrentPeb()->ProcessHeap)
 
-__inline
-VOID
-NTAPI
-RtlSetLastNtStatus(
-    _In_ NTSTATUS Status)
-{
-    NtWriteTeb(LastStatusValue, Status);
-}
-
 #pragma endregion
 
 #pragma region Machine
@@ -203,13 +208,3 @@ RtlSetLastNtStatus(
 #endif
 
 #pragma endregion
-
-typedef
-_Function_class_(RUNDLL32_ENTRY_FN)
-VOID
-CALLBACK
-RUNDLL32_ENTRY_FN(
-    _In_ HWND hWnd,
-    _In_ HINSTANCE hInst,
-    _In_ LPSTR lpszCmdLine,
-    _In_ int nCmdShow);

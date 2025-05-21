@@ -26,10 +26,10 @@ EXTERN_C_START
 //
 //    The layout itself cannot change since this structure has been exported
 //    in ntddk, ntifs.h, and nthal.h for some time.
-
 //
 // Define NX support policy values.
 //
+
 #define NX_SUPPORT_POLICY_ALWAYSOFF     0
 #define NX_SUPPORT_POLICY_ALWAYSON      1
 #define NX_SUPPORT_POLICY_OPTIN         2
@@ -41,6 +41,7 @@ EXTERN_C_START
 // N.B. These constants must not be changed because the ldr relies on their
 //      semantic meaning.
 //
+
 #define SEH_VALIDATION_POLICY_ON        0
 #define SEH_VALIDATION_POLICY_OFF       1
 #define SEH_VALIDATION_POLICY_TELEMETRY 2
@@ -118,6 +119,7 @@ EXTERN_C_START
 //
 // Define legal values for the SystemCall member.
 //
+
 #define SYSTEM_CALL_SYSCALL 0
 #define SYSTEM_CALL_INT_2E  1
 
@@ -126,6 +128,7 @@ EXTERN_C_START
 // unless bypass is enabled. This is for compat with existing code which
 // compares this value to zero to detect bypass enablement.
 //
+
 #define SHARED_GLOBAL_FLAGS_QPC_BYPASS_ENABLED (0x01)
 #define SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_HV_PAGE (0x02)
 #define SHARED_GLOBAL_FLAGS_QPC_BYPASS_DISABLE_32BIT (0x04)
@@ -401,18 +404,18 @@ typedef struct _KUSER_SHARED_DATA
             // The following bit fields are for the debugger only. Do not use.
             // Use the bit definitions instead.
             //
-            ULONG DbgErrorPortPresent : 1;
-            ULONG DbgElevationEnabled : 1;
-            ULONG DbgVirtEnabled : 1;
+            ULONG DbgErrorPortPresent       : 1;
+            ULONG DbgElevationEnabled       : 1;
+            ULONG DbgVirtEnabled            : 1;
             ULONG DbgInstallerDetectEnabled : 1;
-            ULONG DbgLkgEnabled : 1;
-            ULONG DbgDynProcessorEnabled : 1;
-            ULONG DbgConsoleBrokerEnabled : 1;
-            ULONG DbgSecureBootEnabled : 1;
-            ULONG DbgMultiSessionSku : 1;
+            ULONG DbgLkgEnabled             : 1;
+            ULONG DbgDynProcessorEnabled    : 1;
+            ULONG DbgConsoleBrokerEnabled   : 1;
+            ULONG DbgSecureBootEnabled      : 1;
+            ULONG DbgMultiSessionSku        : 1;
             ULONG DbgMultiUsersInSessionSku : 1;
             ULONG DbgStateSeparationEnabled : 1;
-            ULONG SpareBits : 21;
+            ULONG SpareBits                 : 21;
         } DUMMYSTRUCTNAME2;
     } DUMMYUNIONNAME2;
 
@@ -544,6 +547,7 @@ typedef struct _KUSER_SHARED_DATA
     // The following field is used for ETW user mode global logging
     // (UMGL).
     //
+
     USHORT UserModeGlobalLogger[16];
 
     //

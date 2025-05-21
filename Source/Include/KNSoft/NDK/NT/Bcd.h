@@ -479,7 +479,7 @@ typedef union _BCD_OBJECT_DATATYPE
     };
 } BCD_OBJECT_DATATYPE, *PBCD_OBJECT_DATATYPE;
 
-static_assert(sizeof(BCD_OBJECT_DATATYPE) == sizeof(ULONG), "sizeof(BCD_OBJECT_DATATYPE) is invalid.");
+_STATIC_ASSERT(sizeof(BCD_OBJECT_DATATYPE) == sizeof(ULONG));
 
 #define BCD_OBJECT_DESCRIPTION_VERSION 0x1
 
@@ -661,7 +661,7 @@ typedef union _BCD_ELEMENT_DATATYPE
     };
 } BCD_ELEMENT_DATATYPE, *PBCD_ELEMENT_DATATYPE;
 
-static_assert(sizeof(BCD_ELEMENT_DATATYPE) == sizeof(ULONG), "sizeof(BCD_ELEMENT_DATATYPE) is invalid.");
+_STATIC_ASSERT(sizeof(BCD_ELEMENT_DATATYPE) == sizeof(ULONG));
 
 NTSYSAPI
 NTSTATUS

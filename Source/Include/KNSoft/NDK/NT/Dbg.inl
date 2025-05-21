@@ -32,7 +32,7 @@ _Inline_DbgUiConnectToDbg(VOID)
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
 
-    if (NtReadTeb(DbgSsReserved[1]))
+    if (NtReadTebPVOID(DbgSsReserved[1]))
     {
         return STATUS_SUCCESS;
     }
@@ -49,7 +49,7 @@ HANDLE
 NTAPI
 _Inline_DbgUiGetThreadDebugObject(VOID)
 {
-    return NtReadTeb(DbgSsReserved[1]);
+    return NtReadTebPVOID(DbgSsReserved[1]);
 }
 
 __inline
@@ -68,7 +68,7 @@ _Inline_DbgUiWaitStateChange(
     _Out_ PDBGUI_WAIT_STATE_CHANGE StateChange,
     _In_opt_ PLARGE_INTEGER Timeout)
 {
-    return NtWaitForDebugEvent(NtReadTeb(DbgSsReserved[1]), TRUE, Timeout, StateChange);
+    return NtWaitForDebugEvent(NtReadTebPVOID(DbgSsReserved[1]), TRUE, Timeout, StateChange);
 }
 
 __inline
@@ -78,7 +78,7 @@ _Inline_DbgUiContinue(
     _In_ PCLIENT_ID AppClientId,
     _In_ NTSTATUS ContinueStatus)
 {
-    return NtDebugContinue(NtReadTeb(DbgSsReserved[1]), AppClientId, ContinueStatus);
+    return NtDebugContinue(NtReadTebPVOID(DbgSsReserved[1]), AppClientId, ContinueStatus);
 }
 
 __inline
@@ -87,7 +87,7 @@ NTAPI
 _Inline_DbgUiStopDebugging(
     _In_ HANDLE Process)
 {
-    return NtRemoveProcessDebug(Process, NtReadTeb(DbgSsReserved[1]));
+    return NtRemoveProcessDebug(Process, NtReadTebPVOID(DbgSsReserved[1]));
 }
 
 __inline
@@ -98,13 +98,13 @@ _Inline_DbgUiDebugActiveProcess(
 {
     NTSTATUS Status;
 
-    Status = NtDebugActiveProcess(Process, NtReadTeb(DbgSsReserved[1]));
+    Status = NtDebugActiveProcess(Process, NtReadTebPVOID(DbgSsReserved[1]));
     if (NT_SUCCESS(Status))
     {
         Status = DbgUiIssueRemoteBreakin(Process);
         if (!NT_SUCCESS(Status))
         {
-            NtRemoveProcessDebug(Process, NtReadTeb(DbgSsReserved[1]));
+            NtRemoveProcessDebug(Process, NtReadTebPVOID(DbgSsReserved[1]));
         }
     }
     return Status;

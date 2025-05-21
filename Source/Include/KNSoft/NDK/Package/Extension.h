@@ -128,12 +128,12 @@
 #define _8EB    _EB(8)
 #define _16EB   _EB(16)
 
-C_ASSERT(_1024KB == _1MB &&
-         _1024MB == _1GB &&
-         _1024GB == _1TB &&
-         _1024TB == _1PB &&
-         _1024PB == _1EB &&
-         _16EB - 1 == MAXULONGLONG);
+_STATIC_ASSERT(_1024KB == _1MB &&
+               _1024MB == _1GB &&
+               _1024GB == _1TB &&
+               _1024TB == _1PB &&
+               _1024PB == _1EB &&
+               _16EB - 1 == MAXULONGLONG);
 
 #pragma endregion
 
@@ -185,10 +185,14 @@ C_ASSERT(_1024KB == _1MB &&
 #define IS_WIN64 FALSE
 #endif
 
-/* Patch C_ASSERT to avoid confusion amount static_assert, _Static_assert, _STATIC_ASSERT and C_ASSERT */
+/* Patch _STATIC_ASSERT to avoid confusion amount static_assert, _Static_assert, _STATIC_ASSERT and C_ASSERT */
 
-#undef C_ASSERT
-#define C_ASSERT(expr) static_assert((expr), #expr)
+#undef _STATIC_ASSERT
+#ifdef __cplusplus
+#define _STATIC_ASSERT(expr) static_assert((expr), #expr)
+#else
+#define _STATIC_ASSERT(expr) _Static_assert((expr), #expr)
+#endif
 
 #define __A2U8(quote) u8##quote
 #define _A2U8(quote) __A2U8(quote)

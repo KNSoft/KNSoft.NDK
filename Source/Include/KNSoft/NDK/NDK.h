@@ -42,5 +42,5 @@
 #endif
 
 /* Sanity checks */
-C_ASSERT(__alignof(LARGE_INTEGER) == 8);
-C_ASSERT(__alignof(PROCESS_CYCLE_TIME_INFORMATION) == 8);
+_STATIC_ASSERT(__alignof(LARGE_INTEGER) == 8);
+_STATIC_ASSERT(__alignof(PROCESS_CYCLE_TIME_INFORMATION) == 8);

@@ -342,88 +342,39 @@ typedef PS_POST_PROCESS_INIT_ROUTINE* PPS_POST_PROCESS_INIT_ROUTINE;
  */
 typedef struct _PEB
 {
-    //
-    // The process was cloned with an inherited address space.
-    //
-    BOOLEAN InheritedAddressSpace;
-
-    //
-    // The process has image file execution options (IFEO).
-    //
-    BOOLEAN ReadImageFileExecOptions;
-
-    //
-    // The process has a debugger attached.
-    //
-    BOOLEAN BeingDebugged;
+    BOOLEAN InheritedAddressSpace;     // The process was cloned with an inherited address space.
+    BOOLEAN ReadImageFileExecOptions;  // The process has image file execution options (IFEO).
+    BOOLEAN BeingDebugged;             // The process has a debugger attached.
 
     union
     {
         BOOLEAN BitField;
         struct
         {
-            BOOLEAN ImageUsesLargePages : 1;            // The process uses large image regions (4 MB).  
-            BOOLEAN IsProtectedProcess : 1;             // The process is a protected process.
-            BOOLEAN IsImageDynamicallyRelocated : 1;    // The process image base address was relocated.         
-            BOOLEAN SkipPatchingUser32Forwarders : 1;   // The process skipped forwarders for User32.dll functions. 1 for 64-bit, 0 for 32-bit.            
-            BOOLEAN IsPackagedProcess : 1;              // The process is a packaged store process (APPX/MSIX).
-            BOOLEAN IsAppContainer : 1;                 // The process has an AppContainer token.      
-            BOOLEAN IsProtectedProcessLight : 1;        // The process is a protected process (light).            
-            BOOLEAN IsLongPathAwareProcess : 1;         // The process is long path aware.
+            BOOLEAN ImageUsesLargePages : 1;           // The process uses large image regions (4 MB).  
+            BOOLEAN IsProtectedProcess : 1;            // The process is a protected process.
+            BOOLEAN IsImageDynamicallyRelocated : 1;   // The process image base address was relocated.         
+            BOOLEAN SkipPatchingUser32Forwarders : 1;  // The process skipped forwarders for User32.dll functions. 1 for 64-bit, 0 for 32-bit.            
+            BOOLEAN IsPackagedProcess : 1;             // The process is a packaged store process (APPX/MSIX).
+            BOOLEAN IsAppContainer : 1;                // The process has an AppContainer token.      
+            BOOLEAN IsProtectedProcessLight : 1;       // The process is a protected process (light).            
+            BOOLEAN IsLongPathAwareProcess : 1;        // The process is long path aware.
         };
     };
 
-    //
-    // Handle to a mutex for synchronization.
-    //
-    HANDLE Mutant;
+    HANDLE Mutant;                                  // Handle to a mutex for synchronization.
+    PVOID ImageBaseAddress;                         // Pointer to the base address of the process image.
+    PPEB_LDR_DATA Ldr;                              // Pointer to the process loader data.
+    PRTL_USER_PROCESS_PARAMETERS ProcessParameters; // Pointer to the process parameters.
+    PVOID SubSystemData;                            // Reserved.
+    PVOID ProcessHeap;                              // Pointer to the process default heap.
+    PRTL_CRITICAL_SECTION FastPebLock;              // Pointer to a critical section used to synchronize access to the PEB.
+    PSLIST_HEADER AtlThunkSListPtr;                 // Pointer to a singly linked list used by ATL.
+    PVOID IFEOKey;                                  // Pointer to the Image File Execution Options key.
 
-    //
-    // Pointer to the base address of the process image.
-    //
-    PVOID ImageBaseAddress;
-
-    //
-    // Pointer to the process loader data.
-    //
-    PPEB_LDR_DATA Ldr;
-
-    //
-    // Pointer to the process parameters.
-    //
-    PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
-
-    //
-    // Reserved.
-    //
-    PVOID SubSystemData;
-
-    //
-    // Pointer to the process default heap.
-    //
-    PVOID ProcessHeap;
-
-    //
-    // Pointer to a critical section used to synchronize access to the PEB.
-    //
-    PRTL_CRITICAL_SECTION FastPebLock;
-
-    //
-    // Pointer to a singly linked list used by ATL.
-    //
-    PSLIST_HEADER AtlThunkSListPtr;
-
-    //
-    // Pointer to the Image File Execution Options key.
-    //
-    PVOID IFEOKey;
-
-    //
-    // Cross process flags.
-    //
     union
     {
-        ULONG CrossProcessFlags;
+        ULONG CrossProcessFlags;                    // Cross process flags.
         struct
         {
             ULONG ProcessInJob : 1;                 // The process is part of a job.
@@ -438,119 +389,34 @@ typedef struct _PEB
         };
     };
 
-    //
     // User32 KERNEL_CALLBACK_TABLE (ntuser.h)
-    //
     union
     {
         PVOID KernelCallbackTable;
         PVOID UserSharedInfoPtr;
     };
 
-    //
-    // Reserved.
-    //
-    ULONG SystemReserved;
-
-    //
-    // Pointer to the Active Template Library (ATL) singly linked list (32-bit)
-    //
-    ULONG AtlThunkSListPtr32;
-
-    //
-    // Pointer to the API Set Schema.
-    //
-    PAPI_SET_NAMESPACE ApiSetMap;
-
-    //
-    // Counter for TLS expansion.
-    //
-    ULONG TlsExpansionCounter;
-
-    //
-    // Pointer to the TLS bitmap.
-    //
-    PRTL_BITMAP TlsBitmap;
-
-    //
-    // Bits for the TLS bitmap.
-    //
-    ULONG TlsBitmapBits[2];
-
-    //
-    // Reserved for CSRSS.
-    //
-    PVOID ReadOnlySharedMemoryBase;
-
-    //
-    // Pointer to the USER_SHARED_DATA for the current SILO.
-    //
-    PSILO_USER_SHARED_DATA SharedData;
-
-    //
-    // Reserved for CSRSS.
-    //
-    PVOID* ReadOnlyStaticServerData;
-
-    //
-    // Pointer to the ANSI code page data. (PCPTABLEINFO)
-    //
-    PVOID AnsiCodePageData;
-
-    //
-    // Pointer to the OEM code page data. (PCPTABLEINFO)
-    //
-    PVOID OemCodePageData;
-
-    //
-    // Pointer to the Unicode case table data. (PNLSTABLEINFO)
-    //
-    PVOID UnicodeCaseTableData;
-
-    //
-    // The total number of system processors.
-    //
-    ULONG NumberOfProcessors;
-
-    //
-    // Global flags for the system.
-    //
-    ULONG NtGlobalFlag;
-
-    //
-    // Timeout for critical sections.
-    //
-    LARGE_INTEGER CriticalSectionTimeout;
-
-    //
-    // Reserved size for heap segments.
-    //
-    SIZE_T HeapSegmentReserve;
-
-    //
-    // Committed size for heap segments.
-    //
-    SIZE_T HeapSegmentCommit;
-
-    //
-    // Threshold for decommitting total free heap.
-    //
-    SIZE_T HeapDeCommitTotalFreeThreshold;
-
-    //
-    // Threshold for decommitting free heap blocks.
-    //
-    SIZE_T HeapDeCommitFreeBlockThreshold;
-
-    //
-    // Number of process heaps.
-    //
-    ULONG NumberOfHeaps;
-
-    //
-    // Maximum number of process heaps.
-    //
-    ULONG MaximumNumberOfHeaps;
+    ULONG SystemReserved;                   // Reserved.
+    ULONG AtlThunkSListPtr32;               // Pointer to the Active Template Library (ATL) singly linked list (32-bit)
+    PAPI_SET_NAMESPACE ApiSetMap;           // Pointer to the API Set Schema.
+    ULONG TlsExpansionCounter;              // Counter for TLS expansion.
+    PRTL_BITMAP TlsBitmap;                  // Pointer to the TLS bitmap.
+    ULONG TlsBitmapBits[2];                 // Bits for the TLS bitmap.
+    PVOID ReadOnlySharedMemoryBase;         // Reserved for CSRSS.
+    PSILO_USER_SHARED_DATA SharedData;      // Pointer to the USER_SHARED_DATA for the current SILO.
+    PVOID* ReadOnlyStaticServerData;        // Reserved for CSRSS.
+    PVOID AnsiCodePageData;                 // Pointer to the ANSI code page data. (PCPTABLEINFO)
+    PVOID OemCodePageData;                  // Pointer to the OEM code page data. (PCPTABLEINFO)
+    PVOID UnicodeCaseTableData;             // Pointer to the Unicode case table data. (PNLSTABLEINFO)
+    ULONG NumberOfProcessors;               // The total number of system processors.
+    ULONG NtGlobalFlag;                     // Global flags for the system.
+    LARGE_INTEGER CriticalSectionTimeout;   // Timeout for critical sections.
+    SIZE_T HeapSegmentReserve;              // Reserved size for heap segments.
+    SIZE_T HeapSegmentCommit;               // Committed size for heap segments.
+    SIZE_T HeapDeCommitTotalFreeThreshold;  // Threshold for decommitting total free heap.
+    SIZE_T HeapDeCommitFreeBlockThreshold;  // Threshold for decommitting free heap blocks.
+    ULONG NumberOfHeaps;                    // Number of process heaps.
+    ULONG MaximumNumberOfHeaps;             // Maximum number of process heaps.
 
     //
     // Pointer to an array of process heaps. ProcessHeaps is initialized
@@ -560,171 +426,48 @@ typedef struct _PEB
     //
     PVOID* ProcessHeaps;
 
-    //
-    // Pointer to the system GDI shared handle table.
-    //
-    PVOID GdiSharedHandleTable;
+    PVOID GdiSharedHandleTable;             // Pointer to the system GDI shared handle table.
+    PVOID ProcessStarterHelper;             // Pointer to the process starter helper.
+    ULONG GdiDCAttributeList;               // The maximum number of GDI function calls during batch operations (GdiSetBatchLimit)
+    PRTL_CRITICAL_SECTION LoaderLock;       // Pointer to the loader lock critical section.
+    ULONG OSMajorVersion;                   // Major version of the operating system.
+    ULONG OSMinorVersion;                   // Minor version of the operating system.
+    USHORT OSBuildNumber;                   // Build number of the operating system.
+    USHORT OSCSDVersion;                    // CSD version of the operating system.
+    ULONG OSPlatformId;                     // Platform ID of the operating system.
+    ULONG ImageSubsystem;                   // Subsystem version of the current process image (PE Headers).
+    ULONG ImageSubsystemMajorVersion;       // Major version of the current process image subsystem (PE Headers).
+    ULONG ImageSubsystemMinorVersion;       // Minor version of the current process image subsystem (PE Headers).
+    KAFFINITY ActiveProcessAffinityMask;    // Affinity mask for the current process.
 
-    //
-    // Pointer to the process starter helper.
-    //
-    PVOID ProcessStarterHelper;
-
-    //
-    // The maximum number of GDI function calls during batch operations (GdiSetBatchLimit)
-    //
-    ULONG GdiDCAttributeList;
-
-    //
-    // Pointer to the loader lock critical section.
-    //
-    PRTL_CRITICAL_SECTION LoaderLock;
-
-    //
-    // Major version of the operating system.
-    //
-    ULONG OSMajorVersion;
-
-    //
-    // Minor version of the operating system.
-    //
-    ULONG OSMinorVersion;
-
-    //
-    // Build number of the operating system.
-    //
-    USHORT OSBuildNumber;
-
-    //
-    // CSD version of the operating system.
-    //
-    USHORT OSCSDVersion;
-
-    //
-    // Platform ID of the operating system.
-    //
-    ULONG OSPlatformId;
-
-    //
-    // Subsystem version of the current process image (PE Headers).
-    //
-    ULONG ImageSubsystem;
-
-    //
-    // Major version of the current process image subsystem (PE Headers).
-    //
-    ULONG ImageSubsystemMajorVersion;
-
-    //
-    // Minor version of the current process image subsystem (PE Headers).
-    //
-    ULONG ImageSubsystemMinorVersion;
-
-    //
-    // Affinity mask for the current process.
-    //
-    KAFFINITY ActiveProcessAffinityMask;
-
-    //
     // Temporary buffer for GDI handles accumulated in the current batch.
-    //
 #ifdef _WIN64
     ULONG GdiHandleBuffer[60];
 #else
     ULONG GdiHandleBuffer[34];
 #endif
 
-    //
-    // Pointer to the post-process initialization routine available for use by the application.
-    //
-    PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;
+    PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;           // Pointer to the post-process initialization routine available for use by the application.
+    PRTL_BITMAP TlsExpansionBitmap;                                 // Pointer to the TLS expansion bitmap.
+    ULONG TlsExpansionBitmapBits[32];                               // Bits for the TLS expansion bitmap. TLS_EXPANSION_SLOTS
+    ULONG SessionId;                                                // Session ID of the current process.
+    ULARGE_INTEGER AppCompatFlags;                                  // Application compatibility flags. KACF_*
+    ULARGE_INTEGER AppCompatFlagsUser;                              // Application compatibility flags. KACF_*
+    PVOID pShimData;                                                // Pointer to the Application SwitchBack Compatibility Engine.
+    PVOID AppCompatInfo;                                            // Pointer to the Application Compatibility Engine. // APPCOMPAT_EXE_DATA
+    UNICODE_STRING CSDVersion;                                      // CSD version string of the operating system.
+    PACTIVATION_CONTEXT_DATA ActivationContextData;                 // Pointer to the process activation context.
+    PASSEMBLY_STORAGE_MAP ProcessAssemblyStorageMap;                // Pointer to the process assembly storage map.
+    PACTIVATION_CONTEXT_DATA SystemDefaultActivationContextData;    // Pointer to the system default activation context.
+    PASSEMBLY_STORAGE_MAP SystemAssemblyStorageMap;                 // Pointer to the system assembly storage map.
+    SIZE_T MinimumStackCommit;                                      // Minimum stack commit size.
+    PVOID SparePointers[2];                                         // since 19H1 (previously FlsCallback to FlsHighIndex)
+    PVOID PatchLoaderData;                                          // Pointer to the patch loader data.
+    PVOID ChpeV2ProcessInfo;                                        // Pointer to the CHPE V2 process information. CHPEV2_PROCESS_INFO
 
-    //
-    // Pointer to the TLS expansion bitmap.
-    //
-    PRTL_BITMAP TlsExpansionBitmap;
-
-    //
-    // Bits for the TLS expansion bitmap. TLS_EXPANSION_SLOTS
-    //
-    ULONG TlsExpansionBitmapBits[32];
-
-    //
-    // Session ID of the current process.
-    //
-    ULONG SessionId;
-
-    //
-    // Application compatibility flags. KACF_*
-    //
-    ULARGE_INTEGER AppCompatFlags;
-
-    //
-    // Application compatibility flags. KACF_*
-    //
-    ULARGE_INTEGER AppCompatFlagsUser;
-
-    //
-    // Pointer to the Application SwitchBack Compatibility Engine.
-    //
-    PVOID pShimData;
-
-    //
-    // Pointer to the Application Compatibility Engine. // APPCOMPAT_EXE_DATA
-    //
-    PVOID AppCompatInfo;
-
-    //
-    // CSD version string of the operating system.
-    //
-    UNICODE_STRING CSDVersion;
-
-    //
-    // Pointer to the process activation context.
-    //
-    PACTIVATION_CONTEXT_DATA ActivationContextData;
-
-    //
-    // Pointer to the process assembly storage map.
-    //
-    PASSEMBLY_STORAGE_MAP ProcessAssemblyStorageMap;
-
-    //
-    // Pointer to the system default activation context.
-    //
-    PACTIVATION_CONTEXT_DATA SystemDefaultActivationContextData;
-
-    //
-    // Pointer to the system assembly storage map.
-    //
-    PASSEMBLY_STORAGE_MAP SystemAssemblyStorageMap;
-
-    //
-    // Minimum stack commit size.
-    //
-    SIZE_T MinimumStackCommit;
-
-    //
-    // since 19H1 (previously FlsCallback to FlsHighIndex)
-    //
-    PVOID SparePointers[2];
-
-    //
-    // Pointer to the patch loader data.
-    //
-    PVOID PatchLoaderData;
-
-    //
-    // Pointer to the CHPE V2 process information. CHPEV2_PROCESS_INFO
-    //
-    PVOID ChpeV2ProcessInfo;
-
-    //
-    // Packaged process feature state.
-    //
     union
     {
-        ULONG AppModelFeatureState;
+        ULONG AppModelFeatureState; // Packaged process feature state.
         struct
         {
             ULONG ForegroundBoostProcesses : 1;
@@ -732,61 +475,26 @@ typedef struct _PEB
         };
     };
 
-    //
-    // SpareUlongs
-    // 
-    ULONG SpareUlongs[2];
+    ULONG SpareUlongs[2];                       // SpareUlongs
+    USHORT ActiveCodePage;                      // Active code page.
+    USHORT OemCodePage;                         // OEM code page.
+    USHORT UseCaseMapping;                      // Code page case mapping.
+    USHORT UnusedNlsField;                      // Unused NLS field.
+    PWER_PEB_HEADER_BLOCK WerRegistrationData;  // Pointer to the application WER registration data.
+    PVOID WerShipAssertPtr;                     // Pointer to the application WER assert pointer.
 
-    //
-    // Active code page.
-    //
-    USHORT ActiveCodePage;
-
-    //
-    // OEM code page.
-    //
-    USHORT OemCodePage;
-
-    //
-    // Code page case mapping.
-    //
-    USHORT UseCaseMapping;
-
-    //
-    // Unused NLS field.
-    //
-    USHORT UnusedNlsField;
-
-    //
-    // Pointer to the application WER registration data.
-    //
-    PWER_PEB_HEADER_BLOCK WerRegistrationData;
-
-    //
-    // Pointer to the application WER assert pointer.
-    //
-    PVOID WerShipAssertPtr;
-
-    //
     // Pointer to the EC bitmap on ARM64. (Windows 11 and above)
-    //
     union
     {
         PVOID pContextData; // Pointer to the switchback compatibility engine (Windows 7 and below)
         PVOID EcCodeBitMap; // Pointer to the EC bitmap on ARM64 (Windows 11 and above) // since WIN11
     };
 
-    //
-    // Reserved.
-    //
-    PVOID pImageHeaderHash;
+    PVOID pImageHeaderHash; // Reserved.
 
-    //
-    // ETW tracing flags.
-    //
     union
     {
-        ULONG TracingFlags;
+        ULONG TracingFlags; // ETW tracing flags.
         struct
         {
             ULONG HeapTracingEnabled : 1;       // ETW heap tracing enabled.
@@ -796,382 +504,331 @@ typedef struct _PEB
         };
     };
 
-    //
-    // Reserved for CSRSS.
-    //
-    ULONGLONG CsrServerReadOnlySharedMemoryBase;
+    ULONGLONG CsrServerReadOnlySharedMemoryBase;        // Reserved for CSRSS.
+    PRTL_CRITICAL_SECTION TppWorkerpListLock;           // Pointer to the thread pool worker list lock.
+    LIST_ENTRY TppWorkerpList;                          // Pointer to the thread pool worker list.
+    PVOID WaitOnAddressHashTable[128];                  // Wait on address hash table. (RtlWaitOnAddress)
+    PTELEMETRY_COVERAGE_HEADER TelemetryCoverageHeader; // Pointer to the telemetry coverage header. // since RS3
+    ULONG CloudFileFlags;                               // Cloud file flags. (ProjFs and Cloud Files) // since RS4
+    ULONG CloudFileDiagFlags;                           // Cloud file diagnostic flags.
+    CHAR PlaceholderCompatibilityMode;                  // Placeholder compatibility mode. (ProjFs and Cloud Files)
+    CHAR PlaceholderCompatibilityModeReserved[7];       // Reserved for placeholder compatibility mode.
+    PLEAP_SECOND_DATA LeapSecondData;                   // Pointer to leap second data. // since RS5
 
-    //
-    // Pointer to the thread pool worker list lock.
-    //
-    PRTL_CRITICAL_SECTION TppWorkerpListLock;
-
-    //
-    // Pointer to the thread pool worker list.
-    //
-    LIST_ENTRY TppWorkerpList;
-
-    //
-    // Wait on address hash table. (RtlWaitOnAddress)
-    //
-    PVOID WaitOnAddressHashTable[128];
-
-    //
-    // Pointer to the telemetry coverage header. // since RS3
-    //
-    PTELEMETRY_COVERAGE_HEADER TelemetryCoverageHeader;
-
-    //
-    // Cloud file flags. (ProjFs and Cloud Files) // since RS4
-    //
-    ULONG CloudFileFlags;
-
-    //
-    // Cloud file diagnostic flags.
-    //
-    ULONG CloudFileDiagFlags;
-
-    //
-    // Placeholder compatibility mode. (ProjFs and Cloud Files)
-    //
-    CHAR PlaceholderCompatibilityMode;
-
-    //
-    // Reserved for placeholder compatibility mode.
-    //
-    CHAR PlaceholderCompatibilityModeReserved[7];
-
-    //
-    // Pointer to leap second data. // since RS5
-    //
-    PLEAP_SECOND_DATA LeapSecondData;
-
-    //
-    // Leap second flags.
-    //
     union
     {
-        ULONG LeapSecondFlags;
+        ULONG LeapSecondFlags;              // Leap second flags.
         struct
         {
-            ULONG SixtySecondEnabled : 1; // Leap seconds enabled.
+            ULONG SixtySecondEnabled : 1;   // Leap seconds enabled.
             ULONG Reserved : 31;
         };
     };
 
-    //
-    // Global flags for the process.
-    //
-    ULONG NtGlobalFlag2;
-
-    //
-    // Extended feature disable mask (AVX). // since WIN11
-    //
-    ULONGLONG ExtendedFeatureDisableMask;
+    ULONG NtGlobalFlag2;                    // Global flags for the process.
+    ULONGLONG ExtendedFeatureDisableMask;   // Extended feature disable mask (AVX). // since WIN11
 } PEB, *PPEB;
 
 typedef struct _PEB64
 {
-    BOOLEAN InheritedAddressSpace;
-    BOOLEAN ReadImageFileExecOptions;
-    BOOLEAN BeingDebugged;
+    /* +0x000 */ BOOLEAN InheritedAddressSpace;
+    /* +0x001 */ BOOLEAN ReadImageFileExecOptions;
+    /* +0x002 */ BOOLEAN BeingDebugged;
     union
     {
-        UCHAR BitField;
+        /* +0x003 */ UCHAR BitField;
         struct
         {
-            UCHAR ImageUsesLargePages : 1;
-            UCHAR IsProtectedProcess : 1;
-            UCHAR IsImageDynamicallyRelocated : 1;
-            UCHAR SkipPatchingUser32Forwarders : 1;
-            UCHAR IsPackagedProcess : 1;
-            UCHAR IsAppContainer : 1;
-            UCHAR IsProtectedProcessLight : 1;
-            UCHAR IsLongPathAwareProcess : 1;
+            /* +0x003 */ UCHAR ImageUsesLargePages : 1;
+            /* +0x003 */ UCHAR IsProtectedProcess : 1;
+            /* +0x003 */ UCHAR IsImageDynamicallyRelocated : 1;
+            /* +0x003 */ UCHAR SkipPatchingUser32Forwarders : 1;
+            /* +0x003 */ UCHAR IsPackagedProcess : 1;
+            /* +0x003 */ UCHAR IsAppContainer : 1;
+            /* +0x003 */ UCHAR IsProtectedProcessLight : 1;
+            /* +0x003 */ UCHAR IsLongPathAwareProcess : 1;
         };
     };
-#if _WIN64
-    UCHAR Padding0[4];
-#endif
-    VOID* POINTER_64 Mutant;
-    VOID* POINTER_64 ImageBaseAddress;
-    PEB_LDR_DATA64* POINTER_64 Ldr;
-    RTL_USER_PROCESS_PARAMETERS64* POINTER_64 ProcessParameters;
-    VOID* POINTER_64 SubSystemData;
-    VOID* POINTER_64 ProcessHeap;
-    RTL_CRITICAL_SECTION64* POINTER_64 FastPebLock;
-    struct SLIST_HEADER* POINTER_64 AtlThunkSListPtr; // FIXME: SLIST_HEADER is depends on platform
-    VOID* POINTER_64 IFEOKey;
+    /* +0x008 */ VOID* POINTER_64 Mutant;
+    /* +0x010 */ VOID* POINTER_64 ImageBaseAddress;
+    /* +0x018 */ PEB_LDR_DATA64* POINTER_64 Ldr;
+    /* +0x020 */ RTL_USER_PROCESS_PARAMETERS64* POINTER_64 ProcessParameters;
+    /* +0x028 */ VOID* POINTER_64 SubSystemData;
+    /* +0x030 */ VOID* POINTER_64 ProcessHeap;
+    /* +0x038 */ RTL_CRITICAL_SECTION64* POINTER_64 FastPebLock;
+    /* +0x040 */ VOID* POINTER_64 AtlThunkSListPtr; // SLIST_HEADER*
+    /* +0x048 */ VOID* POINTER_64 IFEOKey;
     union
     {
-        ULONG CrossProcessFlags;
+        /* +0x050 */ ULONG CrossProcessFlags;
         struct
         {
-            ULONG ProcessInJob : 1;
-            ULONG ProcessInitializing : 1;
-            ULONG ProcessUsingVEH : 1;
-            ULONG ProcessUsingVCH : 1;
-            ULONG ProcessUsingFTH : 1;
-            ULONG ProcessPreviouslyThrottled : 1;
-            ULONG ProcessCurrentlyThrottled : 1;
-            ULONG ProcessImagesHotPatched : 1;
-            ULONG ReservedBits0 : 24;
+            /* +0x050 */ ULONG ProcessInJob : 1;
+            /* +0x050 */ ULONG ProcessInitializing : 1;
+            /* +0x050 */ ULONG ProcessUsingVEH : 1;
+            /* +0x050 */ ULONG ProcessUsingVCH : 1;
+            /* +0x050 */ ULONG ProcessUsingFTH : 1;
+            /* +0x050 */ ULONG ProcessPreviouslyThrottled : 1;
+            /* +0x050 */ ULONG ProcessCurrentlyThrottled : 1;
+            /* +0x050 */ ULONG ProcessImagesHotPatched : 1;
+            /* +0x050 */ ULONG ReservedBits0 : 24;
         };
     };
-    UCHAR Padding1[4];
     union
     {
-        VOID* POINTER_64 KernelCallbackTable;
-        VOID* POINTER_64 UserSharedInfoPtr;
+        /* +0x058 */ VOID* POINTER_64 KernelCallbackTable;
+        /* +0x058 */ VOID* POINTER_64 UserSharedInfoPtr;
     };
-    ULONG SystemReserved;
-    ULONG AtlThunkSListPtr32;
-    VOID* POINTER_64 ApiSetMap;
-    ULONG TlsExpansionCounter;
-    UCHAR Padding2[4];
-    RTL_BITMAP64* POINTER_64 TlsBitmap;
-    ULONG TlsBitmapBits[2];
-    VOID* POINTER_64 ReadOnlySharedMemoryBase;
-    VOID* POINTER_64 SharedData;
-    VOID* POINTER_64* POINTER_64 ReadOnlyStaticServerData;
-    VOID* POINTER_64 AnsiCodePageData;
-    VOID* POINTER_64 OemCodePageData;
-    VOID* POINTER_64 UnicodeCaseTableData;
-    ULONG NumberOfProcessors;
-    ULONG NtGlobalFlag;
-    LARGE_INTEGER CriticalSectionTimeout;
-    ULONGLONG HeapSegmentReserve;
-    ULONGLONG HeapSegmentCommit;
-    ULONGLONG HeapDeCommitTotalFreeThreshold;
-    ULONGLONG HeapDeCommitFreeBlockThreshold;
-    ULONG NumberOfHeaps;
-    ULONG MaximumNumberOfHeaps;
-    VOID* POINTER_64* POINTER_64 ProcessHeaps;
-    VOID* POINTER_64 GdiSharedHandleTable;
-    VOID* POINTER_64 ProcessStarterHelper;
-    ULONG GdiDCAttributeList;
-    UCHAR Padding3[4];
-    RTL_CRITICAL_SECTION64* POINTER_64 LoaderLock;
-    ULONG OSMajorVersion;
-    ULONG OSMinorVersion;
-    USHORT OSBuildNumber;
-    USHORT OSCSDVersion;
-    ULONG OSPlatformId;
-    ULONG ImageSubsystem;
-    ULONG ImageSubsystemMajorVersion;
-    ULONG ImageSubsystemMinorVersion;
-    UCHAR Padding4[4];
-    ULONGLONG ActiveProcessAffinityMask;
-    ULONG GdiHandleBuffer[60];
-    VOID* POINTER_64 PostProcessInitRoutine;
-    RTL_BITMAP64* POINTER_64 TlsExpansionBitmap;
-    ULONG TlsExpansionBitmapBits[32];
-    ULONG SessionId;
-    UCHAR Padding5[4];
-    ULARGE_INTEGER AppCompatFlags;
-    ULARGE_INTEGER AppCompatFlagsUser;
-    VOID* POINTER_64 pShimData;
-    VOID* POINTER_64 AppCompatInfo;
-    UNICODE_STRING64 CSDVersion;
-    ACTIVATION_CONTEXT_DATA* POINTER_64 ActivationContextData;
-    ASSEMBLY_STORAGE_MAP64* POINTER_64 ProcessAssemblyStorageMap;
-    ACTIVATION_CONTEXT_DATA* POINTER_64 SystemDefaultActivationContextData;
-    ASSEMBLY_STORAGE_MAP64* POINTER_64 SystemAssemblyStorageMap;
-    ULONGLONG MinimumStackCommit;
-    VOID* POINTER_64 SparePointers[2];
-    VOID* POINTER_64 PatchLoaderData;
-    struct CHPEV2_PROCESS_INFO* POINTER_64 ChpeV2ProcessInfo;
-    ULONG AppModelFeatureState;
-    ULONG SpareUlongs[2];
-    USHORT ActiveCodePage;
-    USHORT OemCodePage;
-    USHORT UseCaseMapping;
-    USHORT UnusedNlsField;
-    VOID* POINTER_64 WerRegistrationData; // TODO: WER_PEB_HEADER_BLOCK64*
-    VOID* POINTER_64 WerShipAssertPtr;
-    VOID* POINTER_64 EcCodeBitMap;
-    VOID* POINTER_64 pImageHeaderHash;
+    /* +0x060 */ ULONG SystemReserved;
+    /* +0x064 */ ULONG AtlThunkSListPtr32;
+    /* +0x068 */ VOID* POINTER_64 ApiSetMap;
+    /* +0x070 */ ULONG TlsExpansionCounter;
+    /* +0x078 */ RTL_BITMAP64* POINTER_64 TlsBitmap;
+    /* +0x080 */ ULONG TlsBitmapBits[2];
+    /* +0x088 */ VOID* POINTER_64 ReadOnlySharedMemoryBase;
+    /* +0x090 */ VOID* POINTER_64 SharedData;
+    /* +0x098 */ VOID* POINTER_64* POINTER_64 ReadOnlyStaticServerData;
+    /* +0x0A0 */ VOID* POINTER_64 AnsiCodePageData;
+    /* +0x0A8 */ VOID* POINTER_64 OemCodePageData;
+    /* +0x0B0 */ VOID* POINTER_64 UnicodeCaseTableData;
+    /* +0x0B8 */ ULONG NumberOfProcessors;
+    /* +0x0BC */ ULONG NtGlobalFlag;
+    /* +0x0C0 */ LARGE_INTEGER CriticalSectionTimeout;
+    /* +0x0C8 */ ULONGLONG HeapSegmentReserve;
+    /* +0x0D0 */ ULONGLONG HeapSegmentCommit;
+    /* +0x0D8 */ ULONGLONG HeapDeCommitTotalFreeThreshold;
+    /* +0x0E0 */ ULONGLONG HeapDeCommitFreeBlockThreshold;
+    /* +0x0E8 */ ULONG NumberOfHeaps;
+    /* +0x0EC */ ULONG MaximumNumberOfHeaps;
+    /* +0x0F0 */ VOID* POINTER_64* POINTER_64 ProcessHeaps;
+    /* +0x0F8 */ VOID* POINTER_64 GdiSharedHandleTable;
+    /* +0x100 */ VOID* POINTER_64 ProcessStarterHelper;
+    /* +0x108 */ ULONG GdiDCAttributeList;
+    /* +0x110 */ RTL_CRITICAL_SECTION64* POINTER_64 LoaderLock;
+    /* +0x118 */ ULONG OSMajorVersion;
+    /* +0x11C */ ULONG OSMinorVersion;
+    /* +0x120 */ USHORT OSBuildNumber;
+    /* +0x122 */ USHORT OSCSDVersion;
+    /* +0x124 */ ULONG OSPlatformId;
+    /* +0x128 */ ULONG ImageSubsystem;
+    /* +0x12C */ ULONG ImageSubsystemMajorVersion;
+    /* +0x130 */ ULONG ImageSubsystemMinorVersion;
+    /* +0x134 */ UCHAR Padding4[4];
+    /* +0x138 */ ULONGLONG ActiveProcessAffinityMask;
+    /* +0x140 */ ULONG GdiHandleBuffer[60];
+    /* +0x230 */ VOID* POINTER_64 PostProcessInitRoutine;
+    /* +0x238 */ RTL_BITMAP64* POINTER_64 TlsExpansionBitmap;
+    /* +0x240 */ ULONG TlsExpansionBitmapBits[32];
+    /* +0x2C0 */ ULONG SessionId;
+    /* +0x2C8 */ ULARGE_INTEGER AppCompatFlags;
+    /* +0x2D0 */ ULARGE_INTEGER AppCompatFlagsUser;
+    /* +0x2D8 */ VOID* POINTER_64 pShimData;
+    /* +0x2E0 */ VOID* POINTER_64 AppCompatInfo;
+    /* +0x2E8 */ UNICODE_STRING64 CSDVersion;
+    /* +0x2F8 */ ACTIVATION_CONTEXT_DATA* POINTER_64 ActivationContextData;
+    /* +0x300 */ ASSEMBLY_STORAGE_MAP64* POINTER_64 ProcessAssemblyStorageMap;
+    /* +0x308 */ ACTIVATION_CONTEXT_DATA* POINTER_64 SystemDefaultActivationContextData;
+    /* +0x310 */ ASSEMBLY_STORAGE_MAP64* POINTER_64 SystemAssemblyStorageMap;
+    /* +0x318 */ ULONGLONG MinimumStackCommit;
+    /* +0x320 */ VOID* POINTER_64 SparePointers[2];
+    /* +0x330 */ VOID* POINTER_64 PatchLoaderData;
+    /* +0x338 */ struct CHPEV2_PROCESS_INFO* POINTER_64 ChpeV2ProcessInfo;
+    /* +0x340 */ ULONG AppModelFeatureState;
+    /* +0x344 */ ULONG SpareUlongs[2];
+    /* +0x34C */ USHORT ActiveCodePage;
+    /* +0x34E */ USHORT OemCodePage;
+    /* +0x350 */ USHORT UseCaseMapping;
+    /* +0x352 */ USHORT UnusedNlsField;
+    /* +0x358 */ VOID* POINTER_64 WerRegistrationData; // TODO: WER_PEB_HEADER_BLOCK64*
+    /* +0x360 */ VOID* POINTER_64 WerShipAssertPtr;
+    /* +0x368 */ VOID* POINTER_64 EcCodeBitMap;
+    /* +0x370 */ VOID* POINTER_64 pImageHeaderHash;
     union
     {
-        ULONG TracingFlags;
+        /* +0x378 */ ULONG TracingFlags;
         struct
         {
-            ULONG HeapTracingEnabled : 1;
-            ULONG CritSecTracingEnabled : 1;
-            ULONG LibLoaderTracingEnabled : 1;
-            ULONG SpareTracingBits : 29;
+            /* +0x378 */ ULONG HeapTracingEnabled : 1;
+            /* +0x378 */ ULONG CritSecTracingEnabled : 1;
+            /* +0x378 */ ULONG LibLoaderTracingEnabled : 1;
+            /* +0x378 */ ULONG SpareTracingBits : 29;
         };
     };
-    UCHAR Padding6[4];
-    ULONGLONG CsrServerReadOnlySharedMemoryBase;
-    RTL_CRITICAL_SECTION64* POINTER_64 TppWorkerpListLock;
-    LIST_ENTRY64 TppWorkerpList;
-    VOID* POINTER_64 WaitOnAddressHashTable[128];
-    TELEMETRY_COVERAGE_HEADER* POINTER_64 TelemetryCoverageHeader;
-    ULONG CloudFileFlags;
-    ULONG CloudFileDiagFlags;
-    CHAR PlaceholderCompatibilityMode;
-    CHAR PlaceholderCompatibilityModeReserved[7];
-    LEAP_SECOND_DATA* POINTER_64 LeapSecondData;
+    /* +0x380 */ ULONGLONG CsrServerReadOnlySharedMemoryBase;
+    /* +0x388 */ RTL_CRITICAL_SECTION64* POINTER_64 TppWorkerpListLock;
+    /* +0x390 */ LIST_ENTRY64 TppWorkerpList;
+    /* +0x3A0 */ VOID* POINTER_64 WaitOnAddressHashTable[128];
+    /* +0x7A0 */ TELEMETRY_COVERAGE_HEADER* POINTER_64 TelemetryCoverageHeader;
+    /* +0x7A8 */ ULONG CloudFileFlags;
+    /* +0x7AC */ ULONG CloudFileDiagFlags;
+    /* +0x7B0 */ CHAR PlaceholderCompatibilityMode;
+    /* +0x7B1 */ CHAR PlaceholderCompatibilityModeReserved[7];
+    /* +0x7B8 */ LEAP_SECOND_DATA* POINTER_64 LeapSecondData;
     union
     {
-        ULONG LeapSecondFlags;
+        /* +0x7C0 */ ULONG LeapSecondFlags;
         struct
         {
-            ULONG SixtySecondEnabled : 1;
-            ULONG Reserved : 31;
+            /* +0x7C0 */ ULONG SixtySecondEnabled : 1;
+            /* +0x7C0 */ ULONG Reserved : 31;
         };
     };
-    ULONG NtGlobalFlag2;
-    ULONGLONG ExtendedFeatureDisableMask;
+    /* +0x7C4 */ ULONG NtGlobalFlag2;
+    /* +0x7C8 */ ULONGLONG ExtendedFeatureDisableMask;
 } PEB64, *PPEB64;
 
 typedef struct _PEB32
 {
-    BOOLEAN InheritedAddressSpace;
-    BOOLEAN ReadImageFileExecOptions;
-    BOOLEAN BeingDebugged;
+    /* +0x000 */ BOOLEAN InheritedAddressSpace;
+    /* +0x001 */ BOOLEAN ReadImageFileExecOptions;
+    /* +0x002 */ BOOLEAN BeingDebugged;
     union
     {
-        UCHAR BitField;
+        /* +0x003 */ UCHAR BitField;
         struct
         {
-            UCHAR ImageUsesLargePages : 1;
-            UCHAR IsProtectedProcess : 1;
-            UCHAR IsImageDynamicallyRelocated : 1;
-            UCHAR SkipPatchingUser32Forwarders : 1;
-            UCHAR IsPackagedProcess : 1;
-            UCHAR IsAppContainer : 1;
-            UCHAR IsProtectedProcessLight : 1;
-            UCHAR IsLongPathAwareProcess : 1;
+            /* +0x003 */ UCHAR ImageUsesLargePages : 1;
+            /* +0x003 */ UCHAR IsProtectedProcess : 1;
+            /* +0x003 */ UCHAR IsImageDynamicallyRelocated : 1;
+            /* +0x003 */ UCHAR SkipPatchingUser32Forwarders : 1;
+            /* +0x003 */ UCHAR IsPackagedProcess : 1;
+            /* +0x003 */ UCHAR IsAppContainer : 1;
+            /* +0x003 */ UCHAR IsProtectedProcessLight : 1;
+            /* +0x003 */ UCHAR IsLongPathAwareProcess : 1;
         };
     };
-    VOID* POINTER_32 Mutant;
-    VOID* POINTER_32 ImageBaseAddress;
-    PEB_LDR_DATA32* POINTER_32 Ldr;
-    RTL_USER_PROCESS_PARAMETERS32* POINTER_32 ProcessParameters;
-    VOID* POINTER_32 SubSystemData;
-    VOID* POINTER_32 ProcessHeap;
-    RTL_CRITICAL_SECTION32* POINTER_32 FastPebLock;
-    struct SLIST_HEADER* POINTER_32 AtlThunkSListPtr; // FIXME: SLIST_HEADER is depends on platform
-    VOID* POINTER_32 IFEOKey;
+    /* +0x004 */ VOID* POINTER_32 Mutant;
+    /* +0x008 */ VOID* POINTER_32 ImageBaseAddress;
+    /* +0x00C */ PEB_LDR_DATA32* POINTER_32 Ldr;
+    /* +0x010 */ RTL_USER_PROCESS_PARAMETERS32* POINTER_32 ProcessParameters;
+    /* +0x014 */ VOID* POINTER_32 SubSystemData;
+    /* +0x018 */ VOID* POINTER_32 ProcessHeap;
+    /* +0x01C */ RTL_CRITICAL_SECTION32* POINTER_32 FastPebLock;
+    /* +0x020 */ VOID* POINTER_32 AtlThunkSListPtr;
+    /* +0x024 */ VOID* POINTER_32 IFEOKey;
     union
     {
-        ULONG CrossProcessFlags;
+        /* +0x028 */ ULONG CrossProcessFlags;
         struct
         {
-            ULONG ProcessInJob : 1;
-            ULONG ProcessInitializing : 1;
-            ULONG ProcessUsingVEH : 1;
-            ULONG ProcessUsingVCH : 1;
-            ULONG ProcessUsingFTH : 1;
-            ULONG ProcessPreviouslyThrottled : 1;
-            ULONG ProcessCurrentlyThrottled : 1;
-            ULONG ProcessImagesHotPatched : 1;
-            ULONG ReservedBits0 : 24;
+            /* +0x028 */ ULONG ProcessInJob : 1;
+            /* +0x028 */ ULONG ProcessInitializing : 1;
+            /* +0x028 */ ULONG ProcessUsingVEH : 1;
+            /* +0x028 */ ULONG ProcessUsingVCH : 1;
+            /* +0x028 */ ULONG ProcessUsingFTH : 1;
+            /* +0x028 */ ULONG ProcessPreviouslyThrottled : 1;
+            /* +0x028 */ ULONG ProcessCurrentlyThrottled : 1;
+            /* +0x028 */ ULONG ProcessImagesHotPatched : 1;
+            /* +0x028 */ ULONG ReservedBits0 : 24;
         };
     };
     union
     {
-        VOID* POINTER_32 KernelCallbackTable;
-        VOID* POINTER_32 UserSharedInfoPtr;
+        /* +0x02C */ VOID* POINTER_32 KernelCallbackTable;
+        /* +0x02C */ VOID* POINTER_32 UserSharedInfoPtr;
     };
-    ULONG SystemReserved;
-    ULONG AtlThunkSListPtr32;
-    VOID* POINTER_32 ApiSetMap;
-    ULONG TlsExpansionCounter;
-    RTL_BITMAP32* POINTER_32 TlsBitmap;
-    ULONG TlsBitmapBits[2];
-    VOID* POINTER_32 ReadOnlySharedMemoryBase;
-    VOID* POINTER_32 SharedData;
-    VOID* POINTER_32* POINTER_32 ReadOnlyStaticServerData;
-    VOID* POINTER_32 AnsiCodePageData;
-    VOID* POINTER_32 OemCodePageData;
-    VOID* POINTER_32 UnicodeCaseTableData;
-    ULONG NumberOfProcessors;
-    ULONG NtGlobalFlag;
-    LARGE_INTEGER CriticalSectionTimeout;
-    ULONG HeapSegmentReserve;
-    ULONG HeapSegmentCommit;
-    ULONG HeapDeCommitTotalFreeThreshold;
-    ULONG HeapDeCommitFreeBlockThreshold;
-    ULONG NumberOfHeaps;
-    ULONG MaximumNumberOfHeaps;
-    VOID* POINTER_32* POINTER_32 ProcessHeaps;
-    VOID* POINTER_32 GdiSharedHandleTable;
-    VOID* POINTER_32 ProcessStarterHelper;
-    ULONG GdiDCAttributeList;
-    RTL_CRITICAL_SECTION32* POINTER_32 LoaderLock;
-    ULONG OSMajorVersion;
-    ULONG OSMinorVersion;
-    USHORT OSBuildNumber;
-    USHORT OSCSDVersion;
-    ULONG OSPlatformId;
-    ULONG ImageSubsystem;
-    ULONG ImageSubsystemMajorVersion;
-    ULONG ImageSubsystemMinorVersion;
-    ULONG ActiveProcessAffinityMask;
-    ULONG GdiHandleBuffer[34];
-    VOID* POINTER_32 PostProcessInitRoutine;
-    RTL_BITMAP32* POINTER_32 TlsExpansionBitmap;
-    ULONG TlsExpansionBitmapBits[32];
-    ULONG SessionId;
-    ULARGE_INTEGER AppCompatFlags;
-    ULARGE_INTEGER AppCompatFlagsUser;
-    VOID* POINTER_32 pShimData;
-    VOID* POINTER_32 AppCompatInfo;
-    UNICODE_STRING32 CSDVersion;
-    ACTIVATION_CONTEXT_DATA* POINTER_32 ActivationContextData;
-    ASSEMBLY_STORAGE_MAP32* POINTER_32 ProcessAssemblyStorageMap;
-    ACTIVATION_CONTEXT_DATA* POINTER_32 SystemDefaultActivationContextData;
-    ASSEMBLY_STORAGE_MAP32* POINTER_32 SystemAssemblyStorageMap;
-    ULONG MinimumStackCommit;
-    VOID* POINTER_32 SparePointers[2];
-    VOID* POINTER_32 PatchLoaderData;
-    struct CHPEV2_PROCESS_INFO* POINTER_32 ChpeV2ProcessInfo;
-    ULONG AppModelFeatureState;
-    ULONG SpareUlongs[2];
-    USHORT ActiveCodePage;
-    USHORT OemCodePage;
-    USHORT UseCaseMapping;
-    USHORT UnusedNlsField;
-    VOID* POINTER_32 WerRegistrationData;  // TODO: WER_PEB_HEADER_BLOCK32*
-    VOID* POINTER_32 WerShipAssertPtr;
-    VOID* POINTER_32 Spare;
-    VOID* POINTER_32 pImageHeaderHash;
+    /* +0x030 */  ULONG SystemReserved;
+    /* +0x034 */ ULONG AtlThunkSListPtr32;
+    /* +0x038 */ VOID* POINTER_32 ApiSetMap;
+    /* +0x03C */ ULONG TlsExpansionCounter;
+    /* +0x040 */ RTL_BITMAP32* POINTER_32 TlsBitmap;
+    /* +0x044 */ ULONG TlsBitmapBits[2];
+    /* +0x04C */ VOID* POINTER_32 ReadOnlySharedMemoryBase;
+    /* +0x050 */ VOID* POINTER_32 SharedData;
+    /* +0x054 */ VOID* POINTER_32* POINTER_32 ReadOnlyStaticServerData;
+    /* +0x058 */ VOID* POINTER_32 AnsiCodePageData;
+    /* +0x05C */ VOID* POINTER_32 OemCodePageData;
+    /* +0x060 */ VOID* POINTER_32 UnicodeCaseTableData;
+    /* +0x064 */ ULONG NumberOfProcessors;
+    /* +0x068 */ ULONG NtGlobalFlag;
+    /* +0x070 */ LARGE_INTEGER CriticalSectionTimeout;
+    /* +0x078 */ ULONG HeapSegmentReserve;
+    /* +0x07C */ ULONG HeapSegmentCommit;
+    /* +0x080 */ ULONG HeapDeCommitTotalFreeThreshold;
+    /* +0x084 */ ULONG HeapDeCommitFreeBlockThreshold;
+    /* +0x088 */ ULONG NumberOfHeaps;
+    /* +0x08C */ ULONG MaximumNumberOfHeaps;
+    /* +0x090 */ VOID* POINTER_32* POINTER_32 ProcessHeaps;
+    /* +0x094 */ VOID* POINTER_32 GdiSharedHandleTable;
+    /* +0x098 */ VOID* POINTER_32 ProcessStarterHelper;
+    /* +0x09C */ ULONG GdiDCAttributeList;
+    /* +0x0A0 */ RTL_CRITICAL_SECTION32* POINTER_32 LoaderLock;
+    /* +0x0A4 */ ULONG OSMajorVersion;
+    /* +0x0A8 */ ULONG OSMinorVersion;
+    /* +0x0AC */ USHORT OSBuildNumber;
+    /* +0x0Ae */ USHORT OSCSDVersion;
+    /* +0x0B0 */ ULONG OSPlatformId;
+    /* +0x0B4 */ ULONG ImageSubsystem;
+    /* +0x0B8 */ ULONG ImageSubsystemMajorVersion;
+    /* +0x0BC */ ULONG ImageSubsystemMinorVersion;
+    /* +0x0C0 */ ULONG ActiveProcessAffinityMask;
+    /* +0x0C4 */ ULONG GdiHandleBuffer[34];
+    /* +0x14C */ VOID* POINTER_32 PostProcessInitRoutine;
+    /* +0x150 */ RTL_BITMAP32* POINTER_32 TlsExpansionBitmap;
+    /* +0x154 */ ULONG TlsExpansionBitmapBits[32];
+    /* +0x1D4 */ ULONG SessionId;
+    /* +0x1D8 */ ULARGE_INTEGER AppCompatFlags;
+    /* +0x1E0 */ ULARGE_INTEGER AppCompatFlagsUser;
+    /* +0x1E8 */ VOID* POINTER_32 pShimData;
+    /* +0x1EC */ VOID* POINTER_32 AppCompatInfo;
+    /* +0x1F0 */ UNICODE_STRING32 CSDVersion;
+    /* +0x1F8 */ ACTIVATION_CONTEXT_DATA* POINTER_32 ActivationContextData;
+    /* +0x1FC */ ASSEMBLY_STORAGE_MAP32* POINTER_32 ProcessAssemblyStorageMap;
+    /* +0x200 */ ACTIVATION_CONTEXT_DATA* POINTER_32 SystemDefaultActivationContextData;
+    /* +0x204 */ ASSEMBLY_STORAGE_MAP32* POINTER_32 SystemAssemblyStorageMap;
+    /* +0x208 */ ULONG MinimumStackCommit;
+    /* +0x20C */ VOID* POINTER_32 SparePointers[2];
+    /* +0x214 */ VOID* POINTER_32 PatchLoaderData;
+    /* +0x218 */ struct CHPEV2_PROCESS_INFO* POINTER_32 ChpeV2ProcessInfo;
+    /* +0x21C */ ULONG AppModelFeatureState;
+    /* +0x220 */ ULONG SpareUlongs[2];
+    /* +0x228 */ USHORT ActiveCodePage;
+    /* +0x22A */ USHORT OemCodePage;
+    /* +0x22C */ USHORT UseCaseMapping;
+    /* +0x22E */ USHORT UnusedNlsField;
+    /* +0x230 */ VOID* POINTER_32 WerRegistrationData;  // TODO: WER_PEB_HEADER_BLOCK32*
+    /* +0x234 */ VOID* POINTER_32 WerShipAssertPtr;
+    /* +0x238 */ VOID* POINTER_32 Spare;
+    /* +0x23C */ VOID* POINTER_32 pImageHeaderHash;
     union
     {
-        ULONG TracingFlags;
+        /* +0x240 */ ULONG TracingFlags;
         struct
         {
-            ULONG HeapTracingEnabled : 1;
-            ULONG CritSecTracingEnabled : 1;
-            ULONG LibLoaderTracingEnabled : 1;
-            ULONG SpareTracingBits : 29;
+            /* +0x240 */ ULONG HeapTracingEnabled : 1;
+            /* +0x240 */ ULONG CritSecTracingEnabled : 1;
+            /* +0x240 */ ULONG LibLoaderTracingEnabled : 1;
+            /* +0x240 */ ULONG SpareTracingBits : 29;
         };
     };
-    ULONGLONG CsrServerReadOnlySharedMemoryBase;
-    RTL_CRITICAL_SECTION32* POINTER_32 TppWorkerpListLock;
-    LIST_ENTRY32 TppWorkerpList;
-    VOID* POINTER_32 WaitOnAddressHashTable[128];
-    TELEMETRY_COVERAGE_HEADER* POINTER_32 TelemetryCoverageHeader;
-    ULONG CloudFileFlags;
-    ULONG CloudFileDiagFlags;
-    CHAR PlaceholderCompatibilityMode;
-    CHAR PlaceholderCompatibilityModeReserved[7];
-    LEAP_SECOND_DATA* POINTER_32 LeapSecondData;
+    /* +0x248 */ ULONGLONG CsrServerReadOnlySharedMemoryBase;
+    /* +0x250 */ RTL_CRITICAL_SECTION32* POINTER_32 TppWorkerpListLock;
+    /* +0x254 */ LIST_ENTRY32 TppWorkerpList;
+    /* +0x25c */ VOID* POINTER_32 WaitOnAddressHashTable[128];
+    /* +0x45c */ TELEMETRY_COVERAGE_HEADER* POINTER_32 TelemetryCoverageHeader;
+    /* +0x460 */ ULONG CloudFileFlags;
+    /* +0x464 */ ULONG CloudFileDiagFlags;
+    /* +0x468 */ CHAR PlaceholderCompatibilityMode;
+    /* +0x469 */ CHAR PlaceholderCompatibilityModeReserved[7];
+    /* +0x470 */ LEAP_SECOND_DATA* POINTER_32 LeapSecondData;
     union
     {
-        ULONG LeapSecondFlags;
+        /* +0x474 */ ULONG LeapSecondFlags;
         struct
         {
-            ULONG SixtySecondEnabled : 1;
-            ULONG Reserved : 31;
+            /* +0x474 */ ULONG SixtySecondEnabled : 1;
+            /* +0x474 */ ULONG Reserved : 31;
         };
     };
-    ULONG NtGlobalFlag2;
-    ULONGLONG ExtendedFeatureDisableMask;
+    /* +0x478 */ ULONG NtGlobalFlag2;
+    /* +0x480 */ ULONGLONG ExtendedFeatureDisableMask;
 } PEB32, *PPEB32;
+
+#if defined(_WIN64)
+_STATIC_ASSERT(sizeof(PEB) == sizeof(PEB64));
+#else
+_STATIC_ASSERT(sizeof(PEB) == sizeof(PEB32));
+#endif
 
 /**
  * The GDI_TEB_BATCH structure is used to store information about GDI batch operations.
@@ -1283,7 +940,6 @@ struct _TEB_ACTIVE_FRAME32
     TEB_ACTIVE_FRAME_CONTEXT32* POINTER_32 Context;
 };
 
-
 #define OLETLSF_LOCALTID 0x01 // This TID is in the current process.
 #define OLETLSF_UUIDINITIALIZED 0x02 // This Logical thread is init'd.
 #define OLETLSF_INTHREADDETACH 0x04 // This is in thread detach.
@@ -1380,99 +1036,53 @@ typedef struct _OLE_TLS_DATA32
  */
 typedef struct _TEB
 {
-    // Thread Information Block (TIB) contains the thread's stack, base and limit addresses, the current stack pointer, and the exception list.
-    NT_TIB NtTib;
-
-    // Reserved.
-    PVOID EnvironmentPointer;
-
-    // Client ID for this thread.
-    CLIENT_ID ClientId;
-
-    // A handle to an active Remote Procedure Call (RPC) if the thread is currently involved in an RPC operation.
-    PVOID ActiveRpcHandle;
-
-    // A pointer to the __declspec(thread) local storage array.
-    PVOID ThreadLocalStoragePointer;
-
-    // A pointer to the Process Environment Block (PEB), which contains information about the process.
-    PPEB ProcessEnvironmentBlock;
-
-    // The previous Win32 error value for this thread.
-    ULONG LastErrorValue;
-
-    // The number of critical sections currently owned by this thread.
-    ULONG CountOfOwnedCriticalSections;
-
+    NT_TIB NtTib;                                   // Thread Information Block (TIB) contains the thread's stack, base and limit addresses, the current stack pointer, and the exception list.
+    PVOID EnvironmentPointer;                       // Reserved.
+    CLIENT_ID ClientId;                             // Client ID for this thread.
+    PVOID ActiveRpcHandle;                          // A handle to an active Remote Procedure Call (RPC) if the thread is currently involved in an RPC operation.
+    PVOID ThreadLocalStoragePointer;                // A pointer to the __declspec(thread) local storage array.
+    PPEB ProcessEnvironmentBlock;                   // A pointer to the Process Environment Block (PEB), which contains information about the process.
+    ULONG LastErrorValue;                           // The previous Win32 error value for this thread.
+    ULONG CountOfOwnedCriticalSections;             // The number of critical sections currently owned by this thread.
     PVOID CsrClientThread;
     PVOID Win32ThreadInfo;
     ULONG User32Reserved[26];
     ULONG UserReserved[5];
     PVOID WOW32Reserved;
-
-    // The LCID of the current thread. (Kernel32!GetThreadLocale)
-    LCID CurrentLocale;
-
+    LCID CurrentLocale;                             // The LCID of the current thread. (Kernel32!GetThreadLocale)
     ULONG FpSoftwareStatusRegister;
     PVOID ReservedForDebuggerInstrumentation[16];
+
 #ifdef _WIN64
     PVOID SystemReserved1[25];
-
-    // Per-thread fiber local storage. (Teb->HasFiberData)
-    PVOID HeapFlsData;
-
-    ULONG_PTR RngState[4];
 #else
-    PVOID SystemReserved1[26];
+    PVOID SystemReserved1[21];
 #endif
 
-    // Placeholder compatibility mode. (ProjFs and Cloud Files)
-    CHAR PlaceholderCompatibilityMode;
-
+    PVOID HeapFlsData;                                          // Per-thread fiber local storage. (Teb->HasFiberData)
+    ULONG_PTR RngState[4];
+    CHAR PlaceholderCompatibilityMode;                          // Placeholder compatibility mode. (ProjFs and Cloud Files)
     BOOLEAN PlaceholderHydrationAlwaysExplicit;
     CHAR PlaceholderReserved[10];
-
-    // The process ID (PID) that the current COM server thread is acting on behalf of.
-    ULONG ProxiedProcessId;
-
+    ULONG ProxiedProcessId;                                     // The process ID (PID) that the current COM server thread is acting on behalf of.
     ACTIVATION_CONTEXT_STACK ActivationStack;
-
-    // Opaque operation on behalf of another user or process.
-    UCHAR WorkingOnBehalfTicket[8];
-
-    // The last exception status for the current thread.
-    NTSTATUS ExceptionCode;
-
-    // Pointer to the activation context stack for the current thread.
-    PACTIVATION_CONTEXT_STACK ActivationContextStackPointer;
-
-    // The stack pointer (SP) of the current system call or exception during instrumentation.
-    ULONG_PTR InstrumentationCallbackSp;
-
-    // The program counter (PC) of the previous system call or exception during instrumentation.
-    ULONG_PTR InstrumentationCallbackPreviousPc;
-
-    // The stack pointer (SP) of the previous system call or exception during instrumentation.
-    ULONG_PTR InstrumentationCallbackPreviousSp;
+    UCHAR WorkingOnBehalfTicket[8];                             // Opaque operation on behalf of another user or process.
+    NTSTATUS ExceptionCode;                                     // The last exception status for the current thread.
+    PACTIVATION_CONTEXT_STACK ActivationContextStackPointer;    // Pointer to the activation context stack for the current thread.
+    ULONG_PTR InstrumentationCallbackSp;                        // The stack pointer (SP) of the current system call or exception during instrumentation.
+    ULONG_PTR InstrumentationCallbackPreviousPc;                // The program counter (PC) of the previous system call or exception during instrumentation.
+    ULONG_PTR InstrumentationCallbackPreviousSp;                // The stack pointer (SP) of the previous system call or exception during instrumentation.
 
 #ifdef _WIN64
-    // The miniversion ID of the current transacted file operation.
-    ULONG TxFsContext;
-#endif
-
-    // Indicates the state of the system call or exception instrumentation callback.
+    ULONG TxFsContext;                          // The miniversion ID of the current transacted file operation.
+    BOOLEAN InstrumentationCallbackDisabled;    // Indicates the state of the system call or exception instrumentation callback.
+    BOOLEAN UnalignedLoadStoreExceptions;       // Indicates the state of alignment exceptions for unaligned load/store operations.
+#else
     BOOLEAN InstrumentationCallbackDisabled;
-
-#ifdef _WIN64
-    // Indicates the state of alignment exceptions for unaligned load/store operations.
-    BOOLEAN UnalignedLoadStoreExceptions;
-#endif
-#ifndef _WIN64
     UCHAR SpareBytes[23];
-
-    // The miniversion ID of the current transacted file operation.
     ULONG TxFsContext;
 #endif
+
     GDI_TEB_BATCH GdiTebBatch;
     CLIENT_ID RealClientId;
     HANDLE GdiCachedProcessHandle;
@@ -1480,7 +1090,6 @@ typedef struct _TEB
     ULONG GdiClientTID;
     PVOID GdiThreadLocalInfo;
     ULONG_PTR Win32ClientInfo[62];
-
     PVOID glDispatchTable[233];
     ULONG_PTR glReserved1[29];
     PVOID glReserved2;
@@ -1489,56 +1098,33 @@ typedef struct _TEB
     PVOID glTable;
     PVOID glCurrentRC;
     PVOID glContext;
-
-    // The previous status value for this thread.
-    NTSTATUS LastStatusValue;
-
-    // A static string for use by the application.
-    UNICODE_STRING StaticUnicodeString;
-
-    // A static buffer for use by the application.
-    WCHAR StaticUnicodeBuffer[261];
-
-    // The maximum stack size and indicates the base of the stack.
-    PVOID DeallocationStack;
-
-    // Data for Thread Local Storage. (TlsGetValue)
-    PVOID TlsSlots[TLS_MINIMUM_AVAILABLE];
-
+    NTSTATUS LastStatusValue;               // The previous status value for this thread.
+    UNICODE_STRING StaticUnicodeString;     // A static string for use by the application.
+    WCHAR StaticUnicodeBuffer[261];         // A static buffer for use by the application.
+    PVOID DeallocationStack;                // The maximum stack size and indicates the base of the stack.
+    PVOID TlsSlots[TLS_MINIMUM_AVAILABLE];  // Data for Thread Local Storage. (TlsGetValue)
     LIST_ENTRY TlsLinks;
-
-    // Reserved for NTVDM.
-    PVOID Vdm;
-
+    PVOID Vdm;                              // Reserved for NTVDM.
     PVOID ReservedForNtRpc;
     PVOID DbgSsReserved[2];
-
-    // The error mode for the current thread. (GetThreadErrorMode)
-    ULONG HardErrorMode;
+    ULONG HardErrorMode;                    // The error mode for the current thread. (GetThreadErrorMode)
 
 #ifdef _WIN64
     PVOID Instrumentation[11];
 #else
     PVOID Instrumentation[9];
 #endif
+
     GUID ActivityId;
-
-    // The service creating the thread (svchost).
-    PVOID SubProcessTag;
-
+    PVOID SubProcessTag;    // The service creating the thread (svchost).
     PVOID PerflibData;
     PVOID EtwTraceData;
+    PVOID WinSockData;      // The address of a socket handle during a blocking socket operation. (WSAStartup)
+    ULONG GdiBatchCount;    // The number of function calls accumulated in the current GDI batch. (GdiSetBatchLimit)
 
-    // The address of a socket handle during a blocking socket operation. (WSAStartup)
-    PVOID WinSockData;
-
-    // The number of function calls accumulated in the current GDI batch. (GdiSetBatchLimit)
-    ULONG GdiBatchCount;
-
-    // The preferred processor for the curremt thread. (SetThreadIdealProcessor/SetThreadIdealProcessorEx)
     union
     {
-        PROCESSOR_NUMBER CurrentIdealProcessor;
+        PROCESSOR_NUMBER CurrentIdealProcessor; // The preferred processor for the curremt thread. (SetThreadIdealProcessor/SetThreadIdealProcessorEx)
         ULONG IdealProcessorValue;
         struct
         {
@@ -1549,53 +1135,28 @@ typedef struct _TEB
         };
     };
 
-    // The minimum size of the stack available during any stack overflow exceptions. (SetThreadStackGuarantee)
-    ULONG GuaranteedStackBytes;
-
+    ULONG GuaranteedStackBytes;         // The minimum size of the stack available during any stack overflow exceptions. (SetThreadStackGuarantee)
     PVOID ReservedForPerf;
-
-    // Per-thread COM/OLE state.
-    POLE_TLS_DATA ReservedForOle;
-
-    // Indicates whether the thread is waiting on the loader lock.
-    ULONG WaitingOnLoaderLock;
-
-    // The saved priority state for the thread.
-    PVOID SavedPriorityState;
-
+    POLE_TLS_DATA ReservedForOle;       // Per-thread COM/OLE state.
+    ULONG WaitingOnLoaderLock;          // Indicates whether the thread is waiting on the loader lock.
+    PVOID SavedPriorityState;           // The saved priority state for the thread.
     ULONG_PTR ReservedForCodeCoverage;
     PVOID ThreadPoolData;
-
-    // Pointer to the TLS (Thread Local Storage) expansion slots for the thread.
-    PVOID* TlsExpansionSlots;
+    PVOID* TlsExpansionSlots;           // Pointer to the TLS (Thread Local Storage) expansion slots for the thread.
 
 #ifdef _WIN64
-    struct CHPEV2_CPUAREA_INFO* ChpeV2CpuAreaInfo; // CHPEV2_CPUAREA_INFO // previously DeallocationBStore
-    PVOID Unused; // previously BStoreLimit
+    struct CHPEV2_CPUAREA_INFO* ChpeV2CpuAreaInfo;  // CHPEV2_CPUAREA_INFO // previously DeallocationBStore
+    PVOID Unused;                                   // previously BStoreLimit
 #endif
 
-    // The generation of the MUI (Multilingual User Interface) data.
-    ULONG MuiGeneration;
-
-    // Indicates whether the thread is impersonating another security context.
-    ULONG IsImpersonating;
-
-    // Pointer to the NLS (National Language Support) cache.
-    PVOID NlsCache;
-
-    // Pointer to the AppCompat/Shim Engine data.
-    PVOID pShimData;
-
+    ULONG MuiGeneration;                // The generation of the MUI (Multilingual User Interface) data.
+    ULONG IsImpersonating;              // Indicates whether the thread is impersonating another security context.
+    PVOID NlsCache;                     // Pointer to the NLS (National Language Support) cache.
+    PVOID pShimData;                    // Pointer to the AppCompat/Shim Engine data.
     ULONG HeapData;
-
-    // Handle to the current transaction associated with the thread.
-    HANDLE CurrentTransactionHandle;
-
-    // Pointer to the active frame for the thread.
-    PTEB_ACTIVE_FRAME ActiveFrame;
-
+    HANDLE CurrentTransactionHandle;    // Handle to the current transaction associated with the thread.
+    PTEB_ACTIVE_FRAME ActiveFrame;      // Pointer to the active frame for the thread.
     PVOID FlsData;
-
     PVOID PreferredLanguages;
     PVOID UserPrefLanguages;
     PVOID MergedPrefLanguages;
@@ -1644,319 +1205,324 @@ typedef struct _TEB
     ULONGLONG LastSleepCounter; // Win11
     ULONG SpinCallCount;
 
-    // Extended feature disable mask (AVX).
-    ULONGLONG ExtendedFeatureDisableMask;
-
-    PVOID SchedulerSharedDataSlot; // 24H2
+    ULONGLONG ExtendedFeatureDisableMask;   // Extended feature disable mask (AVX).
+    PVOID SchedulerSharedDataSlot;          // 24H2
     PVOID HeapWalkContext;
-
-    // The primary processor group affinity of the thread.
-    GROUP_AFFINITY PrimaryGroupAffinity;
-
-    // Read-copy-update (RCU) synchronization context.
-    ULONG Rcu[2];
+    GROUP_AFFINITY PrimaryGroupAffinity;    // The primary processor group affinity of the thread.
+    ULONG Rcu[2];                           // Read-copy-update (RCU) synchronization context.
 } TEB, *PTEB;
 
 typedef struct _TEB64
 {
-    NT_TIB64 NtTib;
-    VOID* POINTER_64 EnvironmentPointer;
-    CLIENT_ID64 ClientId;
-    VOID* POINTER_64 ActiveRpcHandle;
-    VOID* POINTER_64 ThreadLocalStoragePointer;
-    PEB64* POINTER_64 ProcessEnvironmentBlock;
-    ULONG LastErrorValue;
-    ULONG CountOfOwnedCriticalSections;
-    VOID* POINTER_64 CsrClientThread;
-    VOID* POINTER_64 Win32ThreadInfo;
-    ULONG User32Reserved[26];
-    ULONG UserReserved[5];
-    VOID* POINTER_64 WOW32Reserved;
-    LCID CurrentLocale;
-    ULONG FpSoftwareStatusRegister;
-    VOID* POINTER_64 ReservedForDebuggerInstrumentation[16];
-    VOID* POINTER_64 SystemReserved1[30];
-    CHAR PlaceholderCompatibilityMode;
-    BOOLEAN PlaceholderHydrationAlwaysExplicit;
-    CHAR PlaceholderReserved[10];
-    ULONG ProxiedProcessId;
-    ACTIVATION_CONTEXT_STACK64 _ActivationStack;
-    UCHAR WorkingOnBehalfTicket[8];
-    NTSTATUS ExceptionCode;
-    UCHAR Padding0[4];
-    ACTIVATION_CONTEXT_STACK64* POINTER_64 ActivationContextStackPointer;
-    ULONGLONG InstrumentationCallbackSp;
-    ULONGLONG InstrumentationCallbackPreviousPc;
-    ULONGLONG InstrumentationCallbackPreviousSp;
-    ULONG TxFsContext;
-    BOOLEAN InstrumentationCallbackDisabled;
-    BOOLEAN UnalignedLoadStoreExceptions;
-    UCHAR Padding1[2];
-    GDI_TEB_BATCH64 GdiTebBatch;
-    CLIENT_ID64 RealClientId;
-    VOID* POINTER_64 GdiCachedProcessHandle;
-    ULONG GdiClientPID;
-    ULONG GdiClientTID;
-    VOID* POINTER_64 GdiThreadLocalInfo;
-    ULONGLONG Win32ClientInfo[62];
-    VOID* POINTER_64 glDispatchTable[233];
-    ULONGLONG glReserved1[29];
-    VOID* POINTER_64 glReserved2;
-    VOID* POINTER_64 glSectionInfo;
-    VOID* POINTER_64 glSection;
-    VOID* POINTER_64 glTable;
-    VOID* POINTER_64 glCurrentRC;
-    VOID* POINTER_64 glContext;
-    NTSTATUS LastStatusValue;
-    UCHAR Padding2[4];
-    UNICODE_STRING64 StaticUnicodeString;
-    WCHAR StaticUnicodeBuffer[261];
-    UCHAR Padding3[6];
-    VOID* POINTER_64 DeallocationStack;
-    VOID* POINTER_64 TlsSlots[TLS_MINIMUM_AVAILABLE];
-    LIST_ENTRY64 TlsLinks;
-    VOID* POINTER_64 Vdm;
-    VOID* POINTER_64 ReservedForNtRpc;
-    VOID* POINTER_64 DbgSsReserved[2];
-    ULONG HardErrorMode;
-    UCHAR Padding4[4];
-    VOID* POINTER_64 Instrumentation[11];
-    GUID ActivityId;
-    VOID* POINTER_64 SubProcessTag;
-    VOID* POINTER_64 PerflibData;
-    VOID* POINTER_64 EtwTraceData;
-    VOID* POINTER_64 WinSockData;
-    ULONG GdiBatchCount;
+    /* +0x0000 */ NT_TIB64 NtTib;
+    /* +0x0038 */ VOID* POINTER_64 EnvironmentPointer;
+    /* +0x0040 */ CLIENT_ID64 ClientId;
+    /* +0x0050 */ VOID* POINTER_64 ActiveRpcHandle;
+    /* +0x0058 */ VOID* POINTER_64 ThreadLocalStoragePointer;
+    /* +0x0060 */ PEB64* POINTER_64 ProcessEnvironmentBlock;
+    /* +0x0068 */ ULONG LastErrorValue;
+    /* +0x006C */ ULONG CountOfOwnedCriticalSections;
+    /* +0x0070 */ VOID* POINTER_64 CsrClientThread;
+    /* +0x0078 */ VOID* POINTER_64 Win32ThreadInfo;
+    /* +0x0080 */ ULONG User32Reserved[26];
+    /* +0x00E8 */ ULONG UserReserved[5];
+    /* +0x0100 */ VOID* POINTER_64 WOW32Reserved;
+    /* +0x0108 */ LCID CurrentLocale;
+    /* +0x010C */ ULONG FpSoftwareStatusRegister;
+    /* +0x0110 */ VOID* POINTER_64 ReservedForDebuggerInstrumentation[16];
+    /* +0x0190 */ VOID* POINTER_64 SystemReserved1[25];
+    /* +0x0258 */ PVOID HeapFlsData;
+    /* +0x0260 */ ULONG_PTR RngState[4];
+    /* +0x0280 */ CHAR PlaceholderCompatibilityMode;
+    /* +0x0281 */ BOOLEAN PlaceholderHydrationAlwaysExplicit;
+    /* +0x0282 */ CHAR PlaceholderReserved[10];
+    /* +0x028C */ ULONG ProxiedProcessId;
+    /* +0x0290 */ ACTIVATION_CONTEXT_STACK64 _ActivationStack;
+    /* +0x02B8 */ UCHAR WorkingOnBehalfTicket[8];
+    /* +0x02C0 */ NTSTATUS ExceptionCode;
+    /* +0x02C8 */ ACTIVATION_CONTEXT_STACK64* POINTER_64 ActivationContextStackPointer;
+    /* +0x02D0 */ ULONGLONG InstrumentationCallbackSp;
+    /* +0x02D8 */ ULONGLONG InstrumentationCallbackPreviousPc;
+    /* +0x02E0 */ ULONGLONG InstrumentationCallbackPreviousSp;
+    /* +0x02E8 */ ULONG TxFsContext;
+    /* +0x02EC */ BOOLEAN InstrumentationCallbackDisabled;
+    /* +0x02ED */ BOOLEAN UnalignedLoadStoreExceptions;
+    /* +0x02F0 */ GDI_TEB_BATCH64 GdiTebBatch;
+    /* +0x07D8 */ CLIENT_ID64 RealClientId;
+    /* +0x07E8 */ VOID* POINTER_64 GdiCachedProcessHandle;
+    /* +0x07F0 */ ULONG GdiClientPID;
+    /* +0x07F4 */ ULONG GdiClientTID;
+    /* +0x07F8 */ VOID* POINTER_64 GdiThreadLocalInfo;
+    /* +0x0800 */ ULONGLONG Win32ClientInfo[62];
+    /* +0x09F0 */ VOID* POINTER_64 glDispatchTable[233];
+    /* +0x1138 */ ULONGLONG glReserved1[29];
+    /* +0x1220 */ VOID* POINTER_64 glReserved2;
+    /* +0x1228 */ VOID* POINTER_64 glSectionInfo;
+    /* +0x1230 */ VOID* POINTER_64 glSection;
+    /* +0x1238 */ VOID* POINTER_64 glTable;
+    /* +0x1240 */ VOID* POINTER_64 glCurrentRC;
+    /* +0x1248 */ VOID* POINTER_64 glContext;
+    /* +0x1250 */ NTSTATUS LastStatusValue;
+    /* +0x1254 */ UCHAR Padding2[4];
+    /* +0x1258 */ UNICODE_STRING64 StaticUnicodeString;
+    /* +0x1268 */ WCHAR StaticUnicodeBuffer[261];
+    /* +0x1478 */ VOID* POINTER_64 DeallocationStack;
+    /* +0x1480 */ VOID* POINTER_64 TlsSlots[TLS_MINIMUM_AVAILABLE];
+    /* +0x1680 */ LIST_ENTRY64 TlsLinks;
+    /* +0x1690 */ VOID* POINTER_64 Vdm;
+    /* +0x1698 */ VOID* POINTER_64 ReservedForNtRpc;
+    /* +0x16A0 */ VOID* POINTER_64 DbgSsReserved[2];
+    /* +0x16B0 */ ULONG HardErrorMode;
+    /* +0x16B8 */ VOID* POINTER_64 Instrumentation[11];
+    /* +0x1710 */ GUID ActivityId;
+    /* +0x1720 */ VOID* POINTER_64 SubProcessTag;
+    /* +0x1728 */ VOID* POINTER_64 PerflibData;
+    /* +0x1730 */ VOID* POINTER_64 EtwTraceData;
+    /* +0x1738 */ VOID* POINTER_64 WinSockData;
+    /* +0x1740 */ ULONG GdiBatchCount;
     union
     {
-        PROCESSOR_NUMBER CurrentIdealProcessor;
+        /* +0x1744 */ PROCESSOR_NUMBER CurrentIdealProcessor;
         union
         {
-            ULONG IdealProcessorValue;
+            /* +0x1744 */ ULONG IdealProcessorValue;
             struct
             {
-                UCHAR ReservedPad0;
-                UCHAR ReservedPad1;
-                UCHAR ReservedPad2;
-                UCHAR IdealProcessor;
+                /* +0x1744 */ UCHAR ReservedPad0;
+                /* +0x1745 */ UCHAR ReservedPad1;
+                /* +0x1746 */ UCHAR ReservedPad2;
+                /* +0x1747 */ UCHAR IdealProcessor;
             };
         };
     };
-    ULONG GuaranteedStackBytes;
-    UCHAR Padding5[4];
-    VOID* POINTER_64 ReservedForPerf;
-    OLE_TLS_DATA64* POINTER_64 ReservedForOle;
-    ULONG WaitingOnLoaderLock;
-    UCHAR Padding6[4];
-    VOID* POINTER_64 SavedPriorityState;
-    ULONGLONG ReservedForCodeCoverage;
-    VOID* POINTER_64 ThreadPoolData;
-    VOID* POINTER_64* POINTER_64 TlsExpansionSlots;
-    struct CHPEV2_CPUAREA_INFO* POINTER_64 ChpeV2CpuAreaInfo;
-    VOID* POINTER_64 Unused;
-    ULONG MuiGeneration;
-    ULONG IsImpersonating;
-    VOID* POINTER_64 NlsCache;
-    VOID* POINTER_64 pShimData;
-    ULONG HeapData;
-    UCHAR Padding7[4];
-    VOID* POINTER_64 CurrentTransactionHandle;
-    TEB_ACTIVE_FRAME64* POINTER_64 ActiveFrame;
-    VOID* POINTER_64 FlsData;
-    VOID* POINTER_64 PreferredLanguages;
-    VOID* POINTER_64 UserPrefLanguages;
-    VOID* POINTER_64 MergedPrefLanguages;
-    ULONG MuiImpersonation;
+    /* +0x1748 */ ULONG GuaranteedStackBytes;
+    /* +0x174C */ UCHAR Padding5[4];
+    /* +0x1750 */ VOID* POINTER_64 ReservedForPerf;
+    /* +0x1758 */ OLE_TLS_DATA64* POINTER_64 ReservedForOle;
+    /* +0x1760 */ ULONG WaitingOnLoaderLock;
+    /* +0x1768 */ VOID* POINTER_64 SavedPriorityState;
+    /* +0x1770 */ ULONGLONG ReservedForCodeCoverage;
+    /* +0x1778 */ VOID* POINTER_64 ThreadPoolData;
+    /* +0x1780 */ VOID* POINTER_64* POINTER_64 TlsExpansionSlots;
+    /* +0x1788 */ struct CHPEV2_CPUAREA_INFO* POINTER_64 ChpeV2CpuAreaInfo;
+    /* +0x1790 */ VOID* POINTER_64 Unused;
+    /* +0x1798 */ ULONG MuiGeneration;
+    /* +0x179C */ ULONG IsImpersonating;
+    /* +0x17A0 */ VOID* POINTER_64 NlsCache;
+    /* +0x17A8 */ VOID* POINTER_64 pShimData;
+    /* +0x17B0 */ ULONG HeapData;
+    /* +0x17B8 */ VOID* POINTER_64 CurrentTransactionHandle;
+    /* +0x17C0 */ TEB_ACTIVE_FRAME64* POINTER_64 ActiveFrame;
+    /* +0x17C8 */ VOID* POINTER_64 FlsData;
+    /* +0x17D0 */ VOID* POINTER_64 PreferredLanguages;
+    /* +0x17D8 */ VOID* POINTER_64 UserPrefLanguages;
+    /* +0x17E0 */ VOID* POINTER_64 MergedPrefLanguages;
+    /* +0x17E8 */ ULONG MuiImpersonation;
     union
     {
-        USHORT CrossTebFlags;
+        /* +0x17EC */ USHORT CrossTebFlags;
         struct
         {
-            USHORT SpareCrossTebBits : 16;
+            /* +0x17EC */ USHORT SpareCrossTebBits : 16;
         };
     };
     union
     {
-        USHORT SameTebFlags;
+        /* +0x17EE */ USHORT SameTebFlags;
         struct
         {
-            USHORT SafeThunkCall : 1;
-            USHORT InDebugPrint : 1;
-            USHORT HasFiberData : 1;
-            USHORT SkipThreadAttach : 1;
-            USHORT WerInShipAssertCode : 1;
-            USHORT RanProcessInit : 1;
-            USHORT ClonedThread : 1;
-            USHORT SuppressDebugMsg : 1;
-            USHORT DisableUserStackWalk : 1;
-            USHORT RtlExceptionAttached : 1;
-            USHORT InitialThread : 1;
-            USHORT SessionAware : 1;
-            USHORT LoadOwner : 1;
-            USHORT LoaderWorker : 1;
-            USHORT SkipLoaderInit : 1;
-            USHORT SkipFileAPIBrokering : 1;
+            /* +0x17EE */ USHORT SafeThunkCall : 1;
+            /* +0x17EE */ USHORT InDebugPrint : 1;
+            /* +0x17EE */ USHORT HasFiberData : 1;
+            /* +0x17EE */ USHORT SkipThreadAttach : 1;
+            /* +0x17EE */ USHORT WerInShipAssertCode : 1;
+            /* +0x17EE */ USHORT RanProcessInit : 1;
+            /* +0x17EE */ USHORT ClonedThread : 1;
+            /* +0x17EE */ USHORT SuppressDebugMsg : 1;
+            /* +0x17EE */ USHORT DisableUserStackWalk : 1;
+            /* +0x17EE */ USHORT RtlExceptionAttached : 1;
+            /* +0x17EE */ USHORT InitialThread : 1;
+            /* +0x17EE */ USHORT SessionAware : 1;
+            /* +0x17EE */ USHORT LoadOwner : 1;
+            /* +0x17EE */ USHORT LoaderWorker : 1;
+            /* +0x17EE */ USHORT SkipLoaderInit : 1;
+            /* +0x17EE */ USHORT SkipFileAPIBrokering : 1;
         };
     };
-    VOID* POINTER_64 TxnScopeEnterCallback;
-    VOID* POINTER_64 TxnScopeExitCallback;
-    VOID* POINTER_64 TxnScopeContext;
-    ULONG LockCount;
-    LONG WowTebOffset;
-    VOID* POINTER_64 ResourceRetValue;
-    VOID* POINTER_64 ReservedForWdf;
-    ULONGLONG ReservedForCrt;
-    GUID EffectiveContainerId;
-    ULONGLONG LastSleepCounter;
-    ULONG SpinCallCount;
-    UCHAR Padding8[4];
-    ULONGLONG ExtendedFeatureDisableMask;
+    /* +0x17F0 */ VOID* POINTER_64 TxnScopeEnterCallback;
+    /* +0x17F8 */ VOID* POINTER_64 TxnScopeExitCallback;
+    /* +0x1800 */ VOID* POINTER_64 TxnScopeContext;
+    /* +0x1808 */ ULONG LockCount;
+    /* +0x180C */ LONG WowTebOffset;
+    /* +0x1810 */ VOID* POINTER_64 ResourceRetValue;
+    /* +0x1818 */ VOID* POINTER_64 ReservedForWdf;
+    /* +0x1820 */ ULONGLONG ReservedForCrt;
+    /* +0x1828 */ GUID EffectiveContainerId;
+    /* +0x1838 */ ULONGLONG LastSleepCounter;
+    /* +0x1840 */ ULONG SpinCallCount;
+    /* +0x1848 */ ULONGLONG ExtendedFeatureDisableMask;
+    /* +0x1850 */ VOID* POINTER_64 SchedulerSharedDataSlot;
+    /* +0x1858 */ VOID* POINTER_64 HeapWalkContext;
+    /* +0x1860 */ GROUP_AFFINITY PrimaryGroupAffinity;
+    /* +0x1870 */ ULONG Rcu[2];
 } TEB64, *PTEB64;
 
 typedef struct _TEB32
 {
-    NT_TIB32 NtTib;
-    VOID* POINTER_32 EnvironmentPointer;
-    CLIENT_ID32 ClientId;
-    VOID* POINTER_32 ActiveRpcHandle;
-    VOID* POINTER_32 ThreadLocalStoragePointer;
-    PEB32* POINTER_32 ProcessEnvironmentBlock;
-    ULONG LastErrorValue;
-    ULONG CountOfOwnedCriticalSections;
-    VOID* POINTER_32 CsrClientThread;
-    VOID* POINTER_32 Win32ThreadInfo;
-    ULONG User32Reserved[26];
-    ULONG UserReserved[5];
-    VOID* POINTER_32 WOW32Reserved;
-    LCID CurrentLocale;
-    ULONG FpSoftwareStatusRegister;
-    VOID* POINTER_32 ReservedForDebuggerInstrumentation[16];
-    VOID* POINTER_32 SystemReserved1[26];
-    CHAR PlaceholderCompatibilityMode;
-    BOOLEAN PlaceholderHydrationAlwaysExplicit;
-    CHAR PlaceholderReserved[10];
-    ULONG ProxiedProcessId;
-    ACTIVATION_CONTEXT_STACK32 _ActivationStack;
-    UCHAR WorkingOnBehalfTicket[8];
-    NTSTATUS ExceptionCode;
-    ACTIVATION_CONTEXT_STACK32* POINTER_32 ActivationContextStackPointer;
-    ULONG InstrumentationCallbackSp;
-    ULONG InstrumentationCallbackPreviousPc;
-    ULONG InstrumentationCallbackPreviousSp;
-    UCHAR InstrumentationCallbackDisabled;
-    UCHAR SpareBytes[23];
-    ULONG TxFsContext;
-    GDI_TEB_BATCH32 GdiTebBatch;
-    CLIENT_ID32 RealClientId;
-    VOID* POINTER_32 GdiCachedProcessHandle;
-    ULONG GdiClientPID;
-    ULONG GdiClientTID;
-    VOID* POINTER_32 GdiThreadLocalInfo;
-    ULONG Win32ClientInfo[62];
-    VOID* POINTER_32 glDispatchTable[233];
-    ULONG glReserved1[29];
-    VOID* POINTER_32 glReserved2;
-    VOID* POINTER_32 glSectionInfo;
-    VOID* POINTER_32 glSection;
-    VOID* POINTER_32 glTable;
-    VOID* POINTER_32 glCurrentRC;
-    VOID* POINTER_32 glContext;
-    NTSTATUS LastStatusValue;
-    UNICODE_STRING32 StaticUnicodeString;
-    WCHAR StaticUnicodeBuffer[261];
-    VOID* POINTER_32 DeallocationStack;
-    VOID* POINTER_32 TlsSlots[TLS_MINIMUM_AVAILABLE];
-    LIST_ENTRY32 TlsLinks;
-    VOID* POINTER_32 Vdm;
-    VOID* POINTER_32 ReservedForNtRpc;
-    VOID* POINTER_32 DbgSsReserved[2];
-    ULONG HardErrorMode;
-    VOID* POINTER_32 Instrumentation[9];
-    GUID ActivityId;
-    VOID* POINTER_32 SubProcessTag;
-    VOID* POINTER_32 PerflibData;
-    VOID* POINTER_32 EtwTraceData;
-    VOID* POINTER_32 WinSockData;
-    ULONG GdiBatchCount;
+    /* +0x0000 */ NT_TIB32 NtTib;
+    /* +0x001C */ VOID* POINTER_32 EnvironmentPointer;
+    /* +0x0020 */ CLIENT_ID32 ClientId;
+    /* +0x0028 */ VOID* POINTER_32 ActiveRpcHandle;
+    /* +0x002C */ VOID* POINTER_32 ThreadLocalStoragePointer;
+    /* +0x0030 */ PEB32* POINTER_32 ProcessEnvironmentBlock;
+    /* +0x0034 */ ULONG LastErrorValue;
+    /* +0x0038 */ ULONG CountOfOwnedCriticalSections;
+    /* +0x003C */ VOID* POINTER_32 CsrClientThread;
+    /* +0x0040 */ VOID* POINTER_32 Win32ThreadInfo;
+    /* +0x0044 */ ULONG User32Reserved[26];
+    /* +0x00AC */ ULONG UserReserved[5];
+    /* +0x00C0 */ VOID* POINTER_32 WOW32Reserved;
+    /* +0x00C4 */ LCID CurrentLocale;
+    /* +0x00C8 */ ULONG FpSoftwareStatusRegister;
+    /* +0x00CC */ VOID* POINTER_32 ReservedForDebuggerInstrumentation[16];
+    /* +0x010C */ VOID* POINTER_32 SystemReserved1[21];
+    /* +0x0160 */ VOID* POINTER_32 HeapFlsData;
+    /* +0x0164 */ ULONG RngState[4];
+    /* +0x0174 */ CHAR PlaceholderCompatibilityMode;
+    /* +0x0175 */ BOOLEAN PlaceholderHydrationAlwaysExplicit;
+    /* +0x0176 */ CHAR PlaceholderReserved[10];
+    /* +0x0180 */ ULONG ProxiedProcessId;
+    /* +0x0184 */ ACTIVATION_CONTEXT_STACK32 _ActivationStack;
+    /* +0x019C */ UCHAR WorkingOnBehalfTicket[8];
+    /* +0x01A4 */ NTSTATUS ExceptionCode;
+    /* +0x01A8 */ ACTIVATION_CONTEXT_STACK32* POINTER_32 ActivationContextStackPointer;
+    /* +0x01AC */ ULONG InstrumentationCallbackSp;
+    /* +0x01B0 */ ULONG InstrumentationCallbackPreviousPc;
+    /* +0x01B4 */ ULONG InstrumentationCallbackPreviousSp;
+    /* +0x01B8 */ UCHAR InstrumentationCallbackDisabled;
+    /* +0x01B9 */ UCHAR SpareBytes[23];
+    /* +0x01D0 */ ULONG TxFsContext;
+    /* +0x01D4 */ GDI_TEB_BATCH32 GdiTebBatch;
+    /* +0x06B4 */ CLIENT_ID32 RealClientId;
+    /* +0x06BC */ VOID* POINTER_32 GdiCachedProcessHandle;
+    /* +0x06C0 */ ULONG GdiClientPID;
+    /* +0x06C4 */ ULONG GdiClientTID;
+    /* +0x06C8 */ VOID* POINTER_32 GdiThreadLocalInfo;
+    /* +0x06CC */ ULONG Win32ClientInfo[62];
+    /* +0x07C4 */ VOID* POINTER_32 glDispatchTable[233];
+    /* +0x0B68 */ ULONG glReserved1[29];
+    /* +0x0BDC */ VOID* POINTER_32 glReserved2;
+    /* +0x0BE0 */ VOID* POINTER_32 glSectionInfo;
+    /* +0x0BE4 */ VOID* POINTER_32 glSection;
+    /* +0x0BE8 */ VOID* POINTER_32 glTable;
+    /* +0x0BEc */ VOID* POINTER_32 glCurrentRC;
+    /* +0x0BF0 */ VOID* POINTER_32 glContext;
+    /* +0x0BF4 */ NTSTATUS LastStatusValue;
+    /* +0x0BF8 */ UNICODE_STRING32 StaticUnicodeString;
+    /* +0x0C00 */ WCHAR StaticUnicodeBuffer[261];
+    /* +0x0E0C */ VOID* POINTER_32 DeallocationStack;
+    /* +0x0E10 */ VOID* POINTER_32 TlsSlots[TLS_MINIMUM_AVAILABLE];
+    /* +0x0F10 */ LIST_ENTRY32 TlsLinks;
+    /* +0x0F18 */ VOID* POINTER_32 Vdm;
+    /* +0x0F1C */ VOID* POINTER_32 ReservedForNtRpc;
+    /* +0x0F20 */ VOID* POINTER_32 DbgSsReserved[2];
+    /* +0x0F28 */ ULONG HardErrorMode;
+    /* +0x0F2C */ VOID* POINTER_32 Instrumentation[9];
+    /* +0x0F50 */ GUID ActivityId;
+    /* +0x0F60 */ VOID* POINTER_32 SubProcessTag;
+    /* +0x0F64 */ VOID* POINTER_32 PerflibData;
+    /* +0x0F68 */ VOID* POINTER_32 EtwTraceData;
+    /* +0x0F6C */ VOID* POINTER_32 WinSockData;
+    /* +0x0F70 */ ULONG GdiBatchCount;
     union
     {
-        PROCESSOR_NUMBER CurrentIdealProcessor;
+        /* +0x0F74 */ PROCESSOR_NUMBER CurrentIdealProcessor;
         union
         {
-            ULONG IdealProcessorValue;
+            /* +0x0F74 */ ULONG IdealProcessorValue;
             struct
             {
-                UCHAR ReservedPad0;
-                UCHAR ReservedPad1;
-                UCHAR ReservedPad2;
-                UCHAR IdealProcessor;
+                /* +0x0F74 */ UCHAR ReservedPad0;
+                /* +0x0F75 */ UCHAR ReservedPad1;
+                /* +0x0F76 */ UCHAR ReservedPad2;
+                /* +0x0F77 */ UCHAR IdealProcessor;
             };
         };
     };
-    ULONG GuaranteedStackBytes;
-    VOID* POINTER_32 ReservedForPerf;
-    OLE_TLS_DATA32* POINTER_32 ReservedForOle;
-    ULONG WaitingOnLoaderLock;
-    VOID* POINTER_32 SavedPriorityState;
-    ULONG ReservedForCodeCoverage;
-    VOID* POINTER_32 ThreadPoolData;
-    VOID* POINTER_32 TlsExpansionSlots;
-    ULONG MuiGeneration;
-    ULONG IsImpersonating;
-    VOID* POINTER_32 NlsCache;
-    VOID* POINTER_32 pShimData;
-    ULONG HeapData;
-    VOID* POINTER_32 CurrentTransactionHandle;
-    TEB_ACTIVE_FRAME32* POINTER_32 ActiveFrame;
-    VOID* POINTER_32 FlsData;
-    VOID* POINTER_32 PreferredLanguages;
-    VOID* POINTER_32 UserPrefLanguages;
-    VOID* POINTER_32 MergedPrefLanguages;
-    ULONG MuiImpersonation;
+    /* +0x0F78 */ ULONG GuaranteedStackBytes;
+    /* +0x0F7C */ VOID* POINTER_32 ReservedForPerf;
+    /* +0x0F80 */ OLE_TLS_DATA32* POINTER_32 ReservedForOle;
+    /* +0x0F84 */ ULONG WaitingOnLoaderLock;
+    /* +0x0F88 */ VOID* POINTER_32 SavedPriorityState;
+    /* +0x0F8C */ ULONG ReservedForCodeCoverage;
+    /* +0x0F90 */ VOID* POINTER_32 ThreadPoolData;
+    /* +0x0F94 */ VOID* POINTER_32 TlsExpansionSlots;
+    /* +0x0F98 */ ULONG MuiGeneration;
+    /* +0x0F9C */ ULONG IsImpersonating;
+    /* +0x0FA0 */ VOID* POINTER_32 NlsCache;
+    /* +0x0FA4 */ VOID* POINTER_32 pShimData;
+    /* +0x0FA8 */ ULONG HeapData;
+    /* +0x0FAC */ VOID* POINTER_32 CurrentTransactionHandle;
+    /* +0x0FB0 */ TEB_ACTIVE_FRAME32* POINTER_32 ActiveFrame;
+    /* +0x0FB4 */ VOID* POINTER_32 FlsData;
+    /* +0x0FB8 */ VOID* POINTER_32 PreferredLanguages;
+    /* +0x0FBC */ VOID* POINTER_32 UserPrefLanguages;
+    /* +0x0FC0 */ VOID* POINTER_32 MergedPrefLanguages;
+    /* +0x0FC4 */ ULONG MuiImpersonation;
     union
     {
-        USHORT CrossTebFlags;
+        /* +0x0FC8 */ USHORT CrossTebFlags;
         struct
         {
-            USHORT SpareCrossTebBits : 16;
+            /* +0x0FC8 */ USHORT SpareCrossTebBits : 16;
         };
     };
     union
     {
-        USHORT SameTebFlags;
+        /* +0x0FCA */ USHORT SameTebFlags;
         struct
         {
-            USHORT SafeThunkCall : 1;
-            USHORT InDebugPrint : 1;
-            USHORT HasFiberData : 1;
-            USHORT SkipThreadAttach : 1;
-            USHORT WerInShipAssertCode : 1;
-            USHORT RanProcessInit : 1;
-            USHORT ClonedThread : 1;
-            USHORT SuppressDebugMsg : 1;
-            USHORT DisableUserStackWalk : 1;
-            USHORT RtlExceptionAttached : 1;
-            USHORT InitialThread : 1;
-            USHORT SessionAware : 1;
-            USHORT LoadOwner : 1;
-            USHORT LoaderWorker : 1;
-            USHORT SkipLoaderInit : 1;
-            USHORT SkipFileAPIBrokering : 1;
+            /* +0x0FCA */ USHORT SafeThunkCall : 1;
+            /* +0x0FCA */ USHORT InDebugPrint : 1;
+            /* +0x0FCA */ USHORT HasFiberData : 1;
+            /* +0x0FCA */ USHORT SkipThreadAttach : 1;
+            /* +0x0FCA */ USHORT WerInShipAssertCode : 1;
+            /* +0x0FCA */ USHORT RanProcessInit : 1;
+            /* +0x0FCA */ USHORT ClonedThread : 1;
+            /* +0x0FCA */ USHORT SuppressDebugMsg : 1;
+            /* +0x0FCA */ USHORT DisableUserStackWalk : 1;
+            /* +0x0FCA */ USHORT RtlExceptionAttached : 1;
+            /* +0x0FCA */ USHORT InitialThread : 1;
+            /* +0x0FCA */ USHORT SessionAware : 1;
+            /* +0x0FCA */ USHORT LoadOwner : 1;
+            /* +0x0FCA */ USHORT LoaderWorker : 1;
+            /* +0x0FCA */ USHORT SkipLoaderInit : 1;
+            /* +0x0FCA */ USHORT SkipFileAPIBrokering : 1;
         };
     };
-    VOID* POINTER_32 TxnScopeEnterCallback;
-    VOID* POINTER_32 TxnScopeExitCallback;
-    VOID* POINTER_32 TxnScopeContext;
-    ULONG LockCount;
-    LONG WowTebOffset;
-    VOID* POINTER_32 ResourceRetValue;
-    VOID* POINTER_32 ReservedForWdf;
-    ULONGLONG ReservedForCrt;
-    GUID EffectiveContainerId;
-    ULONGLONG LastSleepCounter;
-    ULONG SpinCallCount;
-    ULONGLONG ExtendedFeatureDisableMask;
+    /* +0x0FCC */ VOID* POINTER_32 TxnScopeEnterCallback;
+    /* +0x0FD0 */ VOID* POINTER_32 TxnScopeExitCallback;
+    /* +0x0FD4 */ VOID* POINTER_32 TxnScopeContext;
+    /* +0x0FD8 */ ULONG LockCount;
+    /* +0x0FDC */ LONG WowTebOffset;
+    /* +0x0FE0 */ VOID* POINTER_32 ResourceRetValue;
+    /* +0x0FE4 */ VOID* POINTER_32 ReservedForWdf;
+    /* +0x0FE8 */ ULONGLONG ReservedForCrt;
+    /* +0x0FF0 */ GUID EffectiveContainerId;
+    /* +0x1000 */ ULONGLONG LastSleepCounter;
+    /* +0x1008 */ ULONG SpinCallCount;
+    /* +0x1010 */ ULONGLONG ExtendedFeatureDisableMask;
+    /* +0x1018 */ VOID* POINTER_32 SchedulerSharedDataSlot;
+    /* +0x101C */ VOID* POINTER_32 HeapWalkContext;
+    /* +0x1020 */ GROUP_AFFINITY PrimaryGroupAffinity;
+    /* +0x102C */ ULONG Rcu[2];
 } TEB32, *PTEB32;
+
+#if defined(_WIN64)
+_STATIC_ASSERT(sizeof(TEB) == sizeof(TEB64));
+#else
+_STATIC_ASSERT(sizeof(TEB) == sizeof(TEB32));
+#endif
 
 NTSYSAPI
 PPEB

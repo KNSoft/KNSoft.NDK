@@ -46,8 +46,8 @@ typedef struct _CONTEXT_EX
 #define CONTEXT_EX_LENGTH \
     CONTEXT_ALIGNMENT(sizeof(CONTEXT_EX), CONTEXT_ALIGN)
 
-C_ASSERT(CONTEXT_FRAME_LENGTH == sizeof(CONTEXT));
-C_ASSERT(CONTEXT_EX_LENGTH == 0x20);
+_STATIC_ASSERT(CONTEXT_FRAME_LENGTH == sizeof(CONTEXT));
+_STATIC_ASSERT(CONTEXT_EX_LENGTH == 0x20);
 
 #define RTL_CONTEXT_EX_OFFSET(ContextEx, Chunk) ((ContextEx)->Chunk.Offset)
 #define RTL_CONTEXT_EX_LENGTH(ContextEx, Chunk) ((ContextEx)->Chunk.Length)

@@ -127,12 +127,10 @@ _Inline_RtlInitUnicodeStringEx(
     _Out_ PUNICODE_STRING DestinationString,
     _In_opt_z_ PCWSTR SourceString)
 {
-    SIZE_T MaxSize = (MAXUSHORT & ~1) - sizeof(WCHAR);
- 
     if (SourceString)
     {
         SIZE_T Size = wcslen(SourceString) * sizeof(WCHAR);
-        if (Size > MaxSize)
+        if (Size > (MAXUSHORT & ~1) - sizeof(WCHAR))
         {
             return STATUS_NAME_TOO_LONG;
         }

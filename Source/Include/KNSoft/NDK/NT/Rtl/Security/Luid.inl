@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../NDK.h"
+#include "../../../NDK.h"
 
 EXTERN_C_START
 

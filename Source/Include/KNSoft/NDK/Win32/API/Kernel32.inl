@@ -42,7 +42,7 @@ DWORD
 WINAPI
 _Inline_GetCurrentThreadId(VOID)
 {
-    return NtCurrentThreadId();
+    return (DWORD)(ULONG_PTR)NtCurrentThreadId();
 }
 
 __inline
@@ -50,7 +50,7 @@ DWORD
 WINAPI
 _Inline_GetCurrentProcessId(VOID)
 {
-    return NtCurrentProcessId();
+    return (DWORD)(ULONG_PTR)NtCurrentProcessId();
 }
 
 #pragma endregion
@@ -571,7 +571,7 @@ WINAPI
 _Inline_SetLastError(
     _In_ DWORD dwErrCode)
 {
-    return _Inline_RtlSetLastWin32Error(dwErrCode);
+    _Inline_RtlSetLastWin32Error(dwErrCode);
 }
 
 __inline
