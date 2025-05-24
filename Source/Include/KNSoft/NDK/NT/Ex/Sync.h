@@ -639,7 +639,6 @@ NtSetIRTimer(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
-
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -650,7 +649,6 @@ NtCreateTimer2(
     _In_ ULONG Attributes, // TIMER_TYPE
     _In_ ACCESS_MASK DesiredAccess
 );
-
 #endif
 
 typedef struct _T2_SET_PARAMETERS_V0

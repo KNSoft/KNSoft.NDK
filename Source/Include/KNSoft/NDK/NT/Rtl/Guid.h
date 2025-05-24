@@ -34,6 +34,14 @@ EXTERN_C_START
 
 #define RTL_GUID_STRING_SIZE 38
 
+/**
+ * The RtlStringFromGUID routine converts a given GUID from binary format into a Unicode string.
+ *
+ * \param[in] Guid Specifies the binary-format GUID to convert.
+ * \param[out] GuidString Pointer to a caller-supplied variable in which a pointer to the converted GUID string is returned and must free by calling RtlFreeUnicodeString.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlstringfromguid
+ */
 _IRQL_requires_max_(PASSIVE_LEVEL)
 _Must_inspect_result_
 NTSYSAPI

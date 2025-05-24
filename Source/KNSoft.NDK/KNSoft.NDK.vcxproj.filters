@@ -518,6 +518,15 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Access.inl">
       <Filter>NT\Rtl\Security</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Bcd.inl">
+      <Filter>NT</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Wow.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Path.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">

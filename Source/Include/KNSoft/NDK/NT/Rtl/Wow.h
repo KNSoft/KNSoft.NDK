@@ -8,6 +8,7 @@ EXTERN_C_START
 /* phnt */
 
 #ifdef _WIN64
+
 // rev
 NTSYSAPI
 NTSTATUS
@@ -16,9 +17,7 @@ RtlWow64GetThreadContext(
     _In_ HANDLE ThreadHandle,
     _Inout_ PWOW64_CONTEXT ThreadContext
 );
-#endif
 
-#ifdef _WIN64
 // rev
 NTSYSAPI
 NTSTATUS
@@ -27,6 +26,7 @@ RtlWow64SetThreadContext(
     _In_ HANDLE ThreadHandle,
     _In_ PWOW64_CONTEXT ThreadContext
 );
+
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)

@@ -257,6 +257,23 @@ typedef struct _EXTENDED_CREATE_INFORMATION_32 {
 #define FILE_COPY_STRUCTURED_STORAGE        0x00000041
 #define FILE_STRUCTURED_STORAGE             0x00000441
 
+/**
+ * The NtCreateFile routine creates a new file or directory, or opens an existing file, device, directory, or volume.
+ *
+ * \param[out] FileHandle Pointer to a variable that receives a handle to the pipe.
+ * \param[in] DesiredAccess The requested access to the object.
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the object attributes, including pipe name.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \param[in] AllocationSize The initial allocation size in bytes for the file. Specify a non-zero value to eliminate disk fragmentation, since the file system pre-allocates the file using a contiguous block.
+ * \param[in] FileAttributes The file attributes. Explicitly specified attributes are applied only when the file is created, superseded, or, in some cases, overwritten.
+ * \param[in] ShareAccess The type of share access that the caller would like to use in the file.
+ * \param[in] CreateDisposition Specifies how the file should be handled when the file already exists.
+ * \param[in] CreateOptions Specifies the options to be applied when creating or opening the file.
+ * \param[in] EaBuffer Pointer to an EA buffer used to pass extended attributes.
+ * \param[in] EaLength Length of the EA buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/Winternl/nf-winternl-ntcreatefile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -273,6 +290,18 @@ NtCreateFile(
     _In_reads_bytes_opt_(EaLength) PVOID EaBuffer,
     _In_ ULONG EaLength);
 
+/**
+ * The NtOpenFile routine deletes the specified file.
+ *
+ * \param[out] FileHandle Pointer to a variable that receives a handle to the file.
+ * \param[in] DesiredAccess The requested access to the object. 
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the file's attributes, including file name.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \param[in] ShareAccess Specifies the type of share access for the file.
+ * \param[in] OpenOptions Specifies the options to apply when opening the file.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntopenfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -284,12 +313,27 @@ NtOpenFile(
     _In_ ULONG ShareAccess,
     _In_ ULONG OpenOptions);
 
+/**
+ * The NtDeleteFile routine deletes the specified file.
+ *
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the file's attributes, including file name.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwdeletefile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtDeleteFile(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtFlushBuffersFile routine sends a flush request for the specified file to the file system.
+ *
+ * \param[in] FileHandle A handle to the file whose buffers will be flushed.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwflushbuffersfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -384,18 +428,18 @@ NtCancelSynchronousIoFile(
 /**
  * The NtDeviceIoControlFile function sends a control code directly to a specified device driver, causing the corresponding driver to perform the specified operation.
  *
- * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
- * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
- * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
- * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
- * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
- * @param IoControlCode IOCTL_XXX code that indicates which device I/O control operation is to be carried out on, usually by the underlying device driver.
- * @param InputBuffer Pointer to a caller-allocated input buffer that contains device-specific information to be given to the target driver.
- * @param InputBufferLength Size, in bytes, of the buffer at InputBuffer. This value is ignored if InputBuffer is NULL.
- * @param OutputBuffer Pointer to a caller-allocated output buffer in which information is returned from the target driver.
- * @param OutputBufferLength Size, in bytes, of the buffer at OutputBuffer. This value is ignored if OutputBuffer is NULL.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwdeviceiocontrolfile
+ * \param[in] FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * \param[in] Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * \param[in] ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * \param[in] ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \param[in] IoControlCode IOCTL_XXX code that indicates which device I/O control operation is to be carried out on, usually by the underlying device driver.
+ * \param[in] InputBuffer Pointer to a caller-allocated input buffer that contains device-specific information to be given to the target driver.
+ * \param[in] InputBufferLength Size, in bytes, of the buffer at InputBuffer. This value is ignored if InputBuffer is NULL.
+ * \param[out] OutputBuffer Pointer to a caller-allocated output buffer in which information is returned from the target driver.
+ * \param[in] OutputBufferLength Size, in bytes, of the buffer at OutputBuffer. This value is ignored if OutputBuffer is NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwdeviceiocontrolfile
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -415,18 +459,18 @@ NtDeviceIoControlFile(
 /**
  * The NtFsControlFile function sends a control code directly to a file system or filter driver, causing the corresponding driver to perform the specified action.
  *
- * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
- * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
- * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
- * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object. 
- * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
- * @param FsControlCode FSCTL_XXX code that indicates which file system control operation is to be carried out.
- * @param InputBuffer Pointer to a caller-allocated input buffer that contains device-specific information to be given to the target driver.
- * @param InputBufferLength Size, in bytes, of the buffer at InputBuffer. This value is ignored if InputBuffer is NULL.
- * @param OutputBuffer Pointer to a caller-allocated output buffer in which information is returned from the target driver.
- * @param OutputBufferLength Size, in bytes, of the buffer at OutputBuffer. This value is ignored if OutputBuffer is NULL.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwfscontrolfile
+ * \param[in] FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * \param[in] Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * \param[in] ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * \param[in] ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object. 
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \param[in] FsControlCode FSCTL_XXX code that indicates which file system control operation is to be carried out.
+ * \param[in] InputBuffer Pointer to a caller-allocated input buffer that contains device-specific information to be given to the target driver.
+ * \param[in] InputBufferLength Size, in bytes, of the buffer at InputBuffer. This value is ignored if InputBuffer is NULL.
+ * \param[out] OutputBuffer Pointer to a caller-allocated output buffer in which information is returned from the target driver.
+ * \param[in] OutputBufferLength Size, in bytes, of the buffer at OutputBuffer. This value is ignored if OutputBuffer is NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwfscontrolfile
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -446,17 +490,17 @@ NtFsControlFile(
 /**
  * The NtReadFile function reads data from an open file.
  *
- * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
- * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
- * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
- * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
- * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
- * @param Buffer Pointer to a caller-allocated buffer that receives the data read from the file.
- * @param Length The size, in bytes, of the buffer pointed to by Buffer.
- * @param ByteOffset Pointer to a variable that specifies the starting byte offset in the file where the read operation will begin.
- * @param Key Device and intermediate drivers should set this pointer to NULL.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwreadfile
+ * \param[in] FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * \param[in] Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * \param[in] ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * \param[in] ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \param[out] Buffer Pointer to a caller-allocated buffer that receives the data read from the file.
+ * \param[in] Length The size, in bytes, of the buffer pointed to by Buffer.
+ * \param[in] ByteOffset Pointer to a variable that specifies the starting byte offset in the file where the read operation will begin.
+ * \param[in] Key Device and intermediate drivers should set this pointer to NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwreadfile
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -475,17 +519,17 @@ NtReadFile(
 /**
  * The NtWriteFile function writes data to an open file.
  *
- * @param FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
- * @param Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
- * @param ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
- * @param ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
- * @param IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
- * @param Buffer Pointer to a caller-allocated buffer that contains the data to write to the file.
- * @param Length The size, in bytes, of the buffer pointed to by Buffer.
- * @param ByteOffset Pointer to a variable that specifies the starting byte offset in the file for beginning the write operation.
- * @param Key Device and intermediate drivers should set this pointer to NULL.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwwritefile
+ * \param[in] FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
+ * \param[in] Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
+ * \param[in] ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
+ * \param[in] ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \param[in] Buffer Pointer to a caller-allocated buffer that contains the data to write to the file.
+ * \param[in] Length The size, in bytes, of the buffer pointed to by Buffer.
+ * \param[in] ByteOffset Pointer to a variable that specifies the starting byte offset in the file for beginning the write operation.
+ * \param[in] Key Device and intermediate drivers should set this pointer to NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwwritefile
  */
 NTSYSCALLAPI
 NTSTATUS

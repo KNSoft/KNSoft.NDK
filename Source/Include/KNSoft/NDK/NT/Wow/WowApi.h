@@ -33,6 +33,16 @@ NtWow64QueryInformationProcess64(
     _In_ ULONG ProcessInformationLength,
     _Out_opt_ PULONG ReturnLength);
 
+/**
+ * Reads virtual memory of a 64-bit process from a 32-bit process.
+ *
+ * \param ProcessHandle A handle to the process whose memory is to be read.
+ * \param BaseAddress A pointer to the base address in the specified process from which to read.
+ * \param Buffer A pointer to a buffer that receives the contents from the address space of the specified process.
+ * \param NumberOfBytesToRead The number of bytes to be read from the specified process.
+ * \param NumberOfBytesRead A pointer to a variable that receives the number of bytes transferred into the specified buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

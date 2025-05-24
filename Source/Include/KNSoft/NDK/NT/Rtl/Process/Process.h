@@ -359,7 +359,7 @@ NTSYSAPI
 VOID
 NTAPI
 RtlUserThreadStart(
-    _In_ PTHREAD_START_ROUTINE Function,
+    _In_ PUSER_THREAD_START_ROUTINE Function,
     _In_ PVOID Parameter);
 
 _Analysis_noreturn_

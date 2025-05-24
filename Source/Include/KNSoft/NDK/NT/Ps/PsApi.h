@@ -574,7 +574,8 @@ NtResumeThread(
 /**
  * Retrieves the number of the current processor.
  *
- * @return ULONG The number of the current processor.
+ * \return ULONG The number of the current processor.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/procthread/ntgetcurrentprocessornumber
  */
 NTSYSCALLAPI
 ULONG
@@ -586,8 +587,9 @@ NtGetCurrentProcessorNumber(
 /**
  * Retrieves the number of the current processor.
  *
- * @param ProcessorNumber An optional pointer to a PROCESSOR_NUMBER structure that receives the processor number.
- * @return ULONG The number of the current processor.
+ * \param ProcessorNumber An optional pointer to a PROCESSOR_NUMBER structure that receives the processor number.
+ * \return ULONG The number of the current processor.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-kegetcurrentprocessornumberex
  */
 NTSYSCALLAPI
 ULONG

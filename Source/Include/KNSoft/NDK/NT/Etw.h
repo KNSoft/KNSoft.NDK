@@ -589,6 +589,8 @@ typedef struct _PERFINFO_GROUPMASK
 
 #define PERF_GET_MASK_INDEX(GM) (((GM) & PERF_MASK_INDEX) >> 29)
 #define PERF_GET_MASK_GROUP(GM) ((GM) & PERF_MASK_GROUP)
+// rev
+#define PERF_GET_EVENT_TYPE(x) ((x) & 0xFF)
 
 #define PERFINFO_CLEAR_GROUPMASK(GroupMask) RtlZeroMemory((GroupMask), sizeof(PERFINFO_GROUPMASK))
 #define PERFINFO_OR_GROUP_WITH_GROUPMASK(Group, GroupMask) (GroupMask)->Masks[PERF_GET_MASK_INDEX(Group)] |= PERF_GET_MASK_GROUP(Group)
@@ -2672,6 +2674,7 @@ typedef struct _ETW_OBJECT_HANDLE_EVENT
     ULONG ProcessId;
     ULONG Handle;
     USHORT ObjectType;
+    WCHAR ObjectName[ANYSIZE_ARRAY];
 } ETW_OBJECT_HANDLE_EVENT, *PETW_OBJECT_HANDLE_EVENT;
 
 typedef struct _ETW_REFDEREF_OBJECT_EVENT

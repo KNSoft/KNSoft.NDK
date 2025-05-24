@@ -41,6 +41,26 @@ EXTERN_C_START
 // Win32 pipe instance limit (0xff)
 #define FILE_PIPE_UNLIMITED_INSTANCES   0xffffffff
 
+/**
+ * The NtCreateNamedPipeFile routine deletes the specified file.
+ *
+ * \param[out] FileHandle Pointer to a variable that receives a handle to the pipe.
+ * \param[in] DesiredAccess The requested access to the object.
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the object attributes, including pipe name.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
+ * \param[in] ShareAccess Specifies the type of share access for the file.
+ * \param[in] CreateDisposition Specifies how the file should be handled when the file already exists.
+ * \param[in] CreateOptions Specifies the options to be applied when creating or opening the file.
+ * \param[in] NamedPipeType Type of named pipe to create (byte-type or message-type).
+ * \param[in] ReadMode Mode in which to read the pipe (byte-type or message-type).
+ * \param[in] CompletionMode Specifies blocking or non-blocking mode of the pipe.
+ * \param[in] MaximumInstances Maximum number of simultaneous instances of the named pipe.
+ * \param[in] InboundQuota Specifies the pool quota that is reserved for writes to the inbound side of the named pipe.
+ * \param[in] OutboundQuota Specifies the pool quota that is reserved for writes to the inbound side of the named pipe.
+ * \param[in] DefaultTimeout An optional pointer to a timeout value that is used if a timeout value is not specified when waiting for an instance of a named pipe.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/nt-create-named-pipe-file
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

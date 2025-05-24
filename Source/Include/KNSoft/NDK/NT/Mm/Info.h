@@ -64,8 +64,7 @@ typedef enum _MEMORY_INFORMATION_CLASS
 
 /**
  * The MEMORY_WORKING_SET_BLOCK structure contains working set information for a page.
- *
- * @ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_block
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_block
  */
 typedef struct _MEMORY_WORKING_SET_BLOCK
 {
@@ -82,8 +81,7 @@ typedef struct _MEMORY_WORKING_SET_BLOCK
 
 /**
  * The MEMORY_WORKING_SET_INFORMATION structure contains working set information for a process.
- *
- * @ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_information
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_information
  */
 typedef struct _MEMORY_WORKING_SET_INFORMATION
 {
@@ -134,8 +132,7 @@ typedef enum _MEMORY_WORKING_SET_EX_LOCATION
 
 /**
  * The MEMORY_WORKING_SET_EX_BLOCK structure contains extended working set information for a page.
- *
- * @ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_ex_block
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_ex_block
  */
 typedef union _MEMORY_WORKING_SET_EX_BLOCK
 {
@@ -182,8 +179,7 @@ typedef union _MEMORY_WORKING_SET_EX_BLOCK
 
 /**
  * The MEMORY_WORKING_SET_EX_INFORMATION structure contains extended working set information for a process.
- *
- * @ref https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_ex_information
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_ex_information
  */
 typedef struct _MEMORY_WORKING_SET_EX_INFORMATION
 {
@@ -406,14 +402,13 @@ typedef enum _SECTION_INFORMATION_CLASS
     SectionImageInformation, // q; SECTION_IMAGE_INFORMATION
     SectionRelocationInformation, // q; ULONG_PTR RelocationDelta // name:wow64:whNtQuerySection_SectionRelocationInformation // since WIN7
     SectionOriginalBaseInformation, // q; PVOID BaseAddress // since REDSTONE
-    SectionInternalImageInformation, // SECTION_INTERNAL_IMAGE_INFORMATION // since REDSTONE2
+    SectionInternalImageInformation, // q; SECTION_INTERNAL_IMAGE_INFORMATION // since REDSTONE2
     MaxSectionInfoClass
 } SECTION_INFORMATION_CLASS;
 
 /**
  * The SECTION_BASIC_INFORMATION structure contains information of an opened section object.
- *
- * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/ntquerysection
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/ntquerysection
  */
 typedef struct _SECTION_BASIC_INFORMATION
 {

@@ -1541,6 +1541,17 @@ typedef struct _FILE_FS_GUID_INFORMATION
     GUID FsGuid;
 } FILE_FS_GUID_INFORMATION, *PFILE_FS_GUID_INFORMATION;
 
+/**
+ * The NtQueryInformationFile routine returns various kinds of information about a file object.
+ *
+ * \param FileHandle A handle to the file object representing the file or directory.
+ * \param IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FileInformation.
+ * \param FileInformation Pointer to a caller-allocated buffer into which the routine writes the requested information about the file object.
+ * \param Length The size, in bytes, of the buffer pointed to by FileInformation.
+ * \param FileInformationClass Specifies the type of information to be returned about the file, in the buffer that FileInformation points to.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryinformationfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1552,6 +1563,19 @@ NtQueryInformationFile(
     _In_ FILE_INFORMATION_CLASS FileInformationClass);
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
+/**
+ * The NtQueryInformationByName routine returns various kinds of information about a file object by file name.
+ *
+ * \param ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the file's attributes, including file name.
+ * \param IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FileInformation.
+ * \param FileInformation Pointer to a caller-allocated buffer into which the routine writes the requested information about the file object.
+ * \param Length The size, in bytes, of the buffer pointed to by FileInformation.
+ * \param FileInformationClass Specifies the type of information to be returned about the file, in the buffer that FileInformation points to.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryinformationbyname
+ * \remarks NtQueryInformationByName queries and returns the requested information without opening the actual file,
+ * making it more efficient than NtQueryInformationFile, which requires a file open and subsequent file close.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1563,6 +1587,17 @@ NtQueryInformationByName(
     _In_ FILE_INFORMATION_CLASS FileInformationClass);
 #endif
 
+/**
+ * The NtSetInformationFile routine changes various kinds of information about a file object.
+ *
+ * \param FileHandle A handle to the file object representing the file or directory.
+ * \param IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FileInformation.
+ * \param FileInformation Pointer to a buffer that contains the information to set for the file.
+ * \param Length The size, in bytes, of the buffer pointed to by FileInformation.
+ * \param FileInformationClass The type of information, supplied in the buffer pointed to by FileInformation, to set for the file.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntsetinformationfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1603,6 +1638,23 @@ NtQueryFullAttributesFile(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
     _Out_ PFILE_NETWORK_OPEN_INFORMATION FileInformation);
 
+/**
+ * The NtQueryDirectoryFile routine returns various kinds of information about files in the directory specified by a given file handle.
+ *
+ * \param[in] FileHandle A handle for the file object that represents the directory for which information is being requested.
+ * \param[in] Event An optional handle for a caller-created event. The event is set to the Signaled state the requested operation is completed.
+ * \param[in] ApcRoutine An address of an optional, caller-supplied APC routine to be called when the requested operation completes.
+ * \param[in] ApcContext An address of an optional, caller-supplied APC or I/O completion object associated with the file object.
+ * \param[out] IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FileInformation.
+ * \param[out] FileInformation A pointer to a buffer that receives the desired information about the file.
+ * \param[in] Length The size, in bytes, of the buffer pointed to by FileInformation.
+ * \param[in] FileInformationClass The type of information to be returned about files in the directory.
+ * \param[in] ReturnSingleEntry Set to TRUE if only a single entry should be returned, FALSE otherwise.
+ * \param[in] FileName An optional pointer to a Unicode string search expression containing the name of a file (or multiple files, if wildcards are used) within the directory.
+ * \param[in] RestartScan Set to TRUE if the scan is to start at the first entry in the directory. Set to FALSE if resuming the scan from a previous call.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntquerydirectoryfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1682,6 +1734,17 @@ NtSetQuotaInformationFile(
     _In_reads_bytes_(Length) PVOID Buffer,
     _In_ ULONG Length);
 
+/**
+ * The NtQueryVolumeInformationFile routine retrieves information about the volume associated with a given file, directory, storage device, or volume.
+ *
+ * \param[in] FileHandle A handle to the file, directory, storage device, or volume for which volume information is being requested.
+ * \param[out] IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FsInformation. 
+ * \param[out] FsInformation A pointer to a caller-allocated buffer that receives the desired information about the volume.
+ * \param[in] Length The size, in bytes, of the buffer pointed to by FsInformation.
+ * \param[in] FsInformationClass The type of information to be returned about the volume.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryvolumeinformationfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1692,6 +1755,17 @@ NtQueryVolumeInformationFile(
     _In_ ULONG Length,
     _In_ FSINFOCLASS FsInformationClass);
 
+/**
+ * The NtSetVolumeInformationFile routine modifies information about the volume associated with a given file, directory, storage device, or volume.
+ *
+ * \param[in] FileHandle A handle to the file, directory, storage device, or volume for which volume information is being requested.
+ * \param[out] IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FsInformation.
+ * \param[in] FsInformation A pointer to a caller-allocated buffer containing the volume information to be modified.
+ * \param[in] Length The size, in bytes, of the buffer pointed to by FsInformation.
+ * \param[in] FsInformationClass The type of information to set about the volume.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwsetvolumeinformationfile
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

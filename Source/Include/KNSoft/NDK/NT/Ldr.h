@@ -1265,7 +1265,7 @@ NTAPI
 LdrQueryProcessModuleInformation(
     _In_opt_ PRTL_PROCESS_MODULES ModuleInformation,
     _In_opt_ ULONG Size,
-    _Out_ PULONG ReturnedSize);
+    _Out_opt_ PULONG ReturnedSize);
 
 #pragma endregion
 
@@ -1285,7 +1285,7 @@ NTAPI
 LDR_ENUM_CALLBACK(
     _In_ PLDR_DATA_TABLE_ENTRY ModuleInformation,
     _In_ PVOID Parameter,
-    _Out_ BOOLEAN* Stop);
+    _Out_ PBOOLEAN Stop);
 typedef LDR_ENUM_CALLBACK *PLDR_ENUM_CALLBACK;
 
 typedef

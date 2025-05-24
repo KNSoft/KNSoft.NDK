@@ -94,7 +94,8 @@ NTSYSAPI
 HANDLE
 NTAPI
 RtlQueryCriticalSectionOwner(
-    _In_ HANDLE EventHandle
+    _In_ HANDLE EventHandle,
+    _In_ BOOLEAN ExactMatchOwnerAddress
 );
 
 NTSYSAPI
@@ -309,6 +310,12 @@ RtlDumpResource(
 #pragma region SRW Lock
 
 // winbase:InitializeSRWLock
+/**
+ * The RtlInitializeSRWLock routine initializes a slim reader/writer (SRW) lock.
+ * 
+ * \param SRWLock A pointer to the SRW lock.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-initializesrwlock
+ */
 NTSYSAPI
 VOID
 NTAPI

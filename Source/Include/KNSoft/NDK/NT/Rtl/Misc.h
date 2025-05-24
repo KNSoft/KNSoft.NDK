@@ -3,6 +3,7 @@
 #include "../MinDef.h"
 #include "../Io/Info.h"
 #include "../Ex/Wnf.h"
+#include "../Ps/Basic.h"
 
 #include <minwinbase.h>
 
@@ -86,13 +87,21 @@ NTAPI
 RtlCreateTimerQueue(
     _Out_ PHANDLE TimerQueueHandle);
 
+// WAITORTIMERCALLBACKFUNC
+typedef _Function_class_(RTL_TIMER_CALLBACK)
+VOID NTAPI RTL_TIMER_CALLBACK(
+    _In_ PVOID Parameter,
+    _In_ BOOLEAN TimerOrWaitFired
+    );
+typedef RTL_TIMER_CALLBACK *PRTL_TIMER_CALLBACK;
+
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlCreateTimer(
     _In_ HANDLE TimerQueueHandle,
     _Out_ PHANDLE Handle,
-    _In_ WAITORTIMERCALLBACKFUNC Function,
+    _In_ PRTL_TIMER_CALLBACK Function,
     _In_opt_ PVOID Context,
     _In_ ULONG DueTime,
     _In_ ULONG Period,
@@ -104,7 +113,7 @@ NTAPI
 RtlSetTimer(
     _In_ HANDLE TimerQueueHandle,
     _Out_ PHANDLE Handle,
-    _In_ WAITORTIMERCALLBACKFUNC Function,
+    _In_ PRTL_TIMER_CALLBACK Function,
     _In_opt_ PVOID Context,
     _In_ ULONG DueTime,
     _In_ ULONG Period,
@@ -786,20 +795,36 @@ RtlDeregisterWaitEx(
     _In_opt_ HANDLE CompletionEvent // optional: RTL_WAITER_DEREGISTER_WAIT_FOR_COMPLETION
 );
 
+// WORKERCALLBACKFUNC
+typedef _Function_class_(RTL_WORK_CALLBACK)
+VOID NTAPI RTL_WORK_CALLBACK(
+    _In_ PVOID ThreadParameter
+    );
+typedef RTL_WORK_CALLBACK* PRTL_WORK_CALLBACK;
+
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlQueueWorkItem(
-    _In_ WORKERCALLBACKFUNC Function,
+    _In_ PRTL_WORK_CALLBACK Function,
     _In_opt_ PVOID Context,
     _In_ ULONG Flags);
+
+// APC_CALLBACK_FUNCTION
+typedef _Function_class_(RTL_OVERLAPPED_COMPLETION_ROUTINE)
+VOID NTAPI RTL_OVERLAPPED_COMPLETION_ROUTINE(
+    _In_ NTSTATUS StatusCode,
+    _In_ PVOID Context1,
+    _In_ PVOID Context2
+    );
+typedef RTL_OVERLAPPED_COMPLETION_ROUTINE* PRTL_OVERLAPPED_COMPLETION_ROUTINE;
 
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlSetIoCompletionCallback(
     _In_ HANDLE FileHandle,
-    _In_ APC_CALLBACK_FUNCTION CompletionProc,
+    _In_ PRTL_OVERLAPPED_COMPLETION_ROUTINE Function,
     _In_ ULONG Flags);
 
 typedef
@@ -807,7 +832,7 @@ _Function_class_(RTL_START_POOL_THREAD)
 NTSTATUS
 NTAPI
 RTL_START_POOL_THREAD(
-    _In_ PTHREAD_START_ROUTINE Function,
+    _In_ PUSER_THREAD_START_ROUTINE Function,
     _In_ PVOID Parameter,
     _Out_ PHANDLE ThreadHandle);
 typedef RTL_START_POOL_THREAD *PRTL_START_POOL_THREAD;
@@ -836,7 +861,7 @@ NTSTATUS
 NTAPI
 RtlComputeImportTableHash(
     _In_ HANDLE FileHandle,
-    _Out_writes_bytes_(16) PCHAR Hash,
+    _Out_writes_bytes_(16) PUCHAR Hash,
     _In_ ULONG ImportTableHashRevision);
 
 NTSYSAPI

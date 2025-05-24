@@ -240,6 +240,14 @@ RtlInitUnicodeStringEx(
     _In_opt_z_ PCWSTR SourceString
 );
 
+/**
+ * The RtlCreateUnicodeString routine creates a new counted Unicode string.
+ *
+ * \param DestinationString Pointer to the newly allocated and initialized Unicode string.
+ * \param SourceString Pointer to a null-terminated Unicode string with which to initialize the new string.
+ * \return TRUE if the Unicode string was successfully created, FALSE otherwise.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcreateunicodestring
+ */
 _Success_(return != 0)
 _Must_inspect_result_
 NTSYSAPI
@@ -258,6 +266,12 @@ RtlCreateUnicodeStringFromAsciiz(
     _In_z_ PCSTR SourceString
 );
 
+/**
+ * The RtlFreeUnicodeString routine releases storage that was allocated by RtlAnsiStringToUnicodeString or RtlUpcaseUnicodeString.
+ *
+ * \param UnicodeString A pointer to the string buffer.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfreeunicodestring
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -277,6 +291,13 @@ RtlDuplicateUnicodeString(
     _Out_ PUNICODE_STRING StringOut
 );
 
+/**
+ * The RtlCopyUnicodeString routine copies a source string to a destination string.
+ *
+ * \param[in] DestinationString A pointer to the destination string buffer.
+ * \param[in] SourceString A pointer to the source string buffer.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcopyunicodestring
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -285,6 +306,13 @@ RtlCopyUnicodeString(
     _In_opt_ PCUNICODE_STRING SourceString
 );
 
+/**
+ * The RtlUpcaseUnicodeChar routine converts the specified Unicode character to uppercase.
+ *
+ * \param[in] SourceCharacter Specifies the character to convert.
+ * \return The uppercase version of the specified Unicode character.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlupcaseunicodechar
+ */
 NTSYSAPI
 WCHAR
 NTAPI
@@ -292,6 +320,13 @@ RtlUpcaseUnicodeChar(
     _In_ WCHAR SourceCharacter
 );
 
+/**
+ * The RtlDowncaseUnicodeChar routine converts the specified Unicode character to lowercase.
+ *
+ * \param[in] SourceCharacter Specifies the character to convert.
+ * \return The lowercase version of the specified Unicode character.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtldowncaseunicodechar
+ */
 NTSYSAPI
 WCHAR
 NTAPI
@@ -299,6 +334,15 @@ RtlDowncaseUnicodeChar(
     _In_ WCHAR SourceCharacter
 );
 
+/**
+ * The RtlCompareUnicodeString routine compares two Unicode strings.
+ * 
+ * \param[in] String1 Pointer to the first string.
+ * \param[in] String2 Pointer to the second string.
+ * \param[in] CaseInSensitive If TRUE, case should be ignored when doing the comparison.
+ * \return A signed value that gives the results of the comparison.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcompareunicodestring
+ */
 _Must_inspect_result_
 NTSYSAPI
 LONG
@@ -309,6 +353,16 @@ RtlCompareUnicodeString(
     _In_ BOOLEAN CaseInSensitive
 );
 
+/**
+ * The RtlCompareUnicodeStrings routine compares two Unicode strings.
+ * 
+ * \param[in] String1 Pointer to the first string.
+ * \param[in] String1Length The length, in bytes, of the first string.
+ * \param[in] String2 Pointer to the second string.
+ * \param[in] String2Length The length, in bytes, of the second string.
+ * \param[in] CaseInSensitive If TRUE, case should be ignored when doing the comparison.
+ * \return A signed value that gives the results of the comparison.
+ */
 _Must_inspect_result_
 NTSYSAPI
 LONG
@@ -321,6 +375,15 @@ RtlCompareUnicodeStrings(
     _In_ BOOLEAN CaseInSensitive
 );
 
+/**
+ * The RtlEqualUnicodeString routine compares two Unicode strings to determine whether they are equal.
+ *
+ * \param[in] String1 Pointer to the first Unicode string.
+ * \param[in] String2 Pointer to the second Unicode string.
+ * \param[in] CaseInSensitive If TRUE, case should be ignored when doing the comparison.
+ * \return TRUE if the two Unicode strings are equal; otherwise, it returns FALSE.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlequalunicodestring
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -335,6 +398,16 @@ RtlEqualUnicodeString(
 #define HASH_STRING_ALGORITHM_X65599 1
 #define HASH_STRING_ALGORITHM_INVALID 0xffffffff
 
+/**
+ * The RtlHashUnicodeString routine creates a hash value from a given Unicode string and hash algorithm.
+ *
+ * \param[in] String A pointer to a UNICODE_STRING structure that contains the Unicode string to be converted to a hash value.
+ * \param[in] CaseInSensitive Specifies whether to treat the Unicode string as case sensitive when computing the hash value. If CaseInSensitive is TRUE, a lowercase and uppercase string hash to the same value.
+ * \param[in] HashAlgorithm The hash algorithm to use.
+ * \param[out] HashValue A pointer to a ULONG variable that receives the hash value.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlhashunicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -353,6 +426,15 @@ RtlValidateUnicodeString(
     _In_ PUNICODE_STRING String
 );
 
+/**
+ * The RtlPrefixUnicodeString routine compares two Unicode strings to determine whether one string is a prefix of the other.
+ *
+ * \param[in] String1 Pointer to the first string, which might be a prefix of the buffered Unicode string at String2.
+ * \param[in] String2 Pointer to the second string.
+ * \param[in] CaseInSensitive TRUE, case should be ignored when doing the comparison.
+ * \return TRUE if String1 is a prefix of String2.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlprefixunicodestring
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -565,6 +647,18 @@ RtlUpcaseUnicodeStringToCountedOemString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlMultiByteToUnicodeN routine translates the specified source string into a Unicode string, using the current system ANSI code page (ACP).
+ * The source string is not necessarily from a multibyte character set.
+ *
+ * \param UnicodeString Pointer to a caller-allocated buffer that receives the translated string. UnicodeString buffer must not overlap with MultiByteString buffer.
+ * \param MaxBytesInUnicodeString Maximum number of bytes to be written at UnicodeString. If this value causes the translated string to be truncated, RtlMultiByteToUnicodeN does not return an error status.
+ * \param BytesInUnicodeString Pointer to a caller-allocated variable that receives the length, in bytes, of the translated string. This parameter can be NULL.
+ * \param MultiByteString Pointer to the string to be translated.
+ * \param BytesInMultiByteString Size, in bytes, of the string at MultiByteString.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlmultibytetounicoden
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -576,6 +670,16 @@ RtlMultiByteToUnicodeN(
     _In_ ULONG BytesInMultiByteString
 );
 
+/**
+ * The RtlMultiByteToUnicodeSize routine determines the number of bytes that are required to store the Unicode translation for the specified source string.
+ * The translation is assumed to use the current system ANSI code page (ACP). The source string is not necessarily from a multibyte character set.
+ *
+ * \param BytesInUnicodeString Pointer to a caller-allocated variable that receives the number of bytes that are required to store the translated string.
+ * \param MultiByteString Pointer to the source string for which the Unicode length is to be calculated.
+ * \param BytesInMultiByteString Length, in bytes, of the source string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlmultibytetounicodesize
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -585,6 +689,18 @@ RtlMultiByteToUnicodeSize(
     _In_ ULONG BytesInMultiByteString
 );
 
+/**
+ * The RtlUnicodeToMultiByteN routine translates the specified Unicode string into a new character string, using the current system ANSI code page (ACP).
+ * The source string is not necessarily from a multibyte character set.
+ *
+ * \param MultiByteString Pointer to a caller-allocated buffer to receive the translated string. MultiByteString buffer must not overlap with UnicodeString buffer.
+ * \param MaxBytesInMultiByteString Maximum number of bytes to be written to MultiByteString. If this value causes the translated string to be truncated, RtlUnicodeToMultiByteN does not return an error status.
+ * \param BytesInMultiByteString Pointer to a caller-allocated variable that receives the length, in bytes, of the translated string. This parameter is optional and can be NULL.
+ * \param UnicodeString Pointer to the Unicode source string to be translated.
+ * \param BytesInUnicodeString Size, in bytes, of the string at UnicodeString.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlunicodetomultibyten
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -596,6 +712,16 @@ RtlUnicodeToMultiByteN(
     _In_ ULONG BytesInUnicodeString
 );
 
+/**
+ * The RtlUnicodeToMultiByteSize routine determines the number of bytes that are required to store the multibyte translation for the specified Unicode string.
+ * The translation is assumed to use the current system ANSI code page (ACP). The source string is not necessarily from a multibyte character set.
+ *
+ * \param BytesInMultiByteString Pointer to a caller-allocated variable that receives the number of bytes required to store the translated string.
+ * \param UnicodeString Pointer to the Unicode string for which the multibyte length is to be calculated.
+ * \param BytesInUnicodeString Length, in bytes, of the source string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlunicodetomultibytesize
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -605,6 +731,18 @@ RtlUnicodeToMultiByteSize(
     _In_ ULONG BytesInUnicodeString
 );
 
+/**
+ * The RtlUpcaseUnicodeToMultiByteN routine translates the specified Unicode string into a new uppercase character string, using the current system ANSI code page (ACP).
+ * The translated string is not necessarily from a multibyte character set.
+ *
+ * \param MultiByteString Pointer to a caller-allocated buffer to receive the translated string.
+ * \param MaxBytesInMultiByteString Maximum number of bytes to be written at MultiByteString. If this value causes the translated string to be truncated, RtlUpcaseUnicodeToMultiByteN does not return an error status.
+ * \param BytesInMultiByteString Pointer to a caller-allocated variable that receives the length, in bytes, of the translated string. This parameter can be NULL.
+ * \param UnicodeString Pointer to the Unicode source string to be translated.
+ * \param BytesInUnicodeString Size, in bytes, of the string at UnicodeString.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlupcaseunicodetomultibyten
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -661,6 +799,17 @@ RtlConsoleMultiByteToUnicodeN(
     _Out_ PULONG pdwSpecialChar
 );
 
+/**
+ * The RtlUTF8ToUnicodeN routine translates the specified source string into a Unicode string, using the 8-bit Unicode Transformation Format (UTF-8) code page.
+ *
+ * \param UnicodeStringDestination Pointer to a caller-allocated buffer to receive the translated string.
+ * \param UnicodeStringMaxByteCount Maximum number of bytes to be written at MultiByteString. If this value causes the translated string to be truncated, RtlUpcaseUnicodeToMultiByteN does not return an error status.
+ * \param UnicodeStringActualByteCount Pointer to a caller-allocated variable that receives the length, in bytes, of the translated string. This parameter can be NULL.
+ * \param UTF8StringSource Pointer to the Unicode source string to be translated.
+ * \param UTF8StringByteCount Size, in bytes, of the string at UnicodeString.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlutf8tounicoden
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -672,6 +821,17 @@ RtlUTF8ToUnicodeN(
     _In_ ULONG UTF8StringByteCount
 );
 
+/**
+ * The RtlUnicodeToUTF8N routine translates the specified Unicode string into a new character string, using the 8-bit Unicode Transformation Format (UTF-8) code page.
+ *
+ * \param UTF8StringDestination Pointer to a caller-allocated buffer to receive the translated string.
+ * \param UTF8StringMaxByteCount Maximum number of bytes to be written to UTF8StringDestination. If this value causes the translated string to be truncated, RtlUnicodeToUTF8N returns an error status.
+ * \param UTF8StringActualByteCount A pointer to a caller-allocated variable that receives the length, in bytes, of the translated string. This parameter is optional and can be NULL. If the string is truncated then the returned number counts the actual truncated string count.
+ * \param UnicodeStringSource A pointer to the Unicode source string to be translated.
+ * \param UnicodeStringByteCount Specifies the number of bytes in the Unicode source string that the UnicodeStringSource parameter points to.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlunicodetoutf8n
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -723,7 +883,7 @@ NTSYSAPI
 VOID
 NTAPI
 RtlInitCodePageTable(
-    _In_reads_z_(2) PUSHORT TableBase,
+    _In_reads_opt_(2) PUSHORT TableBase,
     _Inout_ PCPTABLEINFO CodePageTable
 );
 
