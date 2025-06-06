@@ -527,6 +527,12 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Path.inl">
       <Filter>NT\Rtl</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\API\Shell32.inl">
+      <Filter>Win32\API</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Package\ArgvParsing.inl">
+      <Filter>Package</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">

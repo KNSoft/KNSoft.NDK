@@ -40,17 +40,70 @@ _Inline_BaseFormatTimeOut(
 __inline
 DWORD
 WINAPI
+_Inline_GetCurrentProcessId(VOID)
+{
+    return (DWORD)(ULONG_PTR)NtCurrentProcessId();
+}
+
+__inline
+DWORD
+WINAPI
 _Inline_GetCurrentThreadId(VOID)
 {
     return (DWORD)(ULONG_PTR)NtCurrentThreadId();
 }
 
 __inline
-DWORD
+HANDLE
 WINAPI
-_Inline_GetCurrentProcessId(VOID)
+_Inline_GetCurrentProcess(VOID)
 {
-    return (DWORD)(ULONG_PTR)NtCurrentProcessId();
+    return NtCurrentProcess();
+}
+
+__inline
+HANDLE
+WINAPI
+_Inline_GetCurrentThread(VOID)
+{
+    return NtCurrentThread();
+}
+
+__inline
+_NullNull_terminated_
+LPWCH
+WINAPI
+_Inline_GetEnvironmentStringsW(VOID)
+{
+    PWCHAR pEnv, p;
+    ULONG uSize;
+
+    _Inline_RtlAcquirePebLock();
+
+    pEnv = (PWCHAR)NtCurrentPeb()->ProcessParameters->Environment;
+    for (p = pEnv; *p != UNICODE_NULL; p += wcslen(p) + 1);
+    uSize = (p - pEnv + 1) * sizeof(WCHAR);
+
+    p = (PWCHAR)RtlAllocateHeap(RtlProcessHeap(), 0, uSize);
+    if (p)
+    {
+        memcpy(p, pEnv, uSize);
+    } else
+    {
+        _Inline_BaseSetLastNTError(STATUS_NO_MEMORY);
+    }
+
+    _Inline_RtlReleasePebLock();
+    return p;
+}
+
+__inline
+BOOL
+WINAPI
+_Inline_FreeEnvironmentStringsW(
+    _In_ _Pre_ _NullNull_terminated_ LPWCH penv)
+{
+    return RtlFreeHeap(RtlProcessHeap(), 0, penv);
 }
 
 #pragma endregion
@@ -509,6 +562,116 @@ _Inline_SetStdHandle(
     return TRUE;
 }
 
+__inline
+BOOL
+WINAPI
+_Inline_SetStdHandleEx(
+    _In_ DWORD nStdHandle,
+    _In_ HANDLE hHandle,
+    _Out_opt_ PHANDLE phPrevValue)
+{
+    PHANDLE HandlePtr;
+
+    if (phPrevValue != NULL)
+    {
+        *phPrevValue = NULL;
+    }
+
+    if (nStdHandle == STD_INPUT_HANDLE)
+    {
+        HandlePtr = &NtCurrentPeb()->ProcessParameters->StandardInput;
+    } else if (nStdHandle == STD_OUTPUT_HANDLE)
+    {
+        HandlePtr = &NtCurrentPeb()->ProcessParameters->StandardOutput;
+    } else if (nStdHandle == STD_ERROR_HANDLE)
+    {
+        HandlePtr = &NtCurrentPeb()->ProcessParameters->StandardError;
+    } else
+    {
+        _Inline_BaseSetLastNTError(STATUS_INVALID_HANDLE);
+        return FALSE;
+    }
+
+    if (phPrevValue != NULL)
+    {
+        *phPrevValue = *HandlePtr;
+    }
+    *HandlePtr = hHandle;
+    return TRUE;
+}
+
+#pragma endregion
+
+#pragma region I/O
+
+__inline
+BOOL
+WINAPI
+_Inline_FlushFileBuffers(
+    _In_ HANDLE hFile)
+{
+    NTSTATUS Status;
+    IO_STATUS_BLOCK IoStatusBlock;
+
+    DWORD StdHandle = (DWORD)(DWORD_PTR)hFile;
+
+    if (StdHandle == STD_INPUT_HANDLE)
+    {
+        hFile = NtCurrentPeb()->ProcessParameters->StandardInput;
+    } else if (StdHandle == STD_OUTPUT_HANDLE)
+    {
+        hFile = NtCurrentPeb()->ProcessParameters->StandardOutput;
+    } else if (StdHandle == STD_ERROR_HANDLE)
+    {
+        hFile = NtCurrentPeb()->ProcessParameters->StandardError;
+    }
+
+    Status = NtFlushBuffersFile(hFile, &IoStatusBlock);
+    if (NT_SUCCESS(Status))
+    {
+        return TRUE;
+    }
+    _Inline_BaseSetLastNTError(Status);
+    return FALSE;
+}
+
+__inline
+BOOL
+WINAPI
+_Inline_CloseHandle(
+    _In_ _Post_ptr_invalid_ HANDLE hObject)
+{
+    NTSTATUS Status;
+    DWORD StdHandle;
+    HANDLE PrevStdHandle;
+
+    /* Handle standard I/O handles */
+    StdHandle = (DWORD)(DWORD_PTR)hObject;
+    if (StdHandle >= STD_ERROR_HANDLE && StdHandle <= STD_INPUT_HANDLE)
+    {
+        /* SAL marked input handle cannot be NULL, but we need to do that for clearing standard handle */
+#pragma warning(disable: __WARNING_INVALID_PARAM_VALUE_1)
+        if (_Inline_SetStdHandleEx(StdHandle, NULL, &PrevStdHandle))
+        {
+            hObject = PrevStdHandle;
+        }
+#pragma warning(default: __WARNING_INVALID_PARAM_VALUE_1)
+    }
+
+    // FIXME: SbExecuteProcedure...
+
+    /* hObject seems can be NULL when reach here... */
+#pragma warning(disable: __WARNING_INVALID_PARAM_VALUE_3)
+    Status = NtClose(hObject);
+#pragma warning(default: __WARNING_INVALID_PARAM_VALUE_3)
+    if (NT_SUCCESS(Status))
+    {
+        return TRUE;
+    }
+    _Inline_BaseSetLastNTError(Status);
+    return FALSE;
+}
+
 #pragma endregion
 
 #pragma region AVX
@@ -583,6 +746,41 @@ _Inline_IsProcessorFeaturePresent(
     return ProcessorFeature < PROCESSOR_FEATURE_MAX ?
         SharedUserData->ProcessorFeatures[ProcessorFeature] :
         FALSE;
+}
+
+__inline
+DECLSPEC_NORETURN
+VOID
+WINAPI
+_Inline_ExitProcess(
+    _In_ UINT uExitCode)
+{
+    RtlExitUserProcess(uExitCode);
+}
+
+__inline
+BOOL
+WINAPI
+_Inline_TerminateProcess(
+    _In_ HANDLE hProcess,
+    _In_ UINT uExitCode)
+{
+    NTSTATUS Status;
+
+    if (hProcess != NULL)
+    {
+        RtlReportSilentProcessExit(hProcess, uExitCode);
+        Status = NtTerminateProcess(hProcess, uExitCode);
+        if (NT_SUCCESS(Status))
+        {
+            return TRUE;
+        }
+        _Inline_BaseSetLastNTError(Status);
+    } else
+    {
+        _Inline_RtlSetLastWin32Error(ERROR_INVALID_HANDLE);
+    }
+    return FALSE;
 }
 
 EXTERN_C_END
