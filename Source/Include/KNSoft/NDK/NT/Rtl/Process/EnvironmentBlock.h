@@ -335,10 +335,141 @@ VOID NTAPI PS_POST_PROCESS_INIT_ROUTINE(
     );
 typedef PS_POST_PROCESS_INIT_ROUTINE* PPS_POST_PROCESS_INIT_ROUTINE;
 
+typedef struct _SDBQUERYRESULT
+{
+    ULONG Exes[16];
+    ULONG ExeFlags[16];
+    ULONG Layers[8];
+    ULONG LayerFlags;
+    ULONG AppHelp;
+    ULONG ExeCount;
+    ULONG LayerCount;
+    GUID ID;
+    ULONG ExtraFlags;
+    ULONG CustomSDBMap;
+    GUID DB[16];
+} SDBQUERYRESULT, *PSDBQUERYRESULT;
+
+_STATIC_ASSERT(sizeof(SDBQUERYRESULT) == 0x1c8);
+
+typedef struct _SWITCH_CONTEXT_ATTRIBUTE
+{
+    ULONG_PTR ContextUpdateCounter;
+    BOOL AllowContextUpdate;
+    BOOL EnableTrace;
+    HANDLE EtwHandle;
+} SWITCH_CONTEXT_ATTRIBUTE, *PSWITCH_CONTEXT_ATTRIBUTE;
+
+#ifdef _WIN64
+_STATIC_ASSERT(sizeof(SWITCH_CONTEXT_ATTRIBUTE) == 0x18);
+#else
+_STATIC_ASSERT(sizeof(SWITCH_CONTEXT_ATTRIBUTE) == 0x10);
+#endif
+
+typedef struct tagSWITCH_CONTEXT_DATA
+{
+    ULONGLONG OsMaxVersionTested;
+    ULONG TargetPlatform;
+    ULONGLONG ContextMinimum;
+    GUID Platform;
+    GUID MinPlatform;
+    ULONG ContextSource;
+    ULONG ElementCount;
+    GUID Elements[48];
+} SWITCH_CONTEXT_DATA, * PSWITCH_CONTEXT_DATA;
+
+_STATIC_ASSERT(sizeof(SWITCH_CONTEXT_DATA) == 0x340);
+
+typedef struct tagSWITCH_CONTEXT
+{
+    SWITCH_CONTEXT_ATTRIBUTE Attribute;
+    SWITCH_CONTEXT_DATA Data;
+} SWITCH_CONTEXT, *PSWITCH_CONTEXT;
+
+#ifdef _WIN64
+_STATIC_ASSERT(sizeof(SWITCH_CONTEXT) == 0x358);
+#else
+_STATIC_ASSERT(sizeof(SWITCH_CONTEXT) == 0x350);
+#endif
+
+typedef struct _SDB_CSTRUCT_COBALT_PROCFLAG
+{
+    KAFFINITY AffinityMask;
+    ULONG CPUIDEcxOverride;
+    ULONG CPUIDEdxOverride;
+    USHORT ProcessorGroup;
+    USHORT FastSelfModThreshold;
+    USHORT Reserved1;
+    UCHAR Reserved2;
+    UCHAR BackgroundWork : 5;
+    UCHAR CPUIDBrand : 4;
+    UCHAR Reserved3 : 4;
+    UCHAR RdtscScaling : 3;
+    UCHAR Reserved4 : 2;
+    UCHAR UnalignedAtomicApproach : 2;
+    UCHAR Win11Atomics : 2;
+    UCHAR RunOnSingleCore : 1;
+    UCHAR X64CPUID : 1;
+    UCHAR PatchUnaligned : 1;
+    UCHAR InterpreterOrJitter : 1;
+    UCHAR ForceSegmentHeap : 1;
+    UCHAR Reserved5 : 1;
+    UCHAR Reserved6 : 1;
+    union
+    {
+        ULONGLONG Group1AsUINT64;
+        struct _SDB_CSTRUCT_COBALT_PROCFLAG* Specified;
+    };
+} SDB_CSTRUCT_COBALT_PROCFLAG, *PSDB_CSTRUCT_COBALT_PROCFLAG;
+
+#ifdef _WIN64
+_STATIC_ASSERT(sizeof(SDB_CSTRUCT_COBALT_PROCFLAG) == 0x28);
+#else
+_STATIC_ASSERT(sizeof(SDB_CSTRUCT_COBALT_PROCFLAG) == 0x20);
+#endif
+
+typedef struct _APPCOMPAT_EXE_DATA
+{
+    ULONG_PTR Reserved[65];
+    ULONG Size;
+    ULONG Magic;
+    BOOL LoadShimEngine;
+    USHORT ExeType;
+    SDBQUERYRESULT SdbQueryResult;
+    ULONG_PTR DbgLogChannels[128];
+    SWITCH_CONTEXT SwitchContext;
+    ULONG ParentProcessId;
+    WCHAR ParentImageName[260];
+    WCHAR ParentCompatLayers[256];
+    WCHAR ActiveCompatLayers[256];
+    ULONG ImageFileSize;
+    ULONG ImageCheckSum;
+    BOOL LatestOs;
+    BOOL PackageId;
+    BOOL SwitchBackManifest;
+    BOOL UacManifest;
+    BOOL LegacyInstaller;
+    ULONG RunLevel;
+    ULONG_PTR WinRTFlags;
+    PVOID HookCOM;
+    PVOID ComponentOnDemandEvent;
+    PVOID Quirks;
+    ULONG QuirksSize;
+    SDB_CSTRUCT_COBALT_PROCFLAG CobaltProcFlags;
+    ULONG FullMatchDbSizeCb;
+    ULONG FullMatchDbOffset;
+} APPCOMPAT_EXE_DATA, *PAPPCOMPAT_EXE_DATA;
+
+#ifdef _WIN64
+_STATIC_ASSERT(sizeof(APPCOMPAT_EXE_DATA) == 0x11C0);
+#else
+_STATIC_ASSERT(sizeof(APPCOMPAT_EXE_DATA) == 0xE98);
+#endif
+
 /**
  * Process Environment Block (PEB) structure.
  *
- * @remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb
  */
 typedef struct _PEB
 {
@@ -454,7 +585,7 @@ typedef struct _PEB
     ULARGE_INTEGER AppCompatFlags;                                  // Application compatibility flags. KACF_*
     ULARGE_INTEGER AppCompatFlagsUser;                              // Application compatibility flags. KACF_*
     PVOID pShimData;                                                // Pointer to the Application SwitchBack Compatibility Engine.
-    PVOID AppCompatInfo;                                            // Pointer to the Application Compatibility Engine. // APPCOMPAT_EXE_DATA
+    PAPPCOMPAT_EXE_DATA AppCompatInfo;                              // Pointer to the Application Compatibility Engine.
     UNICODE_STRING CSDVersion;                                      // CSD version string of the operating system.
     PACTIVATION_CONTEXT_DATA ActivationContextData;                 // Pointer to the process activation context.
     PASSEMBLY_STORAGE_MAP ProcessAssemblyStorageMap;                // Pointer to the process assembly storage map.
@@ -464,24 +595,14 @@ typedef struct _PEB
     PVOID SparePointers[2];                                         // since 19H1 (previously FlsCallback to FlsHighIndex)
     PVOID PatchLoaderData;                                          // Pointer to the patch loader data.
     PVOID ChpeV2ProcessInfo;                                        // Pointer to the CHPE V2 process information. CHPEV2_PROCESS_INFO
-
-    union
-    {
-        ULONG AppModelFeatureState; // Packaged process feature state.
-        struct
-        {
-            ULONG ForegroundBoostProcesses : 1;
-            ULONG AppModelFeatureStateReserved : 31;
-        };
-    };
-
-    ULONG SpareUlongs[2];                       // SpareUlongs
-    USHORT ActiveCodePage;                      // Active code page.
-    USHORT OemCodePage;                         // OEM code page.
-    USHORT UseCaseMapping;                      // Code page case mapping.
-    USHORT UnusedNlsField;                      // Unused NLS field.
-    PWER_PEB_HEADER_BLOCK WerRegistrationData;  // Pointer to the application WER registration data.
-    PVOID WerShipAssertPtr;                     // Pointer to the application WER assert pointer.
+    ULONG AppModelFeatureState;                                     // Packaged process feature state.
+    ULONG SpareUlongs[2];
+    USHORT ActiveCodePage;                                          // Active code page.
+    USHORT OemCodePage;                                             // OEM code page.
+    USHORT UseCaseMapping;                                          // Code page case mapping.
+    USHORT UnusedNlsField;                                          // Unused NLS field.
+    PWER_PEB_HEADER_BLOCK WerRegistrationData;                      // Pointer to the application WER registration data.
+    PVOID WerShipAssertPtr;                                         // Pointer to the application WER assert pointer.
 
     // Pointer to the EC bitmap on ARM64. (Windows 11 and above)
     union
@@ -1032,7 +1153,7 @@ typedef struct _OLE_TLS_DATA32
 /**
  * Thread Environment Block (TEB) structure.
  *
- * @remarks https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb
  */
 typedef struct _TEB
 {
@@ -1045,7 +1166,7 @@ typedef struct _TEB
     ULONG LastErrorValue;                           // The previous Win32 error value for this thread.
     ULONG CountOfOwnedCriticalSections;             // The number of critical sections currently owned by this thread.
     PVOID CsrClientThread;
-    PVOID Win32ThreadInfo;
+    PVOID Win32ThreadInfo;                          // Reserved for GDI/USER (Win32k).
     ULONG User32Reserved[26];
     ULONG UserReserved[5];
     PVOID WOW32Reserved;
@@ -1063,7 +1184,7 @@ typedef struct _TEB
     ULONG_PTR RngState[4];
     CHAR PlaceholderCompatibilityMode;                          // Placeholder compatibility mode. (ProjFs and Cloud Files)
     BOOLEAN PlaceholderHydrationAlwaysExplicit;
-    CHAR PlaceholderReserved[10];
+    CHAR PlaceholderReserved[10];                               // ProjFs and Cloud Files (reparse point) file virtualization.
     ULONG ProxiedProcessId;                                     // The process ID (PID) that the current COM server thread is acting on behalf of.
     ACTIVATION_CONTEXT_STACK ActivationStack;
     UCHAR WorkingOnBehalfTicket[8];                             // Opaque operation on behalf of another user or process.
@@ -1083,13 +1204,17 @@ typedef struct _TEB
     ULONG TxFsContext;
 #endif
 
+    // Reserved for GDI (Win32k).
     GDI_TEB_BATCH GdiTebBatch;
     CLIENT_ID RealClientId;
     HANDLE GdiCachedProcessHandle;
     ULONG GdiClientPID;
     ULONG GdiClientTID;
     PVOID GdiThreadLocalInfo;
-    ULONG_PTR Win32ClientInfo[62];
+
+    ULONG_PTR Win32ClientInfo[62];  // Reserved for User32 (Win32k).
+
+    // Reserved for opengl32.dll
     PVOID glDispatchTable[233];
     ULONG_PTR glReserved1[29];
     PVOID glReserved2;
@@ -1098,14 +1223,15 @@ typedef struct _TEB
     PVOID glTable;
     PVOID glCurrentRC;
     PVOID glContext;
+
     NTSTATUS LastStatusValue;               // The previous status value for this thread.
     UNICODE_STRING StaticUnicodeString;     // A static string for use by the application.
     WCHAR StaticUnicodeBuffer[261];         // A static buffer for use by the application.
     PVOID DeallocationStack;                // The maximum stack size and indicates the base of the stack.
     PVOID TlsSlots[TLS_MINIMUM_AVAILABLE];  // Data for Thread Local Storage. (TlsGetValue)
-    LIST_ENTRY TlsLinks;
+    LIST_ENTRY TlsLinks;                    // Reserved for TLS.
     PVOID Vdm;                              // Reserved for NTVDM.
-    PVOID ReservedForNtRpc;
+    PVOID ReservedForNtRpc;                 // Reserved for RPC.
     PVOID DbgSsReserved[2];
     ULONG HardErrorMode;                    // The error mode for the current thread. (GetThreadErrorMode)
 
@@ -1116,7 +1242,7 @@ typedef struct _TEB
 #endif
 
     GUID ActivityId;
-    PVOID SubProcessTag;    // The service creating the thread (svchost).
+    PVOID SubProcessTag;    // The identifier of the service that created the thread. (svchost)
     PVOID PerflibData;
     PVOID EtwTraceData;
     PVOID WinSockData;      // The address of a socket handle during a blocking socket operation. (WSAStartup)
@@ -1137,7 +1263,7 @@ typedef struct _TEB
 
     ULONG GuaranteedStackBytes;         // The minimum size of the stack available during any stack overflow exceptions. (SetThreadStackGuarantee)
     PVOID ReservedForPerf;
-    POLE_TLS_DATA ReservedForOle;       // Per-thread COM/OLE state.
+    POLE_TLS_DATA ReservedForOle;       // Reserved for Object Linking and Embedding (OLE)
     ULONG WaitingOnLoaderLock;          // Indicates whether the thread is waiting on the loader lock.
     PVOID SavedPriorityState;           // The saved priority state for the thread.
     ULONG_PTR ReservedForCodeCoverage;
@@ -1157,56 +1283,58 @@ typedef struct _TEB
     HANDLE CurrentTransactionHandle;    // Handle to the current transaction associated with the thread.
     PTEB_ACTIVE_FRAME ActiveFrame;      // Pointer to the active frame for the thread.
     PVOID FlsData;
-    PVOID PreferredLanguages;
-    PVOID UserPrefLanguages;
-    PVOID MergedPrefLanguages;
-    ULONG MuiImpersonation;
+    PVOID PreferredLanguages;           // Pointer to the preferred languages for the current thread. (GetThreadPreferredUILanguages)
+    PVOID UserPrefLanguages;            // Pointer to the user-preferred languages for the current thread. (GetUserPreferredUILanguages)
+    PVOID MergedPrefLanguages;          // Pointer to the merged preferred languages for the current thread. (MUI_MERGE_USER_FALLBACK)
+    ULONG MuiImpersonation;             // Indicates whether the thread is impersonating another user's language settings.
 
     union
     {
         USHORT CrossTebFlags;
         USHORT SpareCrossTebBits : 16;
     };
+
+    // SameTebFlags modify the state and behavior of the current thread.
     union
     {
         USHORT SameTebFlags;
         struct
         {
             USHORT SafeThunkCall : 1;
-            USHORT InDebugPrint : 1;
-            USHORT HasFiberData : 1;
-            USHORT SkipThreadAttach : 1;
+            USHORT InDebugPrint : 1;            // Indicates if the thread is currently in a debug print routine.
+            USHORT HasFiberData : 1;            // Indicates if the thread has local fiber-local storage (FLS).
+            USHORT SkipThreadAttach : 1;        // Indicates if the thread should suppress DLL_THREAD_ATTACH notifications.
             USHORT WerInShipAssertCode : 1;
-            USHORT RanProcessInit : 1;
-            USHORT ClonedThread : 1;
-            USHORT SuppressDebugMsg : 1;
+            USHORT RanProcessInit : 1;          // Indicates if the thread has run process initialization code.
+            USHORT ClonedThread : 1;            // Indicates if the thread is a clone of a different thread.
+            USHORT SuppressDebugMsg : 1;        // Indicates if the thread should suppress LOAD_DLL_DEBUG_INFO notifications.
             USHORT DisableUserStackWalk : 1;
             USHORT RtlExceptionAttached : 1;
-            USHORT InitialThread : 1;
+            USHORT InitialThread : 1;           // Indicates if the thread is the initial thread of the process.
             USHORT SessionAware : 1;
-            USHORT LoadOwner : 1;
+            USHORT LoadOwner : 1;               // Indicates if the thread is the owner of the process loader lock.
             USHORT LoaderWorker : 1;
             USHORT SkipLoaderInit : 1;
             USHORT SkipFileAPIBrokering : 1;
         };
     };
 
-    PVOID TxnScopeEnterCallback;
-    PVOID TxnScopeExitCallback;
-    PVOID TxnScopeContext;
-    ULONG LockCount;
-    LONG WowTebOffset;
+    PVOID TxnScopeEnterCallback;    // Pointer to the callback function that is called when a KTM transaction scope is entered.
+    PVOID TxnScopeExitCallback;     // Pointer to the callback function that is called when a KTM transaction scope is exited.
+    PVOID TxnScopeContext;          // Pointer to optional context data for use by the application when a KTM transaction scope callback is called.
+    ULONG LockCount;                // The lock count of critical sections for the current thread.
+    LONG WowTebOffset;              // The offset to the WOW64 (Windows on Windows) TEB for the current thread.
     PVOID ResourceRetValue;
-    PVOID ReservedForWdf;
-    ULONGLONG ReservedForCrt;
-    GUID EffectiveContainerId;
+    PVOID ReservedForWdf;           // Reserved for Windows Driver Framework (WDF).
+    ULONGLONG ReservedForCrt;       // Reserved for the Microsoft C runtime (CRT).
+    GUID EffectiveContainerId;      // The Host Compute Service (HCS) container identifier.
 
     // Reserved for Kernel32!Sleep (SpinWait).
-    ULONGLONG LastSleepCounter; // Win11
+    ULONGLONG LastSleepCounter; // since Win11
     ULONG SpinCallCount;
 
     ULONGLONG ExtendedFeatureDisableMask;   // Extended feature disable mask (AVX).
-    PVOID SchedulerSharedDataSlot;          // 24H2
+    PVOID SchedulerSharedDataSlot;          // since 24H2
     PVOID HeapWalkContext;
     GROUP_AFFINITY PrimaryGroupAffinity;    // The primary processor group affinity of the thread.
     ULONG Rcu[2];                           // Read-copy-update (RCU) synchronization context.

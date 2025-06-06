@@ -22,7 +22,7 @@ NTAPI
 NtAcquireProcessActivityReference(
     _Out_ PHANDLE ActivityReferenceHandle,
     _In_ HANDLE ParentProcessHandle,
-    _Reserved_ PROCESS_ACTIVITY_TYPE Reserved);
+    _In_ PROCESS_ACTIVITY_TYPE ProcessActivityType);
 #endif
 
 EXTERN_C_END

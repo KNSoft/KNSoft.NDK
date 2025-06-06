@@ -157,6 +157,14 @@ ZwAcquireCrossVmMutant(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
+ZwAcquireProcessActivityReference(
+    _Out_ PHANDLE ActivityReferenceHandle,
+    _In_ HANDLE ParentProcessHandle,
+    _In_ PROCESS_ACTIVITY_TYPE ProcessActivityType);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
 ZwAddAtom(
     _In_reads_bytes_opt_(Length) PCWSTR AtomName,
     _In_ ULONG Length,
@@ -637,7 +645,7 @@ NTSTATUS
 NTAPI
 ZwCallEnclave(
     _In_ PENCLAVE_ROUTINE Routine,
-    _In_ PVOID Reserved,              // reserved for dispatch (RtlEnclaveCallDispatch)
+    _In_ PVOID Reserved,              // SelectVsmEnclaveByNumber > 0 // reserved for dispatch (RtlEnclaveCallDispatch)
     _In_ ULONG Flags,                 // ENCLAVE_CALL_FLAG_*
     _Inout_ PVOID* RoutineParamReturn // input routine parameter, output routine return value
     );
@@ -701,7 +709,7 @@ ZwChangeProcessState(
     _In_ PROCESS_STATE_CHANGE_TYPE StateChangeType,
     _In_opt_ _Reserved_ PVOID ExtendedInformation,
     _In_opt_ _Reserved_ SIZE_T ExtendedInformationLength,
-    _In_opt_ _Reserved_ ULONG64 Reserved
+    _In_opt_ _Reserved_ ULONG Reserved
     );
 
 NTSYSCALLAPI
@@ -1217,7 +1225,7 @@ ZwCreateProcessStateChange(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ HANDLE ProcessHandle,
-    _In_opt_ _Reserved_ ULONG64 Reserved
+    _In_opt_ _Reserved_ ULONG Reserved
     );
 
 NTSYSCALLAPI
@@ -1362,7 +1370,7 @@ ZwCreateThreadStateChange(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ HANDLE ThreadHandle,
-    _In_opt_ ULONG64 Reserved
+    _In_opt_ _Reserved_ ULONG Reserved
     );
 
 NTSYSCALLAPI
@@ -1891,7 +1899,7 @@ NTSTATUS
 NTAPI
 ZwFreeVirtualMemory(
     _In_ HANDLE ProcessHandle,
-    _Inout_ PVOID *BaseAddress,
+    _Inout_ __drv_freesMem(Mem) PVOID* BaseAddress,
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG FreeType
     );
@@ -4824,6 +4832,8 @@ ZwWaitForSingleObject(
     _In_opt_ PLARGE_INTEGER Timeout
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
+
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -4834,6 +4844,18 @@ ZwWaitForWorkViaWorkerFactory(
     _Out_ PULONG PacketsReturned,
     _In_ PWORKER_FACTORY_DEFERRED_WORK DeferredWork
     );
+
+#else
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWaitForWorkViaWorkerFactory(
+    _In_ HANDLE WorkerFactoryHandle,
+    _Out_ PFILE_IO_COMPLETION_INFORMATION MiniPacket
+    );
+
+#endif
 
 NTSYSCALLAPI
 NTSTATUS

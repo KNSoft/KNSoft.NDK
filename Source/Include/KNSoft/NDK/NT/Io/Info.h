@@ -147,7 +147,8 @@ typedef struct _FILE_STANDARD_INFORMATION_EX
 
 /**
  * The FILE_INTERNAL_INFORMATION structure is used to query for the file system's 8-byte file reference number for a file.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_internal_information
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_internal_information
+ * \remark The IndexNumber member is the same as the FileId member of the FILE_ID_BOTH_DIR_INFORMATION and FILE_ID_FULL_DIR_INFORMATION structures.
  */
 typedef struct _FILE_INTERNAL_INFORMATION
 {

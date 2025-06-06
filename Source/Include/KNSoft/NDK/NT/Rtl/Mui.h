@@ -77,6 +77,24 @@ RtlCultureNameToLCID(
     _Out_ PLCID Lcid
 );
 
+// rev
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlpConvertLCIDsToCultureNames(
+    _In_ PCWSTR Lcids, // array
+    _Out_ PCWSTR* CultureNames
+);
+
+// rev
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlpConvertCultureNamesToLCIDs(
+    _In_ PCWSTR CultureNames, // array
+    _Out_ PCWSTR* Lcids
+);
+
 // private
 NTSYSAPI
 VOID

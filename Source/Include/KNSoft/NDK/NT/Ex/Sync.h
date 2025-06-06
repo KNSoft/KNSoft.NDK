@@ -22,15 +22,21 @@ EXTERN_C_START
 #define EVENT_ALL_ACCESS (EVENT_QUERY_STATE|EVENT_MODIFY_STATE|STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE)
 #endif
 
+/**
+ * The EVENT_INFORMATION_CLASS specifies the type of information to be retrieved about an event object.
+ */
 typedef enum _EVENT_INFORMATION_CLASS
 {
     EventBasicInformation
 } EVENT_INFORMATION_CLASS;
 
+/**
+ * The EVENT_BASIC_INFORMATION structure contains basic information about an event object.
+ */
 typedef struct _EVENT_BASIC_INFORMATION
 {
-    EVENT_TYPE EventType;
-    LONG EventState;
+    EVENT_TYPE EventType;   // The type of the event object (NotificationEvent or SynchronizationEvent).
+    LONG EventState;        // The current state of the event object. Nonzero if the event is signaled; zero if not signaled.
 } EVENT_BASIC_INFORMATION, *PEVENT_BASIC_INFORMATION;
 
 /**

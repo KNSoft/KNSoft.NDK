@@ -62,18 +62,25 @@ RtlWow64GetProcessMachines(
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
-typedef enum _THREAD_STATE_CHANGE_TYPE THREAD_STATE_CHANGE_TYPE, *PTHREAD_STATE_CHANGE_TYPE;
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64ChangeProcessState(
+    _In_ HANDLE ProcessStateChangeHandle,
+    _In_ HANDLE ProcessHandle,
+    _In_ PROCESS_STATE_CHANGE_TYPE StateChangeType
+);
 
+// rev
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlWow64ChangeThreadState(
     _In_ HANDLE ThreadStateChangeHandle,
     _In_ HANDLE ThreadHandle,
-    _In_ THREAD_STATE_CHANGE_TYPE StateChangeType,
-    _In_opt_ PVOID ExtendedInformation,
-    _In_opt_ SIZE_T ExtendedInformationLength,
-    _In_opt_ ULONG64 Reserved);
+    _In_ THREAD_STATE_CHANGE_TYPE StateChangeType
+);
 
 #endif
 

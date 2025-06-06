@@ -6,7 +6,7 @@ EXTERN_C_START
 
 /* phnt */
 
-typedef enum _AHC_INFO_CLASS 
+typedef enum _AHC_INFO_CLASS
 {
     AhcInfoClassSdbQueryResult          = 0x00000001,
     AhcInfoClassSdbSxsOverrideManifest  = 0x00000002,
@@ -74,7 +74,7 @@ typedef enum _AHC_INFO_CLASS
 // Cache structures and APIs.
 //
 
-typedef enum _AHC_SERVICE_CLASS 
+typedef enum _AHC_SERVICE_CLASS
 {
     ApphelpCacheServiceLookup = 0,
     ApphelpCacheServiceRemove = 1,
@@ -91,7 +91,7 @@ typedef enum _AHC_SERVICE_CLASS
     ApphelpCacheServiceMax
 } AHC_SERVICE_CLASS;
 
-typedef struct _AHC_SERVICE_LOOKUP 
+typedef struct _AHC_SERVICE_LOOKUP
 {
     AHC_INFO_CLASS InfoClass;                   // Information to lookup.
     UINT HintFlags;                             // Hint flags about cache query.
@@ -105,7 +105,7 @@ typedef struct _AHC_SERVICE_LOOKUP
     UINT EnvironmentSize;                       // Size of environment block in bytes.
 } AHC_SERVICE_LOOKUP, *PAHC_SERVICE_LOOKUP;
 
-typedef struct _AHC_SERVICE_REMOVE 
+typedef struct _AHC_SERVICE_REMOVE
 {
     AHC_INFO_CLASS InfoClass;
     UNICODE_STRING PackageAlias;
@@ -113,7 +113,7 @@ typedef struct _AHC_SERVICE_REMOVE
     UNICODE_STRING ExeSignature;
 } AHC_SERVICE_REMOVE, *PAHC_SERVICE_REMOVE;
 
-typedef struct _AHC_SERVICE_UPDATE 
+typedef struct _AHC_SERVICE_UPDATE
 {
     AHC_INFO_CLASS InfoClass;
     UNICODE_STRING PackageAlias;
@@ -123,12 +123,12 @@ typedef struct _AHC_SERVICE_UPDATE
     ULONG DataSize;
 } AHC_SERVICE_UPDATE, *PAHC_SERVICE_UPDATE;
 
-typedef struct _AHC_SERVICE_CLEAR 
+typedef struct _AHC_SERVICE_CLEAR
 {
     AHC_INFO_CLASS InfoClass;
 } AHC_SERVICE_CLEAR, *PAHC_SERVICE_CLEAR;
 
-typedef struct _AHC_SERVICE_LOOKUP_CDB 
+typedef struct _AHC_SERVICE_LOOKUP_CDB
 {
     UNICODE_STRING Name;
 } AHC_SERVICE_LOOKUP_CDB, *PAHC_SERVICE_LOOKUP_CDB;
@@ -188,7 +188,7 @@ typedef struct _AHC_MAIN_STATISTICS
     ULONG SnapCache;                            // Count of snap store calls.
 } AHC_MAIN_STATISTICS, *PAHC_MAIN_STATISTICS;
 
-typedef struct _AHC_STORE_STATISTICS 
+typedef struct _AHC_STORE_STATISTICS
 {
     ULONG LookupHits;                           // Count of lookup hits.
     ULONG LookupMisses;                         // Count of lookup misses.
@@ -197,21 +197,21 @@ typedef struct _AHC_STORE_STATISTICS
     ULONG Updated;                              // Count of updates.
 } AHC_STORE_STATISTICS, *PAHC_STORE_STATISTICS;
 
-typedef struct _AHC_STATISTICS 
+typedef struct _AHC_STATISTICS
 {
     ULONG Size;                                 // Size of the structure.
     AHC_MAIN_STATISTICS Main;                   // Main statistics.
     AHC_STORE_STATISTICS Store;                 // Store statistics.
 } AHC_STATISTICS, *PAHC_STATISTICS;
 
-typedef struct _AHC_SERVICE_DATAQUERY 
+typedef struct _AHC_SERVICE_DATAQUERY
 {
     AHC_STATISTICS Stats;                       // Statistics.
     ULONG DataSize;                             // Size of data.
     PBYTE Data;                                 // Data.
 } AHC_SERVICE_DATAQUERY, *PAHC_SERVICE_DATAQUERY;
 
-typedef struct _AHC_SERVICE_DATACACHE 
+typedef struct _AHC_SERVICE_DATACACHE
 {
     HANDLE FileHandle;                          // User space handle to file.
     USHORT ExeType;                             // Executable bitness.
@@ -225,13 +225,13 @@ typedef struct _AHC_SERVICE_DATACACHE
     PBYTE CustomData;                           // Pointer to the custom data.
 } AHC_SERVICE_DATACACHE, *PAHC_SERVICE_DATACACHE;
 
-typedef struct _AHC_SERVICE_HWID_QUERY 
+typedef struct _AHC_SERVICE_HWID_QUERY
 {
     BOOLEAN QueryResult;                        // Query result
     UNICODE_STRING HwId;                        // Query HwId; can contain wildcards
 } AHC_SERVICE_HWID_QUERY, *PAHC_SERVICE_HWID_QUERY;
 
-typedef struct _AHC_SERVICE_DATA 
+typedef struct _AHC_SERVICE_DATA
 {
     AHC_SERVICE_LOOKUP Lookup;                  // Lookup EXE/Package.
     AHC_SERVICE_UPDATE Update;                  // Updating flags for a given exe/package.

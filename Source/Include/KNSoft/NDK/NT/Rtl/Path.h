@@ -38,6 +38,12 @@ NTSYSAPI UNICODE_STRING RtlDosPathSeperatorsString;
 NTSYSAPI UNICODE_STRING RtlAlternateDosPathSeperatorString;
 NTSYSAPI UNICODE_STRING RtlNtPathSeperatorString;
 
+/**
+ * The RtlDetermineDosPathNameType_U routine determines the type of Dos or Win32 path type for the specified filename.
+ *
+ * \param DosFileName A pointer to the buffer that contains the Dos or Win32 filename.
+ * \return The return value specifies the path type for the specified file.
+ */
 NTSYSAPI
 RTL_PATH_TYPE
 NTAPI
@@ -45,6 +51,15 @@ RtlDetermineDosPathNameType_U(
     _In_ PCWSTR DosFileName
 );
 
+/**
+ * The RtlIsDosDeviceName_U routine examines the Dos format file name and determines if it is a Dos device name.
+ *
+ * \param DosFileName A pointer to the buffer that contains the DOS or Win32 filename.
+ * \return A nonzero value when the Dos file name is the name of a Dos device. The high order 16 bits is the offset
+ * in the input buffer where the dos device name beings and the low order 16 bits is the length of the device name (excluding any optional trailing colon).
+ * Otherwise, A zero value when the Dos file name is not the name of a Dos device.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlisdosdevicename_u
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -52,6 +67,16 @@ RtlIsDosDeviceName_U(
     _In_ PCWSTR DosFileName
 );
 
+/**
+ * The RtlGetFullPathName_U routine retrieves the full path and file name of the specified file.
+ *
+ * \param FileName A pointer to the buffer that contains the relative filename.
+ * \param BufferLength The length of the buffer for the file path string, in WCHARs. The buffer length must include room for a terminating null character.
+ * \param Buffer A pointer to the buffer that receives the file path string.
+ * \param FilePart A pointer to a buffer that receives the address (within Buffer) of the final file name component in the path.
+ * \return If the function succeeds, the return value specifies the number of characters that are written to the buffer, not including the terminating null character.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfullpathnamea
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -62,6 +87,18 @@ RtlGetFullPathName_U(
     _Out_opt_ PWSTR *FilePart
 );
 
+// rev
+/**
+ * The RtlGetFullPathName_UEx routine retrieves the full path and file name of the specified file.
+ *
+ * \param FileName A pointer to the buffer that contains the relative filename.
+ * \param BufferLength The length of the buffer for the file path string, in WCHARs. The buffer length must include room for a terminating null character.
+ * \param Buffer A pointer to the buffer that receives the file path string.
+ * \param FilePart A pointer to a buffer that receives the address (within Buffer) of the final file name component in the path.
+ * \param BytesRequired If the function succeeds, the return value specifies the number of characters that are written to the buffer, not including the terminating null character.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfullpathnamea
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -87,6 +124,14 @@ RtlGetFullPathName_UstrEx(
     _Out_opt_ SIZE_T *BytesRequired
 );
 
+/**
+ * The RtlGetCurrentDirectory_U routine retrieves the current directory for the current process.
+ *
+ * \param BufferLength The length of the buffer for the current directory string, in WCHARs. The buffer length must include room for a terminating null character.
+ * \param Buffer A pointer to the buffer that receives the current directory string.
+ * \return If the function succeeds, the return value specifies the number of characters that are written to the buffer, not including the terminating null character.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcurrentdirectory
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -95,6 +140,14 @@ RtlGetCurrentDirectory_U(
     _Out_writes_bytes_(BufferLength) PWSTR Buffer
 );
 
+/**
+ * The RtlSetCurrentDirectory_U routine changes the current directory for the current process.
+ *
+ * \param PathName The path to the new current directory.
+ * This parameter may specify a relative path or a full path. In either case, the full path of the specified directory is calculated and stored as the current directory.
+ * \return If the function succeeds, the return value specifies the number of characters that are written to the buffer, not including the terminating null character.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcurrentdirectory
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
