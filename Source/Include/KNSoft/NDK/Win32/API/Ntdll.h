@@ -19,4 +19,29 @@ ApiSetQueryApiSetPresenceEx(
     _Out_ PBOOLEAN IsInSchema,
     _Out_ PBOOLEAN Present);
 
+typedef
+_Function_class_(SWITCH_BACK_PROCEDURE)
+PVOID
+NTAPI
+SWITCH_BACK_PROCEDURE(
+    _In_opt_ PVOID Context);
+typedef SWITCH_BACK_PROCEDURE *PSWITCH_BACK_PROCEDURE;
+
+NTSYSAPI
+PSWITCH_BACK_PROCEDURE
+SbSelectProcedure(
+    ULONG Signature,        // 0xABABABAB
+    ULONG Unknown,          // 1
+    PVOID ScenarioTable,
+    ULONG ScenarioIndex);
+
+NTSYSAPI
+PVOID
+SbExecuteProcedure(
+    ULONG Signature,        // 0xABABABAB
+    ULONG Unknown,          // 1
+    PVOID ScenarioTable,
+    ULONG scenarioIndex,
+    PVOID Context);
+
 EXTERN_C_END
