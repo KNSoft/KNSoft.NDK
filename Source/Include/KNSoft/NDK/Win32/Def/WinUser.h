@@ -8,6 +8,8 @@
 
 #pragma region Resource File
 
+/* See also: https://learn.microsoft.com/en-us/windows/win32/menurc/resources-structures */
+
 #pragma pack(push, 1)
 
 typedef struct _CURSORDIR

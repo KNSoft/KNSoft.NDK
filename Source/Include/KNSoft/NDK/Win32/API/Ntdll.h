@@ -29,19 +29,21 @@ typedef SWITCH_BACK_PROCEDURE *PSWITCH_BACK_PROCEDURE;
 
 NTSYSAPI
 PSWITCH_BACK_PROCEDURE
+NTAPI
 SbSelectProcedure(
     ULONG Signature,        // 0xABABABAB
-    ULONG Unknown,          // 1
+    ULONG Unknown,          // 0? 1?
     PVOID ScenarioTable,
     ULONG ScenarioIndex);
 
 NTSYSAPI
 PVOID
+NTAPI
 SbExecuteProcedure(
     ULONG Signature,        // 0xABABABAB
-    ULONG Unknown,          // 1
+    ULONG Unknown,          // 0? 1?
     PVOID ScenarioTable,
-    ULONG scenarioIndex,
+    ULONG ScenarioIndex,
     PVOID Context);
 
 EXTERN_C_END

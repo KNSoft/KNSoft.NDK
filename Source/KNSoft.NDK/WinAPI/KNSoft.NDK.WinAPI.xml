@@ -3,6 +3,8 @@
     <Export Name="LdrRegisterDllNotification" CallConv="__stdcall" Arg="int ptr ptr ptr" />
     <Export Name="LdrUnregisterDllNotification" CallConv="__stdcall" Arg="ptr" />
     <Export Name="RtlGetParentLocaleName" CallConv="__stdcall" Arg="ptr ptr int int" />
+    <Export Name="SbSelectProcedure" CallConv="__stdcall" Arg="int int ptr int" />
+    <Export Name="SbExecuteProcedure" CallConv="__stdcall" Arg="int int ptr int ptr" />
   </Dll>
   <Dll Name="KERNEL32.dll">
     <Export Name="CreateProcessInternalW" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr int int ptr ptr ptr ptr ptr" />
