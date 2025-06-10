@@ -3,6 +3,8 @@
 #include "../../NDK.h"
 #include "../../NT/NT.inl"
 
+#ifndef ARGPARSE_ALLOC_FUNCNAME
+
 #define TChar WCHAR
 #include "../../Package/ArgvParsing.inl"
 #undef TChar
@@ -10,6 +12,8 @@
 #define TChar CHAR
 #include "../../Package/ArgvParsing.inl"
 #undef TChar
+
+#endif
 
 EXTERN_C_START
 

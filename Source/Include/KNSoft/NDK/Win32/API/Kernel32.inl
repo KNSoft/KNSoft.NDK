@@ -76,18 +76,18 @@ WINAPI
 _Inline_GetEnvironmentStringsW(VOID)
 {
     PWCHAR pEnv, p;
-    ULONG uSize;
+    SIZE_T sSize;
 
     _Inline_RtlAcquirePebLock();
 
     pEnv = (PWCHAR)NtCurrentPeb()->ProcessParameters->Environment;
     for (p = pEnv; *p != UNICODE_NULL; p += wcslen(p) + 1);
-    uSize = (p - pEnv + 1) * sizeof(WCHAR);
+    sSize = (p - pEnv + 1) * sizeof(WCHAR);
 
-    p = (PWCHAR)RtlAllocateHeap(RtlProcessHeap(), 0, uSize);
+    p = (PWCHAR)RtlAllocateHeap(RtlProcessHeap(), 0, sSize);
     if (p)
     {
-        memcpy(p, pEnv, uSize);
+        memcpy(p, pEnv, sSize);
     } else
     {
         _Inline_BaseSetLastNTError(STATUS_NO_MEMORY);
@@ -104,6 +104,102 @@ _Inline_FreeEnvironmentStringsW(
     _In_ _Pre_ _NullNull_terminated_ LPWCH penv)
 {
     return RtlFreeHeap(RtlProcessHeap(), 0, penv);
+}
+
+__inline
+BOOL
+WINAPI
+_Inline_SetEnvironmentVariableW(
+    _In_ LPCWSTR lpName,
+    _In_opt_ LPCWSTR lpValue)
+{
+    NTSTATUS Status = RtlSetEnvironmentVar(NULL,
+                                           lpName,
+                                           wcslen(lpName),
+                                           lpValue,
+                                           lpValue != NULL ? wcslen(lpValue) : 0);
+    if (NT_SUCCESS(Status))
+    {
+        return TRUE;
+    }
+
+    _Inline_BaseSetLastNTError(Status);
+    return FALSE;
+}
+
+__inline
+VOID
+WINAPI
+_Inline_GetStartupInfoW(
+    _Out_ LPSTARTUPINFOW lpStartupInfo)
+{
+    PRTL_USER_PROCESS_PARAMETERS ProcParam;
+    ULONG WindowFlags;
+
+    ProcParam = NtCurrentPeb()->ProcessParameters;
+    lpStartupInfo->cb = sizeof(*lpStartupInfo);
+    lpStartupInfo->lpReserved = ProcParam->ShellInfo.Buffer;
+    lpStartupInfo->lpDesktop = ProcParam->DesktopInfo.Buffer;
+    lpStartupInfo->lpTitle = ProcParam->WindowTitle.Buffer;
+    lpStartupInfo->dwX = ProcParam->StartingX;
+    lpStartupInfo->dwY = ProcParam->StartingY;
+    lpStartupInfo->dwXSize = ProcParam->CountX;
+    lpStartupInfo->dwYSize = ProcParam->CountY;
+    lpStartupInfo->dwXCountChars = ProcParam->CountCharsX;
+    lpStartupInfo->dwYCountChars = ProcParam->CountCharsY;
+    lpStartupInfo->dwFillAttribute = ProcParam->FillAttribute;
+    WindowFlags = ProcParam->WindowFlags;
+    lpStartupInfo->dwFlags = WindowFlags;
+    lpStartupInfo->wShowWindow = (WORD)ProcParam->ShowWindowFlags;
+    lpStartupInfo->cbReserved2 = ProcParam->RuntimeData.Length;
+    lpStartupInfo->lpReserved2 = (LPBYTE)ProcParam->RuntimeData.Buffer;
+
+    if (WindowFlags & (STARTF_USESTDHANDLES | STARTF_USEHOTKEY | STARTF_USEMONITOR))
+    {
+        lpStartupInfo->hStdInput = ProcParam->StandardInput;
+        lpStartupInfo->hStdOutput = ProcParam->StandardOutput;
+        lpStartupInfo->hStdError = ProcParam->StandardError;
+    }
+}
+
+__inline
+BOOL
+WINAPI
+_Inline_IsDebuggerPresent(VOID)
+{
+    return NtCurrentPeb()->BeingDebugged;
+}
+
+#pragma endregion
+
+#pragma region Loader
+
+__inline
+_When_(lpModuleName == NULL, _Ret_notnull_)
+_When_(lpModuleName != NULL, _Ret_maybenull_)
+HMODULE
+WINAPI
+_Inline_GetModuleHandleW(
+    _In_opt_ LPCWSTR lpModuleName)
+{
+    NTSTATUS Status;
+    UNICODE_STRING DllName;
+    PVOID DllHandle;
+
+    if (lpModuleName == NULL)
+    {
+        return (HMODULE)NtCurrentPeb()->ImageBaseAddress;
+    }
+
+    RtlInitUnicodeString(&DllName, lpModuleName);
+    Status = LdrGetDllHandle(NULL, NULL, &DllName, &DllHandle);
+    if (NT_SUCCESS(Status))
+    {
+        return (HMODULE)DllHandle;
+    }
+
+    _Inline_BaseSetLastNTError(Status);
+    return NULL;
 }
 
 #pragma endregion
@@ -230,12 +326,13 @@ _Inline_InitializeCriticalSectionEx(
     _In_ DWORD Flags)
 {
     NTSTATUS Status = RtlInitializeCriticalSectionEx(lpCriticalSection, dwSpinCount, Flags);
-    if (!NT_SUCCESS(Status))
+    if (NT_SUCCESS(Status))
     {
-        _Inline_BaseSetLastNTError(Status);
-        return FALSE;
+        return TRUE;
     }
-    return TRUE;
+
+    _Inline_BaseSetLastNTError(Status);
+    return FALSE;
 }
 
 __inline
@@ -607,23 +704,118 @@ _Inline_SetStdHandleEx(
 __inline
 BOOL
 WINAPI
+_Inline_WriteFile(
+    _In_ HANDLE hFile,
+    _In_reads_bytes_opt_(nNumberOfBytesToWrite) LPCVOID lpBuffer,
+    _In_ DWORD nNumberOfBytesToWrite,
+    _Out_opt_ LPDWORD lpNumberOfBytesWritten,
+    _Inout_opt_ LPOVERLAPPED lpOverlapped)
+{
+    NTSTATUS Status;
+    PVOID ApcContext;
+    IO_STATUS_BLOCK IoStatusBlock = { 0 };
+    DWORD StdHandle = (DWORD)(DWORD_PTR)hFile;
+
+    if (lpNumberOfBytesWritten != NULL)
+    {
+        *lpNumberOfBytesWritten = 0;
+    }
+    if (StdHandle >= STD_ERROR_HANDLE)
+    {
+        if (StdHandle == STD_ERROR_HANDLE)
+        {
+            hFile = NtCurrentPeb()->ProcessParameters->StandardError;
+        } else if (StdHandle == STD_OUTPUT_HANDLE)
+        {
+            hFile = NtCurrentPeb()->ProcessParameters->StandardOutput;
+        } else if (StdHandle == STD_INPUT_HANDLE)
+        {
+            hFile = NtCurrentPeb()->ProcessParameters->StandardInput;
+        }
+    }
+
+    if (lpOverlapped == NULL)
+    {
+        Status = NtWriteFile(hFile,
+                             NULL,
+                             NULL,
+                             NULL,
+                             &IoStatusBlock,
+                             (PVOID)lpBuffer,
+                             nNumberOfBytesToWrite,
+                             NULL,
+                             NULL);
+        if (Status == STATUS_PENDING)
+        {
+            Status = NtWaitForSingleObject(hFile, FALSE, NULL);
+            if (NT_SUCCESS(Status))
+            {
+                Status = IoStatusBlock.Status;
+            }
+        }
+        if (NT_SUCCESS(Status))
+        {
+            if (lpNumberOfBytesWritten != NULL)
+            {
+                *lpNumberOfBytesWritten = (ULONG)IoStatusBlock.Information;
+            }
+            return TRUE;
+        }
+        if (NT_WARNING(Status) && lpNumberOfBytesWritten != NULL)
+        {
+            *lpNumberOfBytesWritten = (ULONG)IoStatusBlock.Information;
+        }
+    } else
+    {
+        lpOverlapped->Internal = STATUS_PENDING;
+        ApcContext = (ULONG_PTR)lpOverlapped->hEvent & 1 ? NULL : lpOverlapped;
+
+        /* False positive warnings, hFile and lpBuffer are assumed not NULL */
+#pragma warning(disable: __WARNING_INVALID_PARAM_VALUE_1 __WARNING_INVALID_PARAM_VALUE_3)
+        Status = NtWriteFile(hFile,
+                             lpOverlapped->hEvent,
+                             NULL,
+                             ApcContext,
+                             (PIO_STATUS_BLOCK)lpOverlapped,
+                             (PVOID)lpBuffer,
+                             nNumberOfBytesToWrite,
+                             (PLARGE_INTEGER)&lpOverlapped->Offset,
+                             NULL);
+#pragma warning(disable: __WARNING_INVALID_PARAM_VALUE_1 __WARNING_INVALID_PARAM_VALUE_3)
+
+        if (Status != STATUS_PENDING && !NT_ERROR(Status))
+        {
+            if (lpNumberOfBytesWritten != NULL)
+            {
+                *lpNumberOfBytesWritten = (ULONG)lpOverlapped->InternalHigh;
+            }
+            return TRUE;
+        }
+    }
+
+    _Inline_BaseSetLastNTError(Status);
+    return FALSE;
+}
+
+__inline
+BOOL
+WINAPI
 _Inline_FlushFileBuffers(
     _In_ HANDLE hFile)
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
-
     DWORD StdHandle = (DWORD)(DWORD_PTR)hFile;
 
-    if (StdHandle == STD_INPUT_HANDLE)
+    if (StdHandle == STD_ERROR_HANDLE)
     {
-        hFile = NtCurrentPeb()->ProcessParameters->StandardInput;
+        hFile = NtCurrentPeb()->ProcessParameters->StandardError;
     } else if (StdHandle == STD_OUTPUT_HANDLE)
     {
         hFile = NtCurrentPeb()->ProcessParameters->StandardOutput;
-    } else if (StdHandle == STD_ERROR_HANDLE)
+    } else if (StdHandle == STD_INPUT_HANDLE)
     {
-        hFile = NtCurrentPeb()->ProcessParameters->StandardError;
+        hFile = NtCurrentPeb()->ProcessParameters->StandardInput;
     }
 
     Status = NtFlushBuffersFile(hFile, &IoStatusBlock);
@@ -634,6 +826,84 @@ _Inline_FlushFileBuffers(
     _Inline_BaseSetLastNTError(Status);
     return FALSE;
 }
+
+/*
+ * A successful path through the function doesn't set the _Out_ annotated parameter.
+ * The original SAL annotation in Windows SDK has no _Success_ expression.
+ */
+#pragma warning(disable: 6101)
+__inline
+BOOL
+WINAPI
+_Inline_SetFilePointerEx(
+    _In_ HANDLE hFile,
+    _In_ LARGE_INTEGER liDistanceToMove,
+    _Out_opt_ PLARGE_INTEGER lpNewFilePointer,
+    _In_ DWORD dwMoveMethod)
+{
+    NTSTATUS Status;
+    IO_STATUS_BLOCK IoStatusBlock;
+    FILE_POSITION_INFORMATION FilePosition;
+    FILE_STANDARD_INFORMATION FileStandard;
+
+    if (dwMoveMethod == FILE_BEGIN)
+    {
+        FilePosition.CurrentByteOffset.QuadPart = liDistanceToMove.QuadPart;
+    } else if (dwMoveMethod == FILE_CURRENT)
+    {
+        Status = NtQueryInformationFile(hFile,
+                                        &IoStatusBlock,
+                                        &FilePosition,
+                                        sizeof(FilePosition),
+                                        FilePositionInformation);
+        if (!NT_SUCCESS(Status))
+        {
+            _Inline_BaseSetLastNTError(Status);
+            return FALSE;
+        }
+        FilePosition.CurrentByteOffset.QuadPart += liDistanceToMove.QuadPart;
+    } else if (dwMoveMethod == FILE_END)
+    {
+        Status = NtQueryInformationFile(hFile,
+                                        &IoStatusBlock,
+                                        &FileStandard,
+                                        sizeof(FileStandard),
+                                        FileStandardInformation);
+        if (!NT_SUCCESS(Status))
+        {
+            _Inline_BaseSetLastNTError(Status);
+            return FALSE;
+        }
+        FilePosition.CurrentByteOffset.QuadPart = FileStandard.EndOfFile.QuadPart + liDistanceToMove.QuadPart;
+    } else
+    {
+        _Inline_RtlSetLastWin32Error(ERROR_INVALID_PARAMETER);
+        return FALSE;
+    }
+
+    if (FilePosition.CurrentByteOffset.QuadPart < 0)
+    {
+        _Inline_RtlSetLastWin32Error(ERROR_NEGATIVE_SEEK);
+        return FALSE;
+    }
+    Status = NtSetInformationFile(hFile,
+                                  &IoStatusBlock,
+                                  &FilePosition,
+                                  sizeof(FilePosition),
+                                  FilePositionInformation);
+    if (!NT_SUCCESS(Status))
+    {
+        _Inline_BaseSetLastNTError(Status);
+        return FALSE;
+    }
+    if (lpNewFilePointer != NULL)
+    {
+        *lpNewFilePointer = FilePosition.CurrentByteOffset;
+    }
+
+    return TRUE;
+}
+#pragma warning(default: 6101)
 
 __inline
 BOOL
@@ -692,12 +962,13 @@ _Inline_GetEnabledXStateFeatures(VOID)
      * The PF_XMMI_INSTRUCTIONS_AVAILABLE feature is necessarily TRUE in x86 version 6.2 and higher,
      * and in all x64 versions.
      */
-    return
-#if !defined(_WIN64) || (NTDDI_VERSION < NTDDI_WIN8)
-        !SharedUserData->ProcessorFeatures[PF_XMMI_INSTRUCTIONS_AVAILABLE] ?
-        XSTATE_MASK_LEGACY_FLOATING_POINT :
+#if defined(_WIN64)
+    return XSTATE_MASK_LEGACY;
+#else
+    return SharedUserData->ProcessorFeatures[PF_XMMI_INSTRUCTIONS_AVAILABLE] ?
+        XSTATE_MASK_LEGACY :
+        XSTATE_MASK_LEGACY_FLOATING_POINT;
 #endif
-        XSTATE_MASK_LEGACY;
 }
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
@@ -781,6 +1052,24 @@ _Inline_TerminateProcess(
         _Inline_RtlSetLastWin32Error(ERROR_INVALID_HANDLE);
     }
     return FALSE;
+}
+
+__inline
+PSLIST_ENTRY
+WINAPI
+_Inline_InterlockedFlushSList(
+    _Inout_ PSLIST_HEADER ListHead)
+{
+    return RtlInterlockedFlushSList(ListHead);
+}
+
+__inline
+VOID
+WINAPI
+_Inline_InitializeSListHead(
+    _Out_ PSLIST_HEADER ListHead)
+{
+    RtlInitializeSListHead(ListHead);
 }
 
 EXTERN_C_END
