@@ -288,6 +288,9 @@ typedef struct _FILE_COMPRESSION_INFORMATION
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_disposition_information
  */
 #pragma push_macro("DeleteFile")
+#ifdef DeleteFile
+#undef DeleteFile
+#endif
 typedef struct _FILE_DISPOSITION_INFORMATION
 {
     BOOLEAN DeleteFile;
