@@ -90,7 +90,7 @@ typedef enum _FILE_INFORMATION_CLASS
     FileIdAllExtdDirectoryInformation, // FILE_ID_ALL_EXTD_DIR_INFORMATION
     FileIdAllExtdBothDirectoryInformation, // FILE_ID_ALL_EXTD_BOTH_DIR_INFORMATION
     FileStreamReservationInformation, // FILE_STREAM_RESERVATION_INFORMATION // since 24H2
-    FileMupProviderInfo, // MUP_PROVIDER_INFORMATION
+    FileMupProviderInfo, // qs: MUP_PROVIDER_INFORMATION
     FileMaximumInformation
 } FILE_INFORMATION_CLASS, *PFILE_INFORMATION_CLASS;
 
@@ -152,15 +152,7 @@ typedef struct _FILE_STANDARD_INFORMATION_EX
  */
 typedef struct _FILE_INTERNAL_INFORMATION
 {
-    union
-    {
-        ULARGE_INTEGER IndexNumber;
-        struct
-        {
-            ULONGLONG MftRecordIndex : 48; // rev
-            ULONGLONG SequenceNumber : 16; // rev
-        };
-    };
+    LARGE_INTEGER IndexNumber;
 } FILE_INTERNAL_INFORMATION, *PFILE_INTERNAL_INFORMATION;
 
 /**
@@ -764,15 +756,7 @@ typedef struct _FILE_VOLUME_NAME_INFORMATION
 typedef struct _FILE_ID_INFORMATION
 {
     ULONGLONG VolumeSerialNumber;
-    union
-    {
-        FILE_ID_128 FileId;
-        struct
-        {
-            LONGLONG FileIdLowPart : 64; // rev
-            LONGLONG FileIdHighPart : 64; // rev
-        };
-    };
+    FILE_ID_128 FileId;
 } FILE_ID_INFORMATION, *PFILE_ID_INFORMATION;
 
 /**

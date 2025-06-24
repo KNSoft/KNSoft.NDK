@@ -18,7 +18,7 @@ typedef enum _RTL_BSD_ITEM_TYPE
     RtlBsdPowerTransition, // q: s: RTL_BSD_DATA_POWER_TRANSITION
     RtlBsdItemBootAttemptCount, // q: s: UCHAR // BootAttemptCount
     RtlBsdItemBootCheckpoint, // q: s: UCHAR // LastBootCheckpoint
-    RtlBsdItemBootId, // q; s: ULONG (USER_SHARED_DATA->BootId)
+    RtlBsdItemBootId, // q; s: ULONG (USER_SHARED_DATA->BootId) // 10
     RtlBsdItemShutdownBootId, // q; s: ULONG
     RtlBsdItemReportedAbnormalShutdownBootId, // q; s: ULONG
     RtlBsdItemErrorInfo, // RTL_BSD_DATA_ERROR_INFO

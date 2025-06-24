@@ -951,6 +951,16 @@ RtlIsNormalizedString(
 );
 
 // ntifs:FsRtlIsNameInExpression
+/**
+ * The RtlIsNameInExpression routine determines whether a Unicode string matches the specified pattern.
+ *
+ * \param Expression A pointer to the pattern string. This string can contain wildcard characters. If the IgnoreCase parameter is TRUE, the string must contain only uppercase characters.
+ * \param Name Maximum number of bytes to be written to UTF8StringDestination. If this value causes the translated string to be truncated, RtlUnicodeToUTF8N returns an error status.
+ * \param IgnoreCase TRUE for case-insensitive matching, or FALSE for case-sensitive matching.
+ * \param UpcaseTable An optional pointer to an uppercase character table to use for case-insensitive matching. If this parameter is NULL, the default system uppercase character table is used.
+ * \return TRUE if the string matches the pattern. If the string does not match the pattern, this function returns FALSE.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlisnameinexpression
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -975,6 +985,14 @@ RtlIsNameInUnUpcasedExpression(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_19H1)
+/**
+ * The RtlDoesNameContainWildCards routine determines whether a Unicode string contains wildcard characters.
+ *
+ * \param Name A pointer to the string to be checked.
+ * \return TRUE if one or more wildcard characters were found, FALSE otherwise.
+ * \remarks The following are wildcard characters: *, ?, ANSI_DOS_STAR, ANSI_DOS_DOT, and ANSI_DOS_QM.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-_fsrtl_advanced_fcb_header-fsrtldoesnamecontainwildcards
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI

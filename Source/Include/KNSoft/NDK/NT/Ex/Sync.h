@@ -199,10 +199,11 @@ NtQueryEvent(
 /**
  * The NtCreateEventPair routine creates an event pair object and opens a handle to the object with the specified desired access.
  *
- * @param EventPairHandle A pointer to a variable that receives the event pair object handle.
- * @param DesiredAccess The access mask that specifies the requested access to the event pair object.
- * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
- * @return NTSTATUS Successful or errant status.
+ * \remark Event Pairs are used to communicate with protected subsystems (see Context Switches).
+ * \param EventPairHandle A pointer to a variable that receives the event pair object handle.
+ * \param DesiredAccess The access mask that specifies the requested access to the event pair object.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
