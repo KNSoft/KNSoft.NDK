@@ -427,7 +427,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\WinSta.h">
       <Filter>Win32\API</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Misc.h">
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32KApi.h">
       <Filter>NT\Win32K</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h">

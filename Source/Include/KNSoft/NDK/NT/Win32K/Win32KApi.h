@@ -919,16 +919,6 @@ NtUserQueryInformationThread(
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
-NtUserSetInformationThread(
-    _In_ HANDLE ThreadHandle,
-    _In_ USERTHREADINFOCLASS ThreadInformationClass,
-    _In_reads_bytes_(ThreadInformationLength) PVOID ThreadInformation,
-    _In_ ULONG ThreadInformationLength
-    );
-
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
 NtUserRaiseLowerShellWindow(
     _In_ HWND WindowHandle,
     _In_ BOOLEAN SetWithOptions
@@ -983,13 +973,6 @@ NtUserSendInput(
 NTSYSCALLAPI
 HWND
 NTAPI
-NtUserSetActiveWindow(
-    _In_ HWND WindowHandle
-    );
-
-NTSYSCALLAPI
-HWND
-NTAPI
 NtUserSetCapture(
     _In_ HWND WindowHandle
     );
@@ -1020,13 +1003,6 @@ NTAPI
 NtUserSetCursorPos(
     _In_ LONG X,
     _In_ LONG Y
-    );
-
-NTSYSCALLAPI
-HWND
-NTAPI
-NtUserSetFocus(
-    _In_ HWND WindowHandle
     );
 
 NTSYSCALLAPI
