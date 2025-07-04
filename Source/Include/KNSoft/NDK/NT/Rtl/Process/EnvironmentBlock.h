@@ -1150,6 +1150,15 @@ typedef struct _OLE_TLS_DATA32
     ULONG TIDCaller;
 } OLE_TLS_DATA32, *POLE_TLS_DATA32;
 
+// rev - xor key for ReservedForNtRpc
+#define RPC_THREAD_POINTER_KEY64 0xABABABABDEDEDEDEui64
+#define RPC_THREAD_POINTER_KEY32 0xABABABAB
+#ifdef _WIN64
+#define RPC_THREAD_POINTER_KEY RPC_THREAD_POINTER_KEY64i64
+#else
+#define RPC_THREAD_POINTER_KEY RPC_THREAD_POINTER_KEY32
+#endif
+
 /**
  * Thread Environment Block (TEB) structure.
  *
@@ -1231,7 +1240,7 @@ typedef struct _TEB
     PVOID TlsSlots[TLS_MINIMUM_AVAILABLE];  // Data for Thread Local Storage. (TlsGetValue)
     LIST_ENTRY TlsLinks;                    // Reserved for TLS.
     PVOID Vdm;                              // Reserved for NTVDM.
-    PVOID ReservedForNtRpc;                 // Reserved for RPC.
+    PVOID ReservedForNtRpc;                 // Reserved for RPC. The pointer is XOR'ed with RPC_THREAD_POINTER_KEY.
     PVOID DbgSsReserved[2];
     ULONG HardErrorMode;                    // The error mode for the current thread. (GetThreadErrorMode)
 

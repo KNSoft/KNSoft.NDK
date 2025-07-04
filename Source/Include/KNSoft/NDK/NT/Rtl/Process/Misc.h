@@ -50,12 +50,15 @@ RtlFlsSetValue(
     _In_ ULONG FlsIndex,
     _In_ PVOID FlsData);
 
+#define RTL_FLS_DATA_CLEANUP_PER_SLOT 1
+#define RTL_FLS_DATA_CLEANUP_DEALLOCATE 2
+
 NTSYSAPI
-NTSTATUS 
-NTAPI 
+VOID
+NTAPI
 RtlProcessFlsData(
-    _In_ HANDLE ProcessHandle,
-    _Out_ PVOID* FlsData);
+    _In_ PVOID FlsData,
+    _In_ ULONG Flags);
 
 #endif
 

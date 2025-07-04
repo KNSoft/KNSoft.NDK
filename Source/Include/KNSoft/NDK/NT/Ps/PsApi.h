@@ -982,7 +982,8 @@ NtQueueApcThreadEx2(
 
 // PROC_THREAD_ATTRIBUTE_NUM (dmex)
 #define _USE_FULL_PROC_THREAD_ATTRIBUTE
-typedef enum _PROC_THREAD_ATTRIBUTE_NUM {
+typedef enum _PROC_THREAD_ATTRIBUTE_NUM
+{
     ProcThreadAttributeParentProcess = 0, // in HANDLE
     ProcThreadAttributeExtendedFlags = 1, // in ULONG (EXTENDED_PROCESS_CREATION_FLAG_*)
     ProcThreadAttributeHandleList = 2, // in HANDLE[]
@@ -1011,7 +1012,8 @@ typedef enum _PROC_THREAD_ATTRIBUTE_NUM {
     ProcThreadAttributeEnableOptionalXStateFeatures = 27, // in ULONG64 // since WIN11
     ProcThreadAttributeCreateStore = 28, // ULONG // rev (diversenok)
     ProcThreadAttributeTrustedApp = 29,
-    ProcThreadAttributeSveVectorLength = 30
+    ProcThreadAttributeSveVectorLength = 30,
+    ProcThreadAttributeSmeVectorLength = 31 // since 25H2
 } PROC_THREAD_ATTRIBUTE_NUM;
 
 #ifndef PROC_THREAD_ATTRIBUTE_EXTENDED_FLAGS

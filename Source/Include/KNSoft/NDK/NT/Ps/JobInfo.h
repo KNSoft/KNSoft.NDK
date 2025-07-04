@@ -60,7 +60,8 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectPagePriorityLimit = 49, // JOBOBJECT_PAGE_PRIORITY_LIMIT
     JobObjectServerSiloDiagnosticInformation = 50, // SERVERSILO_DIAGNOSTIC_INFORMATION, // since 24H2
     JobObjectNetworkAccountingInformation = 51, // JOBOBJECT_NETWORK_ACCOUNTING_INFORMATION
-    MaxJobObjectInfoClass = 52
+    JobObjectCpuPartition = 52, // since 25H2
+    MaxJobObjectInfoClass = 53
 } JOBOBJECTINFOCLASS, *PJOBOBJECTINFOCLASS;
 
 #define JOB_OBJECT_LIMIT_SILO_READY 0x00400000
