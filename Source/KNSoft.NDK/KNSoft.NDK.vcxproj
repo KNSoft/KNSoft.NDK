@@ -256,6 +256,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Include\KNSoft\NDK\Assembly\Header.inc" />
+    <None Include="..\Include\KNSoft\NDK\Assembly\NDK.inc" />
+    <None Include="..\Include\KNSoft\NDK\Assembly\NDK.mac" />
     <None Include="..\Include\KNSoft\NDK\NDK.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Bcd.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Dbg.inl" />

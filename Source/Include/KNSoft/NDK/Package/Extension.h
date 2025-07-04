@@ -15,6 +15,16 @@
 // Test combined flags
 #define TEST_FLAGS(val, flags) (((val) & (flags)) == (flags))
 
+#define MAKEDWORD2(ll, lh, hl, hh) (((DWORD)MAKEWORD(hl, hh) << 16) & (DWORD)MAKEWORD(ll, lh))
+
+#define IPV4_LE(v1, v2, v3, v4) MAKEDWORD2(v1, v2, v3, v4)
+#define IPV4_BE(v1, v2, v3, v4) MAKEDWORD2(v4, v3, v2, v1)
+
+#define A8R8G8B8(r, g, b, a) MAKEDWORD2(b, g, r, a)
+#define X8R8G8B8(r, g, b) MAKEDWORD2(b, g, r, 0)
+#define A8B8G8R8(r, g, b, a) MAKEDWORD2(r, g, b, a)
+#define X8B8G8R8(r, g, b) MAKEDWORD2(r, g, b, 0)
+
 #pragma region Size in bytes
 
 #define BYTE_BIT 8UL

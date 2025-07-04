@@ -312,9 +312,10 @@ typedef void * POINTER_32 PVOID32;
 #define LODWORD(l) ((DWORD)(((QWORD)(l)) & 0xffffffff))
 #define HIDWORD(l) ((DWORD)((((QWORD)(l)) >> 32) & 0xffffffff))
 
-#define MAXUCHAR     0xff
-#define MAXUSHORT    0xffff
-#define MAXULONG     0xffffffff
+#define MAXUCHAR    0xff
+#define MAXUSHORT   0xffff
+#define MAXULONG    0xffffffff
+#define MAXQWORD    0xffffffffffffffff
 
 #pragma endregion
 
@@ -625,11 +626,18 @@ struct _SINGLE_LIST_ENTRY64
 #define FIELD_SIZE(type, field) (sizeof(((type*)0)->field))
 #endif
 
+/* ksxxx.inc */
+#if defined(_WIN64)
+#define SizeofPointer 8
+#else
+#define SizeofPointer 4
+#endif
+
 #pragma endregion
 
 /* wdm.h */
 
-#if defined (_WIN64)
+#if defined(_WIN64)
 #define BitScanReverseSizeT BitScanReverse64
 #define BitScanForwardSizeT BitScanForward64
 #else

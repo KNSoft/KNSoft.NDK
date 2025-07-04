@@ -67,6 +67,9 @@
     <Filter Include="Package">
       <UniqueIdentifier>{a566dc55-3916-4927-ae91-86f02a7a5529}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assembly">
+      <UniqueIdentifier>{0bbb76ba-4844-48bd-ad6f-68228ff3e7af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
@@ -532,6 +535,15 @@
     </None>
     <None Include="..\Include\KNSoft\NDK\Package\ArgvParsing.inl">
       <Filter>Package</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Assembly\Header.inc">
+      <Filter>Assembly</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Assembly\NDK.inc">
+      <Filter>Assembly</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Assembly\NDK.mac">
+      <Filter>Assembly</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
