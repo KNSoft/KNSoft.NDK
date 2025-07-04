@@ -1,5 +1,10 @@
-# Visual Studio generated .editorconfig file with C++ settings.
 root = true
+
+[*.{inc,mac,asm,s}]
+
+charset = utf-8
+
+# Visual Studio generated .editorconfig file with C++ settings.
 
 [*.{c,c++,cc,cpp,cppm,cxx,h,h++,hh,hpp,hxx,inl,ipp,ixx,tlh,tli}]
 
