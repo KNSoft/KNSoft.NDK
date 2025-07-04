@@ -7,17 +7,15 @@
 static volatile LONG g_lInit = 0;
 
 static
-MSVC_POST_INITIALIZER(Init1)
+MSVC_POST_CPP_USER_INITIALIZER(Init1)
 {
     InterlockedAdd(&g_lInit, 234);
-    return 0;
 }
 
 static
-MSVC_POST_INITIALIZER(Init2)
+MSVC_POST_CPP_USER_INITIALIZER(Init2)
 {
     InterlockedAdd(&g_lInit, 432);
-    return 0;
 }
 
 TEST_FUNC(MSVC)
@@ -25,4 +23,4 @@ TEST_FUNC(MSVC)
     TEST_OK(g_lInit == 666);
 }
 
-C_ASSERT(TRUE);
+_STATIC_ASSERT(TRUE);
