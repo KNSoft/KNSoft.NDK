@@ -1,12 +1,12 @@
 IFDEF _M_X64
-include ksamd64.inc
+INCLUDE ksamd64.inc
 ; ELSEIFDEF _M_IX86
-; include ks386.inc ; Removed since Windows SDK 10.0.18362.0
+; INCLUDE ks386.inc ; Removed since Windows SDK 10.0.18362.0
 ENDIF
 
-include CallConv.Inc
+INCLUDE CallConv.Inc
 
-include NDK.mac
+INCLUDE NDK.mac
 
 IFDEF _WIN64
 SIZE_T equ <QWORD>

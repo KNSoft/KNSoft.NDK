@@ -160,7 +160,8 @@ NTAPI
 ZwAcquireProcessActivityReference(
     _Out_ PHANDLE ActivityReferenceHandle,
     _In_ HANDLE ParentProcessHandle,
-    _In_ PROCESS_ACTIVITY_TYPE ProcessActivityType);
+    _In_ PROCESS_ACTIVITY_TYPE ProcessActivityType
+    );
 
 NTSYSCALLAPI
 NTSTATUS
@@ -721,7 +722,7 @@ ZwChangeThreadState(
     _In_ THREAD_STATE_CHANGE_TYPE StateChangeType,
     _In_opt_ PVOID ExtendedInformation,
     _In_opt_ SIZE_T ExtendedInformationLength,
-    _In_opt_ ULONG64 Reserved
+    _In_opt_ ULONG Reserved
     );
 
 NTSYSCALLAPI

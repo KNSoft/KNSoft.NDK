@@ -469,7 +469,7 @@ NtChangeThreadState(
     _In_ THREAD_STATE_CHANGE_TYPE StateChangeType,
     _In_opt_ PVOID ExtendedInformation,
     _In_opt_ SIZE_T ExtendedInformationLength,
-    _In_opt_ ULONG64 Reserved
+    _In_opt_ ULONG Reserved
     );
 
 #endif

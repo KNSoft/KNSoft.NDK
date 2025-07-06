@@ -353,6 +353,7 @@ UnitTest_PrintF(
 
     va_start(ArgList, Format);
     UnitTest_PrintFV(Format, ArgList);
+    va_end(ArgList);
 }
 
 VOID
@@ -366,6 +367,7 @@ UnitTest_FormatMessage(
     va_start(ArgList, Format);
     vDbgPrintEx(MAXULONG, DPFLTR_ERROR_LEVEL, Format, ArgList);
     UnitTest_PrintFV(Format, ArgList);
+    va_end(ArgList);
 }
 
 #pragma endregion
