@@ -168,7 +168,8 @@ _STATIC_ASSERT(_1024KB == _1MB &&
 
 #pragma region String
 
-#define _STR_CCH_LEN(quote) (ARRAYSIZE(quote) - 1)
+#define _STR_LEN(quote) (ARRAYSIZE(quote) - 1)
+#define _STR_SIZE(quote) (sizeof(quote) - sizeof(quote[0]))
 
 #define ASCII_CASE_MASK 0b100000
 #define UNICODE_EOL ((DWORD)0x000A000D)
