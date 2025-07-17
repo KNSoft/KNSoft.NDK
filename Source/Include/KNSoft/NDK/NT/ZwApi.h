@@ -4879,6 +4879,73 @@ ZwWorkerFactoryWorkerReady(
     _In_ HANDLE WorkerFactoryHandle
     );
 
+_Must_inspect_result_
+__drv_allocatesMem(Mem)
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWow64AllocateVirtualMemory64(
+    _In_ HANDLE ProcessHandle,
+    _Inout_ _At_(*BaseAddress,
+                 _Readable_bytes_(*RegionSize)
+                 _Writable_bytes_(*RegionSize)
+                 _Post_readable_byte_size_(*RegionSize)) PULONGLONG BaseAddress,
+    _In_ ULONGLONG ZeroBits,
+    _Inout_ PULONGLONG RegionSize,
+    _In_ ULONG AllocationType,
+    _In_ ULONG Protect
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWow64GetNativeSystemInformation(
+    _In_ SYSTEM_INFORMATION_CLASS SystemInformationClass,
+    _In_ PVOID NativeSystemInformation,
+    _In_ ULONG InformationLength,
+    _Out_opt_ PULONG ReturnLength
+    );
+
+NTSYSCALLAPI
+BOOLEAN
+NTAPI
+ZwWow64IsProcessorFeaturePresent(
+    _In_ ULONG ProcessorFeature
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWow64QueryInformationProcess64(
+    _In_ HANDLE ProcessHandle,
+    _In_ PROCESSINFOCLASS ProcessInformationClass,
+    _Out_writes_bytes_to_(ProcessInformationLength, *ReturnLength) PVOID ProcessInformation,
+    _In_ ULONG ProcessInformationLength,
+    _Out_opt_ PULONG ReturnLength
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWow64ReadVirtualMemory64(
+    _In_ HANDLE ProcessHandle,
+    _In_ ULONGLONG BaseAddress,
+    _Out_writes_bytes_to_(NumberOfBytesToRead, *NumberOfBytesRead) PVOID Buffer,
+    _In_ ULONGLONG NumberOfBytesToRead,
+    _Out_opt_ PULONGLONG NumberOfBytesRead
+    );
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWow64WriteVirtualMemory64(
+    _In_ HANDLE ProcessHandle,
+    _In_ ULONGLONG BaseAddress,
+    _In_reads_bytes_(NumberOfBytesToWrite) PVOID Buffer,
+    _In_ ULONGLONG NumberOfBytesToWrite,
+    _Out_opt_ PULONGLONG NumberOfBytesWritten
+    );
+
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
