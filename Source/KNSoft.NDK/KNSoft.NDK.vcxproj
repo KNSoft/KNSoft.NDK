@@ -280,6 +280,9 @@
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.WinAPI.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.CRT.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\KNSoft.Precomp4C.1.0.17-alpha\build\KNSoft.Precomp4C.targets" Condition="Exists('..\packages\KNSoft.Precomp4C.1.0.17-alpha\build\KNSoft.Precomp4C.targets')" />

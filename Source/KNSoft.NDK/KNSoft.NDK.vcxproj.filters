@@ -553,5 +553,8 @@
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.WinAPI.xml">
       <Filter>Win32\API</Filter>
     </Precomp4C_LibCreate>
+    <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.CRT.xml">
+      <Filter>Win32\API</Filter>
+    </Precomp4C_LibCreate>
   </ItemGroup>
 </Project>
