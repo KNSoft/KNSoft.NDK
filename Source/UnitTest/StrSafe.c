@@ -1,17 +1,17 @@
 ﻿/*
- * Test for the StrSafe.h
+ * Test for the StrSafe.inl
  */
 
 #include "UnitTest.h"
 
-#include <KNSoft/NDK/Package/StrSafe.h>
+#include <KNSoft/NDK/Package/StrSafe.inl>
 
 #define DEFINE_TEST_STRING(Name, String)\
 static const char Name##_A[] = String;\
 static const wchar_t Name##_W[] = _A2W(String);
 
-DEFINE_TEST_STRING(TEST_STRING1, "KNSoft.NDK StrSafe.h Test String");
-DEFINE_TEST_STRING(TEST_STRING1_PART1, "KNSoft.NDK StrSafe.h Test");
+DEFINE_TEST_STRING(TEST_STRING1, "KNSoft.NDK StrSafe.inl Test String");
+DEFINE_TEST_STRING(TEST_STRING1_PART1, "KNSoft.NDK StrSafe.inl Test");
 
 TEST_FUNC(StrSafeFunc)
 {

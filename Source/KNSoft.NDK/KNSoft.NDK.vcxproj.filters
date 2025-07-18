@@ -436,7 +436,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h">
       <Filter>Package</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.h">
+    <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.inl">
       <Filter>Package</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h">

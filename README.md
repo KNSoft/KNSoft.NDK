@@ -18,7 +18,7 @@
   - Extension macros and definitions, e.g. `NtCurrentPeb()`, `PEB(64/32)`, `TEB(64/32)`, ...
 - Packages
   - Unit Test Framework
-  - StrSafe.h (different from `strsafe.h` in Windows SDK)
+  - Safe string functions
 
 ## Usage
 
@@ -46,7 +46,7 @@ The following features **are NOT enabled by default**, reference corresponding h
   - [UnitTest.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.h)
   - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.inl)
 - Safe string functions (different from `strsafe.h` in Windows SDK)
-  - [StrSafe.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.h)
+  - [StrSafe.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.inl)
 
 The following features **are enabled by default**, can be excluded by defining corresponding macro:
 

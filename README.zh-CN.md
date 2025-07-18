@@ -18,7 +18,7 @@
   - 扩展的宏和定义，例如：`NtCurrentPeb()`、`PEB(64/32)`、`TEB(64/32)`……
 - 包
   - 单元测试框架
-  - StrSafe.h（与Windows SDK里的`strsafe.h`不同）
+  - 安全字符串函数
 
 ## 用法
 
@@ -46,7 +46,7 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
   - [UnitTest.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.h)
   - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.inl)
 - 安全字符串函数（与Windows SDK里的`strsafe.h`不同）
-  - [StrSafe.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.h)
+  - [StrSafe.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.inl)
 
 下列功能**默认启用**，定义对应宏可进行排除：
 

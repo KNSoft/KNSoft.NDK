@@ -1,9 +1,9 @@
 ﻿/*
- * KNSoft.NDK StrSafe.h package, licensed under the MIT license.
+ * KNSoft.NDK StrSafe.inl package, licensed under the MIT license.
  * Copyright (c) KNSoft.org (https://github.com/KNSoft). All rights reserved.
  *
  * Make C string routines a bit more safe and easy.
- * Not equals to the strsafe.h in Windows SDK.
+ * Similar to strsafe.h in Windows SDK but different.
  *
  * Usually, the return value is the number of characters written, not including null-terminator, so:
  *     Return == 0: No data or an error occurred (e.g. the buffer too small).

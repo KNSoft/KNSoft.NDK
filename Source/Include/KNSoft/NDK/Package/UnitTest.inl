@@ -2,7 +2,7 @@
 
 #include "../NT/NT.h"
 #include "../Win32/Def/WinBase.h"
-#include "StrSafe.h"
+#include "StrSafe.inl"
 #include "UnitTest.h"
 
 #pragma region Prints
