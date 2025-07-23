@@ -14,12 +14,12 @@ _Inline_RtlInitString(
     if (SourceString)
     {
         SIZE_T Size = strlen(SourceString);
-        if (Size > (MAXUSHORT - sizeof(CHAR)))
+        if (Size > ANSI_STRING_MAX_BYTES - sizeof(ANSI_NULL))
         {
-            Size = MAXUSHORT - sizeof(CHAR);
+            Size = ANSI_STRING_MAX_BYTES - sizeof(ANSI_NULL);
         }
         DestinationString->Length = (USHORT)Size;
-        DestinationString->MaximumLength = (USHORT)Size + sizeof(CHAR);
+        DestinationString->MaximumLength = DestinationString->Length + sizeof(ANSI_NULL);
     }
     else
     {
@@ -38,12 +38,12 @@ _Inline_RtlInitStringEx(
     if (SourceString)
     {
         SIZE_T Size = strlen(SourceString);
-        if (Size > (MAXUSHORT - sizeof(CHAR)))
+        if (Size > ANSI_STRING_MAX_BYTES - sizeof(ANSI_NULL))
         {
             return STATUS_NAME_TOO_LONG;
         }
         DestinationString->Length = (USHORT)Size;
-        DestinationString->MaximumLength = (USHORT)Size + sizeof(CHAR);
+        DestinationString->MaximumLength = DestinationString->Length + sizeof(ANSI_NULL);
     }
     else
     {
@@ -100,18 +100,15 @@ _Inline_RtlInitUnicodeString(
     _Out_ PUNICODE_STRING DestinationString,
     _In_opt_z_ PCWSTR SourceString)
 {
-    SIZE_T MaxSize = (MAXUSHORT & ~1) - sizeof(UNICODE_NULL);
- 
     if (SourceString)
     {
         SIZE_T Size = wcslen(SourceString) * sizeof(WCHAR);
- 
-        if (Size > MaxSize)
+        if (Size > UNICODE_STRING_MAX_BYTES - sizeof(UNICODE_NULL))
         {
-            Size = MaxSize;
+            Size = UNICODE_STRING_MAX_BYTES - sizeof(UNICODE_NULL);
         }
         DestinationString->Length = (USHORT)Size;
-        DestinationString->MaximumLength = (USHORT)Size + sizeof(UNICODE_NULL);
+        DestinationString->MaximumLength = DestinationString->Length + sizeof(UNICODE_NULL);
     }
     else
     {
@@ -151,7 +148,7 @@ NTAPI
 _Inline_RtlEraseUnicodeString(
     _Inout_ PUNICODE_STRING String)
 {
-    if (String->Buffer != NULL && String->MaximumLength)
+    if (String->Buffer != NULL && String->MaximumLength != 0)
     {
         memset(String->Buffer, 0, String->MaximumLength);
         String->Length = 0;

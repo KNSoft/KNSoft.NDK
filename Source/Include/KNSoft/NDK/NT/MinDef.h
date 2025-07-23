@@ -317,6 +317,9 @@ typedef void * POINTER_32 PVOID32;
 #define MAXULONG    0xffffffff
 #define MAXQWORD    0xffffffffffffffff
 
+#define ANSI_STRING_MAX_BYTES ((USHORT)65535)
+#define ANSI_STRING_MAX_CHARS (65535)
+
 #pragma endregion
 
 #pragma region Microsoft Specific
