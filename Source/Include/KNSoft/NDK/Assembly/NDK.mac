@@ -351,6 +351,26 @@ $STACKFRAME MACRO b:REQ
 ENDM
 
 ;=====================================================================================
+; brief: Return symbol name of variable or function.
+;=====================================================================================
+
+$SYMBOLNAME MACRO Name:REQ, ArgSize
+
+IFDEF _M_IX86
+
+IFNB <ArgSize>
+    EXITM @CatStr(<_>, <Name>, <@>, %(ArgSize))
+ELSE
+    EXITM @CatStr(<_>, <Name>)
+ENDIF
+
+ELSE
+    EXITM <Name>
+ENDIF
+
+ENDM
+
+;=====================================================================================
 ; brief: Define a public label with or without type.
 ;=====================================================================================
 

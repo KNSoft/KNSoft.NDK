@@ -8,6 +8,10 @@ INCLUDE CallConv.Inc
 
 INCLUDE NDK.mac
 
+TRUE  equ 1
+FALSE equ 0
+NULL  equ 0
+
 IFDEF _WIN64
 SIZE_T equ <QWORD>
 ELSE
