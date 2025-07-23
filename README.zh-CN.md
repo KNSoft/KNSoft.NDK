@@ -19,6 +19,7 @@
 - 包
   - 单元测试框架
   - 安全字符串函数
+  - 命令行解析函数
 
 ## 用法
 
@@ -47,6 +48,8 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
   - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.inl)
 - 安全字符串函数（与Windows SDK里的`strsafe.h`不同）
   - [StrSafe.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.inl)
+- 命令行解析函数
+  - [ArgParse.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/ArgParse.inl)
 
 下列功能**默认启用**，定义对应宏可进行排除：
 
@@ -80,5 +83,6 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
 - Microsoft Learning
 - Microsoft Windows Protocols
 - Windows Internals
+- [Microsoft.Windows.SDK.CRTSource](https://www.nuget.org/packages/Microsoft.Windows.SDK.CRTSource)
 
 以及[KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C)用于生成DLL导入库。

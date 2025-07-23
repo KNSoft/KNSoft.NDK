@@ -268,7 +268,7 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Sid.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\String.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Wow.inl" />
-    <None Include="..\Include\KNSoft\NDK\Package\ArgvParsing.inl" />
+    <None Include="..\Include\KNSoft\NDK\Package\ArgParse.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\Shell32.inl" />

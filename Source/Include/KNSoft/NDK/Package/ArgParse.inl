@@ -1,4 +1,18 @@
-﻿#ifdef TChar
+﻿/*
+ * KNSoft.NDK ArgParse.inl package, licensed under the MIT license.
+ * Copyright (c) KNSoft.org (https://github.com/KNSoft). All rights reserved.
+ *
+ * Provide native implementation of command-line parsing.
+ * See also `_Inline_CommandLineToArgv(A/W)` in "..\Win32\API\Shell32.inl" for usage.
+ * 
+ * Source base on Microsoft UCRT:
+ * 
+ * Microsoft.Windows.SDK.CRTSource (https://www.nuget.org/packages/Microsoft.Windows.SDK.CRTSource)
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license.
+ */
+
+#ifdef TChar
 
 #include "../NDK.h"
 
@@ -76,7 +90,7 @@ ARGPARSE_PARSE_FUNC(TChar)(
         {
             *ArgV++ = ArgPtr;
         }
-        ++ * ArgC;
+        ++*ArgC;
 
         for (;;)
         {
@@ -179,5 +193,7 @@ ARGPARSE_ALLOC_FUNC(TChar)(
     *ArgV = (TChar**)Buffer;
     return STATUS_SUCCESS;
 }
+
+#define ARGPARSE_FREE_FUNC(ArgV) RtlFreeHeap(RtlProcessHeap(), 0, ArgV);
 
 #endif

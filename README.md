@@ -19,6 +19,7 @@
 - Packages
   - Unit Test Framework
   - Safe string functions
+  - Command-line parsing functions
 
 ## Usage
 
@@ -47,6 +48,8 @@ The following features **are NOT enabled by default**, reference corresponding h
   - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.inl)
 - Safe string functions (different from `strsafe.h` in Windows SDK)
   - [StrSafe.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.inl)
+- Command-line parsing functions
+  - [ArgParse.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/ArgParse.inl)
 
 The following features **are enabled by default**, can be excluded by defining corresponding macro:
 
@@ -80,5 +83,6 @@ And public sources were lawfully used:
 - Microsoft Learning
 - Microsoft Windows Protocols
 - Windows Internals
+- [Microsoft.Windows.SDK.CRTSource](https://www.nuget.org/packages/Microsoft.Windows.SDK.CRTSource)
 
 And [KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C) to generate DLL import libraries.

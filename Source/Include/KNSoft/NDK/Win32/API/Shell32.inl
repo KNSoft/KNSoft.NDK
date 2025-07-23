@@ -6,11 +6,11 @@
 #ifndef ARGPARSE_ALLOC_FUNCNAME
 
 #define TChar WCHAR
-#include "../../Package/ArgvParsing.inl"
+#include "../../Package/ArgParse.inl"
 #undef TChar
 
 #define TChar CHAR
-#include "../../Package/ArgvParsing.inl"
+#include "../../Package/ArgParse.inl"
 #undef TChar
 
 #endif
