@@ -10,11 +10,31 @@
             <LanguageStandard>stdcpplatest</LanguageStandard>
             <LanguageStandard_C>stdclatest</LanguageStandard_C>
             <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-            <ObjectFileName>$(IntDir)%(Directory)</ObjectFileName>
+            <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
         </ClCompile>
         <MASM>
-            <ObjectFileName>$(IntDir)%(Directory)</ObjectFileName>
+            <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
         </MASM>
+    </ItemDefinitionGroup>
+
+    <!-- Use static default libraries -->
+    <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+        <ClCompile>
+            <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+        </ClCompile>
+    </ItemDefinitionGroup>
+    <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+        <ClCompile>
+            <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+        </ClCompile>
+    </ItemDefinitionGroup>
+
+    <!-- Disable LTCG and ignore default libraries for LIB -->
+    <ItemDefinitionGroup Condition="'$(ConfigurationType)' == 'StaticLibrary'">
+        <Lib>
+            <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+            <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
+        </Lib>
     </ItemDefinitionGroup>
 
     <!-- MSBuild variable to C/C++ macro -->
@@ -49,18 +69,6 @@
             <PreprocessorDefinitions>MSB_PLATFORM_TARGET="$(PlatformTarget)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_TARGET_PLATFORM_VERSION="$(TargetPlatformVersion)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <PreprocessorDefinitions>MSB_TARGET_PLATFORM_DISPLAY_NAME="$(TargetPlatformDisplayName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-        </ClCompile>
-    </ItemDefinitionGroup>
-
-    <!-- Use static default libraries -->
-    <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
-        <ClCompile>
-            <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-        </ClCompile>
-    </ItemDefinitionGroup>
-    <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
-        <ClCompile>
-            <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
         </ClCompile>
     </ItemDefinitionGroup>
 
