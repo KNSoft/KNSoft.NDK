@@ -4886,10 +4886,7 @@ NTSTATUS
 NTAPI
 ZwWow64AllocateVirtualMemory64(
     _In_ HANDLE ProcessHandle,
-    _Inout_ _At_(*BaseAddress,
-                 _Readable_bytes_(*RegionSize)
-                 _Writable_bytes_(*RegionSize)
-                 _Post_readable_byte_size_(*RegionSize)) PULONGLONG BaseAddress,
+    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*RegionSize) _Writable_bytes_(*RegionSize) _Post_readable_byte_size_(*RegionSize)) PULONGLONG BaseAddress,
     _In_ ULONGLONG ZeroBits,
     _Inout_ PULONGLONG RegionSize,
     _In_ ULONG AllocationType,
