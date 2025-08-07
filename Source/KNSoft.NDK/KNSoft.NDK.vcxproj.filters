@@ -545,6 +545,9 @@
     <None Include="..\Include\KNSoft\NDK\Assembly\NDK.mac">
       <Filter>Assembly</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Stack.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">
