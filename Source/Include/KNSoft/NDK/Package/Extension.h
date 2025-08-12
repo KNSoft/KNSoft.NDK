@@ -197,7 +197,6 @@ _STATIC_ASSERT(_1024KB == _1MB &&
 #endif
 
 /* Patch _STATIC_ASSERT to avoid confusion amount static_assert, _Static_assert, _STATIC_ASSERT and C_ASSERT */
-
 #undef _STATIC_ASSERT
 #ifdef __cplusplus
 #define _STATIC_ASSERT(expr) static_assert((expr), #expr)
@@ -215,7 +214,7 @@ _STATIC_ASSERT(_1024KB == _1MB &&
 
 #if defined _M_IX86
 #define MSVC_LINKER_SYMBOL_PREFIX "_"
-#elif defined _M_X64 || defined _M_ARM || defined _M_ARM64
+#else
 #define MSVC_LINKER_SYMBOL_PREFIX ""
 #endif
 

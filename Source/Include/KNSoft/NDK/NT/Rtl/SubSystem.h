@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../MinDef.h"
+#include "../Rtl/Process/Process.h"
 #include "../Lpc/Base.h"
 
 EXTERN_C_START

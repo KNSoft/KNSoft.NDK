@@ -51,7 +51,7 @@ NtWriteCurrentTebByte(
     unsigned int Offset,
     unsigned char Value)
 {
-#if defined(_M_X64)
+#if defined(_M_X64) && !defined(_M_ARM64EC)
     __writegsbyte
 #elif defined(_M_IX86)
     __writefsbyte
@@ -67,7 +67,7 @@ NtWriteCurrentTebUshort(
     unsigned int Offset,
     unsigned short Value)
 {
-#if defined(_M_X64)
+#if defined(_M_X64) && !defined(_M_ARM64EC)
     __writegsword
 #elif defined(_M_IX86)
     __writefsword
@@ -84,7 +84,7 @@ NtWriteCurrentTebUlong(
     unsigned int Value
     )
 {
-#if defined(_M_X64)
+#if defined(_M_X64) && !defined(_M_ARM64EC)
     __writegsdword
 #elif defined(_M_IX86)
     __writefsdword
@@ -107,7 +107,7 @@ NtWriteCurrentTebUlonglong(
     NtWriteCurrentTebUlong(Offset, li.LowPart);
     NtWriteCurrentTebUlong(Offset + sizeof(ULONG), li.HighPart);
 #else
-#if defined(_M_X64)
+#if defined(_M_X64) && !defined(_M_ARM64EC)
     __writegsqword
 #elif defined(_M_IX86)
     __writefsqword
