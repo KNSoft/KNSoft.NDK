@@ -49,19 +49,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <OutDir>$(SolutionDir)OutDir\$(PlatformTarget)\</OutDir>
-    <IntDir>IntDir\$(PlatformTarget)\</IntDir>
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\phnt;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)OutDir\$(KnsoftArch)\</OutDir>
+    <IntDir>IntDir\$(KnsoftArch)\</IntDir>
+    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)OutDir\$(PlatformTarget)\</OutDir>
-    <IntDir>IntDir\$(PlatformTarget)\</IntDir>
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\phnt;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)OutDir\$(KnsoftArch)\</OutDir>
+    <IntDir>IntDir\$(KnsoftArch)\</IntDir>
+    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)OutDir\$(PlatformTarget)\</OutDir>
-    <IntDir>IntDir\$(PlatformTarget)\</IntDir>
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\phnt;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)OutDir\$(KnsoftArch)\</OutDir>
+    <IntDir>IntDir\$(KnsoftArch)\</IntDir>
+    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
