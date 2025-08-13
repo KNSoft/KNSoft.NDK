@@ -16,7 +16,7 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [x64, x86, ARM64]
+        platform: [x64, x86, ARM64, ARM64EC]
         config: [Debug, Release]
       fail-fast: false
     runs-on: windows-latest
