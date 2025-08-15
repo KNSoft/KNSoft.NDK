@@ -254,11 +254,3 @@ MSVC_LINKER_FORCE_INCLUDE(_KNSoft_NDK_PostCppUserInitializer_##x)\
 void __cdecl x(void)
 
 #pragma endregion
-
-#pragma region MSBuild
-
-#define MSB_LIB_PATH(LibName) (MSB_PLATFORMTARGET"/"MSB_CONFIGURATION"/"##LibName)
-
-/* Other MSB_* are defined in Directory.Build.props */
-
-#pragma endregion
