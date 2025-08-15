@@ -226,6 +226,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\KernelBase.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Hash.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ole32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\SecHost.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\User32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\UserMgrCli.h" />
