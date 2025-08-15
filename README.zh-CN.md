@@ -41,6 +41,8 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
 - Ntdll Hash API (`(A_SHA/MD4/MD5)(Init/Update/Final)`)
   - [Ntdll.Hash.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Win32/API/Ntdll.Hash.h)
   - KNSoft.NDK.Ntdll.Hash.lib (由[KNSoft.NDK.Ntdll.Hash.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.Hash.xml)生成)
+- Ntdll CRT
+  - KNSoft.NDK.Ntdll.CRT.lib (由[KNSoft.NDK.Ntdll.CRT.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.CRT.xml)生成)
 - Windows API 引入库补充
   - KNSoft.NDK.WinAPI.lib (由[KNSoft.NDK.WinAPI.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.WinAPI.xml)生成)
 - 单元测试框架
@@ -61,7 +63,7 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
 
 ![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/msbuild.yml)
 
-[KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK)始终跟进最新的Windows NT和规范，目标x86、x64和ARM64平台。
+[KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK)始终跟进最新的Windows NT和规范，目标x86、x64、ARM64和ARM64EC平台。
 
 **仅支持最新的MSVC生成工具和SDK。**
 

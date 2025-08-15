@@ -41,6 +41,8 @@ The following features **are NOT enabled by default**, reference corresponding h
 - Ntdll Hash API (`(A_SHA/MD4/MD5)(Init/Update/Final)`)
   - [Ntdll.Hash.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Win32/API/Ntdll.Hash.h)
   - KNSoft.NDK.Ntdll.Hash.lib (Generated from [KNSoft.NDK.Ntdll.Hash.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.Hash.xml))
+- Ntdll CRT
+  - KNSoft.NDK.Ntdll.CRT.lib (Generated from [KNSoft.NDK.Ntdll.CRT.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.CRT.xml))
 - Windows API import library addendum
   - KNSoft.NDK.WinAPI.lib (Generated from [KNSoft.NDK.WinAPI.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.WinAPI.xml))
 - Unit Test Framework
@@ -61,7 +63,7 @@ The following features **are enabled by default**, can be excluded by defining c
 
 ![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/msbuild.yml)
 
-[KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) always follow up the latest Windows NT and specifications, targets to x86, x64 and ARM64 platforms.
+[KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) always follow up the latest Windows NT and specifications, targets to x86, x64, ARM64, and ARM64EC platforms.
 
 **Only support the latest MSVC generation tools and SDKs.**
 
