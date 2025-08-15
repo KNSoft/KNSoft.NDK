@@ -201,7 +201,11 @@ _STATIC_ASSERT(_1024KB == _1MB &&
 #ifdef __cplusplus
 #define _STATIC_ASSERT(expr) static_assert((expr), #expr)
 #else
+#if __STDC_VERSION__ >= 201112L
 #define _STATIC_ASSERT(expr) _Static_assert((expr), #expr)
+#else
+#define _STATIC_ASSERT C_ASSERT
+#endif
 #endif
 
 #define __A2U8(quote) u8##quote
