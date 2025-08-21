@@ -215,6 +215,7 @@
   <ItemGroup>
     <ClCompile Include="Extension\MSVC.c" />
     <ClCompile Include="Main.c" />
+    <ClCompile Include="NT\Bcd.c" />
     <ClCompile Include="NT\PebLdr.c" />
     <ClCompile Include="NT\PebTebKUSD.c" />
     <ClCompile Include="StrSafe.c" />

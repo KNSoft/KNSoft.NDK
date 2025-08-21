@@ -13,6 +13,9 @@
     <ClCompile Include="Extension\MSVC.c">
       <Filter>Extension</Filter>
     </ClCompile>
+    <ClCompile Include="NT\Bcd.c">
+      <Filter>NT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NT">
