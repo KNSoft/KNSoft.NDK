@@ -2,8 +2,6 @@
 
 #include "../MinDef.h"
 
-#include <winioctl.h>
-
 EXTERN_C_START
 
 typedef enum _FILE_INFORMATION_CLASS

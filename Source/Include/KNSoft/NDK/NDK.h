@@ -8,10 +8,13 @@
 
 #include "NT/NT.h"
 
-/* Windows.h */
+/* Windows.h and winioctl.h */
 
 #define _WINSOCKAPI_ // Use WinSock2.h
 #include <Windows.h>
+
+#include <initguid.h>
+#include <winioctl.h>
 
 #include "Win32/Def/WinBase.h"
 #include "Win32/Def/WinUser.h"

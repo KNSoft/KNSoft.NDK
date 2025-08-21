@@ -61,7 +61,7 @@
 
 #pragma endregion Windows.h
 
-#pragma region Include windef.h, ntdef.h, wingdi.h and guiddef.h
+#pragma region Include windef.h, ntdef.h, guiddef.h, wingdi.h, and winioctl.h
 
 /* windef.h */
 
@@ -264,6 +264,7 @@ typedef SID* PSID;
 
 #include <wingdi.h>
 #include <guiddef.h>
+#include <winioctl.h>
 
 #pragma endregion
 

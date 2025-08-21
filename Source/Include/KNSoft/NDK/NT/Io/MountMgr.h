@@ -2,8 +2,6 @@
 
 #include "../MinDef.h"
 
-#include <winioctl.h>
-
 EXTERN_C_START
 
 #define MOUNTMGR_DEVICE_NAME L"\\Device\\MountPointManager"
