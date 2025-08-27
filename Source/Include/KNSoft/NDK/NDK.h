@@ -41,7 +41,7 @@
 /* Enable extensions */
 
 #ifndef _KNSOFT_NDK_NO_EXTENSION
-#include "Package/Extension.h"
+#include "NDK.Ext.h"
 #endif
 
 /* Sanity checks */

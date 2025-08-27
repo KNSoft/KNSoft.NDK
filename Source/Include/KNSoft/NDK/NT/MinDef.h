@@ -11,8 +11,9 @@
 #define DBG 1
 #endif
 
-/* FIXME: Not sure */
-#define NTDDI_WIN10_GE NTDDI_WIN11_ZN
+/* Patch undocumented NTDDI versions */
+#define NTDDI_WIN10_GE NTDDI_WIN11_ZN /* Introduced in Windows SDK 10.0.26100.1 (Win11), later than all NTDDI_WIN10_* */
+#define NTDDI_WIN11_DT NTDDI_WIN11_GE /* Introduced in Windows SDK 10.0.26100.3916, later than NTDDI_WIN11_GE */
 
 #pragma region Define architecture
 
@@ -288,25 +289,13 @@ typedef SID* PSID;
 #define NT_CODE_MASK 0xffff
 #define NT_CODE(Status) (((ULONG)(Status)) & NT_CODE_MASK)
 
-FORCEINLINE
-NTSTATUS
-MAKE_NTSTATUS(
-    _In_ ULONG Severity,
-    _In_ ULONG Facility,
-    _In_ ULONG Code)
-{
-    return (NTSTATUS)(((Severity & NT_SEVERITY_MASK) << NT_SEVERITY_SHIFT) |
-                      ((Facility & NT_FACILITY_MASK) << NT_FACILITY_SHIFT) |
-                      (Code & NT_CODE_MASK));
-}
-
 #pragma endregion
 
 #pragma region Basic Types
 
 typedef unsigned __int64 QWORD, near* PQWORD, far* LPQWORD;
 typedef DOUBLE *PDOUBLE;
-typedef void * POINTER_32 PVOID32;
+typedef void* POINTER_32 PVOID32;
 
 #define MAKEDWORD(l, h) ((DWORD)(((WORD)(((DWORD_PTR)(l)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(h)) & 0xffff))) << 16))
 #define MAKEQWORD(l, h) ((QWORD)(((DWORD)(((DWORD_PTR)(l)) & 0xffffffff)) | ((QWORD)((DWORD)(((DWORD_PTR)(h)) & 0xffffffff))) << 32))
@@ -337,20 +326,32 @@ typedef void * POINTER_32 PVOID32;
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
-#if __STDC_VERSION__ >= 202311L
-#ifndef __cplusplus
-#define nullptr ((void *)0)
-#endif
-typedef __typeof__(nullptr) nullptr_t;
-#endif
-
 #if defined(__cplusplus)
 #define typeof decltype
 #elif __STDC_VERSION__ < 202311L && _MSC_FULL_VER >= 193933428
 #define typeof __typeof__
 #endif
 
+#if __STDC_VERSION__ >= 202311L
+#ifndef __cplusplus
+#define nullptr ((void *)0)
+#endif
+typedef typeof(nullptr) nullptr_t;
+#endif
+
 #define FIELD_TYPE(type, field) typeof(((type*)NULL)->field)
+
+/* Patch _STATIC_ASSERT to avoid confusion amount static_assert, _Static_assert, _STATIC_ASSERT and C_ASSERT */
+#undef _STATIC_ASSERT
+#ifdef __cplusplus
+#define _STATIC_ASSERT(expr) static_assert((expr), #expr)
+#else
+#if __STDC_VERSION__ >= 201112L
+#define _STATIC_ASSERT(expr) _Static_assert((expr), #expr)
+#else
+#define _STATIC_ASSERT C_ASSERT
+#endif
+#endif
 
 #pragma endregion
 
@@ -598,13 +599,13 @@ struct _SINGLE_LIST_ENTRY64
 #pragma region Pointer & Align & Size
 
 /* ntifs.h */
-#define RtlOffsetToPointer(B,O) ((PCHAR)(((PCHAR)(B)) + ((ULONG_PTR)(O))))
-#define RtlPointerToOffset(B,P) ((ULONG)(((PCHAR)(P)) - ((PCHAR)(B))))
+#define RtlOffsetToPointer(B, O) ((PCHAR)(((PCHAR)(B)) + ((ULONG_PTR)(O))))
+#define RtlPointerToOffset(B, P) ((ULONG)(((PCHAR)(P)) - ((PCHAR)(B))))
 
 /* fltKernel.h */
 #define Add2Ptr(P,I) ((PVOID)((PUCHAR)(P) + (I)))
 #define PtrOffset(B,O) ((ULONG)((ULONG_PTR)(O) - (ULONG_PTR)(B)))
-#define ROUND_TO_SIZE(_length, _alignment) ((((ULONG_PTR)(_length)) + ((_alignment)-1)) & ~(ULONG_PTR)((_alignment) - 1))
+#define ROUND_TO_SIZE(_length, _alignment) ((((ULONG_PTR)(_length)) + ((_alignment) - 1)) & ~(ULONG_PTR)((_alignment) - 1))
 #define IS_ALIGNED(_pointer, _alignment) ((((ULONG_PTR)(_pointer)) & ((_alignment) - 1)) == 0)
 
 /* wdm.h */

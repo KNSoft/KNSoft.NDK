@@ -1,12 +1,12 @@
-﻿/* KNSoft.NDK extension package, native addendum */
+﻿/* KNSoft.NDK extensions */
 
 #pragma once
 
 #ifdef _KNSOFT_NDK_NO_EXTENSION
-#pragma message("KNSoft.NDK: Extension.h is included but _KNSOFT_NDK_NO_EXTENSION is defineded.")
+#pragma message("KNSoft.NDK: NDK.Ext.h is included but _KNSOFT_NDK_NO_EXTENSION is defineded.")
 #endif
 
-#include "../NT/MinDef.h"
+#include "NT/MinDef.h"
 
 // Gets equality of two value after masked
 #define IS_EQUAL_MASKED(val1, val2, mask) (!(((val1) ^ (val2)) & (mask)))
@@ -14,8 +14,6 @@
 #define COMBINE_FLAGS(val, uflag, bEnable) ((bEnable) ? ((val) | (uflag)) : ((val) & ~(uflag)))
 // Test combined flags
 #define TEST_FLAGS(val, flags) (((val) & (flags)) == (flags))
-
-#define MAKEDWORD2(ll, lh, hl, hh) (((DWORD)MAKEWORD(hl, hh) << 16) & (DWORD)MAKEWORD(ll, lh))
 
 #define IPV4_LE(v1, v2, v3, v4) MAKEDWORD2(v1, v2, v3, v4)
 #define IPV4_BE(v1, v2, v3, v4) MAKEDWORD2(v4, v3, v2, v1)
@@ -159,13 +157,6 @@ _STATIC_ASSERT(_1024KB == _1MB &&
 
 #pragma endregion
 
-#pragma region Alignments
-
-#define CODE_ALIGNMENT 0x10
-#define STRING_ALIGNMENT 0x4
-
-#pragma endregion
-
 #pragma region String
 
 #define _STR_LEN(quote) (ARRAYSIZE(quote) - 1)
@@ -196,18 +187,6 @@ _STATIC_ASSERT(_1024KB == _1MB &&
 #define IS_WIN64 FALSE
 #endif
 
-/* Patch _STATIC_ASSERT to avoid confusion amount static_assert, _Static_assert, _STATIC_ASSERT and C_ASSERT */
-#undef _STATIC_ASSERT
-#ifdef __cplusplus
-#define _STATIC_ASSERT(expr) static_assert((expr), #expr)
-#else
-#if __STDC_VERSION__ >= 201112L
-#define _STATIC_ASSERT(expr) _Static_assert((expr), #expr)
-#else
-#define _STATIC_ASSERT C_ASSERT
-#endif
-#endif
-
 #define __A2U8(quote) u8##quote
 #define _A2U8(quote) __A2U8(quote)
 
@@ -216,7 +195,7 @@ _STATIC_ASSERT(_1024KB == _1MB &&
 
 /* _CRT_LINKER_SYMBOL_PREFIX and _CRT_LINKER_FORCE_INCLUDE */
 
-#if defined _M_IX86
+#if defined(_M_IX86)
 #define MSVC_LINKER_SYMBOL_PREFIX "_"
 #else
 #define MSVC_LINKER_SYMBOL_PREFIX ""

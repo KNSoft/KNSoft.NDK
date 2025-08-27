@@ -36,6 +36,7 @@
 #include "Rtl/ActCtx.h"
 
 #ifndef _KNSOFT_NDK_NO_EXTENSION
+#include "Extension/Misc.h"
 #include "Extension/Runtime.h"
 #include "Extension/Security.h"
 #endif

@@ -433,9 +433,6 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32KApi.h">
       <Filter>NT\Win32K</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Package\Extension.h">
-      <Filter>Package</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.inl">
       <Filter>Package</Filter>
     </ClInclude>
@@ -480,6 +477,10 @@
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ole32.h">
       <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NDK.Ext.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Extension\Misc.h">
+      <Filter>NT\Extension</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
