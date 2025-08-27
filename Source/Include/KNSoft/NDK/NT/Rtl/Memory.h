@@ -39,7 +39,6 @@ RtlFillMemoryNonTemporal(
 
 #pragma region Memory
 
-#if (NTDDI_VERSION >= NTDDI_WIN2K)
 _Must_inspect_result_
 NTSYSAPI
 SIZE_T
@@ -47,10 +46,7 @@ NTAPI
 RtlCompareMemoryUlong(
     _In_reads_bytes_(Length) PVOID Source,
     _In_ SIZE_T Length,
-    _In_ ULONG Pattern
-);
-
-#endif
+    _In_ ULONG Pattern);
 
 #if defined(_M_AMD64) && !defined(_M_ARM64EC)
 
@@ -305,5 +301,13 @@ RtlIsZeroMemory(
     _In_ PVOID Buffer,
     _In_ SIZE_T Length);
 #endif
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCopyMappedMemory(
+    _Out_writes_bytes_all_(Length) PVOID Destination,
+    _In_reads_bytes_(Length) PVOID Source,
+    _In_ SIZE_T Length);
 
 EXTERN_C_END

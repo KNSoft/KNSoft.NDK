@@ -1901,7 +1901,43 @@ PssNtQuerySnapshot(
     _In_ ULONG BufferLength
     );
 
-#endif
+// rev
+typedef struct _PSSNT_WALK_MARKER_INFO
+{
+    ULONG Signature; // Win32: 0x4D575350 // 'PSSM'
+    HANDLE SectionHandle;
+} PSSNT_WALK_MARKER_INFO, *PNPSSNT_WALK_MARKER_INFO;
+    
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+PssNtWalkSnapshot(
+    _In_ HANDLE SnapshotHandle,
+    _In_ ULONG InformationClass,
+    _In_ HANDLE WalkMarkerHandle,
+    _Out_writes_bytes_(BufferLength) PVOID Buffer,
+    _In_ ULONG BufferLength
+    );
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+PssNtFreeWalkMarker(
+    _Inout_ PHANDLE WalkMarkerHandle
+    );
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+PssNtValidateDescriptor(
+    _In_ HANDLE SnapshotHandle,
+    _In_opt_ PVOID ExceptionAddress
+    );
+
+#endif /* (NTDDI_VERSION >= NTDDI_WINBLUE) */
 
 // rev
 /**

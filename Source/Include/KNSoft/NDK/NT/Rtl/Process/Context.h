@@ -147,6 +147,15 @@ RtlLocateExtendedFeature(
     _Out_opt_ PULONG Length);
 
 NTSYSAPI
+PVOID
+NTAPI
+RtlLocateExtendedFeature2(
+    _In_ PCONTEXT_EX ContextEx,
+    _In_ ULONG FeatureId,
+    _In_ XSTATE_CONFIGURATION XState,
+    _Out_opt_ PULONG Length);
+
+NTSYSAPI
 PCONTEXT
 NTAPI
 RtlLocateLegacyContext(

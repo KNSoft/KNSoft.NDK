@@ -381,4 +381,12 @@ RtlNotifyFeatureToggleUsage(
     _In_ ULONG Flags
     );
 
+// rev
+NTSYSAPI
+ULONG
+NTAPI
+RtlGetFeatureTogglesChangeToken(
+    VOID
+    );
+
 EXTERN_C_END

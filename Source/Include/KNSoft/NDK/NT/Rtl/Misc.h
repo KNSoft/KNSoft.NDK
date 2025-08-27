@@ -872,4 +872,11 @@ RtlComputeCrc32(
     _In_ PVOID Buffer,
     _In_ ULONG Length);
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
+NTSYSAPI
+ULONG_PTR
+NTAPI
+RtlGetReturnAddressHijackTarget(VOID);
+#endif
+
 EXTERN_C_END

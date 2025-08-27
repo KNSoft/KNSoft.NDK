@@ -102,6 +102,17 @@ RtlGetNtProductType(
     _Out_ PNT_PRODUCT_TYPE NtProductType);
 #endif
 
+// private
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlGetProductInfo(
+    _In_ ULONG OSMajorVersion,
+    _In_ ULONG OSMinorVersion,
+    _In_ ULONG SpMajorVersion,
+    _In_ ULONG SpMinorVersion,
+    _Out_ PULONG ReturnedProductType);
+
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 NTSYSAPI
 ULONG

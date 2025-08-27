@@ -1137,11 +1137,29 @@ typedef IN_ADDR const *PCIN_ADDR;
 typedef IN6_ADDR const *PCIN6_ADDR;
 
 NTSYSAPI
+PSTR
+NTAPI
+RtlIpv4AddressToStringA(
+    _In_ PCIN_ADDR Address,
+    _Out_writes_(16) PSTR AddressString
+);
+
+NTSYSAPI
 PWSTR
 NTAPI
 RtlIpv4AddressToStringW(
     _In_ PCIN_ADDR Address,
     _Out_writes_(16) PWSTR AddressString
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlIpv4AddressToStringExA(
+    _In_ PCIN_ADDR Address,
+    _In_ USHORT Port,
+    _Out_writes_to_(*AddressStringLength, *AddressStringLength) PSTR AddressString,
+    _Inout_ PULONG AddressStringLength
 );
 
 NTSYSAPI
@@ -1155,12 +1173,31 @@ RtlIpv4AddressToStringExW(
 );
 
 NTSYSAPI
+PSTR
+NTAPI
+RtlIpv6AddressToStringA(
+    _In_ PCIN6_ADDR Address,
+    _Out_writes_(46) PSTR AddressString
+);
+
+NTSYSAPI
 PWSTR
 NTAPI
 RtlIpv6AddressToStringW(
     _In_ PCIN6_ADDR Address,
     _Out_writes_(46) PWSTR AddressString
 );
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlIpv6AddressToStringExA(
+    _In_ PCIN6_ADDR Address,
+    _In_ ULONG ScopeId,
+    _In_ USHORT Port,
+    _Out_writes_to_(*AddressStringLength, *AddressStringLength) PSTR AddressString,
+    _Inout_ PULONG AddressStringLength
+    );
 
 NTSYSAPI
 NTSTATUS
@@ -1176,11 +1213,31 @@ RtlIpv6AddressToStringExW(
 NTSYSAPI
 NTSTATUS
 NTAPI
+RtlIpv4StringToAddressA(
+    _In_ PCSTR AddressString,
+    _In_ BOOLEAN Strict,
+    _Out_ PCSTR* Terminator,
+    _Out_ PIN_ADDR Address
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
 RtlIpv4StringToAddressW(
     _In_ PCWSTR AddressString,
     _In_ BOOLEAN Strict,
-    _Out_ LPCWSTR * Terminator,
+    _Out_ LPCWSTR* Terminator,
     _Out_ PIN_ADDR Address
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlIpv4StringToAddressExA(
+    _In_ PCSTR AddressString,
+    _In_ BOOLEAN Strict,
+    _Out_ PIN_ADDR Address,
+    _Out_ PUSHORT Port
 );
 
 NTSYSAPI
@@ -1196,10 +1253,29 @@ RtlIpv4StringToAddressExW(
 NTSYSAPI
 NTSTATUS
 NTAPI
+RtlIpv6StringToAddressA(
+    _In_ PCSTR AddressString,
+    _Out_ PCSTR* Terminator,
+    _Out_ PIN6_ADDR Address
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
 RtlIpv6StringToAddressW(
     _In_ PCWSTR AddressString,
-    _Out_ PCWSTR * Terminator,
+    _Out_ PCWSTR* Terminator,
     _Out_ PIN6_ADDR Address
+);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlIpv6StringToAddressExA(
+    _In_ PCSTR AddressString,
+    _Out_ PIN6_ADDR Address,
+    _Out_ PULONG ScopeId,
+    _Out_ PUSHORT Port
 );
 
 NTSYSAPI

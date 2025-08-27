@@ -269,6 +269,20 @@ RtlAddProcessTrustLabelAce(
     _In_ UCHAR AceType, // SYSTEM_PROCESS_TRUST_LABEL_ACE_TYPE
     _In_ ACCESS_MASK AccessMask);
 
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlAddAccessFilterAce(
+    _Inout_ PACL Acl,
+    _In_ ULONG AceRevision,
+    _In_ ULONG AceFlags, // TRUST_PROTECTED_FILTER_ACE_FLAG
+    _In_ PSID AccessFilterSid,
+    _In_ UCHAR AceType, // SYSTEM_FILTERING_ACE_TYPE
+    _In_ ACCESS_MASK AccessMask,
+    _In_ PVOID Buffer, // SYSTEM_ACCESS_FILTER_ACE
+    _In_ USHORT BufferLength);
+
 #endif
 
 EXTERN_C_END
