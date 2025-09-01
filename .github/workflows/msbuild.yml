@@ -16,10 +16,11 @@ jobs:
   build:
     strategy:
       matrix:
+        os: [windows-latest, windows-11-arm]
         platform: [x64, x86, ARM64, ARM64EC]
         config: [Debug, Release]
       fail-fast: false
-    runs-on: windows-latest
+    runs-on: ${{matrix.os}}
     steps:
     - name: Source checkout
       uses: actions/checkout@main
@@ -30,7 +31,7 @@ jobs:
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild ${{env.SOLUTION_FILE_PATH}} /restore /m /p:Configuration=${{matrix.config}} /p:Platform=${{matrix.platform}} /p:RestorePackagesConfig=true
-    - name: Run Unit Test (x64, x86)
-      if: ${{ matrix.platform == 'x64' || matrix.platform == 'x86' }}
+    - name: Run Unit Test
+      if: ${{(matrix.os == 'windows-latest' && (matrix.platform == 'x64' || matrix.platform == 'x86') || matrix.os == 'windows-11-arm')}}
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: .\Source\OutDir\${{matrix.platform}}\${{matrix.config}}\UnitTest.exe -Run
