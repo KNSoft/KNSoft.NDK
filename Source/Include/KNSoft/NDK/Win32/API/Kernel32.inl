@@ -1009,6 +1009,14 @@ _Inline_SetLastError(
 }
 
 __inline
+LCID
+WINAPI
+_Inline_GetThreadLocale(void)
+{
+    return NtReadTeb(CurrentLocale);
+}
+
+__inline
 BOOL
 WINAPI
 _Inline_IsProcessorFeaturePresent(
