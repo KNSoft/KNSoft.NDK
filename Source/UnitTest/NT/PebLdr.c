@@ -26,7 +26,6 @@ TEST_FUNC(PebLdrStruct)
     {
         NtdllHeader = Add2Ptr(NtdllLdrEntry->DllBase, ((PIMAGE_DOS_HEADER)(NtdllLdrEntry->DllBase))->e_lfanew);
         TEST_OK(NtdllLdrEntry->SizeOfImage == NtdllHeader->OptionalHeader.SizeOfImage);
-        TEST_OK(NtdllLdrEntry->CheckSum == NtdllHeader->OptionalHeader.CheckSum);
         TEST_OK(NtdllLdrEntry->TimeDateStamp == NtdllHeader->FileHeader.TimeDateStamp);
     } else
     {

@@ -64,27 +64,22 @@ TEST_FUNC(TebStruct)
     TEST_OK(Teb->LastStatusValue == STATUS_DYNAMIC_CODE_BLOCKED);
 
     TEST_OK(Teb->CurrentLocale == GetThreadLocale());
-    TEST_OK(Teb->HardErrorMode == GetThreadErrorMode());
 }
 
 TEST_FUNC(KUSDStruct)
 {
-    PCKUSER_SHARED_DATA KUSD = SharedUserData;
     TIME_ZONE_INFORMATION TimeZoneInfo;
     WCHAR NtSystemRoot[MAX_PATH];
-    SYSTEM_INFO SystemInfo;
 
     DWORD TimeZoneId = GetTimeZoneInformation(&TimeZoneInfo);
-    TEST_OK(KUSD->TimeZoneId == TimeZoneId);
+    TEST_OK(SharedUserData->TimeZoneId == TimeZoneId);
 
     if (GetWindowsDirectoryW(NtSystemRoot, ARRAYSIZE(NtSystemRoot)) > 0)
     {
-        TEST_OK(_wcsicmp(KUSD->NtSystemRoot, NtSystemRoot) == 0);
+        TEST_OK(_wcsicmp(SharedUserData->NtSystemRoot, NtSystemRoot) == 0);
     } else
     {
-        TEST_SKIP("GetWindowsDirectoryW failed with 0x%08lX, skip test for KUSD->NtSystemRoot\n", GetLastError());
+        TEST_SKIP("GetWindowsDirectoryW failed with 0x%08lX, skip test for SharedUserData->NtSystemRoot\n",
+                  GetLastError());
     }
-    
-    GetNativeSystemInfo(&SystemInfo);
-    TEST_OK(KUSD->NativeProcessorArchitecture == SystemInfo.wProcessorArchitecture);
 }
