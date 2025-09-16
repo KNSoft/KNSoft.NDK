@@ -5,54 +5,25 @@
 ;=====================================================================================
 
 ;=====================================================================================
-; brief: Get low part or high part of a value.
-; example: $LOWORD(022334455h) is 04455h.
-;=====================================================================================
-
-$LOBYTE MACRO v
-    EXITM <v AND 0FFh>
-ENDM
-
-$HIBYTE MACRO v
-    EXITM <(v SHR 8) AND 0FFh>
-ENDM
-
-$LOWORD MACRO v
-    EXITM <v AND 0FFFFh>
-ENDM
-
-$HIWORD MACRO v
-    EXITM <(v SHR 16) AND 0FFFFh>
-ENDM
-
-$LODWORD MACRO v
-    EXITM <v AND 0FFFFFFFFh>
-ENDM
-
-$HIDWORD MACRO v
-    EXITM <(v SHR 32) AND 0FFFFFFFFh>
-ENDM
-
-;=====================================================================================
 ; brief: Make a WORD/DWORD/QWORD.
 ; example: $MAKEDWORD(1, 2) is 000020001h.
 ;          $MAKEDWORD2(1, 2, 3, 4) is 004030201h.
 ;=====================================================================================
 
 $MAKEWORD MACRO l, h
-    EXITM <($LOBYTE(h) SHL 8) OR $LOBYTE(l)>
+    EXITM <(((LOW h) SHL 8) OR (LOW l))>
 ENDM
 
 $MAKEDWORD MACRO l, h
-    EXITM <($LOWORD(h) SHL 8) OR $LOWORD(l)>
+    EXITM <(((LOWORD h) SHL 8) OR (LOWORD l))>
 ENDM
 
 $MAKEQWORD MACRO l, h
-    EXITM <($LODWORD(h) SHL 8) OR $LODWORD(l)>
+    EXITM <(((LOW32 h) SHL 8) OR (LOW32 l))>
 ENDM
 
 $MAKEDWORD2 MACRO ll, lh, hl, hh
-    EXITM <($LOBYTE(hh) SHL 24) OR ($LOBYTE(hl) SHL 16) OR ($LOBYTE(lh) SHL 8) OR $LOBYTE(ll)>
+    EXITM <(((LOW hh) SHL 24) OR ((LOW hl) SHL 16) OR ((LOW lh) SHL 8) OR (LOW ll))>
 ENDM
 
 ;=====================================================================================
@@ -72,7 +43,7 @@ ENDM
 ;=====================================================================================
 ; brief: Make a DWORD for various color formats.
 ; example: $A8R8G8B8(255, 0, 0) means red color in A8R8G8B8 format.
-;          $RGB(0, 255, 0) means blue color and compatible with GDI COLORREF value.
+;          $RGB(0, 0, 255) means blue color and compatible with GDI COLORREF value.
 ;=====================================================================================
 
 $A8R8G8B8 MACRO r, g, b, a
@@ -100,35 +71,35 @@ ENDM
 ;=====================================================================================
 
 $MAKELANGID MACRO PrimaryLangId, SubLangId
-    EXITM <($LOWORD(SubLangId) SHL 10) OR $LOWORD(PrimaryLangId)>
+    EXITM <(((LOWORD SubLangId) SHL 10) OR (LOWORD PrimaryLangId))>
 ENDM
 
 $PRIMARYLANGID MACRO LangId
-    EXITM <$LOWORD(LangId) AND 03FFh>
+    EXITM <((LOWORD LangId) AND 03FFh)>
 ENDM
 
 $SUBLANGID MACRO LangId
-    EXITM <$LOWORD(LangId) SHR 10>
+    EXITM <((LOWORD LangId) SHR 10)>
 ENDM
 
 $MAKELCID MACRO LangId, SortId
-    EXITM <($LOWORD(SortId) SHL 16) OR $LOWORD(LangId)>
+    EXITM <(((LOWORD SortId) SHL 16) OR (LOWORD LangId))>
 ENDM
 
 $MAKESORTLCID MACRO LangId, SortId, SortVer
-    EXITM <$MAKELCID(LangId, SortId) OR ($LOWORD(SortVer) SHL 20)>
+    EXITM <($MAKELCID(LangId, SortId) OR ((LOWORD SortVer) SHL 20))>
 ENDM
 
 $LANGIDFROMLCID MACRO Lcid
-    EXITM $LOWORD(Lcid)
+    EXITM <(LOWORD Lcid)>
 ENDM
 
 $SORTIDFROMLCID MACRO Lcid
-    EXITM <(Lcid SHR 16) AND 0Fh>
+    EXITM <((Lcid SHR 16) AND 0Fh)>
 ENDM
 
 $SORTVERSIONFROMLCID MACRO Lcid
-    EXITM <(Lcid SHR 20) AND 0Fh>
+    EXITM <((Lcid SHR 20) AND 0Fh)>
 ENDM
 
 ;=====================================================================================

@@ -16,6 +16,7 @@
     <ClCompile Include="NT\Bcd.c">
       <Filter>NT</Filter>
     </ClCompile>
+    <ClCompile Include="Assembly.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NT">
@@ -27,5 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UnitTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AsmMacro.asm" />
   </ItemGroup>
 </Project>

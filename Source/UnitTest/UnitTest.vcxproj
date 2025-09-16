@@ -72,6 +72,8 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\marmasm.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -213,6 +215,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Assembly.c" />
     <ClCompile Include="Extension\MSVC.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="NT\Bcd.c" />
@@ -224,7 +227,15 @@
   <ItemGroup>
     <ClInclude Include="UnitTest.h" />
   </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='x64' OR '$(Platform)'=='Win32'">
+    <MASM Include="AsmMacro.asm" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='ARM64' OR '$(Platform)'=='ARM64EC'">
+    <None Include="AsmMacro.asm" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\marmasm.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>

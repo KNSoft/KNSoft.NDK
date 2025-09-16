@@ -4,6 +4,7 @@
 TEST_DECL_FUNC(UnitTestFramework);
 TEST_DECL_FUNC(MSVC);
 
+TEST_DECL_FUNC(Assembly);
 TEST_DECL_FUNC(Bcd);
 TEST_DECL_FUNC(KUSDStruct);
 TEST_DECL_FUNC(PebLdrStruct);
@@ -15,6 +16,7 @@ CONST UNITTEST_ENTRY UnitTestList[] = {
     TEST_DECL_ENTRY(UnitTestFramework),
     TEST_DECL_ENTRY(MSVC),
 
+    TEST_DECL_ENTRY(Assembly),
     TEST_DECL_ENTRY(Bcd),
     TEST_DECL_ENTRY(KUSDStruct),
     TEST_DECL_ENTRY(PebLdrStruct),
