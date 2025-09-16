@@ -67,12 +67,12 @@ ConsoleControl(
     _In_reads_bytes_(ConsoleInformationLength) PVOID ConsoleInformation,
     _In_ ULONG ConsoleInformationLength);
 
-/* See also NtQuerySendMessage */
+/* See also NtUserQuerySendMessage */
 WINUSERAPI
 BOOL
 NTAPI
 QuerySendMessage(
-    _Inout_ MSG* pMsg);
+    _Inout_ PMSG Message);
 
 /* See also NtUserSetWindowStationUser */
 WINUSERAPI

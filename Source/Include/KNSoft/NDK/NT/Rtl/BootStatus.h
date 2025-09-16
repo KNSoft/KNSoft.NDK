@@ -30,6 +30,8 @@ typedef enum _RTL_BSD_ITEM_TYPE
     RtlBsdItemMax
 } RTL_BSD_ITEM_TYPE;
 
+#define BOOT_STATUS_FIELD_MAX RtlBsdItemMax
+
 typedef struct _RTL_BSD_DATA_POWER_TRANSITION
 {
     LARGE_INTEGER PowerButtonTimestamp;

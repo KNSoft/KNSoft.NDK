@@ -137,6 +137,15 @@ RtlSetOwnerSecurityDescriptor(
     _In_opt_ PSID Owner,
     _In_ BOOLEAN OwnerDefaulted);
 
+/**
+ * The RtlGetGroupSecurityDescriptor routine returns the primary group information for a given security descriptor.
+ *
+ * @param SecurityDescriptor Pointer to the security descriptor whose primary group information is to be returned.
+ * @param Group Pointer to a variable that receives a pointer to the security identifier (SID) for the primary group.
+ * @param GroupDefaulted Pointer to a Boolean variable that receives the value of the SE_GROUP_DEFAULTED flag.
+ * @return NTSTATUS Successful or errant status.
+ * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlgetgroupsecuritydescriptor
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

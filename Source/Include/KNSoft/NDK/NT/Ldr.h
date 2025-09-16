@@ -200,16 +200,18 @@ typedef struct _LDR_DATA_TABLE_ENTRY
             ULONG InIndexes : 1;
             ULONG ShimDll : 1;
             ULONG InExceptionTable : 1;
-            ULONG ReservedFlags1 : 2;
+            ULONG VerifierProvider : 1;
+            ULONG ShimEngineCalloutSent : 1;
             ULONG LoadInProgress : 1;
             ULONG LoadConfigProcessed : 1;
             ULONG EntryProcessed : 1;
             ULONG ProtectDelayLoad : 1;
-            ULONG ReservedFlags3 : 2;
+            ULONG AuxIatCopyPrivate : 1;
+            ULONG ReservedFlags3 : 1;
             ULONG DontCallForThreads : 1;
             ULONG ProcessAttachCalled : 1;
             ULONG ProcessAttachFailed : 1;
-            ULONG CorDeferredValidate : 1;
+            ULONG ScpInExceptionTable : 1;
             ULONG CorImage : 1;
             ULONG DontRelocate : 1;
             ULONG CorILOnly : 1;
@@ -247,6 +249,8 @@ typedef struct _LDR_DATA_TABLE_ENTRY
     LDR_HOT_PATCH_STATE HotPatchState;
 } LDR_DATA_TABLE_ENTRY, *PLDR_DATA_TABLE_ENTRY;
 
+typedef const LDR_DATA_TABLE_ENTRY* PCLDR_DATA_TABLE_ENTRY;
+
 typedef struct _LDR_DATA_TABLE_ENTRY64
 {
     LIST_ENTRY64 InLoadOrderLinks;
@@ -273,16 +277,18 @@ typedef struct _LDR_DATA_TABLE_ENTRY64
             ULONG InIndexes : 1;
             ULONG ShimDll : 1;
             ULONG InExceptionTable : 1;
-            ULONG ReservedFlags1 : 2;
+            ULONG VerifierProvider : 1;
+            ULONG ShimEngineCalloutSent : 1;
             ULONG LoadInProgress : 1;
             ULONG LoadConfigProcessed : 1;
             ULONG EntryProcessed : 1;
             ULONG ProtectDelayLoad : 1;
-            ULONG ReservedFlags3 : 2;
+            ULONG AuxIatCopyPrivate : 1;
+            ULONG ReservedFlags3 : 1;
             ULONG DontCallForThreads : 1;
             ULONG ProcessAttachCalled : 1;
             ULONG ProcessAttachFailed : 1;
-            ULONG CorDeferredValidate : 1;
+            ULONG ScpInExceptionTable : 1;
             ULONG CorImage : 1;
             ULONG DontRelocate : 1;
             ULONG CorILOnly : 1;
@@ -320,6 +326,8 @@ typedef struct _LDR_DATA_TABLE_ENTRY64
     LDR_HOT_PATCH_STATE HotPatchState;
 } LDR_DATA_TABLE_ENTRY64, *PLDR_DATA_TABLE_ENTRY64;
 
+typedef const LDR_DATA_TABLE_ENTRY64* PCLDR_DATA_TABLE_ENTRY64;
+
 typedef struct _LDR_DATA_TABLE_ENTRY32
 {
     LIST_ENTRY32 InLoadOrderLinks;
@@ -346,16 +354,18 @@ typedef struct _LDR_DATA_TABLE_ENTRY32
             ULONG InIndexes : 1;
             ULONG ShimDll : 1;
             ULONG InExceptionTable : 1;
-            ULONG ReservedFlags1 : 2;
+            ULONG VerifierProvider : 1;
+            ULONG ShimEngineCalloutSent : 1;
             ULONG LoadInProgress : 1;
             ULONG LoadConfigProcessed : 1;
             ULONG EntryProcessed : 1;
             ULONG ProtectDelayLoad : 1;
-            ULONG ReservedFlags3 : 2;
+            ULONG AuxIatCopyPrivate : 1;
+            ULONG ReservedFlags3 : 1;
             ULONG DontCallForThreads : 1;
             ULONG ProcessAttachCalled : 1;
             ULONG ProcessAttachFailed : 1;
-            ULONG CorDeferredValidate : 1;
+            ULONG ScpInExceptionTable : 1;
             ULONG CorImage : 1;
             ULONG DontRelocate : 1;
             ULONG CorILOnly : 1;
@@ -392,6 +402,8 @@ typedef struct _LDR_DATA_TABLE_ENTRY32
     VOID* POINTER_32 ActivePatchImageBase;
     LDR_HOT_PATCH_STATE HotPatchState;
 } LDR_DATA_TABLE_ENTRY32, *PLDR_DATA_TABLE_ENTRY32;
+
+typedef const LDR_DATA_TABLE_ENTRY32* PCLDR_DATA_TABLE_ENTRY32;
 
 #pragma endregion
 
@@ -1716,6 +1728,14 @@ LdrpResGetMappingSize(
     _Out_ PSIZE_T Size, 
     _In_ ULONG Flags, 
     _In_ BOOLEAN GetFileSizeFromLoadAsDataTable
+    );
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+LdrAppxHandleIntegrityFailure(
+    _In_ NTSTATUS Status
     );
 
 EXTERN_C_END

@@ -342,6 +342,13 @@ NtUserQueryWindow(
     _In_ WINDOWINFOCLASS WindowInfo
     );
 
+NTSYSAPI
+BOOL
+NTAPI
+NtUserQuerySendMessage(
+    _Inout_ PMSG Message
+    );
+
 NTSYSCALLAPI
 HWND
 NTAPI
@@ -399,16 +406,6 @@ NTSYSCALLAPI
 LOGICAL
 NTAPI
 NtUserSetWindowStationUser(
-    _In_ HWINSTA WindowStationHandle,
-    _In_ PLUID UserLogonId,
-    _In_ PSID UserSid,
-    _In_ ULONG UserSidLength
-    );
-
-NTSYSAPI
-LOGICAL
-NTAPI
-SetWindowStationUser(
     _In_ HWINSTA WindowStationHandle,
     _In_ PLUID UserLogonId,
     _In_ PSID UserSid,
@@ -945,6 +942,14 @@ NtUserRealChildWindowFromPoint(
 NTSYSCALLAPI
 BOOL
 NTAPI
+NtUserRegisterCloakedNotification(
+    _In_ HWND WindowHandle,
+    _In_ BOOL Register
+    );
+
+NTSYSCALLAPI
+BOOL
+NTAPI
 NtUserRegisterHotKey(
     _In_ HWND WindowHandle,
     _In_ LONG id,
@@ -1027,7 +1032,7 @@ BOOL
 NTAPI
 NtUserSetWindowPos(
     _In_ HWND WindowHandle,
-    _In_ HWND WindowHandleInsertAfter,
+    _In_opt_ HWND WindowHandleInsertAfter,
     _In_ LONG X,
     _In_ LONG Y,
     _In_ LONG cx,
@@ -1184,7 +1189,10 @@ NtUserWindowFromPoint(
     _In_ POINT Point
     );
 
-typedef NTSTATUS FN_DISPATCH(PVOID);
+typedef _Function_class_(FN_DISPATCH)
+NTSTATUS NTAPI FN_DISPATCH(
+    _In_opt_ PVOID Context
+    );
 typedef FN_DISPATCH* PFN_DISPATCH;
 
 // Peb!KernelCallbackTable = user32.dll!apfnDispatch
