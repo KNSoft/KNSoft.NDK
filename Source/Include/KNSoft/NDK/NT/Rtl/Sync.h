@@ -6,6 +6,12 @@ EXTERN_C_START
 
 #pragma region Critical Section
 
+/**
+ * The RtlInitializeCriticalSection routine initializes a critical section object.
+ *
+ * \param CriticalSection A pointer to the critical section object.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-initializecriticalsection
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -13,6 +19,13 @@ RtlInitializeCriticalSection(
     _Out_ PRTL_CRITICAL_SECTION CriticalSection
 );
 
+/**
+ * The RtlInitializeCriticalSectionAndSpinCount routine initializes a critical section object and sets the spin count for the critical section.
+ *
+ * \param CriticalSection A pointer to the critical section object.
+ * \param SpinCount The spin count for the critical section object. On single-processor systems, the spin count is ignored.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-initializecriticalsectionandspincount
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -21,6 +34,14 @@ RtlInitializeCriticalSectionAndSpinCount(
     _In_ ULONG SpinCount
 );
 
+/**
+ * The RtlInitializeCriticalSectionEx routine initializes a critical section object and sets the spin count for the critical section with flags.
+ *
+ * \param CriticalSection A pointer to the critical section object.
+ * \param SpinCount The spin count for the critical section object. On single-processor systems, the spin count is ignored.
+ * \param Flags This parameter can be 0 or the CRITICAL_SECTION_NO_DEBUG_INFO flag.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-initializecriticalsectionex
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

@@ -13,15 +13,16 @@ EXTERN_C_START
 
 #pragma region Thread Profiling
 
+// rev
 /**
- * Enables thread profiling on the specified thread.
+ * The RtlEnableThreadProfiling routine enables thread profiling on the specified thread.
  *
- * @param ThreadHandle The handle to the thread on which you want to enable profiling. This must be the current thread.
- * @param Flags To receive thread profiling data such as context switch count, set this parameter to THREAD_PROFILING_FLAG_DISPATCH; otherwise, set to 0.
- * @param HardwareCounters To receive hardware performance counter data, set this parameter to a bitmask that identifies the hardware counters to collect.
- * @param PerformanceDataHandle An opaque handle that you use when calling the RtlReadThreadProfilingData and RtlDisableThreadProfiling functions.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-enablethreadprofiling
+ * \param ThreadHandle The handle to the thread on which you want to enable profiling. This must be the current thread.
+ * \param Flags To receive thread profiling data such as context switch count, set this parameter to THREAD_PROFILING_FLAG_DISPATCH; otherwise, set to 0.
+ * \param HardwareCounters To receive hardware performance counter data, set this parameter to a bitmask that identifies the hardware counters to collect.
+ * \param PerformanceDataHandle An opaque handle that you use when calling the RtlReadThreadProfilingData and RtlDisableThreadProfiling functions.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-enablethreadprofiling
  */
 NTSYSAPI
 NTSTATUS
@@ -32,12 +33,13 @@ RtlEnableThreadProfiling(
     _In_ ULONG64 HardwareCounters,
     _Out_ PVOID* PerformanceDataHandle);
 
+// rev
 /**
- * Disables thread profiling.
+ * The RtlDisableThreadProfiling routine disables thread profiling.
  *
- * @param PerformanceDataHandle The handle that the RtlEnableThreadProfiling function returned.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querythreadprofiling
+ * \param PerformanceDataHandle The handle that the RtlEnableThreadProfiling function returned.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querythreadprofiling
  */
 NTSYSAPI
 NTSTATUS
@@ -45,13 +47,14 @@ NTAPI
 RtlDisableThreadProfiling(
     _In_ PVOID PerformanceDataHandle);
 
+// rev
 /**
- * Determines whether thread profiling is enabled for the specified thread.
+ * The RtlQueryThreadProfiling routine determines whether thread profiling is enabled for the specified thread.
  *
- * @param ThreadHandle The handle to the thread on which you want to enable profiling. This must be the current thread.
- * @param Enabled Is TRUE if thread profiling is enabled for the specified thread; otherwise, FALSE.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querythreadprofiling
+ * \param ThreadHandle The handle to the thread on which you want to enable profiling. This must be the current thread.
+ * \param Enabled Is TRUE if thread profiling is enabled for the specified thread; otherwise, FALSE.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-querythreadprofiling
  */
 NTSYSAPI
 NTSTATUS
@@ -60,14 +63,15 @@ RtlQueryThreadProfiling(
     _In_ HANDLE ThreadHandle,
     _Out_ PBOOLEAN Enabled);
 
+// rev
 /**
- * Reads the specified profiling data associated with the thread.
+ * The RtlReadThreadProfilingData routine reads the specified profiling data associated with the thread.
  *
- * @param PerformanceDataHandle The handle that the RtlEnableThreadProfiling function returned.
- * @param Flags One or more flags set when you called the RtlEnableThreadProfiling function that specify the counter data to read.
- * @param PerformanceData A PERFORMANCE_DATA structure that contains the thread profiling and hardware counter data.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readthreadprofilingdata
+ * \param PerformanceDataHandle The handle that the RtlEnableThreadProfiling function returned.
+ * \param Flags One or more flags set when you called the RtlEnableThreadProfiling function that specify the counter data to read.
+ * \param PerformanceData A PERFORMANCE_DATA structure that contains the thread profiling and hardware counter data.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readthreadprofilingdata
  */
 NTSYSAPI
 NTSTATUS
@@ -156,12 +160,13 @@ RtlDeleteTimerQueueEx(
 
 #pragma region QPC
 
+// rev
 /**
- * Retrieves the current value of the performance counter, which is a high resolution (<1us) time stamp that can be used for time-interval measurements.
+ * The RtlQueryPerformanceCounter routine retrieves the current value of the performance counter, which is a high resolution (<1us) time stamp that can be used for time-interval measurements.
  *
- * @param PerformanceCounter A pointer to a variable that receives the current performance-counter value, in counts.
- * @return Returns TRUE if the function succeeds, otherwise FALSE. On systems that run Windows XP or later, the function will always succeed and will thus never return zero.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter
+ * \param PerformanceCounter A pointer to a variable that receives the current performance-counter value, in counts.
+ * \return Returns TRUE if the function succeeds, otherwise FALSE. On systems that run Windows XP or later, the function will always succeed and will thus never return zero.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter
  */
 NTSYSAPI
 LOGICAL
@@ -169,13 +174,14 @@ NTAPI
 RtlQueryPerformanceCounter(
     _Out_ PLARGE_INTEGER PerformanceCounter);
 
+// rev
 /**
- * Retrieves the frequency of the performance counter. The frequency of the performance counter is fixed at system boot and is consistent across all processors.
+ * The RtlQueryPerformanceFrequency routine retrieves the frequency of the performance counter. The frequency of the performance counter is fixed at system boot and is consistent across all processors.
  * Therefore, the frequency need only be queried upon application initialization, and the result can be cached.
  *
- * @param PerformanceFrequency A pointer to a variable that receives the current performance-counter frequency, in counts per second. 
- * @return Returns TRUE if the function succeeds, otherwise FALSE. On systems that run Windows XP or later, the function will always succeed and will thus never return zero.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency
+ * \param PerformanceFrequency A pointer to a variable that receives the current performance-counter frequency, in counts per second. 
+ * \return Returns TRUE if the function succeeds, otherwise FALSE. On systems that run Windows XP or later, the function will always succeed and will thus never return zero.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency
  */
 NTSYSAPI
 LOGICAL
@@ -205,11 +211,11 @@ RtlSetCurrentTransaction(
 #pragma region Pointer Encode/Decode
 
 /**
- * Encodes the specified pointer. Encoded pointers can be used to provide another layer of protection for pointer values.
+ * The RtlEncodePointer routine encodes the specified pointer. Encoded pointers can be used to provide another layer of protection for pointer values.
  *
- * @param Ptr The system pointer to be encoded.
- * @return The function returns the encoded pointer.
- * @sa https://learn.microsoft.com/en-us/previous-versions/bb432254(v=vs.85)
+ * \param Ptr The system pointer to be encoded.
+ * \return The function returns the encoded pointer.
+ * \sa https://learn.microsoft.com/en-us/previous-versions/bb432254(v=vs.85)
  */
 NTSYSAPI
 _Ret_maybenull_
@@ -219,11 +225,11 @@ RtlEncodePointer(
     _In_opt_ PVOID Ptr);
 
 /**
- * Decodes a pointer that was previously encoded with RtlEncodePointer.
+ * The RtlDecodePointer routine decodes a pointer that was previously encoded with RtlEncodePointer.
  *
- * @param Ptr The system pointer to be decoded.
- * @return The function returns the decoded pointer.
- * @sa https://learn.microsoft.com/en-us/previous-versions/bb432242(v=vs.85)
+ * \param Ptr The system pointer to be decoded.
+ * \return The function returns the decoded pointer.
+ * \sa https://learn.microsoft.com/en-us/previous-versions/bb432242(v=vs.85)
  */
 NTSYSAPI
 _Ret_maybenull_
@@ -233,11 +239,12 @@ RtlDecodePointer(
     _In_opt_ PVOID Ptr);
 
 /**
- * Encodes the specified pointer with a system-specific value. Encoded pointers can be used to provide another layer of protection for pointer values.
+ * The RtlEncodeSystemPointer routine encodes the specified pointer with a system-specific value.
+ * Encoded pointers can be used to provide another layer of protection for pointer values.
  *
- * @param Ptr The system pointer to be encoded.
- * @return The function returns the encoded pointer.
- * @sa https://learn.microsoft.com/en-us/previous-versions/bb432255(v=vs.85)
+ * \param Ptr The system pointer to be encoded.
+ * \return The function returns the encoded pointer.
+ * \sa https://learn.microsoft.com/en-us/previous-versions/bb432255(v=vs.85)
  */
 NTSYSAPI
 _Ret_maybenull_
@@ -247,11 +254,11 @@ RtlEncodeSystemPointer(
     _In_opt_ PVOID Ptr);
 
 /**
- * Decodes a pointer that was previously encoded with RtlEncodeSystemPointer.
+ * The RtlDecodeSystemPointer routine decodes a pointer that was previously encoded with RtlEncodeSystemPointer.
  *
- * @param Ptr The pointer to be decoded.
- * @return The function returns the decoded pointer.
- * @sa https://learn.microsoft.com/en-us/previous-versions/bb432243(v=vs.85)
+ * \param Ptr The pointer to be decoded.
+ * \return The function returns the decoded pointer.
+ * \sa https://learn.microsoft.com/en-us/previous-versions/bb432243(v=vs.85)
  */
 NTSYSAPI
 _Ret_maybenull_
@@ -262,14 +269,16 @@ RtlDecodeSystemPointer(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+// rev
 /**
- * Encodes the specified pointer of the specified process. Encoded pointers can be used to provide another layer of protection for pointer values.
+ * The RtlEncodeRemotePointer routine encodes the specified pointer of the specified process.
+ * Encoded pointers can be used to provide another layer of protection for pointer values.
  *
- * @param ProcessHandle Handle to the remote process that owns the pointer.
- * @param Pointer The pointer to be encoded.
- * @param EncodedPointer The encoded pointer.
- * @return HRESULT Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/previous-versions/dn877135(v=vs.85)
+ * \param ProcessHandle Handle to the remote process that owns the pointer.
+ * \param Pointer The pointer to be encoded.
+ * \param EncodedPointer The encoded pointer.
+ * \return HRESULT Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/previous-versions/dn877135(v=vs.85)
  */
 NTSYSAPI
 HRESULT
@@ -279,14 +288,16 @@ RtlEncodeRemotePointer(
     _In_opt_ PVOID Pointer,
     _Out_ PVOID* EncodedPointer);
 
+// rev
 /**
- * Decodes a pointer in a specified process that was previously encoded with RtlEncodePointer or RtlEncodeRemotePointer.
+ * The RtlDecodeRemotePointer routine decodes a pointer in a specified process that was previously 
+ * encoded with RtlEncodePointer or RtlEncodeRemotePointer.
  *
- * @param ProcessHandle Handle to the remote process that owns the pointer.
- * @param Pointer The pointer to be decoded.
- * @param DecodedPointer The decoded pointer.
- * @return HRESULT Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/previous-versions/dn877133(v=vs.85)
+ * \param ProcessHandle Handle to the remote process that owns the pointer.
+ * \param Pointer The pointer to be decoded.
+ * \param DecodedPointer The decoded pointer.
+ * \return HRESULT Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/previous-versions/dn877133(v=vs.85)
  */
 NTSYSAPI
 HRESULT
@@ -627,9 +638,9 @@ RtlWnfDllUnloadCallback(
 
 // private
 /**
- * The RTL_UNLOAD_EVENT_TRACE structure contains the unloaded module event information.
+ * The RTL_UNLOAD_EVENT_TRACE structure contains information about modules unloaded by the current process.
  *
- * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtrace
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtrace
  */
 typedef struct _RTL_UNLOAD_EVENT_TRACE
 {
@@ -665,10 +676,10 @@ typedef struct _RTL_UNLOAD_EVENT_TRACE32
 } RTL_UNLOAD_EVENT_TRACE32, *PRTL_UNLOAD_EVENT_TRACE32;
 
 /**
- * Enables the dump code to get the unloaded module information from Ntdll.dll for storage in the minidump.
+ * The RtlGetUnloadEventTrace routine enables the dump code to get the unloaded module information from Ntdll.dll for storage in the minidump.
  *
- * @return A pointer to an array of unload events.
- * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtrace
+ * \return A pointer to an array of unload events.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtrace
  */
 NTSYSAPI
 PRTL_UNLOAD_EVENT_TRACE
@@ -676,13 +687,13 @@ NTAPI
 RtlGetUnloadEventTrace(VOID);
 
 /**
- * Retrieves the size and location of the dynamically unloaded module list for the current process.
+ * The RtlGetUnloadEventTraceEx routine retrieves the size and location of the dynamically unloaded module list for the current process.
  *
- * @param ElementSize A pointer to a variable that contains the size of an element in the list.
- * @param ElementCount A pointer to a variable that contains the number of elements in the list.
- * @param EventTrace A pointer to an array of RTL_UNLOAD_EVENT_TRACE structures.
- * @return A pointer to an array of unload events.
- * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtraceex
+ * \param ElementSize A pointer to a variable that contains the size of an element in the list.
+ * \param ElementCount A pointer to a variable that contains the number of elements in the list.
+ * \param EventTrace A pointer to an array of RTL_UNLOAD_EVENT_TRACE structures.
+ * \return A pointer to an array of unload events.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlgetunloadeventtraceex
  */
 NTSYSAPI
 PRTL_UNLOAD_EVENT_TRACE
@@ -864,6 +875,14 @@ RtlComputeImportTableHash(
     _Out_writes_bytes_(16) PUCHAR Hash,
     _In_ ULONG ImportTableHashRevision);
 
+/**
+ * The RtlComputeCrc32 routine computes the CRC32 checksum for a buffer, allowing for incremental computation by providing a partial CRC value.
+ *
+ * \param PartialCrc The initial CRC32 value. Use 0 for a new computation, or the result of a previous call to continue CRC calculation over additional data.
+ * \param Buffer Pointer to the buffer containing the data to compute the CRC32 for.
+ * \param Length The length, in bytes, of the buffer.
+ * \return The computed CRC32 value.
+ */
 NTSYSAPI
 ULONG32
 NTAPI

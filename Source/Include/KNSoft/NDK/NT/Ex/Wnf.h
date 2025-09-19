@@ -53,6 +53,18 @@ typedef struct _WNF_DELIVERY_DESCRIPTOR
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+/**
+ * The NtCreateWnfStateName routine creates a new WNF (Windows Notification Facility) state name.
+ *
+ * \param StateName Pointer to a WNF_STATE_NAME structure that receives the created state name.
+ * \param NameLifetime The lifetime of the state name (see WNF_STATE_NAME_LIFETIME).
+ * \param DataScope The data scope for the state name (see WNF_DATA_SCOPE).
+ * \param PersistData If TRUE, the state data is persistent.
+ * \param TypeId Optional pointer to a WNF_TYPE_ID structure specifying the type of the state data.
+ * \param MaximumStateSize The maximum size, in bytes, of the state data.
+ * \param SecurityDescriptor Pointer to a security descriptor for the state name.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -65,12 +77,30 @@ NtCreateWnfStateName(
     _In_ ULONG MaximumStateSize,
     _In_ PSECURITY_DESCRIPTOR SecurityDescriptor);
 
+/**
+ * The NtDeleteWnfStateName routine deletes an existing WNF state name.
+ *
+ * \param StateName Pointer to the WNF_STATE_NAME to delete.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtDeleteWnfStateName(
     _In_ PCWNF_STATE_NAME StateName);
 
+/**
+ * The NtUpdateWnfStateData routine updates the data associated with a WNF state name.
+ *
+ * \param StateName Pointer to the WNF_STATE_NAME to update.
+ * \param Buffer Pointer to the data buffer to write.
+ * \param Length Length, in bytes, of the data buffer.
+ * \param TypeId Optional pointer to a WNF_TYPE_ID structure specifying the type of the state data.
+ * \param ExplicitScope Optional pointer to a security identifier (SID) for explicit scope.
+ * \param MatchingChangeStamp The change stamp to match for update.
+ * \param CheckStamp If TRUE, the change stamp is checked before updating.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -79,37 +109,69 @@ NtUpdateWnfStateData(
     _In_reads_bytes_opt_(Length) const VOID* Buffer,
     _In_opt_ ULONG Length,
     _In_opt_ PCWNF_TYPE_ID TypeId,
-    _In_opt_ const VOID* ExplicitScope,
+    _In_opt_ PCSID ExplicitScope,
     _In_ WNF_CHANGE_STAMP MatchingChangeStamp,
-    _In_ LOGICAL CheckStamp);
+    _In_ LOGICAL CheckStamp
+    );
 
+/**
+ * The NtDeleteWnfStateData routine Deletes the data associated with a WNF state name.
+ *
+ * \param StateName Pointer to the WNF_STATE_NAME whose data is to be deleted.
+ * \param ExplicitScope Optional pointer to a security identifier (SID) for explicit scope.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtDeleteWnfStateData(
     _In_ PCWNF_STATE_NAME StateName,
-    _In_opt_ const VOID* ExplicitScope);
+    _In_opt_ PCSID ExplicitScope
+    );
 
+/**
+ * The NtQueryWnfStateData routine Queries the data associated with a WNF state name.
+ *
+ * \param StateName Pointer to the WNF_STATE_NAME to query.
+ * \param TypeId Optional pointer to a WNF_TYPE_ID structure specifying the type of the state data.
+ * \param ExplicitScope Optional pointer to a security identifier (SID) for explicit scope.
+ * \param ChangeStamp Pointer to a variable that receives the change stamp.
+ * \param Buffer Pointer to a buffer that receives the state data.
+ * \param BufferLength On input, the size of the buffer in bytes; on output, the number of bytes written.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtQueryWnfStateData(
     _In_ PCWNF_STATE_NAME StateName,
     _In_opt_ PCWNF_TYPE_ID TypeId,
-    _In_opt_ const VOID* ExplicitScope,
+    _In_opt_ PCSID ExplicitScope,
     _Out_ PWNF_CHANGE_STAMP ChangeStamp,
     _Out_writes_bytes_opt_(*BufferLength) PVOID Buffer,
-    _Inout_ PULONG BufferLength);
+    _Inout_ PULONG BufferLength
+    );
 
+/**
+ * The NtQueryWnfStateNameInformation routine queries information about a WNF state name.
+ *
+ * \param StateName Pointer to the WNF_STATE_NAME to query.
+ * \param NameInfoClass The information class to query (see WNF_STATE_NAME_INFORMATION).
+ * \param ExplicitScope Optional pointer to a security identifier (SID) for explicit scope.
+ * \param Buffer Pointer to a buffer that receives the requested information.
+ * \param BufferLength The size, in bytes, of the buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtQueryWnfStateNameInformation(
     _In_ PCWNF_STATE_NAME StateName,
     _In_ WNF_STATE_NAME_INFORMATION NameInfoClass,
-    _In_opt_ const VOID* ExplicitScope,
+    _In_opt_ PCSID ExplicitScope,
     _Out_writes_bytes_(BufferLength) PVOID Buffer,
-    _In_ ULONG BufferLength);
+    _In_ ULONG BufferLength
+    );
 
 NTSYSCALLAPI
 NTSTATUS

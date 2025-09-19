@@ -114,6 +114,7 @@
 
 #undef PSID
 typedef SID* PSID;
+typedef const SID* PCSID;
 #undef _JOBOBJECTINFOCLASS
 #undef JOBOBJECTINFOCLASS
 #undef JobObjectBasicAccountingInformation

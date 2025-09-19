@@ -563,6 +563,15 @@ typedef struct _TIMER_SET_COALESCABLE_TIMER_INFO
     _Out_opt_ PBOOLEAN PreviousState;
 } TIMER_SET_COALESCABLE_TIMER_INFO, *PTIMER_SET_COALESCABLE_TIMER_INFO;
 
+/**
+ * The NtCreateTimer routine creates a timer object.
+ *
+ * \param TimerHandle A pointer to a variable that receives the handle to the timer object.
+ * \param DesiredAccess The access mask that specifies the requested access to the timer object.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \param TimerType The type of the timer object.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -573,6 +582,14 @@ NtCreateTimer(
     _In_ TIMER_TYPE TimerType
 );
 
+/**
+ * The NtOpenTimer routine opens a handle to an existing timer object.
+ *
+ * \param TimerHandle A pointer to a variable that receives the handle to the timer object.
+ * \param DesiredAccess The access mask that specifies the requested access to the timer object.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -582,6 +599,18 @@ NtOpenTimer(
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
 );
 
+/**
+ * The NtSetTimer routine sets a timer object to the signaled state after a specified interval.
+ *
+ * \param TimerHandle A handle to the timer object.
+ * \param DueTime A pointer to a LARGE_INTEGER that specifies the absolute or relative time at which the timer is to be set to the signaled state.
+ * \param TimerApcRoutine An optional pointer to a function to be called when the timer is signaled.
+ * \param TimerContext An optional pointer to a context to be passed to the APC routine.
+ * \param ResumeTimer If TRUE, resumes the timer; otherwise, sets a new timer.
+ * \param Period The period of the timer, in milliseconds. If zero, the timer is signaled once.
+ * \param PreviousState A pointer to a variable that receives the previous state of the timer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -595,6 +624,15 @@ NtSetTimer(
     _Out_opt_ PBOOLEAN PreviousState
 );
 
+/**
+ * The NtSetTimerEx routine sets extended information for a timer object.
+ *
+ * \param TimerHandle A handle to the timer object.
+ * \param TimerSetInformationClass The class of information to set.
+ * \param TimerSetInformation A pointer to a buffer that contains the information to set.
+ * \param TimerSetInformationLength The size of the buffer, in bytes.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -605,6 +643,13 @@ NtSetTimerEx(
     _In_ ULONG TimerSetInformationLength
 );
 
+/**
+ * The NtCancelTimer routine Cancels a timer object.
+ *
+ * \param TimerHandle A handle to the timer object.
+ * \param CurrentState A pointer to a variable that receives the current state of the timer object.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -613,6 +658,16 @@ NtCancelTimer(
     _Out_opt_ PBOOLEAN CurrentState
 );
 
+/**
+ * The NtQueryTimer routine retrieves information about a timer object.
+ *
+ * \param TimerHandle A handle to the timer object.
+ * \param TimerInformationClass The class of information to retrieve.
+ * \param TimerInformation A pointer to a buffer that receives the requested information.
+ * \param TimerInformationLength The size of the buffer, in bytes.
+ * \param ReturnLength A pointer to a variable that receives the size of the data returned.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -626,6 +681,14 @@ NtQueryTimer(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+/**
+ * The NtCreateIRTimer routine creates an IR timer object.
+ *
+ * \param TimerHandle A pointer to a variable that receives the handle to the IR timer object.
+ * \param Reserved Reserved parameter.
+ * \param DesiredAccess The access mask that specifies the requested access to the timer object.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -635,6 +698,13 @@ NtCreateIRTimer(
     _In_ ACCESS_MASK DesiredAccess
 );
 
+/**
+ * The NtSetIRTimer routine sets an IR timer object.
+ *
+ * \param TimerHandle A handle to the IR timer object.
+ * \param DueTime An optional pointer to a LARGE_INTEGER that specifies the time at which the timer is to be set to the signaled state.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -646,6 +716,16 @@ NtSetIRTimer(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+/**
+ * The NtCreateTimer2 routine creates a timer object.
+ *
+ * \param TimerHandle A pointer to a variable that receives the handle to the timer object.
+ * \param Reserved1 Reserved parameter.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \param Attributes Timer attributes (TIMER_TYPE).
+ * \param DesiredAccess The access mask that specifies the requested access to the timer object.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -696,6 +776,20 @@ NtCancelTimer2(
 #define PROFILE_CONTROL 0x0001
 #define PROFILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | PROFILE_CONTROL)
 
+/**
+ * The NtCreateProfile routine creates a profile object for performance monitoring.
+ *
+ * \param ProfileHandle A pointer to a variable that receives the handle to the profile object.
+ * \param Process Optional handle to the process to be profiled. If NULL, the current process is used.
+ * \param ProfileBase The base address of the region to be profiled.
+ * \param ProfileSize The size, in bytes, of the region to be profiled.
+ * \param BucketSize The size, in bytes, of each bucket in the profile buffer.
+ * \param Buffer A pointer to a buffer that receives the profile data.
+ * \param BufferSize The size, in bytes, of the buffer.
+ * \param ProfileSource The source of the profiling data (KPROFILE_SOURCE).
+ * \param Affinity The processor affinity mask indicating which processors to profile.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -711,6 +805,21 @@ NtCreateProfile(
     _In_ KAFFINITY Affinity
 );
 
+/**
+ * The NtCreateProfileEx routine creates a profile object for performance monitoring with group affinity.
+ *
+ * \param ProfileHandle A pointer to a variable that receives the handle to the profile object.
+ * \param Process Optional handle to the process to be profiled. If NULL, the current process is used.
+ * \param ProfileBase The base address of the region to be profiled.
+ * \param ProfileSize The size, in bytes, of the region to be profiled.
+ * \param BucketSize The size, in bytes, of each bucket in the profile buffer.
+ * \param Buffer A pointer to a buffer that receives the profile data.
+ * \param BufferSize The size, in bytes, of the buffer.
+ * \param ProfileSource The source of the profiling data (KPROFILE_SOURCE).
+ * \param GroupCount The number of group affinities provided.
+ * \param GroupAffinity A pointer to an array of GROUP_AFFINITY structures specifying processor groups to profile.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -727,6 +836,12 @@ NtCreateProfileEx(
     _In_reads_(GroupCount) PGROUP_AFFINITY GroupAffinity
 );
 
+/**
+ * The NtStartProfile routine starts the specified profile object.
+ *
+ * \param ProfileHandle A handle to the profile object.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -734,6 +849,12 @@ NtStartProfile(
     _In_ HANDLE ProfileHandle
 );
 
+/**
+ * The NtStopProfile routine stops the specified profile object.
+ *
+ * \param ProfileHandle A handle to the profile object.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -741,6 +862,13 @@ NtStopProfile(
     _In_ HANDLE ProfileHandle
 );
 
+/**
+ * The NtQueryIntervalProfile routine retrieves the interval for the specified profile source.
+ *
+ * \param ProfileSource The profile source (KPROFILE_SOURCE) to query.
+ * \param Interval A pointer to a variable that receives the interval, in 100-nanosecond units.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -749,6 +877,13 @@ NtQueryIntervalProfile(
     _Out_ PULONG Interval
 );
 
+/**
+ * The NtSetIntervalProfile routine sets the interval for the specified profile source.
+ *
+ * \param Interval The interval, in 100-nanosecond units, to set.
+ * \param Source The profile source (KPROFILE_SOURCE) to set the interval for.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -766,6 +901,15 @@ NtSetIntervalProfile(
 #define KEYEDEVENT_ALL_ACCESS \
     (STANDARD_RIGHTS_REQUIRED | KEYEDEVENT_WAIT | KEYEDEVENT_WAKE)
 
+/**
+ * The NtCreateKeyedEvent routine creates a keyed event object and returns a handle to it.
+ *
+ * \param KeyedEventHandle A pointer to a variable that receives the handle to the keyed event object.
+ * \param DesiredAccess The access mask that specifies the requested access to the keyed event object.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \param Flags Reserved. Must be zero.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -776,6 +920,14 @@ NtCreateKeyedEvent(
     _Reserved_ ULONG Flags
 );
 
+/**
+ * The NtOpenKeyedEvent routine opens a handle to an existing keyed event object.
+ *
+ * \param KeyedEventHandle A pointer to a variable that receives the handle to the keyed event object.
+ * \param DesiredAccess The access mask that specifies the requested access to the keyed event object.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -785,6 +937,15 @@ NtOpenKeyedEvent(
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
 );
 
+/**
+ * The NtReleaseKeyedEvent routine releases a thread that is waiting on a keyed event with the specified key value.
+ *
+ * \param KeyedEventHandle Optional handle to the keyed event object. If NULL, the default keyed event is used.
+ * \param KeyValue The key value that identifies the waiting thread to release.
+ * \param Alertable Specifies whether the call is alertable (can be interrupted by APCs).
+ * \param Timeout Optional pointer to a timeout value (in 100-nanosecond intervals). If NULL, waits indefinitely.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -795,6 +956,15 @@ NtReleaseKeyedEvent(
     _In_opt_ PLARGE_INTEGER Timeout
 );
 
+/**
+ *  The NtWaitForKeyedEvent routine waits for a keyed event to be released with the specified key value.
+ *
+ * \param KeyedEventHandle Optional handle to the keyed event object. If NULL, the default keyed event is used.
+ * \param KeyValue The key value to wait for.
+ * \param Alertable Specifies whether the call is alertable (can be interrupted by APCs).
+ * \param Timeout Optional pointer to a timeout value (in 100-nanosecond intervals). If NULL, waits indefinitely.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -442,6 +442,16 @@ LdrInitializeThunk(
 #define LDR_PATH_SAFE_CURRENT_DIRS            0x00002000 // LOAD_LIBRARY_SAFE_CURRENT_DIRS // since REDSTONE1
 #define LDR_PATH_SEARCH_SYSTEM32_NO_FORWARDER 0x00004000 // LOAD_LIBRARY_SEARCH_SYSTEM32_NO_FORWARDER // since REDSTONE1
 
+/**
+ * The LdrLoadDll routine loads the specified DLL into the address space of the calling process.
+ *
+ * \param DllPath A pointer to a Unicode string specifying the search path for the DLL or a combination of LDR_PATH_* flags. If NULL, the default search order is used.
+ * \param DllCharacteristics A pointer to a variable specifying DLL characteristics.
+ * \param DllName A pointer to a UNICODE_STRING structure containing the name of the DLL to load.
+ * \param DllHandle A pointer that receives the handle to module on success.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -451,12 +461,29 @@ LdrLoadDll(
     _In_ PUNICODE_STRING DllName,
     _Out_ PVOID* DllHandle);
 
+/**
+ * The LdrUnloadDll routine unloads the specified DLL from the address space of the calling process.
+ *
+ * \param DllHandle A handle to the DLL module to unload, as returned by LdrLoadDll.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-freelibrary
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 LdrUnloadDll(
     _In_ PVOID DllHandle);
 
+/**
+ * The LdrGetDllHandle routine retrieves a handle to a module that is already loaded in the calling process.
+ *
+ * \param DllPath A pointer to a Unicode string specifying the search path for the DLL or a combination of LDR_PATH_* flags. If NULL, the default search order is used.
+ * \param DllCharacteristics A pointer to a variable specifying DLL characteristics. Can be NULL.
+ * \param DllName A pointer to a UNICODE_STRING structure containing the name of the DLL to find.
+ * \param DllHandle A pointer that receives the handle to the loaded DLL module on success.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandleexw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -469,6 +496,18 @@ LdrGetDllHandle(
 #define LDR_GET_DLL_HANDLE_EX_UNCHANGED_REFCOUNT 0x00000001
 #define LDR_GET_DLL_HANDLE_EX_PIN 0x00000002
 
+/**
+ * The LdrGetDllHandleEx routine retrieves a handle to a module that is already loaded in the calling process, with extended control over reference counting.
+ *
+ * \param Flags A combination of flags that control behavior:
+ *  - LDR_GET_DLL_HANDLE_EX_UNCHANGED_REFCOUNT: Do not modify the module's reference count.
+ *  - LDR_GET_DLL_HANDLE_EX_PIN: Pin the module so it cannot be unloaded for the lifetime of the process.
+ * \param DllPath An optional semicolon-separated search path used to resolve DllName if needed. If NULL, the default module lookup is used.
+ * \param DllCharacteristics Optional pointer to the DLL characteristics (same values accepted by LdrLoadDll). Typically NULL for lookups.
+ * \param DllName The Unicode name of the module to find. Can be a base name (e.g., "ntdll.dll") or a fully-qualified path.
+ * \param DllHandle Receives the module handle on success.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -479,6 +518,13 @@ LdrGetDllHandleEx(
     _In_ PUNICODE_STRING DllName,
     _Out_ PVOID *DllHandle);
 
+/**
+ * The LdrGetDllHandleByMapping routine retrieves a module handle for an image that is already loaded in the calling process, identified by base address.
+ *
+ * \param BaseAddress The base address of a mapped image (image or datafile view).
+ * \param DllHandle Receives the module handle corresponding to the base address.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -486,6 +532,15 @@ LdrGetDllHandleByMapping(
     _In_ PVOID BaseAddress,
     _Out_ PVOID* DllHandle);
 
+/**
+ * The LdrGetDllHandleByName routine retrieves a module handle by base name and/or full path for a DLL already loaded in the calling process.
+ *
+ * \param BaseDllName Optional base file name (e.g., "kernel32.dll"). Note: Matching is case-insensitive.
+ * \param FullDllName Optional fully-qualified path of the module. Note: Matching is case-insensitive.
+ * \param DllHandle Receives the module handle on success.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks At least one of BaseDllName or FullDllName must be supplied. If both are supplied, they must refer to the same module.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -962,6 +1017,28 @@ LdrGetFileNameFromLoadAsDataTable(
 
 #pragma region Resource
 
+// TEB->ResourceRetValue
+typedef struct _LDR_RESLOADER_RET
+{
+    PVOID Module;
+    PLDR_DATA_TABLE_ENTRY DataEntry;
+    PVOID TargetModule;
+} LDR_RESLOADER_RET, *PLDR_RESLOADER_RET;
+
+typedef struct _LDR_RESLOADER_RET64
+{
+    VOID* POINTER_64 Module;
+    LDR_DATA_TABLE_ENTRY64* POINTER_64 DataEntry;
+    VOID* POINTER_64 TargetModule;
+} LDR_RESLOADER_RET64, *PLDR_RESLOADER_RET64;
+
+typedef struct _LDR_RESLOADER_RET32
+{
+    VOID* POINTER_32 Module;
+    LDR_DATA_TABLE_ENTRY32* POINTER_32 DataEntry;
+    VOID* POINTER_32 TargetModule;
+} LDR_RESLOADER_RET32, *PLDR_RESLOADER_RET32;
+
 /**
  * The LdrAccessResource function returns a pointer to the first byte of the specified resource in memory.
  *
@@ -1012,6 +1089,17 @@ LdrFindResource_U(
     _In_ ULONG Level,
     _Out_ PIMAGE_RESOURCE_DATA_ENTRY *ResourceDataEntry);
 
+/**
+ * The LdrFindResourceEx_U function determines the location of a resource in a DLL.
+ *
+ * \param Flags A handle to the DLL.
+ * \param DllHandle A handle to the DLL.
+ * \param ResourceInfo The type and name of the resource.
+ * \param Count The number of resource  information.
+ * \param ResourceDataEntry The resource information block.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-findresourceexw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1032,60 +1120,63 @@ LdrFindResourceDirectory_U(
     _Out_ PIMAGE_RESOURCE_DIRECTORY* ResourceDirectory);
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+// rev
 /**
  * The LdrResFindResource function finds a resource in a DLL.
  *
- * @param DllHandle A handle to the DLL.
- * @param Type The type of the resource.
- * @param Name The name of the resource.
- * @param Language The language of the resource.
- * @param ResourceBuffer An optional pointer to receive the resource buffer.
- * @param ResourceLength An optional pointer to receive the resource length.
- * @param CultureName An optional buffer to receive the culture name.
- * @param CultureNameLength An optional pointer to receive the length of the culture name.
- * @param Flags Flags for the resource search.
- * @return NTSTATUS Successful or errant status.
+ * \param DllHandle A handle to the DLL.
+ * \param Type The type of the resource. This parameter can also be MAKEINTRESOURCE(ID), where ID is the integer identifier of the resource.
+ * \param Name The name of the resource. This parameter can also be MAKEINTRESOURCE(ID), where ID is the integer identifier of the resource.
+ * \param Language The language of the resource. This parameter can also be MAKEINTRESOURCE(ID), where ID is the integer identifier of the resource.
+ * \param ResourceBuffer An optional pointer to receive the resource buffer.
+ * \param ResourceLength An optional pointer to receive the resource length.
+ * \param CultureName An optional buffer to receive the culture name.
+ * \param CultureNameLength An optional pointer to receive the length of the culture name.
+ * \param Flags Flags to modify the resource search.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
 NTAPI
 LdrResFindResource(
     _In_ PVOID DllHandle,
-    _In_ ULONG_PTR Type,
-    _In_ ULONG_PTR Name,
-    _In_ ULONG_PTR Language,
+    _In_ PCWSTR Type,
+    _In_ PCWSTR Name,
+    _In_ PCWSTR Language,
     _Out_opt_ PVOID* ResourceBuffer,
     _Out_opt_ PULONG ResourceLength,
     _Out_writes_bytes_opt_(CultureNameLength) PVOID CultureName, // WCHAR buffer[6]
     _Out_opt_ PULONG CultureNameLength,
-    _In_ ULONG Flags
+    _In_opt_ ULONG Flags
     );
 
+// rev
 /**
  * The LdrResFindResourceDirectory function finds a resource directory in a DLL.
  *
- * @param DllHandle A handle to the DLL.
- * @param Type The type of the resource.
- * @param Name The name of the resource.
- * @param ResourceDirectory An optional pointer to receive the resource directory.
- * @param CultureName An optional buffer to receive the culture name.
- * @param CultureNameLength An optional pointer to receive the length of the culture name.
- * @param Flags Flags for the resource search.
- * @return NTSTATUS Successful or errant status.
+ * \param DllHandle A handle to the DLL.
+ * \param Type The type of the resource. This parameter can also be MAKEINTRESOURCE(ID), where ID is the integer identifier of the resource.
+ * \param Name The name of the resource. This parameter can also be MAKEINTRESOURCE(ID), where ID is the integer identifier of the resource.
+ * \param ResourceDirectory An optional pointer to receive the resource directory.
+ * \param CultureName An optional buffer to receive the culture name.
+ * \param CultureNameLength An optional pointer to receive the length of the culture name.
+ * \param Flags Flags for the resource search.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
 NTAPI
 LdrResFindResourceDirectory(
     _In_ PVOID DllHandle,
-    _In_ ULONG_PTR Type,
-    _In_ ULONG_PTR Name,
+    _In_ PCWSTR Type,
+    _In_ PCWSTR Name,
     _Out_opt_ PIMAGE_RESOURCE_DIRECTORY* ResourceDirectory,
     _Out_writes_bytes_opt_(CultureNameLength) PVOID CultureName, // WCHAR buffer[6]
     _Out_opt_ PULONG CultureNameLength,
-    _In_ ULONG Flags
+    _In_opt_ ULONG Flags
     );
 
+// rev
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1097,18 +1188,19 @@ LdrpResGetResourceDirectory(
     _Out_ PIMAGE_NT_HEADERS* OutHeaders
     );
 
+// rev
 /**
 * The LdrResSearchResource function searches for a resource in a DLL.
 *
-* @param DllHandle A handle to the DLL.
-* @param ResourceInfo A pointer to the resource information.
-* @param Level The level of the resource.
-* @param Flags Flags for the resource search.
-* @param ResourceBuffer An optional pointer to receive the resource buffer.
-* @param ResourceLength An optional pointer to receive the resource length.
-* @param CultureName An optional buffer to receive the culture name.
-* @param CultureNameLength An optional pointer to receive the length of the culture name.
-* @return NTSTATUS Successful or errant status.
+* \param DllHandle A handle to the DLL.
+* \param ResourceId A pointer to an array of resource names.
+* \param Count The number of resource names in the array.
+* \param Flags Flags for the resource search.
+* \param ResourceBuffer An optional pointer to receive the resource buffer.
+* \param ResourceLength An optional pointer to receive the resource length.
+* \param CultureName An optional buffer to receive the culture name.
+* \param CultureNameLength An optional pointer to receive the length of the culture name.
+* \return NTSTATUS Successful or errant status.
 */
 NTSYSAPI
 NTSTATUS
@@ -1120,7 +1212,7 @@ LdrResSearchResource(
     _In_ ULONG Flags,
     _Out_opt_ PVOID* ResourceBuffer,
     _Out_opt_ PSIZE_T ResourceLength,
-    _Out_writes_bytes_opt_(CultureNameLength) PVOID CultureName, // WCHAR buffer[6]
+    _Out_writes_bytes_opt_(*CultureNameLength) PVOID CultureName, // WCHAR buffer[6]
     _Out_opt_ PULONG CultureNameLength
     );
 
@@ -1158,7 +1250,7 @@ NTSTATUS
 NTAPI
 LdrResRelease(
     _In_ PVOID DllHandle,
-    _In_opt_ ULONG_PTR CultureNameOrId, // MAKEINTRESOURCE
+    _In_opt_ PCWSTR CultureNameOrId, // MAKEINTRESOURCE
     _In_ ULONG Flags
     );
 #endif
@@ -1183,6 +1275,16 @@ typedef struct _LDR_ENUM_RESOURCE_ENTRY
 #define NAME_FROM_RESOURCE_ENTRY(RootDirectory, Entry) \
     ((Entry)->NameIsString ? (ULONG_PTR)((ULONG_PTR)(RootDirectory) + (ULONG_PTR)((Entry)->NameOffset)) : (Entry)->Id)
 
+/**
+ * The LdrEnumResources routine enumerates resources of a specified DLL module.
+ *
+ * \param DllHandle Handle to the loaded DLL module whose resources are to be enumerated.
+ * \param ResourceInfo Pointer to a LDR_RESOURCE_INFO structure that specifies the resource type, name, and language.
+ * \param ResourceIdCount Specifies the level of enumeration (e.g., type, name, or language).
+ * \param ResourceCount On input, specifies the maximum number of resources to enumerate. On output, receives the actual number of resources enumerated.
+ * \param Resources Pointer to a buffer that receives an array of LDR_ENUM_RESOURCE_ENTRY structures describing the resources.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1193,14 +1295,17 @@ LdrEnumResources(
     _Inout_ ULONG* ResourceCount,
     _Out_writes_to_opt_(*ResourceCount, *ResourceCount) PLDR_ENUM_RESOURCE_ENTRY Resources);
 
+// rev
 /**
- * Returns a handle to the language-specific dynamic-link library (DLL) resource module associated with a DLL that is already loaded for the calling process.
+ * The LdrLoadAlternateResourceModule routine returns a handle to the language-specific dynamic-link library (DLL)
+ * resource module associated with a DLL that is already loaded for the calling process.
  *
- * \param DllHandle A handle to the DLL module to search for a MUI resource. If the language-specific DLL for the MUI is available, loads the specified module into the address space of the calling process and returns a handle to the module.
+ * \param DllHandle A handle to the DLL module to search for a MUI resource. If the language-specific DLL for the MUI is available,
+ * loads the specified module into the address space of the calling process and returns a handle to the module.
  * \param BaseAddress The base address of the mapped view.
  * \param Size The size of the mapped view.
  * \param Flags Reserved
- * \return Successful or errant status.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
@@ -1221,12 +1326,7 @@ LdrLoadAlternateResourceModuleEx(
     _Out_opt_ PSIZE_T Size,
     _In_ ULONG Flags);
 
-/**
- * Frees the language-specific dynamic-link library (DLL) resource module previously loaded by LdrLoadAlternateResourceModule function.
- *
- * @param DllHandle The base address of the mapped view.
- * @return Successful or errant status.
- */
+// rev
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -1301,6 +1401,13 @@ LdrQueryProcessModuleInformation(
 
 #pragma region Find
 
+/**
+ * The LdrFindEntryForAddress routine retrieves the loader data table entry for a given address within a loaded module.
+ *
+ * \param DllHandle A pointer to an address within the loaded module (such as the base address of the DLL or any address inside the module).
+ * \param Entry On success, receives a pointer to the LDR_DATA_TABLE_ENTRY structure corresponding to the module containing the specified address.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1313,8 +1420,8 @@ _Function_class_(LDR_ENUM_CALLBACK)
 VOID
 NTAPI
 LDR_ENUM_CALLBACK(
-    _In_ PLDR_DATA_TABLE_ENTRY ModuleInformation,
-    _In_ PVOID Parameter,
+    _In_ PCLDR_DATA_TABLE_ENTRY ModuleInformation,
+    _In_opt_ PVOID Parameter,
     _Out_ PBOOLEAN Stop);
 typedef LDR_ENUM_CALLBACK *PLDR_ENUM_CALLBACK;
 
@@ -1323,9 +1430,9 @@ _Function_class_(LDR_ENUM_CALLBACK64)
 VOID
 NTAPI
 LDR_ENUM_CALLBACK64(
-    _In_ PLDR_DATA_TABLE_ENTRY64 ModuleInformation,
-    _In_ PVOID Parameter,
-    _Out_ BOOLEAN* Stop);
+    _In_ PCLDR_DATA_TABLE_ENTRY64 ModuleInformation,
+    _In_opt_ PVOID Parameter,
+    _Out_ PBOOLEAN Stop);
 typedef LDR_ENUM_CALLBACK64 *PLDR_ENUM_CALLBACK64;
 
 typedef
@@ -1333,9 +1440,9 @@ _Function_class_(LDR_ENUM_CALLBACK32)
 VOID
 NTAPI
 LDR_ENUM_CALLBACK32(
-    _In_ PLDR_DATA_TABLE_ENTRY32 ModuleInformation,
-    _In_ PVOID Parameter,
-    _Out_ BOOLEAN* Stop);
+    _In_ PCLDR_DATA_TABLE_ENTRY32 ModuleInformation,
+    _In_opt_ PVOID Parameter,
+    _Out_ PBOOLEAN Stop);
 typedef LDR_ENUM_CALLBACK32 *PLDR_ENUM_CALLBACK32;
 
 NTSYSAPI
@@ -1344,7 +1451,7 @@ NTAPI
 LdrEnumerateLoadedModules(
     _In_ BOOLEAN ReservedFlag,
     _In_ PLDR_ENUM_CALLBACK EnumProc,
-    _In_ PVOID Context);
+    _In_opt_ PVOID Context);
 
 #pragma endregion
 

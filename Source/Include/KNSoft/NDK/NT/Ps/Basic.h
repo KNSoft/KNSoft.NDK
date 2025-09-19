@@ -231,16 +231,21 @@ USER_THREAD_START_ROUTINE(
     _In_ PVOID ThreadParameter);
 typedef USER_THREAD_START_ROUTINE *PUSER_THREAD_START_ROUTINE;
 
+/**
+ * The INITIAL_TEB structure contains information about the initial stack for a thread.
+ * This structure is used when creating a new thread to specify the stack boundaries and allocation base.
+ * It also contains information about the previous stack if the thread is being recreated.
+ */
 typedef struct _INITIAL_TEB
 {
     struct
     {
-        PVOID OldStackBase;
-        PVOID OldStackLimit;
+        PVOID OldStackBase;     // Pointer to the base address of the previous stack.
+        PVOID OldStackLimit;    // Pointer to the limit address of the previous stack.
     } OldInitialTeb;
-    PVOID StackBase;
-    PVOID StackLimit;
-    PVOID StackAllocationBase;
+    PVOID StackBase;            // Pointer to the base address of the new stack.
+    PVOID StackLimit;           // Pointer to the limit address of the new stack.
+    PVOID StackAllocationBase;  // Pointer to the base address where the stack was allocated.
 } INITIAL_TEB, *PINITIAL_TEB;
 
 /**

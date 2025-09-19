@@ -84,9 +84,11 @@ RtlVerifyVersionInfo(
 /**
  * The RtlGetEnabledExtendedFeatures routine returns a mask of extended processor features that are enabled by the system.
  *
- * @param FeatureMask A 64-bit feature mask. This parameter indicates a set of extended processor features for which the caller requests information about whether the features are enabled.
- * @return A 64-bitmask of enabled extended processor features. The routine calculates this mask as the intersection (bitwise AND) between all enabled features and the value of the FeatureMask parameter.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlgetenabledextendedfeatures
+ * \param FeatureMask A 64-bit feature mask. This parameter indicates a set of extended processor features for which the caller 
+ * requests information about whether the features are enabled.
+ * \return A 64-bitmask of enabled extended processor features. The routine calculates this mask as the intersection (bitwise AND) 
+ * between all enabled features and the value of the FeatureMask parameter.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlgetenabledextendedfeatures
  */
 NTSYSAPI
 ULONG64
@@ -169,12 +171,13 @@ RtlIsEnclaveFeaturePresent(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+// rev
 /**
- * Determines whether the specified processor feature is supported by the current computer.
+ * The RtlIsProcessorFeaturePresent routine determines whether the specified processor feature is supported by the current computer.
  *
- * @param ProcessorFeature The processor feature to be tested.
- * @return If the feature is supported, the return value is a nonzero value.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent
+ * \param ProcessorFeature The processor feature to be tested.
+ * \return If the feature is supported, the return value is a nonzero value.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent
  */
 NTSYSAPI
 BOOLEAN
@@ -183,23 +186,28 @@ RtlIsProcessorFeaturePresent(
     _In_ ULONG ProcessorFeature);
 #endif
 
+// rev
 /**
- * Retrieves the number of the processor the current thread was running on during the call to this function.
+ * The RtlGetCurrentProcessorNumber routine retrieves the number of the processor the current thread was running 
+ * on during the call to this function.
  *
- * @return The function returns the current processor number.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessornumber
+ * \return The function returns the current processor number.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessornumber
  */
 NTSYSAPI
 ULONG
 NTAPI
 RtlGetCurrentProcessorNumber(VOID);
 
+// rev
 /**
- * Retrieves the processor group and number of the logical processor in which the calling thread is running.
+ * The RtlGetCurrentProcessorNumberEx routine retrieves the processor group and number of the logical processor 
+ * in which the calling thread is running.
  *
- * @param ProcessorNumber A pointer to a PROCESSOR_NUMBER structure that receives the processor group and number of the logical processor the calling thread is running.
- * @return This function does not return a value.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessornumberex
+ * \param ProcessorNumber A pointer to a PROCESSOR_NUMBER structure that receives the processor group and number 
+ * of the logical processor the calling thread is running.
+ * \return This function does not return a value.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessornumberex
  */
 NTSYSAPI
 VOID

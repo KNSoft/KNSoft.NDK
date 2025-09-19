@@ -152,26 +152,26 @@ NtCreateProcess(
 
 // begin_rev
 #define PROCESS_CREATE_FLAGS_NONE 0x00000000
-#define PROCESS_CREATE_FLAGS_BREAKAWAY 0x00000001 // NtCreateProcessEx & NtCreateUserProcess
-#define PROCESS_CREATE_FLAGS_NO_DEBUG_INHERIT 0x00000002 // NtCreateProcessEx & NtCreateUserProcess
-#define PROCESS_CREATE_FLAGS_INHERIT_HANDLES 0x00000004 // NtCreateProcessEx & NtCreateUserProcess
-#define PROCESS_CREATE_FLAGS_OVERRIDE_ADDRESS_SPACE 0x00000008 // NtCreateProcessEx only
-#define PROCESS_CREATE_FLAGS_LARGE_PAGES 0x00000010 // NtCreateProcessEx only (requires SeLockMemoryPrivilege)
-#define PROCESS_CREATE_FLAGS_LARGE_PAGE_SYSTEM_DLL 0x00000020 // NtCreateProcessEx only (requires SeLockMemoryPrivilege)
-#define PROCESS_CREATE_FLAGS_PROTECTED_PROCESS 0x00000040 // NtCreateUserProcess only
-#define PROCESS_CREATE_FLAGS_CREATE_SESSION 0x00000080 // NtCreateProcessEx & NtCreateUserProcess (requires SeLoadDriverPrivilege)
-#define PROCESS_CREATE_FLAGS_INHERIT_FROM_PARENT 0x00000100 // NtCreateProcessEx & NtCreateUserProcess
-#define PROCESS_CREATE_FLAGS_CREATE_SUSPENDED 0x00000200 // NtCreateProcessEx & NtCreateUserProcess
-#define PROCESS_CREATE_FLAGS_FORCE_BREAKAWAY 0x00000400 // NtCreateProcessEx & NtCreateUserProcess (requires SeTcbPrivilege)
-#define PROCESS_CREATE_FLAGS_MINIMAL_PROCESS 0x00000800 // NtCreateProcessEx only
-#define PROCESS_CREATE_FLAGS_RELEASE_SECTION 0x00001000 // NtCreateProcessEx & NtCreateUserProcess
-#define PROCESS_CREATE_FLAGS_CLONE_MINIMAL 0x00002000 // NtCreateProcessEx only
+#define PROCESS_CREATE_FLAGS_BREAKAWAY 0x00000001                               // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_NO_DEBUG_INHERIT 0x00000002                        // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_INHERIT_HANDLES 0x00000004                         // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_OVERRIDE_ADDRESS_SPACE 0x00000008                  // NtCreateProcessEx only
+#define PROCESS_CREATE_FLAGS_LARGE_PAGES 0x00000010                             // NtCreateProcessEx only (requires SeLockMemoryPrivilege)
+#define PROCESS_CREATE_FLAGS_LARGE_PAGE_SYSTEM_DLL 0x00000020                   // NtCreateProcessEx only (requires SeLockMemoryPrivilege)
+#define PROCESS_CREATE_FLAGS_PROTECTED_PROCESS 0x00000040                       // NtCreateUserProcess only
+#define PROCESS_CREATE_FLAGS_CREATE_SESSION 0x00000080                          // NtCreateProcessEx & NtCreateUserProcess (requires SeLoadDriverPrivilege)
+#define PROCESS_CREATE_FLAGS_INHERIT_FROM_PARENT 0x00000100                     // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_CREATE_SUSPENDED 0x00000200                        // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_FORCE_BREAKAWAY 0x00000400                         // NtCreateProcessEx & NtCreateUserProcess (requires SeTcbPrivilege)
+#define PROCESS_CREATE_FLAGS_MINIMAL_PROCESS 0x00000800                         // NtCreateProcessEx only
+#define PROCESS_CREATE_FLAGS_RELEASE_SECTION 0x00001000                         // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_CLONE_MINIMAL 0x00002000                           // NtCreateProcessEx only
 #define PROCESS_CREATE_FLAGS_CLONE_MINIMAL_REDUCED_COMMIT 0x00004000
-#define PROCESS_CREATE_FLAGS_AUXILIARY_PROCESS 0x00008000 // NtCreateProcessEx & NtCreateUserProcess (requires SeTcbPrivilege)
-#define PROCESS_CREATE_FLAGS_CREATE_STORE 0x00020000 // NtCreateProcessEx & NtCreateUserProcess
-#define PROCESS_CREATE_FLAGS_USE_PROTECTED_ENVIRONMENT 0x00040000 // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_AUXILIARY_PROCESS 0x00008000                       // NtCreateProcessEx & NtCreateUserProcess (requires SeTcbPrivilege)
+#define PROCESS_CREATE_FLAGS_CREATE_STORE 0x00020000                            // NtCreateProcessEx & NtCreateUserProcess
+#define PROCESS_CREATE_FLAGS_USE_PROTECTED_ENVIRONMENT 0x00040000               // NtCreateProcessEx & NtCreateUserProcess
 #define PROCESS_CREATE_FLAGS_IMAGE_EXPANSION_MITIGATION_DISABLE 0x00080000
-#define PROCESS_CREATE_FLAGS_PARTITION_CREATE_SLAB_IDENTITY 0x00400000 // NtCreateProcessEx & NtCreateUserProcess (requires SeLockMemoryPrivilege)
+#define PROCESS_CREATE_FLAGS_PARTITION_CREATE_SLAB_IDENTITY 0x00400000          // NtCreateProcessEx & NtCreateUserProcess (requires SeLockMemoryPrivilege)
 // end_rev
 
 /**
@@ -992,36 +992,36 @@ NtQueueApcThreadEx2(
 #define _USE_FULL_PROC_THREAD_ATTRIBUTE
 typedef enum _PROC_THREAD_ATTRIBUTE_NUM
 {
-    ProcThreadAttributeParentProcess = 0, // in HANDLE
-    ProcThreadAttributeExtendedFlags = 1, // in ULONG (EXTENDED_PROCESS_CREATION_FLAG_*)
-    ProcThreadAttributeHandleList = 2, // in HANDLE[]
-    ProcThreadAttributeGroupAffinity = 3, // in GROUP_AFFINITY // since WIN7
-    ProcThreadAttributePreferredNode = 4, // in USHORT
-    ProcThreadAttributeIdealProcessor = 5, // in PROCESSOR_NUMBER
-    ProcThreadAttributeUmsThread = 6, // in UMS_CREATE_THREAD_ATTRIBUTES
-    ProcThreadAttributeMitigationPolicy = 7, // in ULONG, ULONG64, or ULONG64[2]
-    ProcThreadAttributePackageFullName = 8, // in WCHAR[] // since WIN8
-    ProcThreadAttributeSecurityCapabilities = 9, // in SECURITY_CAPABILITIES
-    ProcThreadAttributeConsoleReference = 10, // BaseGetConsoleReference (kernelbase.dll)
-    ProcThreadAttributeProtectionLevel = 11, // in ULONG (PROTECTION_LEVEL_*) // since WINBLUE
-    ProcThreadAttributeOsMaxVersionTested = 12, // in MAXVERSIONTESTED_INFO // since THRESHOLD // (from exe.manifest)
-    ProcThreadAttributeJobList = 13, // in HANDLE[]
-    ProcThreadAttributeChildProcessPolicy = 14, // in ULONG (PROCESS_CREATION_CHILD_PROCESS_*) // since THRESHOLD2
-    ProcThreadAttributeAllApplicationPackagesPolicy = 15, // in ULONG (PROCESS_CREATION_ALL_APPLICATION_PACKAGES_*) // since REDSTONE
-    ProcThreadAttributeWin32kFilter = 16, // in WIN32K_SYSCALL_FILTER
-    ProcThreadAttributeSafeOpenPromptOriginClaim = 17, // in SE_SAFE_OPEN_PROMPT_RESULTS
-    ProcThreadAttributeDesktopAppPolicy = 18, // in ULONG (PROCESS_CREATION_DESKTOP_APP_*) // since RS2
-    ProcThreadAttributeBnoIsolation = 19, // in PROC_THREAD_BNOISOLATION_ATTRIBUTE
-    ProcThreadAttributePseudoConsole = 22, // in HANDLE (HPCON) // since RS5
-    ProcThreadAttributeIsolationManifest = 23, // in ISOLATION_MANIFEST_PROPERTIES // rev (diversenok) // since 19H2+
-    ProcThreadAttributeMitigationAuditPolicy = 24, // in ULONG, ULONG64, or ULONG64[2] // since 21H1
-    ProcThreadAttributeMachineType = 25, // in USHORT // since 21H2
-    ProcThreadAttributeComponentFilter = 26, // in ULONG
-    ProcThreadAttributeEnableOptionalXStateFeatures = 27, // in ULONG64 // since WIN11
-    ProcThreadAttributeCreateStore = 28, // ULONG // rev (diversenok)
+    ProcThreadAttributeParentProcess = 0,                   // in HANDLE
+    ProcThreadAttributeExtendedFlags = 1,                   // in ULONG (EXTENDED_PROCESS_CREATION_FLAG_*)
+    ProcThreadAttributeHandleList = 2,                      // in HANDLE[]
+    ProcThreadAttributeGroupAffinity = 3,                   // in GROUP_AFFINITY // since WIN7
+    ProcThreadAttributePreferredNode = 4,                   // in USHORT
+    ProcThreadAttributeIdealProcessor = 5,                  // in PROCESSOR_NUMBER
+    ProcThreadAttributeUmsThread = 6,                       // in UMS_CREATE_THREAD_ATTRIBUTES
+    ProcThreadAttributeMitigationPolicy = 7,                // in ULONG, ULONG64, or ULONG64[2]
+    ProcThreadAttributePackageFullName = 8,                 // in WCHAR[] // since WIN8
+    ProcThreadAttributeSecurityCapabilities = 9,            // in SECURITY_CAPABILITIES
+    ProcThreadAttributeConsoleReference = 10,               // BaseGetConsoleReference (kernelbase.dll)
+    ProcThreadAttributeProtectionLevel = 11,                // in ULONG (PROTECTION_LEVEL_*) // since WINBLUE
+    ProcThreadAttributeOsMaxVersionTested = 12,             // in MAXVERSIONTESTED_INFO // since THRESHOLD // (from exe.manifest)
+    ProcThreadAttributeJobList = 13,                        // in HANDLE[]
+    ProcThreadAttributeChildProcessPolicy = 14,             // in ULONG (PROCESS_CREATION_CHILD_PROCESS_*) // since THRESHOLD2
+    ProcThreadAttributeAllApplicationPackagesPolicy = 15,   // in ULONG (PROCESS_CREATION_ALL_APPLICATION_PACKAGES_*) // since REDSTONE
+    ProcThreadAttributeWin32kFilter = 16,                   // in WIN32K_SYSCALL_FILTER
+    ProcThreadAttributeSafeOpenPromptOriginClaim = 17,      // in SE_SAFE_OPEN_PROMPT_RESULTS
+    ProcThreadAttributeDesktopAppPolicy = 18,               // in ULONG (PROCESS_CREATION_DESKTOP_APP_*) // since RS2
+    ProcThreadAttributeBnoIsolation = 19,                   // in PROC_THREAD_BNOISOLATION_ATTRIBUTE
+    ProcThreadAttributePseudoConsole = 22,                  // in HANDLE (HPCON) // since RS5
+    ProcThreadAttributeIsolationManifest = 23,              // in ISOLATION_MANIFEST_PROPERTIES // rev (diversenok) // since 19H2+
+    ProcThreadAttributeMitigationAuditPolicy = 24,          // in ULONG, ULONG64, or ULONG64[2] // since 21H1
+    ProcThreadAttributeMachineType = 25,                    // in USHORT // since 21H2
+    ProcThreadAttributeComponentFilter = 26,                // in ULONG
+    ProcThreadAttributeEnableOptionalXStateFeatures = 27,   // in ULONG64 // since WIN11
+    ProcThreadAttributeCreateStore = 28,                    // ULONG // rev (diversenok)
     ProcThreadAttributeTrustedApp = 29,
     ProcThreadAttributeSveVectorLength = 30,
-    ProcThreadAttributeSmeVectorLength = 31 // since 25H2
+    ProcThreadAttributeSmeVectorLength = 31                 // since 25H2
 } PROC_THREAD_ATTRIBUTE_NUM;
 
 #ifndef PROC_THREAD_ATTRIBUTE_EXTENDED_FLAGS

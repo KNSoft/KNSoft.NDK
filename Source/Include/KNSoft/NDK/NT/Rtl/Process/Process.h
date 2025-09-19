@@ -11,6 +11,10 @@ EXTERN_C_START
 
 /* phnt & PDB */
 
+// RTL_PROCESS_LOCK_INFORMATION Type
+#define RTL_CRITSECT_TYPE 0
+#define RTL_RESOURCE_TYPE 1
+
 // private
 typedef struct _RTL_PROCESS_LOCK_INFORMATION
 {
@@ -179,6 +183,18 @@ typedef struct _RTL_USER_PROCESS_EXTENDED_PARAMETERS
 } RTL_USER_PROCESS_EXTENDED_PARAMETERS, *PRTL_USER_PROCESS_EXTENDED_PARAMETERS;
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
+/**
+ * The RtlCreateUserProcessEx routine creates a new process and its primary thread, with extended parameters.
+ *
+ * \param NtImagePathName Pointer to a UNICODE_STRING that specifies the path of the image to be executed.
+ * \param ProcessParameters Pointer to a RTL_USER_PROCESS_PARAMETERS structure that contains process parameter information.
+ * \param InheritHandles If TRUE, each inheritable handle in the calling process is inherited by the new process.
+ * \param ProcessExtendedParameters Optional pointer to a RTL_USER_PROCESS_EXTENDED_PARAMETERS structure for additional process creation options. Can be NULL.
+ * \param ProcessInformation Pointer to a RTL_USER_PROCESS_INFORMATION structure that receives information about the new process and its primary thread.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks This function is available on Windows 10 RS2 and later. It allows for more advanced process creation scenarios than RtlCreateUserProcess.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -191,7 +207,7 @@ RtlCreateUserProcessEx(
 #endif
 
 /**
- * Ends the calling process and all its threads.
+ * The RtlExitUserProcess routine ends the calling process and all its threads.
  *
  * \param ExitStatus The exit status for the process and all threads.
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-exitprocess
@@ -209,15 +225,16 @@ RtlExitUserProcess(
 #define RTL_CLONE_PROCESS_FLAGS_INHERIT_HANDLES     0x00000002
 #define RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE      0x00000004 // don't update synchronization objects
 
+// private
 /**
- * Creates a new process from the current process.
+ * The RtlCloneUserProcess routine creates a new process from the current process.
  *
- * @param ProcessFlags The path of the image to be executed.
- * @param ProcessSecurityDescriptor The security descriptor for the new process. If NULL, the process gets a default security descriptor.
- * @param ThreadSecurityDescriptor The security descriptor for the initial thread. If NULL, the thread gets a default security descriptor.
- * @param DebugPort The handle of an ALPC port for debug messages. If NULL, the process gets a default port. (WindowsErrorReportingServicePort)
- * @param ProcessInformation The new process information.
- * @return NTSTATUS Successful or errant status.
+ * \param ProcessFlags The path of the image to be executed.
+ * \param ProcessSecurityDescriptor The security descriptor for the new process. If NULL, the process gets a default security descriptor.
+ * \param ThreadSecurityDescriptor The security descriptor for the initial thread. If NULL, the thread gets a default security descriptor.
+ * \param DebugPort The handle of an ALPC port for debug messages. If NULL, the process gets a default port. (WindowsErrorReportingServicePort)
+ * \param ProcessInformation The new process information.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
@@ -292,7 +309,7 @@ RtlCreateProcessReflection(
     _In_opt_ PVOID StartRoutine,
     _In_opt_ PVOID StartContext,
     _In_opt_ HANDLE EventHandle,
-    _Out_opt_ PRTLP_PROCESS_REFLECTION_REFLECTION_INFORMATION ReflectionInformation);
+    _Out_opt_ PPROCESS_REFLECTION_INFORMATION ReflectionInformation);
 
 /**
  * The RtlSetProcessIsCritical function sets or clears the critical status of the current process.
@@ -343,10 +360,10 @@ RtlSetThreadSubProcessTag(
 
 // rev
 /**
- * Validates the process protection level.
+ * The RtlValidProcessProtection function validates the process protection level.
  *
- * @param ProcessProtection Pointer to a PS_PROTECTION structure describing the protection.
- * @return TRUE if the protection level is valid, FALSE otherwise.
+ * \param ProcessProtection Pointer to a PS_PROTECTION structure describing the protection.
+ * \return TRUE if the protection level is valid, FALSE otherwise.
  */
 NTSYSAPI
 BOOLEAN
@@ -356,11 +373,11 @@ RtlValidProcessProtection(
 
 // rev
 /**
- * Tests whether a source protection level can access a target protection level.
+ * The RtlTestProtectedAccess function tests whether a source protection level can access a target protection level.
  *
- * @param Source Pointer to a PS_PROTECTION structure for the source.
- * @param Target Pointer to a PS_PROTECTION structure for the target.
- * @return TRUE if access is allowed, FALSE otherwise.
+ * \param Source Pointer to a PS_PROTECTION structure for the source.
+ * \param Target Pointer to a PS_PROTECTION structure for the target.
+ * \return TRUE if access is allowed, FALSE otherwise.
  */
 NTSYSAPI
 BOOLEAN
@@ -371,14 +388,28 @@ RtlTestProtectedAccess(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
 
-// rev NtCompareObjects(NtCurrentProcess(), ProcessHandle)
+// rev 
+/**
+ * The RtlIsCurrentProcess function determines whether the specified process handle refers to the current process.
+ *
+ * \param ProcessHandle Handle to the process to compare with the current process.
+ * \return TRUE if the handle refers to the current process; otherwise, FALSE.
+ * \remarks Internally compares the specified handle with the current process handle using `NtCompareObjects(NtCurrentProcess(), ProcessHandle)`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
 RtlIsCurrentProcess(
     _In_ HANDLE ProcessHandle);
 
-// rev NtCompareObjects(NtCurrentThread(), ThreadHandle)
+// rev 
+/**
+ * The RtlIsCurrentThread function determines whether the specified thread handle refers to the current thread.
+ *
+ * \param ThreadHandle Handle to the thread to compare with the current thread.
+ * \return TRUE if the handle refers to the current thread; otherwise, FALSE.
+ * \remarks Internally compares the specified handle with the current thread handle using `NtCompareObjects(NtCurrentThread(), ThreadHandle)`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -387,6 +418,21 @@ RtlIsCurrentThread(
 
 #endif
 
+/**
+ * The RtlCreateUserThread routine creates a thread in the specified process.
+ *
+ * \param ProcessHandle Handle to the process in which the thread is to be created.
+ * \param ThreadSecurityDescriptor Optional pointer to a security descriptor for the new thread. If NULL, the thread gets a default security descriptor.
+ * \param CreateSuspended If TRUE, the thread is created in a suspended state and must be resumed explicitly. If FALSE, the thread starts running immediately.
+ * \param ZeroBits Optional number of high-order address bits that must be zero in the stack's base address. Usually set to 0.
+ * \param MaximumStackSize Optional maximum size, in bytes, of the stack for the new thread. If 0, the default size is used.
+ * \param CommittedStackSize Optional initial size, in bytes, of committed stack for the new thread. If 0, the default size is used.
+ * \param StartAddress Pointer to the application-defined function to be executed by the thread.
+ * \param Parameter Optional pointer to a variable to be passed to the thread function.
+ * \param ThreadHandle Optional pointer to a variable that receives the handle of the new thread.
+ * \param ClientId Optional pointer to a CLIENT_ID structure that receives the thread and process identifiers.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -409,6 +455,13 @@ RtlUserThreadStart(
     _In_ PUSER_THREAD_START_ROUTINE Function,
     _In_ PVOID Parameter);
 
+/**
+ * The RtlExitUserThread routine ends the calling thread and returns the specified exit status.
+ *
+ * \param ExitStatus The exit status for the thread.
+ * \remarks This function does not return to the caller. It terminates the thread immediately.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-exitthread
+ */
 _Analysis_noreturn_
 DECLSPEC_NORETURN
 NTSYSAPI
@@ -417,11 +470,29 @@ NTAPI
 RtlExitUserThread(
     _In_ NTSTATUS ExitStatus);
 
+// rev
+/**
+ * The RtlIsCurrentThreadAttachExempt routine determines whether the current thread is exempt from attach notifications.
+ *
+ * \return TRUE if the current thread is attach-exempt; otherwise, FALSE.
+ * \remarks Attach-exempt threads do not receive DLL_THREAD_ATTACH and DLL_THREAD_DETACH notifications.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
 RtlIsCurrentThreadAttachExempt(VOID);
 
+/**
+ * The RtlCreateUserStack routine allocates and initializes a user-mode stack for a new thread.
+ *
+ * \param CommittedStackSize The initial size, in bytes, of committed stack. If 0, the default is used.
+ * \param MaximumStackSize The maximum size, in bytes, of the stack. If 0, the default is used.
+ * \param ZeroBits The number of high-order address bits that must be zero in the stack's base address. Usually set to 0.
+ * \param PageSize The system page size, in bytes.
+ * \param ReserveAlignment The alignment for the reserved stack region.
+ * \param InitialTeb Pointer to an INITIAL_TEB structure that receives the stack information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -433,12 +504,30 @@ RtlCreateUserStack(
     _In_ ULONG_PTR ReserveAlignment,
     _Out_ PINITIAL_TEB InitialTeb);
 
+/**
+ * The RtlFreeUserStack routine frees a user-mode stack previously allocated for a thread.
+ *
+ * \param AllocationBase The base address of the stack allocation to free.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlFreeUserStack(
     _In_ PVOID AllocationBase);
 
+/**
+ * The RtlRemoteCall routine calls a function in the context of a specified thread in a remote process.
+ *
+ * \param ProcessHandle Handle to the process in which the thread resides.
+ * \param ThreadHandle Handle to the thread in which the function is to be called.
+ * \param CallSite Address of the function to call in the remote process.
+ * \param ArgumentCount Number of arguments to pass to the function.
+ * \param Arguments Pointer to an array of arguments to pass to the function. Can be NULL if no arguments are needed.
+ * \param PassContext If TRUE, the thread context is passed to the function.
+ * \param AlreadySuspended If TRUE, the thread is already suspended and does not need to be suspended by this routine.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

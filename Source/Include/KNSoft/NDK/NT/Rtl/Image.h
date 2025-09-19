@@ -13,6 +13,9 @@ RtlImageNtHeader(
     _In_ PVOID BaseOfImage
 );
 
+/**
+ * Flag to disable range checking in RtlImageNtHeaderEx.
+ */
 #define RTL_IMAGE_NT_HEADER_EX_FLAG_NO_RANGE_CHECK 0x00000001
 
 NTSYSAPI

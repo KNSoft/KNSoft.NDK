@@ -1176,16 +1176,16 @@ typedef struct _TEB
     ULONG LastErrorValue;                           // The previous Win32 error value for this thread.
     ULONG CountOfOwnedCriticalSections;             // The number of critical sections currently owned by this thread.
     PVOID CsrClientThread;
-    PVOID Win32ThreadInfo;                          // Reserved for GDI/USER (Win32k).
-    ULONG User32Reserved[26];
-    ULONG UserReserved[5];
+    PVOID Win32ThreadInfo;                          // Reserved for win32k.sys.
+    ULONG User32Reserved[26];                       // Reserved for user32.dll.
+    ULONG UserReserved[5];                          // Reserved for winsrv.dll.
     PVOID WOW32Reserved;
     LCID CurrentLocale;                             // The LCID of the current thread. (Kernel32!GetThreadLocale)
     ULONG FpSoftwareStatusRegister;
     PVOID ReservedForDebuggerInstrumentation[16];
 
 #ifdef _WIN64
-    PVOID SystemReserved1[25];
+    PVOID SystemReserved1[25];                      // Reserved for floating-point emulation.
 #else
     PVOID SystemReserved1[21];
 #endif
@@ -1329,15 +1329,15 @@ typedef struct _TEB
         };
     };
 
-    PVOID TxnScopeEnterCallback;    // Pointer to the callback function that is called when a KTM transaction scope is entered.
-    PVOID TxnScopeExitCallback;     // Pointer to the callback function that is called when a KTM transaction scope is exited.
-    PVOID TxnScopeContext;          // Pointer to optional context data for use by the application when a KTM transaction scope callback is called.
-    ULONG LockCount;                // The lock count of critical sections for the current thread.
-    LONG WowTebOffset;              // The offset to the WOW64 (Windows on Windows) TEB for the current thread.
-    PVOID ResourceRetValue;
-    PVOID ReservedForWdf;           // Reserved for Windows Driver Framework (WDF).
-    ULONGLONG ReservedForCrt;       // Reserved for the Microsoft C runtime (CRT).
-    GUID EffectiveContainerId;      // The Host Compute Service (HCS) container identifier.
+    PVOID TxnScopeEnterCallback;            // Pointer to the callback function that is called when a KTM transaction scope is entered.
+    PVOID TxnScopeExitCallback;             // Pointer to the callback function that is called when a KTM transaction scope is exited.
+    PVOID TxnScopeContext;                  // Pointer to optional context data for use by the application when a KTM transaction scope callback is called.
+    ULONG LockCount;                        // The lock count of critical sections for the current thread.
+    LONG WowTebOffset;                      // The offset to the WOW64 (Windows on Windows) TEB for the current thread.
+    PLDR_RESLOADER_RET ResourceRetValue;
+    PVOID ReservedForWdf;                   // Reserved for Windows Driver Framework (WDF).
+    ULONGLONG ReservedForCrt;               // Reserved for the Microsoft C runtime (CRT).
+    GUID EffectiveContainerId;              // The Host Compute Service (HCS) container identifier.
 
     // Reserved for Kernel32!Sleep (SpinWait).
     ULONGLONG LastSleepCounter; // since Win11
@@ -1492,7 +1492,7 @@ typedef struct _TEB64
     /* +0x1800 */ VOID* POINTER_64 TxnScopeContext;
     /* +0x1808 */ ULONG LockCount;
     /* +0x180C */ LONG WowTebOffset;
-    /* +0x1810 */ VOID* POINTER_64 ResourceRetValue;
+    /* +0x1810 */ LDR_RESLOADER_RET64* POINTER_64 ResourceRetValue;
     /* +0x1818 */ VOID* POINTER_64 ReservedForWdf;
     /* +0x1820 */ ULONGLONG ReservedForCrt;
     /* +0x1828 */ GUID EffectiveContainerId;
@@ -1643,7 +1643,7 @@ typedef struct _TEB32
     /* +0x0FD4 */ VOID* POINTER_32 TxnScopeContext;
     /* +0x0FD8 */ ULONG LockCount;
     /* +0x0FDC */ LONG WowTebOffset;
-    /* +0x0FE0 */ VOID* POINTER_32 ResourceRetValue;
+    /* +0x0FE0 */ LDR_RESLOADER_RET32* POINTER_32 ResourceRetValue;
     /* +0x0FE4 */ VOID* POINTER_32 ReservedForWdf;
     /* +0x0FE8 */ ULONGLONG ReservedForCrt;
     /* +0x0FF0 */ GUID EffectiveContainerId;
