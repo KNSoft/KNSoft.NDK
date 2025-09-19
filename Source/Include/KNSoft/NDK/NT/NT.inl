@@ -13,4 +13,5 @@
 #include "Rtl/Path.inl"
 #include "Rtl/Stack.inl"
 #include "Rtl/String.inl"
+#include "Rtl/SysInfo.inl"
 #include "Rtl/Wow.inl"

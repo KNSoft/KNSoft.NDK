@@ -1022,9 +1022,7 @@ WINAPI
 _Inline_IsProcessorFeaturePresent(
     _In_ DWORD ProcessorFeature)
 {
-    return ProcessorFeature < PROCESSOR_FEATURE_MAX ?
-        SharedUserData->ProcessorFeatures[ProcessorFeature] :
-        FALSE;
+    return _Inline_RtlIsProcessorFeaturePresent(ProcessorFeature);
 }
 
 __inline

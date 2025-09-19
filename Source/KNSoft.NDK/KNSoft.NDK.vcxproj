@@ -257,6 +257,7 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Sid.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Stack.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\String.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\SysInfo.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Wow.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\ArgParse.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
