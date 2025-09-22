@@ -5,7 +5,7 @@
 
 # KNSoft.NDK
 
-[![NuGet Downloads](https://img.shields.io/nuget/dt/KNSoft.NDK)](https://www.nuget.org/packages/KNSoft.NDK) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/msbuild.yml) ![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub License](https://img.shields.io/github/license/KNSoft/KNSoft.NDK)](https://github.com/KNSoft/KNSoft.NDK/blob/main/LICENSE)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/KNSoft.NDK)](https://www.nuget.org/packages/KNSoft.NDK) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/Build_Publish.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/Build_Publish.yml) ![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub License](https://img.shields.io/github/license/KNSoft/KNSoft.NDK)](https://github.com/KNSoft/KNSoft.NDK/blob/main/LICENSE)
 
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) provides native C/C++ definitions and import libraries for Windows NT development.
 
@@ -61,7 +61,7 @@ The following features **are enabled by default**, can be excluded by defining c
 
 ## Compatibility
 
-![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/msbuild.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/msbuild.yml)
+![PR Welcome](https://img.shields.io/badge/PR-welcome-0688CB.svg) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/KNSoft/KNSoft.NDK/Build_Publish.yml)](https://github.com/KNSoft/KNSoft.NDK/actions/workflows/Build_Publish.yml)
 
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) always follow up the latest Windows NT and specifications, targets to x86, x64, ARM64, and ARM64EC platforms.
 
