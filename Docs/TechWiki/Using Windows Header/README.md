@@ -170,13 +170,13 @@
         <td>Server 2012 R2</td>
     </tr>
     <tr>
-        <td rowspan="14">Windows 10</td>
+        <td rowspan="15">Windows 10</td>
         <td>1507</td>
         <td>Threshold</td>
-        <td rowspan="18">10</td>
-        <td rowspan="18">0</td>
+        <td rowspan="20">10</td>
+        <td rowspan="20">0</td>
         <td>10240</td>
-        <td rowspan="18">0x0A00</td>
+        <td rowspan="20">0x0A00</td>
         <td rowspan="2">_WIN32_WINNT_WINTHRESHOLD</td>
         <td>0x0A000000</td>
         <td>NTDDI_WIN10<br>NTDDI_WINTHRESHOLD</td>
@@ -192,7 +192,7 @@
         <td>1607</td>
         <td>Redstone</td>
         <td>14393</td>
-        <td rowspan="17">_WIN32_WINNT_WIN10</td>
+        <td rowspan="19">_WIN32_WINNT_WIN10</td>
         <td>0x0A000002</td>
         <td>NTDDI_WIN10_RS1</td>
     </tr>
@@ -240,7 +240,7 @@
     </tr>
     <tr>
         <td>2004 20H1</td>
-        <td rowspan="5">Vibranium</td>
+        <td rowspan="6">Vibranium</td>
         <td>19041</td>
         <td>0x0A000009</td>
         <td>NTDDI_WIN10_MN</td>
@@ -254,23 +254,29 @@
     <tr>
         <td>21H1</td>
         <td>19043</td>
-        <td>0x0A00000B</td>
-        <td>NTDDI_WIN10_CO</td>
+        <td></td>
+        <td></td>
     </tr>
     <tr>
         <td>21H2</td>
         <td>19044</td>
-        <td>0x0A00000C</td>
-        <td>NTDDI_WIN10_NI</td>
+        <td>0x0A00000B</td>
+        <td>NTDDI_WIN10_CO</td>
     </tr>
     <tr>
         <td>22H2</td>
         <td>19045</td>
+        <td>0x0A00000C</td>
+        <td>NTDDI_WIN10_NI</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
         <td>0x0A00000D</td>
         <td>NTDDI_WIN10_CU</td>
     </tr>
     <tr>
-        <td rowspan="4">Windows 11</td>
+        <td rowspan="5">Windows 11</td>
         <td>21H2</td>
         <td>Cobalt, Sun Valley</td>
         <td>22000</td>
@@ -295,7 +301,12 @@
         <td>24H2</td>
         <td>Germanium, Hudson Valley</td>
         <td>26100</td>
-        <td>0x0A000010</td>
-        <td>NTDDI_WIN11_GE</td>
+        <td rowspan="2">0x0A000010</td>
+        <td rowspan="2">NTDDI_WIN11_GE</td>
+    </tr>
+    <tr>
+        <td>25H2</td>
+        <td></td>
+        <td>26200</td>
     </tr>
 </table>
