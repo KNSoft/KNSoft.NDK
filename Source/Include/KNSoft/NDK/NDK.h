@@ -31,6 +31,7 @@
 #include "Win32/API/User32.h"
 #include "Win32/API/UserMgrCli.h"
 #include "Win32/API/WinSta.h"
+#include "Win32/API/AdvAPI32.h"
 #include "Win32/API/ComBase.h"
 
 /* Additional headers */
