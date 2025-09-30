@@ -166,20 +166,6 @@ typedef struct _EXTENDED_CREATE_INFORMATION_32 {
 #define FILE_EXISTS                     0x00000004
 #define FILE_DOES_NOT_EXIST             0x00000005
 
-#if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
-//
-// Define the QueryFlags values for NtQueryDirectoryFileEx.
-//
-
-#define FILE_QUERY_RESTART_SCAN                 0x00000001
-#define FILE_QUERY_RETURN_SINGLE_ENTRY          0x00000002
-#define FILE_QUERY_INDEX_SPECIFIED              0x00000004
-#define FILE_QUERY_RETURN_ON_DISK_ENTRIES_ONLY  0x00000008
-#endif
-#if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
-#define FILE_QUERY_NO_CURSOR_UPDATE             0x00000010
-#endif
-
 //
 // Define special ByteOffset parameters for read and write operations
 //
@@ -363,6 +349,11 @@ NtFlushBuffersFile(
 //  This is equivalent to how NtFlushBuffersFile has always worked.
 //
 
+// If set, File data and metadata in the file cache will be written, and the 
+// underlying storage is synchronized to flush its cache.
+// Windows file systems supported: NTFS, ReFS, FAT, exFAT.
+//
+#define FLUSH_FLAGS_FILE_NORMAL 0x00000000
 //  If set, this operation will write the data for the given file from the
 //  Windows in-memory cache.  This will NOT commit any associated metadata
 //  changes.  This will NOT send a SYNC to the storage device to flush its
@@ -391,6 +382,17 @@ NtFlushBuffersFile(
 #define FLUSH_FLAGS_FLUSH_AND_PURGE 0x00000008 // 24H2
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The NtFlushBuffersFileEx routine sends a flush request for a given file to the file system. An optional flush operation flag can be set to control how file data is written to storage.
+ *
+ * \param FileHandle A handle to the file object representing the file, directory, device or volume.
+ * \param Flags Flush operation flags.
+ * \param Parameters Pointer to a block with additional parameters. This parameter must currently be set to NULL.
+ * \param ParametersSize The size, in bytes, of the block that Parameters point to. This parameter must currently be set to 0.
+ * \param IoStatusBlock Address of the caller's I/O status block. This parameter is required and cannot be NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntflushbuffersfileex
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

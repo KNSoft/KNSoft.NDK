@@ -423,7 +423,6 @@ typedef struct _TOKEN_PROCESS_TRUST_LEVEL
  * @param DefaultDacl Optional pointer to a TOKEN_DEFAULT_DACL structure specifying the default DACL for the token.
  * @param Source Pointer to a TOKEN_SOURCE structure specifying the source of the token.
  * @return NTSTATUS code indicating success or failure.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntcreatetoken
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -458,7 +457,7 @@ NtCreateToken(
  * @param HandleCount Number of handles in the Handles array.
  * @param Handles Optional pointer to an array of handles to be associated with the token.
  * @return NTSTATUS code indicating success or failure.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntcreatelowboxtoken
+ * @sa https://learn.microsoft.com/en-us/windows/win32/secauthz/ntcreatelowboxtoken
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -498,7 +497,6 @@ NtCreateLowBoxToken(
  * @param DefaultDacl Optional pointer to a TOKEN_DEFAULT_DACL structure specifying the default DACL for the token.
  * @param Source Pointer to a TOKEN_SOURCE structure specifying the source of the token.
  * @return NTSTATUS code indicating success or failure.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntcreatetokenex
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -803,7 +801,7 @@ NtFilterTokenEx(
  * \param SecondTokenHandle Handle to the second access token to compare. The handle must have TOKEN_QUERY access.
  * \param Equal Pointer to a BOOLEAN variable that receives TRUE if the tokens are equivalent, or FALSE otherwise.
  * \return NTSTATUS Successful or errant status.
- * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntcomparetokens
+ * \sa https://learn.microsoft.com/en-us/windows/win32/secauthz/ntcomparetokens
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -837,7 +835,6 @@ NtPrivilegeCheck(
  *
  * @param ThreadHandle Handle to the thread that will impersonate the anonymous token. The handle must have THREAD_DIRECT_IMPERSONATION access.
  * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntimpersonateanonymoustoken
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -1257,7 +1254,6 @@ NtAccessCheckByTypeResultListAndAuditAlarmByHandle(
  * @param AccessGranted Specifies a flag that determines whether access was granted.
  * @param GenerateOnClose A pointer to a flag set by the audit-generation routine when the function returns.
  * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-openobjectauditalarma
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -1287,7 +1283,6 @@ NtOpenObjectAuditAlarm(
  * @param Privileges A pointer to a PRIVILEGE_SET structure that specifies the privileges used to gain access.
  * @param AccessGranted Specifies a flag that determines whether access was granted.
  * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-privilegeobjectauditalarma
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -1308,7 +1303,6 @@ NtPrivilegeObjectAuditAlarm(
  * @param HandleId A pointer to a unique value representing the client's handle to the object.
  * @param GenerateOnClose Specifies a flag that determines whether to generate an audit on close.
  * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-closeobjectauditalarma
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -1326,7 +1320,6 @@ NtCloseObjectAuditAlarm(
  * @param HandleId A pointer to a unique value representing the client's handle to the object.
  * @param GenerateOnClose Specifies a flag that determines whether to generate an audit on close.
  * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-deleteobjectauditalarma
  */
 NTSYSCALLAPI
 NTSTATUS
