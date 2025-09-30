@@ -221,6 +221,7 @@
     <ClCompile Include="NT\Bcd.c" />
     <ClCompile Include="NT\PebLdr.c" />
     <ClCompile Include="NT\PebTebKUSD.c" />
+    <ClCompile Include="RandGen.c" />
     <ClCompile Include="StrSafe.c" />
     <ClCompile Include="UnitTestFramework.c" />
   </ItemGroup>

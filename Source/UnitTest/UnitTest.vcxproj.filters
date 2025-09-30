@@ -17,6 +17,7 @@
       <Filter>NT</Filter>
     </ClCompile>
     <ClCompile Include="Assembly.c" />
+    <ClCompile Include="RandGen.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NT">
@@ -30,6 +31,6 @@
     <ClInclude Include="UnitTest.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AsmMacro.asm" />
+    <MASM Include="AsmMacro.asm" />
   </ItemGroup>
 </Project>

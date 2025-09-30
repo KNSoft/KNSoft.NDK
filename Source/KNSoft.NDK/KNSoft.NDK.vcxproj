@@ -261,6 +261,7 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\SysInfo.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Wow.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\ArgParse.inl" />
+    <None Include="..\Include\KNSoft\NDK\Package\RandGen.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\Shell32.inl" />
