@@ -313,7 +313,7 @@ _Inline_InitializeCriticalSectionAndSpinCount(
     _Out_ LPCRITICAL_SECTION lpCriticalSection,
     _In_ DWORD dwSpinCount)
 {
-#if NTDDI_VERSION >= NTDDI_VISTA
+#if _KNSOFT_NDK_NTDDI_MIN >= NTDDI_VISTA
     RtlInitializeCriticalSectionAndSpinCount(lpCriticalSection, dwSpinCount);
     return TRUE;
 #else
@@ -1122,8 +1122,6 @@ _Inline_InterlockedPushListSList(
     return RtlInterlockedPushListSList(ListHead, List, ListEnd, Count);
 }
 
-#if NTDDI_VERSION >= NTDDI_WIN8
-
 __inline
 PSLIST_ENTRY
 WINAPI
@@ -1133,10 +1131,15 @@ _Inline_InterlockedPushListSListEx(
     _Inout_ PSLIST_ENTRY ListEnd,
     _In_ ULONG Count)
 {
-    return RtlInterlockedPushListSListEx(ListHead, List, ListEnd, Count);
-}
-
+    return
+#if _KNSOFT_NDK_NTDDI_MIN >= NTDDI_WIN8
+        RtlInterlockedPushListSListEx
+#else
+        RtlInterlockedPushListSList
 #endif
+        (ListHead, List, ListEnd, Count);
+
+}
 
 __inline
 USHORT
