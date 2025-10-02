@@ -313,8 +313,19 @@ _Inline_InitializeCriticalSectionAndSpinCount(
     _Out_ LPCRITICAL_SECTION lpCriticalSection,
     _In_ DWORD dwSpinCount)
 {
+#if NTDDI_VERSION >= NTDDI_VISTA
     RtlInitializeCriticalSectionAndSpinCount(lpCriticalSection, dwSpinCount);
     return TRUE;
+#else
+    NTSTATUS Status = RtlInitializeCriticalSectionAndSpinCount(lpCriticalSection, dwSpinCount);
+    if (NT_SUCCESS(Status))
+    {
+        return TRUE;
+    }
+
+    _Inline_BaseSetLastNTError(Status);
+    return FALSE;
+#endif
 }
 
 __inline
@@ -1060,6 +1071,17 @@ _Inline_TerminateProcess(
     return FALSE;
 }
 
+/* SList */
+
+__inline
+VOID
+WINAPI
+_Inline_InitializeSListHead(
+    _Out_ PSLIST_HEADER ListHead)
+{
+    RtlInitializeSListHead(ListHead);
+}
+
 __inline
 PSLIST_ENTRY
 WINAPI
@@ -1070,12 +1092,59 @@ _Inline_InterlockedFlushSList(
 }
 
 __inline
-VOID
+PSLIST_ENTRY
 WINAPI
-_Inline_InitializeSListHead(
-    _Out_ PSLIST_HEADER ListHead)
+_Inline_InterlockedPopEntrySList(
+    _Inout_ PSLIST_HEADER ListHead)
 {
-    RtlInitializeSListHead(ListHead);
+    return RtlInterlockedPopEntrySList(ListHead);
+}
+
+__inline
+PSLIST_ENTRY
+WINAPI
+_Inline_InterlockedPushEntrySList(
+    _Inout_ PSLIST_HEADER ListHead,
+    _Inout_ __drv_aliasesMem PSLIST_ENTRY ListEntry)
+{
+    return RtlInterlockedPushEntrySList(ListHead, ListEntry);
+}
+
+__inline
+PSLIST_ENTRY
+WINAPI
+_Inline_InterlockedPushListSList(
+    _Inout_ PSLIST_HEADER ListHead,
+    _Inout_ PSLIST_ENTRY List,
+    _Inout_ PSLIST_ENTRY ListEnd,
+    _In_ ULONG Count)
+{
+    return RtlInterlockedPushListSList(ListHead, List, ListEnd, Count);
+}
+
+#if NTDDI_VERSION >= NTDDI_WIN8
+
+__inline
+PSLIST_ENTRY
+WINAPI
+_Inline_InterlockedPushListSListEx(
+    _Inout_ PSLIST_HEADER ListHead,
+    _Inout_ PSLIST_ENTRY List,
+    _Inout_ PSLIST_ENTRY ListEnd,
+    _In_ ULONG Count)
+{
+    return RtlInterlockedPushListSListEx(ListHead, List, ListEnd, Count);
+}
+
+#endif
+
+__inline
+USHORT
+WINAPI
+_Inline_QueryDepthSList(
+    _In_ PSLIST_HEADER ListHead)
+{
+    return RtlQueryDepthSList(ListHead);
 }
 
 EXTERN_C_END

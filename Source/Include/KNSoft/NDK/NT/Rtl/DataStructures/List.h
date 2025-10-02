@@ -5,6 +5,18 @@
 
 EXTERN_C_START
 
+/* Addendum to SList */
+
+NTSYSAPI
+PSLIST_ENTRY
+NTAPI
+RtlInterlockedPushListSList(
+    _Inout_ PSLIST_HEADER ListHead,
+    _Inout_ __drv_aliasesMem PSLIST_ENTRY List,
+    _Inout_ PSLIST_ENTRY ListEnd,
+    _In_ DWORD Count
+    );
+
 /* wdm.h */
 
 //
