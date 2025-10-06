@@ -8,7 +8,7 @@
 
 EXTERN_C_START
 
-/* phnt & PDB & KNSoft.NDK */
+/* phnt & PDB & KNSoft.NDK & Geoff Chappell */
 
 typedef struct _LEAP_SECOND_DATA
 {
@@ -1159,6 +1159,27 @@ typedef struct _OLE_TLS_DATA32
 #else
 #define RPC_THREAD_POINTER_KEY RPC_THREAD_POINTER_KEY32
 #endif
+
+typedef struct _RTL_PERTHREAD_CURDIR
+{
+    PRTL_DRIVE_LETTER_CURDIR CurrentDirectories;
+    PUNICODE_STRING ImageName;
+    PVOID Environment;
+} RTL_PERTHREAD_CURDIR, *PRTL_PERTHREAD_CURDIR;
+
+typedef struct _RTL_PERTHREAD_CURDIR64
+{
+    RTL_DRIVE_LETTER_CURDIR64* POINTER_64 CurrentDirectories;
+    UNICODE_STRING64* POINTER_64 ImageName;
+    VOID* POINTER_64 Environment;
+} RTL_PERTHREAD_CURDIR64, *PRTL_PERTHREAD_CURDIR64;
+
+typedef struct _RTL_PERTHREAD_CURDIR32
+{
+    RTL_DRIVE_LETTER_CURDIR32* POINTER_32 CurrentDirectories;
+    UNICODE_STRING32* POINTER_32 ImageName;
+    VOID* POINTER_32 Environment;
+} RTL_PERTHREAD_CURDIR32, *PRTL_PERTHREAD_CURDIR32;
 
 /**
  * Thread Environment Block (TEB) structure.
