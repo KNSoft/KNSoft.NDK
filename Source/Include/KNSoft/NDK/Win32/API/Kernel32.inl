@@ -204,7 +204,7 @@ _Inline_GetModuleHandleW(
         return (HMODULE)NtCurrentPeb()->ImageBaseAddress;
     }
 
-    RtlInitUnicodeString(&DllName, lpModuleName);
+    _Inline_RtlInitUnicodeString(&DllName, lpModuleName);
     Status = LdrGetDllHandle(NULL, NULL, &DllName, &DllHandle);
     if (NT_SUCCESS(Status))
     {
@@ -247,7 +247,7 @@ _Inline_GetModuleHandleExW(
 
     if (lpModuleName == NULL)
     {
-        *phModule = NtCurrentPeb()->ImageBaseAddress;
+        *phModule = (HMODULE)NtCurrentPeb()->ImageBaseAddress;
         return TRUE;
     }
     if (dwFlags & GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS)
@@ -259,7 +259,7 @@ _Inline_GetModuleHandleExW(
         }
     } else
     {
-        RtlInitUnicodeString(&DllName, lpModuleName);
+        _Inline_RtlInitUnicodeString(&DllName, lpModuleName);
         Status = LdrGetDllHandle(NULL, NULL, &DllName, &DllHandle);
         if (!NT_SUCCESS(Status))
         {
@@ -275,7 +275,7 @@ _Inline_GetModuleHandleExW(
         }
     }
 
-    *phModule = DllHandle;
+    *phModule = (HMODULE)DllHandle;
     return TRUE;
 
 _Fail:
@@ -294,11 +294,11 @@ _Inline_GetModuleFileNameW(
     _In_ DWORD nSize)
 {
     PVOID DllBase;
-    DWORD dwCch;
     PUNICODE_STRING ImageName;
-    PWCH Path;
-    PVOID Cookie;
     BOOLEAN LoaderLocked;
+    PVOID Cookie;
+    DWORD dwCch;
+    PWCH Path;
 
     DllBase = _Inline_BasepMapModuleHandle(hModule, FALSE);
     if (hModule != NULL)
@@ -310,7 +310,7 @@ _Inline_GetModuleFileNameW(
         }
     } else
     {
-        PRTL_PERTHREAD_CURDIR PerThreadCurdir = NtReadTeb(NtTib.SubSystemTib);
+        PRTL_PERTHREAD_CURDIR PerThreadCurdir = (PRTL_PERTHREAD_CURDIR)NtReadTeb(NtTib.SubSystemTib);
         if (PerThreadCurdir != NULL && PerThreadCurdir->ImageName != NULL)
         {
             ImageName = PerThreadCurdir->ImageName;
@@ -320,7 +320,9 @@ _Inline_GetModuleFileNameW(
     }
 
     PLDR_DATA_TABLE_ENTRY HeadEntry, Entry;
-    HeadEntry = CONTAINING_RECORD(NtCurrentPeb()->Ldr->InLoadOrderModuleList.Flink, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
+    HeadEntry = CONTAINING_RECORD(NtCurrentPeb()->Ldr->InLoadOrderModuleList.Flink,
+                                  LDR_DATA_TABLE_ENTRY,
+                                  InLoadOrderLinks);
     Entry = HeadEntry;
     LdrLockLoaderLock(LDR_LOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS, NULL, &Cookie);
     LoaderLocked = TRUE;
@@ -1300,7 +1302,6 @@ _Inline_InterlockedPushListSListEx(
         RtlInterlockedPushListSList
 #endif
         (ListHead, List, ListEnd, Count);
-
 }
 
 __inline

@@ -14,9 +14,7 @@
 
 #include "../NDK.h"
 
-/*
- * Generate software random numbers by calling RtlRandomEx [0..MAXLONG-1], use the low 31 bits only
- */
+/* Generate software random numbers by calling RtlRandomEx [0..MAXLONG-1], use the low 31 bits only */
 
 static ULONG g_ulRandSeed = 0;
 
@@ -52,6 +50,7 @@ Rand_SW16(void)
 #if (defined(_M_X64) && !defined(_M_ARM64EC)) || defined(_M_IX86)
 
 __forceinline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HW32(
     _Out_ unsigned int* Random)
@@ -71,6 +70,7 @@ Rand_HW32(
 }
 
 __forceinline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HW64(
     _Out_ unsigned __int64* Random)
@@ -97,6 +97,7 @@ Rand_HW64(
 }
 
 __forceinline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HW16(
     _Out_ unsigned short* Random)
@@ -119,6 +120,7 @@ Rand_HW16(
 #else
 
 __forceinline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HW32(
     _Out_ unsigned int* Random)
@@ -128,6 +130,7 @@ Rand_HW32(
 }
 
 __forceinline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HW64(
     _Out_ unsigned __int64* Random)
@@ -137,6 +140,7 @@ Rand_HW64(
 }
 
 __forceinline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HW16(
     _Out_ unsigned short* Random)
@@ -160,6 +164,7 @@ Rand_SWSizeT(VOID)
 }
 
 __forceinline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HWSizeT(
     _Out_ SIZE_T* Random)
@@ -232,6 +237,7 @@ Rand_SWBuffer(
 }
 
 __inline
+_Success_(return != FALSE)
 LOGICAL
 Rand_HWBuffer(
     _Out_writes_bytes_(RandomBufferLength) void* RandomBuffer,
