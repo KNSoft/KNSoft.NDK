@@ -37,9 +37,7 @@ EXTERN_C_START
 #define CONTEXT_ARM_INTEGER (CONTEXT_ARM | 0x2L)
 #define CONTEXT_ARM_FLOATING_POINT  (CONTEXT_ARM | 0x4L)
 #define CONTEXT_ARM_DEBUG_REGISTERS (CONTEXT_ARM | 0x8L)
-
 #define CONTEXT_ARM_FULL (CONTEXT_ARM_CONTROL | CONTEXT_ARM_INTEGER | CONTEXT_ARM_FLOATING_POINT)
-
 #define CONTEXT_ARM_ALL (CONTEXT_ARM_CONTROL | CONTEXT_ARM_INTEGER | CONTEXT_ARM_FLOATING_POINT | CONTEXT_ARM_DEBUG_REGISTERS)
 
 #define ARM_MAX_BREAKPOINTS     8
@@ -328,7 +326,7 @@ NtGetNextProcess(
 /**
  * Retrieves a handle to the next thread in the system.
  *
- * @param ProcessHandle A handle to the process for enumerateration of threads.
+ * @param ProcessHandle A handle to the process for enumeration of threads.
  * @param ThreadHandle An optional handle to a thread. If this parameter is NULL, the function retrieves the first thread in the process.
  * @param DesiredAccess The access rights desired for the new thread handle.
  * @param HandleAttributes The attributes for the new thread handle.
@@ -675,10 +673,10 @@ NtSetInformationThread(
     );
 
 /**
- * Sends an alert to the specified thread.
+ * The NtAlertThread routine alerts the specified thread.
  *
- * @param ThreadHandle A handle to the thread to be alerted.
- * @return NTSTATUS Successful or errant status.
+ * \param[in] ThreadHandle A handle to the thread to be alerted.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -688,11 +686,11 @@ NtAlertThread(
     );
 
 /**
- * Resumes a thread that was previously suspended and sends an alert to it.
+ * The NtAlertResumeThread routine resumes a specified thread that was previously suspended and alerts the thread.
  *
- * @param ThreadHandle A handle to the thread to be resumed and alerted.
- * @param PreviousSuspendCount An optional pointer to a variable that receives the thread's previous suspend count.
- * @return NTSTATUS Successful or errant status.
+ * \param[in] ThreadHandle A handle to the thread to be resumed and alerted.
+ * \param[out, optional] PreviousSuspendCount An optional pointer to a variable that receives the thread's previous suspend count.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -1551,7 +1549,7 @@ NtCreateUserProcess(
  * @param ObjectAttributes Optional. A pointer to an OBJECT_ATTRIBUTES structure that specifies the attributes of the new thread.
  * @param ProcessHandle A handle to the process in which the thread is to be created.
  * @param StartRoutine A pointer to the application-defined function to be executed by the thread.
- * @param Argument Optional. A pointer to a variable to be passed to the thread.
+ * \param Argument Optional. A pointer to a variable that is passed to the thread.
  * @param CreateFlags Flags that control the creation of the thread. These flags are defined as THREAD_CREATE_FLAGS_*.
  * @param ZeroBits The number of zero bits in the starting address of the thread's stack.
  * @param StackSize The initial size of the thread's stack, in bytes.

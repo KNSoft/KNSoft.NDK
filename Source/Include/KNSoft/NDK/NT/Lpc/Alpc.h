@@ -329,7 +329,7 @@ NtAlpcCreateResourceReserve(
     _In_ HANDLE PortHandle,
     _Reserved_ ULONG Flags,
     _In_ SIZE_T MessageSize,
-    _Out_ PALPC_HANDLE ResourceId);
+    _Out_ PULONG ResourceId);
 
 NTSYSCALLAPI
 NTSTATUS
@@ -337,7 +337,7 @@ NTAPI
 NtAlpcDeleteResourceReserve(
     _In_ HANDLE PortHandle,
     _Reserved_ ULONG Flags,
-    _In_ ALPC_HANDLE ResourceId);
+    _In_ PULONG ResourceId);
 
 NTSYSCALLAPI
 NTSTATUS

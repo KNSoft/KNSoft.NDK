@@ -431,7 +431,7 @@ ZwAlpcCreateResourceReserve(
     _In_ HANDLE PortHandle,
     _Reserved_ ULONG Flags,
     _In_ SIZE_T MessageSize,
-    _Out_ PALPC_HANDLE ResourceId
+    _Out_ PULONG ResourceId
     );
 
 NTSYSCALLAPI
@@ -467,7 +467,7 @@ NTAPI
 ZwAlpcDeleteResourceReserve(
     _In_ HANDLE PortHandle,
     _Reserved_ ULONG Flags,
-    _In_ ALPC_HANDLE ResourceId
+    _In_ PULONG ResourceId
     );
 
 NTSYSCALLAPI
@@ -1164,8 +1164,7 @@ ZwCreatePartition(
     _In_opt_ HANDLE ParentPartitionHandle,
     _Out_ PHANDLE PartitionHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
-    _In_ ULONG PreferredNode
+    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes
     );
 
 NTSYSCALLAPI

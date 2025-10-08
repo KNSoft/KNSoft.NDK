@@ -107,7 +107,7 @@ typedef enum _PROCESSINFOCLASS
     ProcessDebugAuthInformation,                    // s: CiTool.exe --device-id // PplDebugAuthorization // since RS4 // 90
     ProcessSystemResourceManagement,                // s: PROCESS_SYSTEM_RESOURCE_MANAGEMENT
     ProcessSequenceNumber,                          // q: ULONGLONG
-    ProcessLoaderDetour,                            // qs: // since RS5
+    ProcessLoaderDetour,                            // qs: Obsolete // since RS5
     ProcessSecurityDomainInformation,               // q: PROCESS_SECURITY_DOMAIN_INFORMATION
     ProcessCombineSecurityDomainsInformation,       // s: PROCESS_COMBINE_SECURITY_DOMAINS_INFORMATION
     ProcessEnableLogging,                           // qs: PROCESS_LOGGING_INFORMATION
@@ -117,9 +117,9 @@ typedef enum _PROCESSINFOCLASS
     ProcessAltSystemCallInformation,                // s: PROCESS_SYSCALL_PROVIDER_INFORMATION // since 20H1 // 100
     ProcessDynamicEHContinuationTargets,            // s: PROCESS_DYNAMIC_EH_CONTINUATION_TARGETS_INFORMATION
     ProcessDynamicEnforcedCetCompatibleRanges,      // s: PROCESS_DYNAMIC_ENFORCED_ADDRESS_RANGE_INFORMATION // since 20H2
-    ProcessCreateStateChange,                       // qs: // since WIN11
-    ProcessApplyStateChange,
-    ProcessEnableOptionalXStateFeatures,            // s: ULONG64 // optional XState feature bitmask
+    ProcessCreateStateChange,                       // s: Obsolete // since WIN11
+    ProcessApplyStateChange,                        // s: Obsolete
+    ProcessEnableOptionalXStateFeatures,            // s: ULONG64 // EnableProcessOptionalXStateFeatures
     ProcessAltPrefetchParam,                        // qs: OVERRIDE_PREFETCH_PARAMETER // App Launch Prefetch (ALPF) // since 22H1
     ProcessAssignCpuPartitions,                     // s: HANDLE
     ProcessPriorityClassEx,                         // s: PROCESS_PRIORITY_CLASS_EX
@@ -492,7 +492,7 @@ typedef struct _PROCESS_PRIORITY_CLASS_EX
 } PROCESS_PRIORITY_CLASS_EX, *PPROCESS_PRIORITY_CLASS_EX;
 
 /**
- * The PROCESS_FOREGROUND_BACKGROUND structure is used to manage the the priority class of a process, specifically whether it runs in the foreground or background.
+ * The PROCESS_FOREGROUND_BACKGROUND structure is used to manage the priority class of a process, specifically whether it runs in the foreground or background.
  */
 typedef struct _PROCESS_FOREGROUND_BACKGROUND
 {
@@ -675,27 +675,33 @@ typedef struct _PROCESS_STACK_ALLOCATION_INFORMATION_EX
 /**
  * The PROCESS_AFFINITY_UPDATE_MODE union is used to specify the affinity update mode for a process.
  */
-typedef union _PROCESS_AFFINITY_UPDATE_MODE
+typedef struct _PROCESS_AFFINITY_UPDATE_MODE
 {
-    ULONG Flags;
-    struct
+    union
     {
-        ULONG EnableAutoUpdate : 1; // Indicates whether auto-update of affinity is enabled.
-        ULONG Permanent : 1;        // Indicates whether the affinity update is permanent.
-        ULONG Reserved : 30;        // Reserved for future use.
+        ULONG Flags;
+        struct
+        {
+            ULONG EnableAutoUpdate : 1; // Indicates whether auto-update of affinity is enabled.
+            ULONG Permanent : 1;        // Indicates whether the affinity update is permanent.
+            ULONG Reserved : 30;        // Reserved for future use.
+        };
     };
 } PROCESS_AFFINITY_UPDATE_MODE, *PPROCESS_AFFINITY_UPDATE_MODE;
 
 /**
  * The PROCESS_MEMORY_ALLOCATION_MODE union is used to specify the memory allocation mode for a process.
  */
-typedef union _PROCESS_MEMORY_ALLOCATION_MODE
+typedef struct _PROCESS_MEMORY_ALLOCATION_MODE
 {
-    ULONG Flags;
-    struct
+    union
     {
-        ULONG TopDown : 1;      // Indicates whether memory allocation should be top-down.
-        ULONG Reserved : 31;    // Reserved for future use.
+        ULONG Flags;
+        struct
+        {
+            ULONG TopDown : 1;      // Indicates whether memory allocation should be top-down.
+            ULONG Reserved : 31;    // Reserved for future use.
+        };
     };
 } PROCESS_MEMORY_ALLOCATION_MODE, *PPROCESS_MEMORY_ALLOCATION_MODE;
 
@@ -1033,9 +1039,9 @@ typedef struct _PROCESS_COMMIT_RELEASE_INFORMATION
 } PROCESS_COMMIT_RELEASE_INFORMATION, *PPROCESS_COMMIT_RELEASE_INFORMATION;
 
 /**
- * The PROCESS_JOB_MEMORY_INFO structure contains Represents app memory usage at a single point in time.
+ * The PROCESS_JOB_MEMORY_INFO structure represents app memory usage at a single point in time.
  *
- * @remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-app_memory_information
+ * \remarks https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-app_memory_information
  */
 typedef struct _PROCESS_JOB_MEMORY_INFO
 {
@@ -1140,14 +1146,17 @@ typedef struct _POWER_THROTTLING_THREAD_STATE
  * The PROCESS_READWRITEVM_LOGGING_INFORMATION structure provides flags to enable logging
  * of read and write operations to a process's virtual memory.
  */
-typedef union _PROCESS_READWRITEVM_LOGGING_INFORMATION
+typedef struct _PROCESS_READWRITEVM_LOGGING_INFORMATION
 {
-    UCHAR Flags;
-    struct
+    union
     {
-        UCHAR EnableReadVmLogging : 1;  // Enable logging of read operations to virtual memory.
-        UCHAR EnableWriteVmLogging : 1; // Enable logging of write operations to virtual memory.
-        UCHAR Unused : 6;
+        UCHAR Flags;
+        struct
+        {
+            UCHAR EnableReadVmLogging : 1;  // Enable logging of read operations to virtual memory.
+            UCHAR EnableWriteVmLogging : 1; // Enable logging of write operations to virtual memory.
+            UCHAR Unused : 6;
+        };
     };
 } PROCESS_READWRITEVM_LOGGING_INFORMATION, *PPROCESS_READWRITEVM_LOGGING_INFORMATION;
 
@@ -1174,13 +1183,16 @@ typedef struct _PROCESS_UPTIME_INFORMATION
 /**
  * The PROCESS_SYSTEM_RESOURCE_MANAGEMENT union is used to specify system resource management flags for a process.
  */
-typedef union _PROCESS_SYSTEM_RESOURCE_MANAGEMENT
+typedef struct _PROCESS_SYSTEM_RESOURCE_MANAGEMENT
 {
-    ULONG Flags;
-    struct
+    union
     {
-        ULONG Foreground : 1; // Indicates if the process is a foreground process (1 = foreground, 0 = background).
-        ULONG Reserved : 31;
+        ULONG Flags;
+        struct
+        {
+            ULONG Foreground : 1; // Indicates if the process is a foreground process (1 = foreground, 0 = background).
+            ULONG Reserved : 31;
+        };
     };
 } PROCESS_SYSTEM_RESOURCE_MANAGEMENT, *PPROCESS_SYSTEM_RESOURCE_MANAGEMENT;
 
@@ -1206,22 +1218,32 @@ typedef struct _PROCESS_COMBINE_SECURITY_DOMAINS_INFORMATION
  * for specific process and thread events, such as virtual memory access, suspend/resume,
  * execution protection, and impersonation.
  */
-typedef union _PROCESS_LOGGING_INFORMATION
+typedef struct _PROCESS_LOGGING_INFORMATION
 {
-    ULONG Flags;
-    struct
+    union
     {
-        ULONG EnableReadVmLogging : 1;                  // Enables logging of read operations to process virtual memory.
-        ULONG EnableWriteVmLogging : 1;                 // Enables logging of write operations to process virtual memory.
-        ULONG EnableProcessSuspendResumeLogging : 1;    // Enables logging of process suspend and resume events.
-        ULONG EnableThreadSuspendResumeLogging : 1;     // Enables logging of thread suspend and resume events.
-        ULONG EnableLocalExecProtectVmLogging : 1;      // Enables logging of local execution protection for virtual memory.
-        ULONG EnableRemoteExecProtectVmLogging : 1;     // Enables logging of remote execution protection for virtual memory.
-        ULONG EnableImpersonationLogging : 1;           // Enables logging of impersonation events.
-        ULONG Reserved : 25;
+        ULONG Flags;
+        struct
+        {
+            ULONG EnableReadVmLogging : 1;                  // Enables logging of read operations to process virtual memory.
+            ULONG EnableWriteVmLogging : 1;                 // Enables logging of write operations to process virtual memory.
+            ULONG EnableProcessSuspendResumeLogging : 1;    // Enables logging of process suspend and resume events.
+            ULONG EnableThreadSuspendResumeLogging : 1;     // Enables logging of thread suspend and resume events.
+            ULONG EnableLocalExecProtectVmLogging : 1;      // Enables logging of local execution protection for virtual memory.
+            ULONG EnableRemoteExecProtectVmLogging : 1;     // Enables logging of remote execution protection for virtual memory.
+            ULONG EnableImpersonationLogging : 1;           // Enables logging of impersonation events.
+            ULONG Reserved : 25;
+        };
     };
 } PROCESS_LOGGING_INFORMATION, *PPROCESS_LOGGING_INFORMATION;
 
+/**
+ * This value changes the seconds field during a positive leap second adjustment by the system.
+ * If enabled, then the seconds field returns any positive leap second (For example: 23:59:59 -> 23:59:60 -> 00:00:00).
+ * If not enabled, then the 59th second preceding a positive leap second will be shown for 2 seconds with the milliseconds
+ * value ticking twice as slow. (For example: 23:59:59 -> 23:59:59.500 -> 00:00:00, which takes 2 seconds in wall clock time).
+ * Note: Leap second adjustments are disabled by default for each process, this flag also does not persist if the process is restarted.
+ */
 #define PROCESS_LEAP_SECOND_FLAG_ENABLE_SIXTY_SECOND 0x1
 #define PROCESS_LEAP_SECOND_VALID_FLAGS (PROCESS_LEAP_SECOND_INFO_FLAG_ENABLE_SIXTY_SECOND)
 

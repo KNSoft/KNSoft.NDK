@@ -10,62 +10,67 @@ EXTERN_C_START
 typedef enum _JOBOBJECTINFOCLASS
 {
     JobObjectBasicAccountingInformation = 1,            // q: JOBOBJECT_BASIC_ACCOUNTING_INFORMATION
-    JobObjectBasicLimitInformation = 2,                 // q; s: JOBOBJECT_BASIC_LIMIT_INFORMATION
+    JobObjectBasicLimitInformation = 2,                 // qs: JOBOBJECT_BASIC_LIMIT_INFORMATION
     JobObjectBasicProcessIdList = 3,                    // q: JOBOBJECT_BASIC_PROCESS_ID_LIST
-    JobObjectBasicUIRestrictions = 4,                   // q; s: JOBOBJECT_BASIC_UI_RESTRICTIONS
-    JobObjectSecurityLimitInformation = 5,              // JOBOBJECT_SECURITY_LIMIT_INFORMATION
-    JobObjectEndOfJobTimeInformation = 6,               // q; s: JOBOBJECT_END_OF_JOB_TIME_INFORMATION
+    JobObjectBasicUIRestrictions = 4,                   // qs: JOBOBJECT_BASIC_UI_RESTRICTIONS
+    JobObjectSecurityLimitInformation = 5,              // qs: JOBOBJECT_SECURITY_LIMIT_INFORMATION
+    JobObjectEndOfJobTimeInformation = 6,               // qs: JOBOBJECT_END_OF_JOB_TIME_INFORMATION
     JobObjectAssociateCompletionPortInformation = 7,    // s: JOBOBJECT_ASSOCIATE_COMPLETION_PORT
     JobObjectBasicAndIoAccountingInformation = 8,       // q: JOBOBJECT_BASIC_AND_IO_ACCOUNTING_INFORMATION
-    JobObjectExtendedLimitInformation = 9,              // q; s: JOBOBJECT_EXTENDED_LIMIT_INFORMATION[V2]
-    JobObjectJobSetInformation = 10,                    // JOBOBJECT_JOBSET_INFORMATION
-    JobObjectGroupInformation = 11,                     // USHORT
-    JobObjectNotificationLimitInformation = 12,         // JOBOBJECT_NOTIFICATION_LIMIT_INFORMATION
-    JobObjectLimitViolationInformation = 13,            // JOBOBJECT_LIMIT_VIOLATION_INFORMATION
-    JobObjectGroupInformationEx = 14,                   // GROUP_AFFINITY (ARRAY)
-    JobObjectCpuRateControlInformation = 15,            // JOBOBJECT_CPU_RATE_CONTROL_INFORMATION
-    JobObjectCompletionFilter = 16,                     // q; s: ULONG
-    JobObjectCompletionCounter = 17,                    // q; s: ULONG
-    JobObjectFreezeInformation = 18,                    // JOBOBJECT_FREEZE_INFORMATION
-    JobObjectExtendedAccountingInformation = 19,        // JOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION
-    JobObjectWakeInformation = 20,                      // JOBOBJECT_WAKE_INFORMATION
+    JobObjectExtendedLimitInformation = 9,              // qs: JOBOBJECT_EXTENDED_LIMIT_INFORMATION[V2]
+    JobObjectJobSetInformation = 10,                    // q: JOBOBJECT_JOBSET_INFORMATION
+    JobObjectGroupInformation = 11,                     // q: USHORT
+    JobObjectNotificationLimitInformation = 12,         // q: JOBOBJECT_NOTIFICATION_LIMIT_INFORMATION
+    JobObjectLimitViolationInformation = 13,            // q: JOBOBJECT_LIMIT_VIOLATION_INFORMATION
+    JobObjectGroupInformationEx = 14,                   // qs: GROUP_AFFINITY (ARRAY)
+    JobObjectCpuRateControlInformation = 15,            // qs: JOBOBJECT_CPU_RATE_CONTROL_INFORMATION
+    JobObjectCompletionFilter = 16,                     // qs: ULONG
+    JobObjectCompletionCounter = 17,                    // qs: ULONG
+    JobObjectFreezeInformation = 18,                    // qs: JOBOBJECT_FREEZE_INFORMATION
+    JobObjectExtendedAccountingInformation = 19,        // qs: JOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION
+    JobObjectWakeInformation = 20,                      // qs: JOBOBJECT_WAKE_INFORMATION
     JobObjectBackgroundInformation = 21,                // s: BOOLEAN
     JobObjectSchedulingRankBiasInformation = 22,
     JobObjectTimerVirtualizationInformation = 23,
     JobObjectCycleTimeNotification = 24,
     JobObjectClearEvent = 25,
-    JobObjectInterferenceInformation = 26,              // JOBOBJECT_INTERFERENCE_INFORMATION
+    JobObjectInterferenceInformation = 26,              // q: JOBOBJECT_INTERFERENCE_INFORMATION
     JobObjectClearPeakJobMemoryUsed = 27,
-    JobObjectMemoryUsageInformation = 28,               // JOBOBJECT_MEMORY_USAGE_INFORMATION, // JOBOBJECT_MEMORY_USAGE_INFORMATION_V2
+    JobObjectMemoryUsageInformation = 28,               // q: JOBOBJECT_MEMORY_USAGE_INFORMATION, // JOBOBJECT_MEMORY_USAGE_INFORMATION_V2
     JobObjectSharedCommit = 29,
-    JobObjectContainerId = 30,                          // JOBOBJECT_CONTAINER_IDENTIFIER_V2
-    JobObjectIoRateControlInformation = 31,             // JOBOBJECT_IO_RATE_CONTROL_INFORMATION_NATIVE, JOBOBJECT_IO_RATE_CONTROL_INFORMATION_NATIVE_V2, JOBOBJECT_IO_RATE_CONTROL_INFORMATION_NATIVE_V3
-    JobObjectNetRateControlInformation = 32,            // JOBOBJECT_NET_RATE_CONTROL_INFORMATION
-    JobObjectNotificationLimitInformation2 = 33,        // JOBOBJECT_NOTIFICATION_LIMIT_INFORMATION_2
-    JobObjectLimitViolationInformation2 = 34,           // JOBOBJECT_LIMIT_VIOLATION_INFORMATION_2
+    JobObjectContainerId = 30,                          // q: JOBOBJECT_CONTAINER_IDENTIFIER_V2
+    JobObjectIoRateControlInformation = 31,             // qs: JOBOBJECT_IO_RATE_CONTROL_INFORMATION_NATIVE, JOBOBJECT_IO_RATE_CONTROL_INFORMATION_NATIVE_V2, JOBOBJECT_IO_RATE_CONTROL_INFORMATION_NATIVE_V3
+    JobObjectNetRateControlInformation = 32,            // qs: JOBOBJECT_NET_RATE_CONTROL_INFORMATION
+    JobObjectNotificationLimitInformation2 = 33,        // qs: JOBOBJECT_NOTIFICATION_LIMIT_INFORMATION_2
+    JobObjectLimitViolationInformation2 = 34,           // qs: JOBOBJECT_LIMIT_VIOLATION_INFORMATION_2
     JobObjectCreateSilo = 35,                           // s: NULL
-    JobObjectSiloBasicInformation = 36,                 // SILOOBJECT_BASIC_INFORMATION
-    JobObjectSiloRootDirectory = 37,                    // SILOOBJECT_ROOT_DIRECTORY
-    JobObjectServerSiloBasicInformation = 38,           // SERVERSILO_BASIC_INFORMATION
-    JobObjectServerSiloUserSharedData = 39,             // SILO_USER_SHARED_DATA, // NtQueryInformationJobObject(NULL, 39, Buffer, sizeof(SILO_USER_SHARED_DATA), 0);
-    JobObjectServerSiloInitialize = 40,                 // SERVERSILO_INIT_INFORMATION
+    JobObjectSiloBasicInformation = 36,                 // q: SILOOBJECT_BASIC_INFORMATION
+    JobObjectSiloRootDirectory = 37,                    // q: SILOOBJECT_ROOT_DIRECTORY
+    JobObjectServerSiloBasicInformation = 38,           // q: SERVERSILO_BASIC_INFORMATION
+    JobObjectServerSiloUserSharedData = 39,             // q: SILO_USER_SHARED_DATA, // NtQueryInformationJobObject(NULL, 39, Buffer, sizeof(SILO_USER_SHARED_DATA), 0);
+    JobObjectServerSiloInitialize = 40,                 // qs: SERVERSILO_INIT_INFORMATION
     JobObjectServerSiloRunningState = 41,
-    JobObjectIoAttribution = 42,                        // JOBOBJECT_IO_ATTRIBUTION_INFORMATION
+    JobObjectIoAttribution = 42,                        // q: JOBOBJECT_IO_ATTRIBUTION_INFORMATION
     JobObjectMemoryPartitionInformation = 43,
     JobObjectContainerTelemetryId = 44,                 // s: GUID // NtSetInformationJobObject(_In_ PGUID, 44, _In_ PGUID, sizeof(GUID)); // daxexec
     JobObjectSiloSystemRoot = 45,                       // s: UNICODE_STRING
-    JobObjectEnergyTrackingState = 46,                  // JOBOBJECT_ENERGY_TRACKING_STATE
+    JobObjectEnergyTrackingState = 46,                  // q: JOBOBJECT_ENERGY_TRACKING_STATE
     JobObjectThreadImpersonationInformation = 47,       // q; s: BOOLEAN
-    JobObjectIoPriorityLimit = 48,                      // JOBOBJECT_IO_PRIORITY_LIMIT
-    JobObjectPagePriorityLimit = 49,                    // JOBOBJECT_PAGE_PRIORITY_LIMIT
-    JobObjectServerSiloDiagnosticInformation = 50,      // SERVERSILO_DIAGNOSTIC_INFORMATION, // since 24H2
-    JobObjectNetworkAccountingInformation = 51,         // JOBOBJECT_NETWORK_ACCOUNTING_INFORMATION
+    JobObjectIoPriorityLimit = 48,                      // qs: JOBOBJECT_IO_PRIORITY_LIMIT
+    JobObjectPagePriorityLimit = 49,                    // qs: JOBOBJECT_PAGE_PRIORITY_LIMIT
+    JobObjectServerSiloDiagnosticInformation = 50,      // q: SERVERSILO_DIAGNOSTIC_INFORMATION, // since 24H2
+    JobObjectNetworkAccountingInformation = 51,         // q: JOBOBJECT_NETWORK_ACCOUNTING_INFORMATION
     JobObjectCpuPartition = 52,                         // since 25H2
     MaxJobObjectInfoClass = 53
 } JOBOBJECTINFOCLASS, *PJOBOBJECTINFOCLASS;
 
 #define JOB_OBJECT_LIMIT_SILO_READY 0x00400000
 
+/**
+ * The JOBOBJECT_EXTENDED_LIMIT_INFORMATION_V2 structure contains basic and extended limit information for a job object.
+ *
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_extended_limit_information
+ */
 typedef struct _JOBOBJECT_EXTENDED_LIMIT_INFORMATION_V2
 {
     JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation;

@@ -219,9 +219,9 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32
 
 /**
  * A pointer to a user-defined function that serves as the starting routine for a new thread.
- * 
- * @param ThreadParameter A pointer to a variable to be passed to the thread.
- * @return NTSTATUS Successful or errant status.
+ *
+ * \param ThreadParameter A pointer to a variable that is passed to the thread.
+ * \return NTSTATUS Successful or errant status.
  */
 typedef
 _Function_class_(USER_THREAD_START_ROUTINE)
