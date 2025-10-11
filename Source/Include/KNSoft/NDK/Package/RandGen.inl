@@ -45,7 +45,10 @@ Rand_SW16(void)
     return (unsigned short)RtlRandomEx(&g_ulRandSeed);
 }
 
-/* Generate hardware random numbers by calling _rdrandxx_step. ARM is not supported yet, fallback to software */
+/*
+ * Generate hardware random numbers by calling RDRAND on x64/x86.
+ * ARM is not supported yet, and RDRAND is not emulated on WoA, fallback to software
+ */
 
 #if (defined(_M_X64) && !defined(_M_ARM64EC)) || defined(_M_IX86)
 
@@ -55,6 +58,13 @@ LOGICAL
 Rand_HW32(
     _Out_ unsigned int* Random)
 {
+    if (SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64 &&
+        SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
+    {
+        *Random = Rand_SW32();
+        return TRUE;
+    }
+
     unsigned int i, p;
 
     for (i = 0; i < 1000000; i++)
@@ -75,6 +85,13 @@ LOGICAL
 Rand_HW64(
     _Out_ unsigned __int64* Random)
 {
+    if (SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64 &&
+        SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
+    {
+        *Random = Rand_SW64();
+        return TRUE;
+    }
+
     unsigned int i;
     unsigned __int64 p;
 
@@ -102,6 +119,13 @@ LOGICAL
 Rand_HW16(
     _Out_ unsigned short* Random)
 {
+    if (SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64 &&
+        SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
+    {
+        *Random = Rand_SW16();
+        return TRUE;
+    }
+
     unsigned int i;
     unsigned short p;
 
