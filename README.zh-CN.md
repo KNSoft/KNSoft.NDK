@@ -10,16 +10,11 @@
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK)提供了原始C/C++定义和引入库供Windows NT开发。
 
 ## 功能
-
-- Windows NT
-  - 未公开的API声明和类型定义，例如：`Nt/Zw*`、`Ldr*`、`PEB`、`TEB`、`LDR_*`……
-  - Windows DLL导出项引入库，例如：`KERNEL32.dll!CreateProcessInternalW`、`ntdll.dll!LdrRegisterDllNotification`……
-  - Windows SDK的补充
-  - 扩展的宏和定义，例如：`NtCurrentPeb()`、`PEB(64/32)`、`TEB(64/32)`……
-- 包
-  - 单元测试框架
-  - 安全字符串函数
-  - 命令行解析函数
+- 未公开的API声明和类型定义，例如：`Nt/Zw*`、`Ldr*`、`PEB`、`TEB`、`LDR_*`……
+- Windows DLL导出项引入库补充，例如：`KERNEL32.dll!CreateProcessInternalW`、`ntdll.dll!LdrRegisterDllNotification`……
+- Windows SDK的补充
+- 扩展的宏和定义，例如：`NtCurrentPeb()`、`PEB(64/32)`、`TEB(64/32)`……
+- 使用原生方式实现的功能包（如单元测试框架、安全字符串函数、命令行解析、随机数生成等）
 
 ## 用法
 
@@ -52,6 +47,8 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
   - [StrSafe.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.inl)
 - 命令行解析函数
   - [ArgParse.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/ArgParse.inl)
+- 随机数生成函数
+  - [RandGen.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/RandGen.inl)
 
 下列功能**默认启用**，定义对应宏可进行排除：
 

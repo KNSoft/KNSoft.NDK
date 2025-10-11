@@ -10,16 +10,11 @@
 [KNSoft.NDK](https://github.com/KNSoft/KNSoft.NDK) provides native C/C++ definitions and import libraries for Windows NT development.
 
 ## Feature
-
-- Windows NT
-  - Undocumented API declarations and type definitions, e.g. `Nt/Zw*`, `Ldr*`, `PEB`, `TEB`, `LDR_*`, ...
-  - Import library for Windows DLL exports, e.g. `KERNEL32.dll!CreateProcessInternalW`, `ntdll.dll!LdrRegisterDllNotification`, ...
-  - Addendum to Windows SDK
-  - Extension macros and definitions, e.g. `NtCurrentPeb()`, `PEB(64/32)`, `TEB(64/32)`, ...
-- Packages
-  - Unit Test Framework
-  - Safe string functions
-  - Command-line parsing functions
+- Undocumented API declarations and type definitions, e.g. `Nt/Zw*`, `Ldr*`, `PEB`, `TEB`, `LDR_*`, ...
+- Import library addendum for Windows DLL exports, e.g. `KERNEL32.dll!CreateProcessInternalW`, `ntdll.dll!LdrRegisterDllNotification`, ...
+- Addendum to Windows SDK
+- Extension macros and definitions, e.g. `NtCurrentPeb()`, `PEB(64/32)`, `TEB(64/32)`, ...
+- Function packages implemented by native method, e.g. unit test framework, safe string functions, command-line parsing, random numbers generation, ...
 
 ## Usage
 
@@ -52,6 +47,8 @@ The following features **are NOT enabled by default**, reference corresponding h
   - [StrSafe.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/StrSafe.inl)
 - Command-line parsing functions
   - [ArgParse.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/ArgParse.inl)
+- Random numbers generation functions
+  - [RandGen.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/RandGen.inl)
 
 The following features **are enabled by default**, can be excluded by defining corresponding macro:
 
