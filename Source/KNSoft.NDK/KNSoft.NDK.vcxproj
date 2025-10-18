@@ -250,6 +250,7 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\AVX.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\DataStructures\Bitmap.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\ErrorHandling.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Guid.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Misc.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Path.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Process\EnvironmentBlock.inl" />
