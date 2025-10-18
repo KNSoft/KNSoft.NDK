@@ -256,6 +256,7 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Access.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Luid.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Sid.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Token.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Stack.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\String.inl" />
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\SysInfo.inl" />
