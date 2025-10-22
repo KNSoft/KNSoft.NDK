@@ -18,6 +18,7 @@
     <file src="..\README.md" target="" />
     <file src="KNSoft.NDK.targets" target="build\" />
     <file src="Include\**" target="build\Include\" />
+    <file src="SDK\SDK.cs" target="build\SDK\" />
     <file src="OutDir\**\KNSoft.NDK.WinAPI.lib" target="build\Lib\" />
     <file src="OutDir\**\KNSoft.NDK.Ntdll.CRT.lib" target="build\Lib\" />
     <file src="OutDir\**\KNSoft.NDK.Ntdll.Hash.lib" target="build\Lib\" />

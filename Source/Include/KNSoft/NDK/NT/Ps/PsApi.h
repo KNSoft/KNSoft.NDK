@@ -1824,7 +1824,7 @@ typedef enum _PSSNT_QUERY_INFORMATION_CLASS
  * @param ThreadContextFlags Optional flags for capturing thread context.
  * @return NTSTATUS Successful or errant status.
  */
-NTSYSCALLAPI
+NTSYSAPI
 NTSTATUS
 NTAPI
 PssNtCaptureSnapshot(

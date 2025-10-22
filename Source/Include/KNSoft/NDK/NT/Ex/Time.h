@@ -104,10 +104,6 @@ NtConvertBetweenAuxiliaryCounterAndPerformanceCounter(
 #endif
 
 NTSYSCALLAPI
-ULONGLONG
-NtGetTickCount64(VOID);
-
-NTSYSCALLAPI
 ULONG
 NtGetTickCount(VOID);
 

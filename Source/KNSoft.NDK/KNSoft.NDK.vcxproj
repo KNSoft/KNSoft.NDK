@@ -220,6 +220,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Wow\Wow.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Wow\WowApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\ZwApi.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\ZwApi.Manual.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.inl" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\AdvAPI32.h" />
