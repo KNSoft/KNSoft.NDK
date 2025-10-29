@@ -46,7 +46,7 @@ UnitTest_PrintUsage(VOID)
                    "    Test_Program -Run\n"
                    "        Run all tests.\n\n"
                    "    Test_Program -Run TestName -Switch1 -Switch2\n"
-                   "        Run the test that named TestName with two input parameters.\n\n"
+                   "        Run the test or demo that named TestName with two input parameters.\n\n"
                    "Exit with the count of failed tests, or 0 if no test failed.\n\n");
 }
 
@@ -58,17 +58,21 @@ UnitTest_PrintList(VOID)
     BOOL HasEntry = FALSE;
 
     UnitTest_Print("Test list:\n");
-
     for (Entry = UnitTestList; Entry->Name.Buffer != NULL; Entry++)
     {
-        UnitTest_PrintF("    %wZ\n", &Entry->Name);
+        if (!Entry->Manual)
+        {
+            UnitTest_PrintF("    %wZ\n", &Entry->Name);
+        } else
+        {
+            UnitTest_PrintF("    %wZ (Manual)\n", &Entry->Name);
+        }
         HasEntry = TRUE;
     }
     if (!HasEntry)
     {
         UnitTest_Print("    (Empty)\n");
     }
-
     UnitTest_Print("\n");
 }
 
@@ -179,12 +183,15 @@ UnitTest_RunAll(
 
     for (Entry = UnitTestList; Entry->Name.Buffer != NULL; Entry++)
     {
-        UnitTest_RunEntry(Entry, &EntryResult, 0, NULL);
-        Result->Pass += EntryResult.Pass;
-        Result->Fail += EntryResult.Fail;
-        Result->Skip += EntryResult.Skip;
-        Result->Elapsed += EntryResult.Elapsed;
-        Ret++;
+        if (!Entry->Manual)
+        {
+            UnitTest_RunEntry(Entry, &EntryResult, 0, NULL);
+            Result->Pass += EntryResult.Pass;
+            Result->Fail += EntryResult.Fail;
+            Result->Skip += EntryResult.Skip;
+            Result->Elapsed += EntryResult.Elapsed;
+            Ret++;
+        }
     }
 
     if (Ret > 0)
@@ -207,7 +214,7 @@ UnitTest_Run(
     _In_z_ PCWSTR Name,
     _Out_ PUNITTEST_RESULT Result,
     _In_ INT ArgC,
-    _In_reads_(ArgC) _Pre_z_ PCWSTR* ArgV)
+    _In_reads_(ArgC) _Pre_z_ PCWSTR * ArgV)
 {
     PCUNITTEST_ENTRY Entry = UnitTest_FindEntry(Name);
 
@@ -243,7 +250,7 @@ UnitTest_Main(
             {
                 if (UnitTest_RunAll(&Result) == 0)
                 {
-                    UnitTest_Print("No test entry found\n\n");
+                    UnitTest_Print("No entry found\n\n");
                     return (INT)STATUS_NOT_FOUND;
                 }
                 return Result.Fail;
@@ -252,7 +259,7 @@ UnitTest_Main(
                 Entry = UnitTest_FindEntry(argv[2]);
                 if (Entry == NULL)
                 {
-                    UnitTest_PrintF("Test \"%ls\" not found\n\n", argv[2]);
+                    UnitTest_PrintF("Entry \"%ls\" not found\n\n", argv[2]);
                     UnitTest_PrintList();
                     return (INT)STATUS_NOT_FOUND;
                 }

@@ -32,6 +32,7 @@ typedef struct _UNITTEST_ENTRY
 {
     FN_UNITTEST_PROC* Proc;
     UNICODE_STRING Name;
+    BOOLEAN Manual;
 } UNITTEST_ENTRY, *PUNITTEST_ENTRY;
 typedef const UNITTEST_ENTRY *PCUNITTEST_ENTRY;
 
@@ -113,9 +114,13 @@ UnitTest_FormatMessage(
 #define TEST_PARAMETER_ARGV _KNSoft_NDK_UnitTest_ArgV
 
 /* Define a test */
+
 #define TEST_FUNC(Name) EXTERN_C VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV)
 #define TEST_DECL_FUNC(Name) EXTERN_C FN_UNITTEST_PROC Name
-#define TEST_DECL_ENTRY(Name) { Name, RTL_CONSTANT_STRING(L###Name) }
+#define TEST_DECL_ENTRY(Name) { Name, RTL_CONSTANT_STRING(L###Name), FALSE }
+
+/* Ignored by "Run All", only can be run by "-Run Name" explicitly */
+#define TEST_DECL_MANUAL_ENTRY(Name) { Name, RTL_CONSTANT_STRING(L###Name), TRUE }
 
 /* Global test list */
 EXTERN_C CONST UNITTEST_ENTRY UnitTestList[];
