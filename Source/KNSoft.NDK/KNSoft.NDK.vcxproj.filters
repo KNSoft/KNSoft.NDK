@@ -493,7 +493,6 @@
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">
       <Filter>Package</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="..\Include\KNSoft\NDK\NT\NT.inl">
       <Filter>NT</Filter>
     </None>
@@ -570,6 +569,7 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Guid.inl">
       <Filter>NT\Rtl</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">
