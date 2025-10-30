@@ -25,6 +25,8 @@ _Inline_RtlGetLastNtStatus(VOID)
 }
 
 __inline
+_Check_return_
+_Post_equals_last_error_
 ULONG
 NTAPI
 _Inline_RtlGetLastWin32Error(VOID)
