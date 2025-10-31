@@ -9,9 +9,9 @@
 TEST_FUNC(RandGen)
 {
     USHORT u16;
-    ULONG u32;
-    ULONGLONG u64;
-    SIZE_T uSizeT;
+    UINT u32;
+    UINT64 u64;
+    size_t uSizeT;
     BYTE Buff3[3];
     BYTE Buff8[8];
     BYTE Buff12[12];

@@ -6,7 +6,7 @@
  *
  * Rand_[SW/HW](16/32/64/SizeT/Buffer):
  *   SW/HW: Generate by software or hardware, if not specified, try hardware before software.
- *   16/32/64/SizeT: 16-bit, 32-bit, 64-bit, or SIZE_T random number.
+ *   16/32/64/SizeT: 16-bit, 32-bit, 64-bit, or size_t random number.
  *   Buffer: Fill buffer with random numbers.
  */
 
@@ -176,7 +176,7 @@ Rand_HW16(
 #endif
 
 __forceinline
-SIZE_T
+size_t
 Rand_SWSizeT(VOID)
 {
     return
@@ -191,7 +191,7 @@ __forceinline
 _Success_(return != FALSE)
 LOGICAL
 Rand_HWSizeT(
-    _Out_ SIZE_T* Random)
+    _Out_ size_t* Random)
 {
     return
 #if defined(_WIN64)
@@ -226,10 +226,10 @@ Rand_16(VOID)
 }
 
 __forceinline
-SIZE_T
+size_t
 Rand_SizeT(VOID)
 {
-    SIZE_T p;
+    size_t p;
     return Rand_HWSizeT(&p) ? p : Rand_SWSizeT();
 }
 
@@ -270,15 +270,15 @@ Rand_HWBuffer(
     unsigned char* pEnd = (unsigned char*)Add2Ptr(RandomBuffer, RandomBufferLength);
     unsigned char* p = (unsigned char*)RandomBuffer;
     unsigned char* q;
-    SIZE_T s;
+    size_t s;
 
-    while (p <= pEnd - sizeof(SIZE_T))
+    while (p <= pEnd - sizeof(size_t))
     {
-        if (!Rand_HWSizeT((SIZE_T*)p))
+        if (!Rand_HWSizeT((size_t*)p))
         {
             return FALSE;
         }
-        p += sizeof(SIZE_T);
+        p += sizeof(size_t);
     }
     if (p != pEnd)
     {
