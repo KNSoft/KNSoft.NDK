@@ -95,7 +95,7 @@ NTSTATUS
 NTAPI
 RtlCreateAtomTable(
     _In_ ULONG NumberOfBuckets,
-    _Out_ PVOID *AtomTableHandle
+    _Inout_ PVOID *AtomTableHandle
     );
 
 NTSYSAPI

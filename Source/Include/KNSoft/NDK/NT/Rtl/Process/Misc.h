@@ -48,7 +48,7 @@ NTSTATUS
 NTAPI
 RtlFlsSetValue(
     _In_ ULONG FlsIndex,
-    _In_ PVOID FlsData);
+    _In_opt_ PVOID FlsData);
 
 #define RTL_FLS_DATA_CLEANUP_PER_SLOT 1
 #define RTL_FLS_DATA_CLEANUP_DEALLOCATE 2
@@ -88,7 +88,7 @@ NTSTATUS
 NTAPI
 RtlTlsSetValue(
     _In_ ULONG TlsIndex,
-    _In_ PVOID TlsData);
+    _In_opt_ PVOID TlsData);
 
 #endif
 

@@ -343,7 +343,7 @@ NTSTATUS
 NTAPI
 ZwAllocateVirtualMemory(
     _In_ HANDLE ProcessHandle,
-    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*RegionSize) _Writable_bytes_(*RegionSize) _Post_readable_byte_size_(*RegionSize)) PVOID * BaseAddress,
+    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*RegionSize) _Writable_bytes_(*RegionSize) _Post_readable_byte_size_(*RegionSize)) PVOID* BaseAddress,
     _In_ ULONG_PTR ZeroBits,
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG AllocationType,
@@ -357,7 +357,7 @@ NTSTATUS
 NTAPI
 ZwAllocateVirtualMemoryEx(
     _In_ HANDLE ProcessHandle,
-    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*RegionSize) _Writable_bytes_(*RegionSize) _Post_readable_byte_size_(*RegionSize)) PVOID * BaseAddress,
+    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*RegionSize) _Writable_bytes_(*RegionSize) _Post_readable_byte_size_(*RegionSize)) PVOID* BaseAddress,
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG AllocationType,
     _In_ ULONG PageProtection,
@@ -1131,7 +1131,7 @@ ZwCreateLowBoxToken(
     _In_ ULONG CapabilityCount,
     _In_reads_opt_(CapabilityCount) PSID_AND_ATTRIBUTES Capabilities,
     _In_ ULONG HandleCount,
-    _In_reads_opt_(HandleCount) HANDLE *Handles
+    _In_reads_opt_(HandleCount) HANDLE* Handles
     );
 
 NTSYSCALLAPI
@@ -1998,7 +1998,7 @@ NTSTATUS
 NTAPI
 ZwGetCompleteWnfStateSubscription(
     _In_opt_ PWNF_STATE_NAME OldDescriptorStateName,
-    _In_opt_ ULONG64 *OldSubscriptionId,
+    _In_opt_ ULONG64* OldSubscriptionId,
     _In_opt_ ULONG OldDescriptorEventMask,
     _In_opt_ ULONG OldDescriptorStatus,
     _Out_writes_bytes_(DescriptorSize) PWNF_DELIVERY_DESCRIPTOR NewDeliveryDescriptor,
@@ -2074,7 +2074,7 @@ ZwGetNlsSectionPtr(
     _In_ ULONG SectionType,
     _In_ ULONG SectionData,
     _In_ PVOID ContextData,
-    _Out_ PVOID *SectionPointer,
+    _Out_ PVOID* SectionPointer,
     _Out_ PULONG SectionSize
     );
 
@@ -2154,7 +2154,7 @@ NTSYSCALLAPI
 NTSTATUS
 NTAPI
 ZwInitializeNlsFiles(
-    _Out_ PVOID *BaseAddress,
+    _Out_ PVOID* BaseAddress,
     _Out_ PLCID DefaultLocaleId,
     _Out_ PLARGE_INTEGER DefaultCasingTableSize,
     _Out_opt_ PULONG CurrentNLSVersion
@@ -2294,8 +2294,8 @@ NTSYSCALLAPI
 NTSTATUS
 NTAPI
 ZwLockProductActivationKeys(
-    _Inout_opt_ ULONG *pPrivateVer,
-    _Out_opt_ ULONG *pSafeMode
+    _Inout_opt_ ULONG* pPrivateVer,
+    _Out_opt_ ULONG* pSafeMode
     );
 
 NTSYSCALLAPI
@@ -2359,7 +2359,7 @@ ZwMapCMFModule(
     _Out_opt_ PULONG CacheIndexOut,
     _Out_opt_ PULONG CacheFlagsOut,
     _Out_opt_ PULONG ViewSizeOut,
-    _Out_opt_ PVOID *BaseAddress
+    _Out_opt_ PVOID* BaseAddress
     );
 
 NTSYSCALLAPI
@@ -2386,7 +2386,7 @@ NTAPI
 ZwMapViewOfSection(
     _In_ HANDLE SectionHandle,
     _In_ HANDLE ProcessHandle,
-    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*ViewSize) _Writable_bytes_(*ViewSize) _Post_readable_byte_size_(*ViewSize)) PVOID * BaseAddress,
+    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*ViewSize) _Writable_bytes_(*ViewSize) _Post_readable_byte_size_(*ViewSize)) PVOID* BaseAddress,
     _In_ ULONG_PTR ZeroBits,
     _In_ SIZE_T CommitSize,
     _Inout_opt_ PLARGE_INTEGER SectionOffset,
@@ -2402,7 +2402,7 @@ NTAPI
 ZwMapViewOfSectionEx(
     _In_ HANDLE SectionHandle,
     _In_ HANDLE ProcessHandle,
-    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*ViewSize) _Writable_bytes_(*ViewSize) _Post_readable_byte_size_(*ViewSize)) PVOID * BaseAddress,
+    _Inout_ _At_(*BaseAddress, _Readable_bytes_(*ViewSize) _Writable_bytes_(*ViewSize) _Post_readable_byte_size_(*ViewSize)) PVOID* BaseAddress,
     _Inout_opt_ PLARGE_INTEGER SectionOffset,
     _Inout_ PSIZE_T ViewSize,
     _In_ ULONG AllocationType,
@@ -3810,8 +3810,8 @@ NTSTATUS
 NTAPI
 ZwRemoveIoCompletion(
     _In_ HANDLE IoCompletionHandle,
-    _Out_ PVOID *KeyContext,
-    _Out_ PVOID *ApcContext,
+    _Out_ PVOID* KeyContext,
+    _Out_ PVOID* ApcContext,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock,
     _In_opt_ PLARGE_INTEGER Timeout
     );
@@ -3884,7 +3884,7 @@ NTSTATUS
 NTAPI
 ZwReplyWaitReceivePort(
     _In_ HANDLE PortHandle,
-    _Out_opt_ PVOID *PortContext,
+    _Out_opt_ PVOID* PortContext,
     _In_reads_bytes_opt_(ReplyMessage->u1.s1.TotalLength) PPORT_MESSAGE ReplyMessage,
     _Out_ PPORT_MESSAGE ReceiveMessage
     );
@@ -3894,7 +3894,7 @@ NTSTATUS
 NTAPI
 ZwReplyWaitReceivePortEx(
     _In_ HANDLE PortHandle,
-    _Out_opt_ PVOID *PortContext,
+    _Out_opt_ PVOID* PortContext,
     _In_reads_bytes_opt_(ReplyMessage->u1.s1.TotalLength) PPORT_MESSAGE ReplyMessage,
     _Out_ PPORT_MESSAGE ReceiveMessage,
     _In_opt_ PLARGE_INTEGER Timeout
@@ -4510,7 +4510,7 @@ NTSTATUS
 NTAPI
 ZwSetThreadExecutionState(
     _In_ EXECUTION_STATE NewFlags, // ES_* flags
-    _Out_ EXECUTION_STATE *PreviousFlags
+    _Out_ EXECUTION_STATE* PreviousFlags
     );
 
 NTSYSCALLAPI
@@ -4604,7 +4604,7 @@ NTSTATUS
 NTAPI
 ZwShutdownWorkerFactory(
     _In_ HANDLE WorkerFactoryHandle,
-    _Inout_ volatile LONG *PendingWorkerCount
+    _Inout_ volatile LONG* PendingWorkerCount
     );
 
 NTSYSCALLAPI
