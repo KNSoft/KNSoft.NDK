@@ -184,10 +184,10 @@ C4TFunc(
     Debug.Assert(String.IsNullOrEmpty(Functions[0].Parameters[0].Name));
     Debug.Assert(String.IsNullOrEmpty(Functions[0].Parameters[0].LineComment));
 
-    /* A single line, and a parameter comment in tail */
+    /* A single line, a parameter comment in tail, parameter type has "*" */
 
     String[] C5T = """
-int C5TFunc(int p1, /* comment */ int p2, int* /* No name */);
+int C5TFunc(int * p1, /* comment */ int p2, int* /* No name */, int *);
 """.Split("\r\n");
 
     Functions = Cpp.CodeResolver.GetFunctionsFromContent(C5T);
@@ -195,10 +195,10 @@ int C5TFunc(int p1, /* comment */ int p2, int* /* No name */);
     Debug.Assert(Functions[0].Prefixes.Count == 1);
     Debug.Assert(Functions[0].Prefixes[0] == "int");
     Debug.Assert(Functions[0].Name == "C5TFunc");
-    Debug.Assert(Functions[0].Parameters.Count == 3);
+    Debug.Assert(Functions[0].Parameters.Count == 4);
 
     Debug.Assert(Functions[0].Parameters[0].Prefixes.Count == 0);
-    Debug.Assert(Functions[0].Parameters[0].Type == "int");
+    Debug.Assert(Functions[0].Parameters[0].Type == "int*");
     Debug.Assert(Functions[0].Parameters[0].Name == "p1");
     Debug.Assert(String.IsNullOrEmpty(Functions[0].Parameters[0].LineComment));
 
@@ -215,4 +215,10 @@ int C5TFunc(int p1, /* comment */ int p2, int* /* No name */);
     Debug.Assert(Functions[0].Parameters[2].Comments.Count == 1);
     Debug.Assert(Functions[0].Parameters[2].Comments[0] == "/* No name */");
     Debug.Assert(String.IsNullOrEmpty(Functions[0].Parameters[2].LineComment));
+
+    Debug.Assert(Functions[0].Parameters[3].Prefixes.Count == 0);
+    Debug.Assert(Functions[0].Parameters[3].Type == "int*");
+    Debug.Assert(String.IsNullOrEmpty(Functions[0].Parameters[3].Name));
+    Debug.Assert(Functions[0].Parameters[3].Comments.Count == 0);
+    Debug.Assert(String.IsNullOrEmpty(Functions[0].Parameters[3].LineComment));
 }
