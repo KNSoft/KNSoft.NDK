@@ -109,11 +109,11 @@ UnitTest_FormatMessage(
     _In_z_ _Printf_format_string_ PCSTR Format,
     ...);
 
+/* Define a test */
+
 #define TEST_PARAMETER_RESULT _KNSoft_NDK_UnitTest_Result
 #define TEST_PARAMETER_ARGC _KNSoft_NDK_UnitTest_ArgC
 #define TEST_PARAMETER_ARGV _KNSoft_NDK_UnitTest_ArgV
-
-/* Define a test */
 
 #define TEST_FUNC(Name) EXTERN_C VOID NTAPI Name(UNITTEST_RESULT* TEST_PARAMETER_RESULT, _In_ INT TEST_PARAMETER_ARGC, _In_reads_(TEST_PARAMETER_ARGC) _Pre_z_ PCWSTR* TEST_PARAMETER_ARGV)
 #define TEST_DECL_FUNC(Name) EXTERN_C FN_UNITTEST_PROC Name

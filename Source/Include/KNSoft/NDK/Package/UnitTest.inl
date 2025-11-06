@@ -46,7 +46,7 @@ UnitTest_PrintUsage(VOID)
                    "    Test_Program -Run\n"
                    "        Run all tests.\n\n"
                    "    Test_Program -Run TestName -Switch1 -Switch2\n"
-                   "        Run the test or demo that named TestName with two input parameters.\n\n"
+                   "        Run the test that named TestName with two input parameters.\n\n"
                    "Exit with the count of failed tests, or 0 if no test failed.\n\n");
 }
 
@@ -142,7 +142,6 @@ UnitTest_RunEntry(
     UnitTest_FormatMessage(">>>> Running unit test: %wZ\n", &Entry->Name);
     RtlZeroMemory(Result, sizeof(*Result));
 
-    /* NtQueryPerformanceCounter writes frequency after counter */
     RtlQueryPerformanceCounter(&PrefCounter1);
     Entry->Proc(Result, ArgC, ArgV);
     RtlQueryPerformanceCounter(&PrefCounter2);
