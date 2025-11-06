@@ -22,4 +22,35 @@ _Inline_RtlQueryPerformanceFrequency(
     return TRUE;
 }
 
+__inline
+ULONG
+NTAPI
+_Inline_RtlGetCurrentServiceSessionId(VOID)
+{
+    PSILO_USER_SHARED_DATA SharedData = NtCurrentPeb()->SharedData;
+    return SharedData == NULL ? 0 : SharedData->ServiceSessionId;
+}
+
+__inline
+ULONG
+NTAPI
+_Inline_RtlGetActiveConsoleId(VOID)
+{
+    return _Inline_RtlGetCurrentServiceSessionId() == 0 ?
+        SharedUserData->ActiveConsoleId :
+        NtCurrentPeb()->SharedData->ActiveConsoleId;
+}
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
+__inline
+LONGLONG
+NTAPI
+_Inline_RtlGetConsoleSessionForegroundProcessId(VOID)
+{
+    return _Inline_RtlGetCurrentServiceSessionId() == 0 ?
+        SharedUserData->ConsoleSessionForegroundProcessId :
+        NtCurrentPeb()->SharedData->ConsoleSessionForegroundProcessId;
+}
+#endif
+
 EXTERN_C_END
