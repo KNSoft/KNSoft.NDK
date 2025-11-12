@@ -4,6 +4,9 @@
 
 EXTERN_C_START
 
+/* See ML_SECURE_PROCESS in https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab */
+#define SECURITY_MANDATORY_SECURE_PROCESS_RID (0x00007000L)
+
 /* ntifs.h */
 #define SeLengthSid( Sid ) (8 + (4 * ((SID*)Sid)->SubAuthorityCount))
 
