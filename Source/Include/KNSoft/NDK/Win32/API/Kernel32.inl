@@ -368,7 +368,7 @@ _Exit:
 }
 #pragma endregion
 
-#pragma region QPC
+#pragma region QPC and Time
 
 __inline
 BOOL
@@ -388,6 +388,31 @@ _Inline_QueryPerformanceFrequency(
 {
     _Inline_RtlQueryPerformanceFrequency(lpFrequency);
     return TRUE;
+}
+
+__inline
+VOID
+WINAPI
+_Inline_GetSystemTimeAsFileTime(
+    _Out_ LPFILETIME lpSystemTimeAsFileTime
+)
+{
+#if _WIN64
+    *(PULONGLONG)lpSystemTimeAsFileTime = *(PULONGLONG)&SharedUserData->SystemTime;
+#else
+    ULONG HighPart;
+    while (TRUE)
+    {
+        HighPart = SharedUserData->SystemTime.High1Time;
+        if (SharedUserData->SystemTime.High1Time == SharedUserData->SystemTime.High2Time)
+        {
+            break;
+        }
+        YieldProcessor();
+    }
+    lpSystemTimeAsFileTime->dwLowDateTime = SharedUserData->SystemTime.LowPart;
+    lpSystemTimeAsFileTime->dwHighDateTime = HighPart;
+#endif
 }
 
 #pragma endregion
@@ -440,7 +465,7 @@ WINAPI
 _Inline_EncodeRemotePointer(
     _In_ HANDLE ProcessHandle,
     _In_opt_ PVOID Ptr,
-    _Out_ PVOID* EncodedPtr)
+    _Out_ PVOID * EncodedPtr)
 {
     return RtlEncodeRemotePointer(ProcessHandle, Ptr, EncodedPtr);
 }
@@ -451,7 +476,7 @@ WINAPI
 _Inline_DecodeRemotePointer(
     _In_ HANDLE ProcessHandle,
     _In_opt_ PVOID Ptr,
-    _Out_ PVOID* DecodedPtr)
+    _Out_ PVOID * DecodedPtr)
 {
     return RtlDecodeRemotePointer(ProcessHandle, Ptr, DecodedPtr);
 }
