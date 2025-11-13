@@ -6,7 +6,7 @@
 
 EXTERN_C_START
 
-/* ntddk.h */
+/* ntddk.h & phnt & Geoff Chappell & KNSoft.NDK */
 
 //
 // Define data shared between kernel and user mode.
@@ -149,31 +149,31 @@ typedef struct _KUSER_SHARED_DATA
     //
     // N.B. The tick count is updated each time the clock ticks.
     //
-    ULONG TickCountLowDeprecated;
-    ULONG TickCountMultiplier;
+    /* +0x000 */ ULONG TickCountLowDeprecated;
+    /* +0x004 */ ULONG TickCountMultiplier;
 
     //
     // Current 64-bit interrupt time in 100ns units.
     //
-    volatile KSYSTEM_TIME InterruptTime;
+    /* +0x008 */ volatile KSYSTEM_TIME InterruptTime;
 
     //
     // Current 64-bit system time in 100ns units.
     //
-    volatile KSYSTEM_TIME SystemTime;
+    /* +0x014 */ volatile KSYSTEM_TIME SystemTime;
 
     //
     // Current 64-bit time zone bias.
     //
-    volatile KSYSTEM_TIME TimeZoneBias;
+    /* +0x020 */ volatile KSYSTEM_TIME TimeZoneBias;
 
     //
     // Support image magic number range for the host system.
     //
     // N.B. This is an inclusive range.
     //
-    USHORT ImageNumberLow;
-    USHORT ImageNumberHigh;
+    /* +0x02C */ USHORT ImageNumberLow;
+    /* +0x02E */ USHORT ImageNumberHigh;
 
     //
     // Copy of system root in unicode.
@@ -181,51 +181,51 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. This field must be accessed via the RtlGetNtSystemRoot API for
     //      an accurate result.
     //
-    WCHAR NtSystemRoot[260];
+    /* +0x030 */ WCHAR NtSystemRoot[260];
 
     //
     // Maximum stack trace depth if tracing enabled.
     //
-    ULONG MaxStackTraceDepth;
+    /* +0x238 */ ULONG MaxStackTraceDepth;
 
     //
     // Crypto exponent value.
     //
-    ULONG CryptoExponent;
+    /* +0x23C */ ULONG CryptoExponent;
 
     //
     // Time zone ID.
     //
-    ULONG TimeZoneId;
-    ULONG LargePageMinimum;
+    /* +0x240 */ ULONG TimeZoneId;
+    /* +0x244 */ ULONG LargePageMinimum;
 
     //
     // This value controls the AIT Sampling rate.
     //
-    ULONG AitSamplingValue;
+    /* +0x248 */ ULONG AitSamplingValue;
 
     //
     // This value controls switchback processing.
     //
-    ULONG AppCompatFlag;
+    /* +0x24C */ ULONG AppCompatFlag;
 
     //
     // Current Kernel Root RNG state seed version
     //
-    ULONGLONG RNGSeedVersion;
+    /* +0x250 */ ULONGLONG RNGSeedVersion;
 
     //
     // This value controls assertion failure handling.
     //
-    ULONG GlobalValidationRunlevel;
+    /* +0x258 */ ULONG GlobalValidationRunlevel;
 
-    volatile LONG TimeZoneBiasStamp;
+    /* +0x25C */ volatile LONG TimeZoneBiasStamp;
 
     //
     // The shared collective build number undecorated with C or F.
     // GetVersionEx hides the real number
     //
-    ULONG NtBuildNumber;
+    /* +0x260 */ ULONG NtBuildNumber;
 
     //
     // Product type.
@@ -233,10 +233,10 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. This field must be accessed via the RtlGetNtProductType API for
     //      an accurate result.
     //
-    NT_PRODUCT_TYPE NtProductType;
-    BOOLEAN ProductTypeIsValid;
-    BOOLEAN Reserved0[1];
-    USHORT NativeProcessorArchitecture;
+    /* +0x264 */ NT_PRODUCT_TYPE NtProductType;
+    /* +0x268 */ BOOLEAN ProductTypeIsValid;
+    /* +0x269 */ BOOLEAN Reserved0[1];
+    /* +0x26A */ USHORT NativeProcessorArchitecture;
 
     //
     // The NT Version.
@@ -246,34 +246,34 @@ typedef struct _KUSER_SHARED_DATA
     //       the following two fields are used to correctly identify the
     //       version
     //
-    ULONG NtMajorVersion;
-    ULONG NtMinorVersion;
+    /* +0x26C */ ULONG NtMajorVersion;
+    /* +0x270 */ ULONG NtMinorVersion;
 
     //
     // Processor features.
     //
-    BOOLEAN ProcessorFeatures[PROCESSOR_FEATURE_MAX];
+    /* +0x274 */ BOOLEAN ProcessorFeatures[PROCESSOR_FEATURE_MAX];
 
     //
     // Reserved fields - do not use.
     //
-    ULONG MaximumUserModeAddressDeprecated; // Deprecated, use SystemBasicInformation instead.
-    ULONG SystemRangeStartDeprecated;       // Deprecated, use SystemRangeStartInformation instead.
+    /* +0x2B4 */ ULONG MaximumUserModeAddressDeprecated; // Deprecated, use SystemBasicInformation instead.
+    /* +0x2B8 */ ULONG SystemRangeStartDeprecated;       // Deprecated, use SystemRangeStartInformation instead.
 
     //
     // Time slippage while in debugger.
     //
-    volatile ULONG TimeSlip;
+    /* +0x2BC */ volatile ULONG TimeSlip;
 
     //
     // Alternative system architecture, e.g., NEC PC98xx on x86.
     //
-    ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+    /* +0x2C0 */ ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
 
     //
     // Boot sequence, incremented for each boot attempt by the OS loader.
     //
-    ULONG BootId;
+    /* +0x2C4 */ ULONG BootId;
 
     //
     // If the system is an evaluation unit, the following field contains the
@@ -281,7 +281,7 @@ typedef struct _KUSER_SHARED_DATA
     // that there is no expiration. A non-zero value is the UTC absolute time
     // that the system expires.
     //
-    LARGE_INTEGER SystemExpirationDate;
+    /* +0x2C8 */ LARGE_INTEGER SystemExpirationDate;
 
     //
     // Suite support.
@@ -289,25 +289,25 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. This field must be accessed via the RtlGetSuiteMask API for
     //      an accurate result.
     //
-    ULONG SuiteMask;
+    /* +0x2D0 */ ULONG SuiteMask;
 
     //
     // TRUE if a kernel debugger is connected/enabled.
     //
-    BOOLEAN KdDebuggerEnabled;
+    /* +0x2D4 */ BOOLEAN KdDebuggerEnabled;
 
     //
     // Mitigation policies.
     //
     union
     {
-        UCHAR MitigationPolicies;
+        /* +0x2D5 */ UCHAR MitigationPolicies;
         struct
         {
-            UCHAR NXSupportPolicy : 2;
-            UCHAR SEHValidationPolicy : 2;
-            UCHAR CurDirDevicesSkippedForDlls : 2;
-            UCHAR Reserved : 2;
+            /* +0x2D5 */ UCHAR NXSupportPolicy : 2;
+            /* +0x2D5 */ UCHAR SEHValidationPolicy : 2;
+            /* +0x2D5 */ UCHAR CurDirDevicesSkippedForDlls : 2;
+            /* +0x2D5 */ UCHAR Reserved : 2;
         };
     };
 
@@ -316,7 +316,7 @@ typedef struct _KUSER_SHARED_DATA
     // lock packages to determine how many times to spin waiting for a state
     // change before blocking.
     //
-    USHORT CyclesPerYield;
+    /* +0x2D6 */ USHORT CyclesPerYield;
 
     //
     // Current console session Id. Always zero on non-TS systems.
@@ -324,28 +324,28 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. This field must be accessed via the RtlGetActiveConsoleId API for an
     //      accurate result.
     //
-    volatile ULONG ActiveConsoleId;
+    /* +0x2D8 */ volatile ULONG ActiveConsoleId;
 
     //
     // Force-dismounts cause handles to become invalid. Rather than always
     // probe handles, a serial number of dismounts is maintained that clients
     // can use to see if they need to probe handles.
     //
-    volatile ULONG DismountCount;
+    /* +0x2DC */ volatile ULONG DismountCount;
 
     //
     // This field indicates the status of the 64-bit COM+ package on the
     // system. It indicates whether the Intermediate Language (IL) COM+
     // images need to use the 64-bit COM+ runtime or the 32-bit COM+ runtime.
     //
-    ULONG ComPlusPackage;
+    /* +0x2E0 */ ULONG ComPlusPackage;
 
     //
     // Time in tick count for system-wide last user input across all terminal
     // sessions. For MP performance, it is not updated all the time (e.g. once
     // a minute per session). It is used for idle detection.
     //
-    ULONG LastSystemRITEventTickCount;
+    /* +0x2E4 */ ULONG LastSystemRITEventTickCount;
 
     //
     // Number of physical pages in the system. This can dynamically change as
@@ -354,19 +354,19 @@ typedef struct _KUSER_SHARED_DATA
     // machines so code that needs the full value should access
     // FullNumberOfPhysicalPages instead.
     //
-    ULONG NumberOfPhysicalPages;
+    /* +0x2E8 */ ULONG NumberOfPhysicalPages;
 
     //
     // True if the system was booted in safe boot mode.
     //
-    BOOLEAN SafeBootMode;
+    /* +0x2EC */ BOOLEAN SafeBootMode;
 
     //
     // Virtualization flags.
     //
     union
     {
-        UCHAR VirtualizationFlags;
+        /* +0x2ED */ UCHAR VirtualizationFlags;
 
 #if defined(_ARM64_)
         //
@@ -374,9 +374,9 @@ typedef struct _KUSER_SHARED_DATA
         //
         struct
         {
-            UCHAR ArchStartedInEl2 : 1;
-            UCHAR QcSlIsSupported : 1;
-            UCHAR : 6;
+            /* +0x2ED */ UCHAR ArchStartedInEl2 : 1;
+            /* +0x2ED */ UCHAR QcSlIsSupported : 1;
+            /* +0x2ED */ UCHAR : 6;
         };
 #endif
 
@@ -385,7 +385,7 @@ typedef struct _KUSER_SHARED_DATA
     //
     // Reserved (available for reuse).
     //
-    UCHAR Reserved12[2];
+    /* +0x2EE */ UCHAR Reserved12[2];
 
     //
     // This is a packed bitfield that contains various flags concerning
@@ -397,29 +397,29 @@ typedef struct _KUSER_SHARED_DATA
     //
     union
     {
-        ULONG SharedDataFlags;
+        /* +0x2F0 */ ULONG SharedDataFlags;
         struct
         {
             //
             // The following bit fields are for the debugger only. Do not use.
             // Use the bit definitions instead.
             //
-            ULONG DbgErrorPortPresent       : 1;
-            ULONG DbgElevationEnabled       : 1;
-            ULONG DbgVirtEnabled            : 1;
-            ULONG DbgInstallerDetectEnabled : 1;
-            ULONG DbgLkgEnabled             : 1;
-            ULONG DbgDynProcessorEnabled    : 1;
-            ULONG DbgConsoleBrokerEnabled   : 1;
-            ULONG DbgSecureBootEnabled      : 1;
-            ULONG DbgMultiSessionSku        : 1;
-            ULONG DbgMultiUsersInSessionSku : 1;
-            ULONG DbgStateSeparationEnabled : 1;
-            ULONG SpareBits                 : 21;
+            /* +0x2F0 */ ULONG DbgErrorPortPresent       : 1;
+            /* +0x2F0 */ ULONG DbgElevationEnabled       : 1;
+            /* +0x2F0 */ ULONG DbgVirtEnabled            : 1;
+            /* +0x2F0 */ ULONG DbgInstallerDetectEnabled : 1;
+            /* +0x2F0 */ ULONG DbgLkgEnabled             : 1;
+            /* +0x2F0 */ ULONG DbgDynProcessorEnabled    : 1;
+            /* +0x2F0 */ ULONG DbgConsoleBrokerEnabled   : 1;
+            /* +0x2F0 */ ULONG DbgSecureBootEnabled      : 1;
+            /* +0x2F0 */ ULONG DbgMultiSessionSku        : 1;
+            /* +0x2F0 */ ULONG DbgMultiUsersInSessionSku : 1;
+            /* +0x2F0 */ ULONG DbgStateSeparationEnabled : 1;
+            /* +0x2F0 */ ULONG SpareBits                 : 21;
         } DUMMYSTRUCTNAME2;
     } DUMMYUNIONNAME2;
 
-    ULONG DataFlagsPad[1];
+    /* +0x2F4 */ ULONG DataFlagsPad[1];
 
     //
     // Depending on the processor, the code for fast system call will differ,
@@ -427,51 +427,51 @@ typedef struct _KUSER_SHARED_DATA
     //
     // N.B. The following field is only used on 32-bit systems.
     //
-    ULONGLONG TestRetInstruction;
-    LONGLONG QpcFrequency;
+    /* +0x2F8 */ ULONGLONG TestRetInstruction;
+    /* +0x300 */ LONGLONG QpcFrequency;
 
     //
     // On AMD64, this value is initialized to a nonzero value if the system
     // operates with an altered view of the system service call mechanism.
     //
-    ULONG SystemCall;
+    /* +0x308 */ ULONG SystemCall;
 
     //
     // Reserved field - do not use. Used to be UserCetAvailableEnvironments.
     //
-    ULONG Reserved2;
+    /* +0x30C */ ULONG Reserved2;
 
     //
     // Full 64 bit version of the number of physical pages in the system.
     // This can dynamically change as physical memory can be added or removed
     // from a running system.
     //
-    ULONGLONG FullNumberOfPhysicalPages;
+    /* +0x310 */ ULONGLONG FullNumberOfPhysicalPages;
 
     //
     // Reserved, available for reuse.
     //
-    ULONGLONG SystemCallPad[1];
+    /* +0x318 */ ULONGLONG SystemCallPad[1];
 
     //
     // The 64-bit tick count.
     //
     union
     {
-        volatile KSYSTEM_TIME TickCount;
-        volatile ULONG64 TickCountQuad;
+        /* +0x320 */ volatile KSYSTEM_TIME TickCount;
+        /* +0x320 */ volatile ULONG64 TickCountQuad;
         struct
         {
-            ULONG ReservedTickCountOverlay[3];
-            ULONG TickCountPad[1];
+            /* +0x320 */ ULONG ReservedTickCountOverlay[3];
+            /* +0x320 */ ULONG TickCountPad[1];
         } DUMMYSTRUCTNAME;
     } DUMMYUNIONNAME3;
 
     //
     // Cookie for encoding pointers system wide.
     //
-    ULONG Cookie;
-    ULONG CookiePad[1];
+    /* +0x330 */ ULONG Cookie;
+    /* +0x334 */ ULONG CookiePad[1];
 
     //
     // Client id of the process having the focus in the current
@@ -480,7 +480,7 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. This field must be accessed via the
     //      RtlGetConsoleSessionForegroundProcessId API for an accurate result.
     //
-    LONGLONG ConsoleSessionForegroundProcessId;
+    /* +0x338 */ LONGLONG ConsoleSessionForegroundProcessId;
 
     //
     // N.B. The following data is used to implement the precise time
@@ -489,46 +489,46 @@ typedef struct _KUSER_SHARED_DATA
     //
     // Placeholder for the (internal) time update lock.
     //
-    ULONGLONG TimeUpdateLock;
+    /* +0x340 */ ULONGLONG TimeUpdateLock;
 
     //
     // The performance counter value used to establish the current system time.
     //
-    ULONGLONG BaselineSystemTimeQpc;
+    /* +0x348 */ ULONGLONG BaselineSystemTimeQpc;
 
     //
     // The performance counter value used to compute the last interrupt time.
     //
-    ULONGLONG BaselineInterruptTimeQpc;
+    /* +0x350 */ ULONGLONG BaselineInterruptTimeQpc;
 
     //
     // The scaled number of system time seconds represented by a single
     // performance count (this value may vary to achieve time synchronization).
     //
-    ULONGLONG QpcSystemTimeIncrement;
+    /* +0x358 */ ULONGLONG QpcSystemTimeIncrement;
 
     //
     // The scaled number of interrupt time seconds represented by a single
     // performance count (this value is constant after the system is booted).
     //
-    ULONGLONG QpcInterruptTimeIncrement;
+    /* +0x360 */ ULONGLONG QpcInterruptTimeIncrement;
 
     //
     // The scaling shift count applied to the performance counter system time
     // increment.
     //
-    UCHAR QpcSystemTimeIncrementShift;
+    /* +0x368 */ UCHAR QpcSystemTimeIncrementShift;
 
     //
     // The scaling shift count applied to the performance counter interrupt time
     // increment.
     //
-    UCHAR QpcInterruptTimeIncrementShift;
+    /* +0x369 */ UCHAR QpcInterruptTimeIncrementShift;
 
     //
     // The count of unparked processors.
     //
-    USHORT UnparkedProcessorCount;
+    /* +0x36A */ USHORT UnparkedProcessorCount;
 
     //
     // A bitmask of enclave features supported on this system.
@@ -536,61 +536,60 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. This field must be accessed via the RtlIsEnclareFeaturePresent API for an
     //      accurate result.
     //
-    ULONG EnclaveFeatureMask[4];
+    /* +0x36C */ ULONG EnclaveFeatureMask[4];
 
     //
     // Current coverage round for telemetry based coverage.
     //
-    ULONG TelemetryCoverageRound;
+    /* +0x37C */ ULONG TelemetryCoverageRound;
 
     //
     // The following field is used for ETW user mode global logging
     // (UMGL).
     //
-
-    USHORT UserModeGlobalLogger[16];
+    /* +0x380 */ USHORT UserModeGlobalLogger[16];
 
     //
     // Settings that can enable the use of Image File Execution Options
     // from HKCU in addition to the original HKLM.
     //
-    ULONG ImageFileExecutionOptions;
+    /* +0x3A0 */ ULONG ImageFileExecutionOptions;
 
     //
     // Generation of the kernel structure holding system language information
     //
-    ULONG LangGenerationCount;
+    /* +0x3A4 */ ULONG LangGenerationCount;
 
     //
     // Reserved (available for reuse).
     //
-    ULONGLONG Reserved4;
+    /* +0x3A8 */ ULONGLONG Reserved4;
 
     //
     // Current 64-bit interrupt time bias in 100ns units.
     //
-    volatile ULONGLONG InterruptTimeBias;
+    /* +0x3B0 */ volatile ULONGLONG InterruptTimeBias;
 
     //
     // Current 64-bit performance counter bias, in performance counter units
     // before the shift is applied.
     //
-    volatile ULONGLONG QpcBias;
+    /* +0x3B8 */ volatile ULONGLONG QpcBias;
 
     //
     // Number of active processors and groups.
     //
-    ULONG ActiveProcessorCount;
-    volatile UCHAR ActiveGroupCount;
+    /* +0x3C0 */ ULONG ActiveProcessorCount;
+    /* +0x3C4 */ volatile UCHAR ActiveGroupCount;
 
     //
     // Reserved (available for re-use).
     //
-    UCHAR Reserved9;
+    /* +0x3C5 */ UCHAR Reserved9;
 
     union
     {
-        USHORT QpcData;
+        /* +0x3C6 */ USHORT QpcData;
         struct
         {
 
@@ -598,37 +597,37 @@ typedef struct _KUSER_SHARED_DATA
             // A bitfield indicating whether performance counter queries can
             // read the counter directly (bypassing the system call) and flags.
             //
-            volatile UCHAR QpcBypassEnabled;
+            /* +0x3C6 */ volatile UCHAR QpcBypassEnabled;
 
             //
             // Reserved, leave as zero for backward compatibility. Was shift
             // applied to the raw counter value to derive QPC count.
             //
-            UCHAR QpcReserved;
+            /* +0x3C6 */ UCHAR QpcReserved;
         };
     };
 
-    LARGE_INTEGER TimeZoneBiasEffectiveStart;
-    LARGE_INTEGER TimeZoneBiasEffectiveEnd;
+    /* +0x3C8 */ LARGE_INTEGER TimeZoneBiasEffectiveStart;
+    /* +0x3D0 */ LARGE_INTEGER TimeZoneBiasEffectiveEnd;
 
     //
     // Extended processor state configuration (AMD64 and x86).
     //
-    XSTATE_CONFIGURATION XState;
+    /* +0x3D8 */ XSTATE_CONFIGURATION XState;
 
-    KSYSTEM_TIME FeatureConfigurationChangeStamp;
-    ULONG Spare;
+    /* +0x720 */ KSYSTEM_TIME FeatureConfigurationChangeStamp;
+    /* +0x72C */ ULONG Spare;
 
-    ULONG64 UserPointerAuthMask;
+    /* +0x730 */ ULONG64 UserPointerAuthMask;
 
     //
     // Extended processor state configuration (ARM64). The reserved space for
     // other architectures is not available for reuse.
     //
 #if defined(_ARM64_)
-    XSTATE_CONFIGURATION XStateArm64;
+    /* +0x738 */ XSTATE_CONFIGURATION XStateArm64;
 #else
-    ULONG Reserved10[210];
+    /* +0x738 */ ULONG Reserved10[210];
 #endif
 
 } KUSER_SHARED_DATA, *PKUSER_SHARED_DATA;
