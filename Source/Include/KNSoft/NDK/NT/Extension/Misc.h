@@ -14,8 +14,6 @@ MAKE_NTSTATUS(
                       (Code & NT_CODE_MASK));
 }
 
-#define MAKEDWORD2(ll, lh, hl, hh) (((DWORD)MAKEWORD(hl, hh) << 16) & (DWORD)MAKEWORD(ll, lh))
-
 #pragma region Alignments
 
 #define CODE_ALIGNMENT 0x10

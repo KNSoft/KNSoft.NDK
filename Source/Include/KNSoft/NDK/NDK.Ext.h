@@ -15,6 +15,8 @@
 // Test combined flags
 #define TEST_FLAGS(val, flags) (((val) & (flags)) == (flags))
 
+#define MAKEDWORD2(ll, lh, hl, hh) (((DWORD)MAKEWORD(hl, hh) << 16) & (DWORD)MAKEWORD(ll, lh))
+
 #define IPV4_LE(v1, v2, v3, v4) MAKEDWORD2(v1, v2, v3, v4)
 #define IPV4_BE(v1, v2, v3, v4) MAKEDWORD2(v4, v3, v2, v1)
 
