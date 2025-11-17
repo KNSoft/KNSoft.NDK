@@ -570,6 +570,9 @@
       <Filter>NT\Rtl</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="..\Include\KNSoft\NDK\NT\Ldr.inl">
+      <Filter>NT</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">

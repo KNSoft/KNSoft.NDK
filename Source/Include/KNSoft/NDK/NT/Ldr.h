@@ -516,7 +516,7 @@ LdrGetDllHandle(
     _In_opt_ PCWSTR DllPath,
     _In_opt_ PULONG DllCharacteristics,
     _In_ PUNICODE_STRING DllName,
-    _Out_ PVOID *DllHandle);
+    _Out_ PVOID* DllHandle);
 
 // LdrGetDllHandleEx Flags
 #define LDR_GET_DLL_HANDLE_EX_UNCHANGED_REFCOUNT 0x00000001

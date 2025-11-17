@@ -205,7 +205,7 @@ _Inline_GetModuleHandleW(
     }
 
     _Inline_RtlInitUnicodeString(&DllName, lpModuleName);
-    Status = LdrGetDllHandle(NULL, NULL, &DllName, &DllHandle);
+    Status = _Inline_LdrGetDllHandle(NULL, NULL, &DllName, &DllHandle);
     if (NT_SUCCESS(Status))
     {
         return (HMODULE)DllHandle;
@@ -260,7 +260,7 @@ _Inline_GetModuleHandleExW(
     } else
     {
         _Inline_RtlInitUnicodeString(&DllName, lpModuleName);
-        Status = LdrGetDllHandle(NULL, NULL, &DllName, &DllHandle);
+        Status = _Inline_LdrGetDllHandle(NULL, NULL, &DllName, &DllHandle);
         if (!NT_SUCCESS(Status))
         {
             goto _Fail;

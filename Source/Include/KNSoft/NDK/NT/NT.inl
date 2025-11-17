@@ -2,6 +2,7 @@
 
 #include "Bcd.inl"
 #include "Dbg.inl"
+#include "Ldr.inl"
 #include "Rtl/AVX.inl"
 #include "Rtl/DataStructures/Bitmap.inl"
 #include "Rtl/Process/EnvironmentBlock.inl"
