@@ -153,6 +153,51 @@ NtWriteCurrentTebPVOID(
 
 #pragma endregion
 
+#pragma region Interlocked operations
+
+__forceinline
+unsigned int
+_InterlockedRead32(
+    _In_ const volatile unsigned int* Target)
+{
+#if defined _M_ARM64 || defined _M_ARM64EC
+    return __load_acquire32(Target);
+#elif defined _M_IX86 || defined _M_X64
+    unsigned int const result = *Target;
+    _ReadWriteBarrier();
+    return result;
+#endif
+}
+
+__forceinline
+unsigned
+__int64
+_InterlockedRead64(
+    _In_ const volatile unsigned __int64* Target)
+{
+#if defined _M_ARM64 || defined _M_ARM64EC
+    return __load_acquire64(Target);
+#elif defined _M_X64
+    unsigned __int64 const result = *Target;
+    _ReadWriteBarrier();
+    return result;
+#endif
+}
+
+__forceinline
+void*
+_InterlockedReadPointer(
+    _In_ const volatile void** Target)
+{
+#ifdef _WIN64
+    return (void*)_InterlockedRead64((const volatile unsigned __int64*)Target);
+#else
+    return (void*)_InterlockedRead32((const volatile unsigned __int32*)Target);
+#endif
+}
+
+#pragma endregion __crt_interlocked_*
+
 #pragma region Pseudo Handles
 
 #define NtCurrentProcess() ((HANDLE)(LONG_PTR)-1)
