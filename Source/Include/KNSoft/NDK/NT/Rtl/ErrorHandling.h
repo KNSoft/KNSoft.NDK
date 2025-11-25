@@ -175,7 +175,7 @@ RtlRemoveVectoredContinueHandler(
 
 typedef
 _Function_class_(RTLP_UNHANDLED_EXCEPTION_FILTER)
-ULONG
+LONG
 NTAPI
 RTLP_UNHANDLED_EXCEPTION_FILTER(
     _In_ PEXCEPTION_POINTERS ExceptionInfo);
@@ -185,7 +185,7 @@ NTSYSAPI
 VOID
 NTAPI
 RtlSetUnhandledExceptionFilter(
-    _In_ PRTLP_UNHANDLED_EXCEPTION_FILTER UnhandledExceptionFilter);
+    _In_opt_ PRTLP_UNHANDLED_EXCEPTION_FILTER UnhandledExceptionFilter);
 
 // rev
 NTSYSAPI

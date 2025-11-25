@@ -23,7 +23,7 @@
 #include "Image.h"
 #include "Ldr.h"
 #include "Misc.h"
-#include "Mui.h"
+#include "Nls.h"
 #include "Sam.h"
 #include "Sxs.h"
 #include "Tm.h"

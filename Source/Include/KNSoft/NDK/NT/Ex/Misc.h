@@ -166,6 +166,14 @@ NtSetDefaultHardErrorPort(
 
 #define MAX_WOW64_SHARED_ENTRIES 16
 
+/**
+ * The NtUmsThreadYield routine yields control to the user-mode scheduling (UMS) scheduler thread on which the calling UMS worker thread is running.
+ * Note: As of Windows 11, user-mode scheduling is not supported. All calls fail with the error STATUS_NOT_SUPPORTED.
+ *
+ * \param SchedulerParam Optional handle to the keyed event object. If NULL, the default keyed event is used.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-umsthreadyield
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

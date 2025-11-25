@@ -15,7 +15,8 @@ MessageBoxTimeoutA(
     _In_opt_ LPCSTR lpCaption,
     _In_ UINT uType,
     _In_ WORD wLanguageId,
-    _In_ DWORD dwMilliseconds);
+    _In_ DWORD dwMilliseconds
+    );
 
 WINUSERAPI
 INT
@@ -26,7 +27,8 @@ MessageBoxTimeoutW(
     _In_opt_ LPCWSTR lpCaption,
     _In_ UINT uType,
     _In_ WORD wLanguageId,
-    _In_ DWORD dwMilliseconds);
+    _In_ DWORD dwMilliseconds
+    );
 
 WINUSERAPI
 HWND
@@ -42,13 +44,15 @@ WINUSERAPI
 BOOL
 WINAPI
 IsTopLevelWindow(
-    _In_ HWND hWnd);
+    _In_ HWND hWnd
+    );
 
 WINUSERAPI
 BOOL
 WINAPI
 IsServerSideWindow(
-    _In_ HWND hWnd);
+    _In_ HWND hWnd
+    );
 
 WINUSERAPI
 BOOL
@@ -56,7 +60,8 @@ WINAPI
 EndTask(
     HWND hWnd,
     BOOL fShutDown,
-    BOOL fForce);
+    BOOL fForce
+    );
 
 /* See also NtUserConsoleControl */
 WINUSERAPI
@@ -65,18 +70,20 @@ NTAPI
 ConsoleControl(
     _In_ CONSOLECONTROL Command,
     _In_reads_bytes_(ConsoleInformationLength) PVOID ConsoleInformation,
-    _In_ ULONG ConsoleInformationLength);
+    _In_ ULONG ConsoleInformationLength
+    );
 
 /* See also NtUserQuerySendMessage */
 WINUSERAPI
 BOOL
 NTAPI
 QuerySendMessage(
-    _Inout_ PMSG Message);
+    _Inout_ PMSG Message
+    );
 
 /* See also NtUserSetWindowStationUser */
 WINUSERAPI
-LOGICAL
+BOOL
 NTAPI
 SetWindowStationUser(
     _In_ HWINSTA WindowStationHandle,
@@ -90,21 +97,31 @@ WINUSERAPI
 HWND
 NTAPI
 GhostWindowFromHungWindow(
-    _In_ HWND WindowHandle);
+    _In_ HWND WindowHandle
+    );
 
 /* See also NtUserHungWindowFromGhostWindow */
 WINUSERAPI
 HWND
 NTAPI
 HungWindowFromGhostWindow(
-    _In_ HWND WindowHandle);
+    _In_ HWND WindowHandle
+    );
 
 /* See also NtUserGetSendMessageReceiver */
-NTSYSAPI
+WINUSERAPI
 HWND
 NTAPI
 GetSendMessageReceiver(
     _In_ HANDLE ThreadId
+    );
+
+/* User32.dll ordinal 2005, see also: NtUserSetChildWindowNoActivate */
+WINUSERAPI
+BOOL
+NTAPI
+SetChildWindowNoActivate(
+    _In_ HWND WindowHandle
     );
 
 EXTERN_C_END

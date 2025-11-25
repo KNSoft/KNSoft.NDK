@@ -382,6 +382,18 @@ RtlQueryAllInternalFeatureConfigurations(
 
 // private
 NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryAllInternalRuntimeFeatureConfigurations(
+    _In_ RTL_FEATURE_ID FeatureId,
+    _In_ RTL_FEATURE_CONFIGURATION_TYPE ConfigurationType,
+    _Out_opt_ PRTL_FEATURE_CHANGE_STAMP ChangeStamp,
+    _Out_writes_(*ConfigurationCount) PRTL_FEATURE_CONFIGURATION Configurations,
+    _Inout_ PSIZE_T ConfigurationCount
+    );
+
+// private
+NTSYSAPI
 RTL_FEATURE_CHANGE_STAMP
 NTAPI
 RtlQueryFeatureConfigurationChangeStamp(

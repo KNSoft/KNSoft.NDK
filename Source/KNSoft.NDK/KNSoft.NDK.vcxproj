@@ -148,7 +148,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Mm\Info.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Mm\Misc.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Mm\Mm.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\Mui.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Nls.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\NT.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ob\Ob.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ob\Misc.h" />

@@ -240,16 +240,20 @@ RtlLocateSupervisorFeature(
 #define ELEVATION_FLAG_SHORTCUT_REDIR 0x00000004
 #define ELEVATION_FLAG_NO_SIGNATURE_CHECK 0x00000008
 
-typedef union _RTL_ELEVATION_FLAGS
+// private
+typedef struct _RTL_ELEVATION_FLAGS
 {
-    ULONG Flags;
-    struct
+    union
     {
-        ULONG ElevationEnabled : 1;
-        ULONG VirtualizationEnabled : 1;
-        ULONG InstallerDetectEnabled : 1;
-        ULONG AdminApprovalModeType : 2;
-        ULONG ReservedBits : 27;
+        ULONG Flags;
+        struct
+        {
+            ULONG ElevationEnabled : 1;
+            ULONG VirtualizationEnabled : 1;
+            ULONG InstallerDetectEnabled : 1;
+            ULONG AdminApprovalModeType : 2;
+            ULONG ReservedBits : 27;
+        };
     };
 } RTL_ELEVATION_FLAGS, *PRTL_ELEVATION_FLAGS;
 

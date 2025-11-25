@@ -9,11 +9,14 @@ EXTERN_C_START
 /* ntnls.h */
 
 #define MAXIMUM_LEADBYTES   12
-
-// This structure is the data from the raw codepage files.  Note that we set the "Codepage" field
-// last, so any threads accessing this pointers in this structure should check to see if that is
-// CP_UTF8 (65001) first.  If so, they should not use the pointers.
-// MemoryBarrier might be warranted before checking CodePage to protect out-of-order reads of the pointers.
+/*
+ * This structure is the data from the raw codepage files.
+ * Note that we set the "Codepage" field last, so any threads accessing this pointers in this structure
+ * should check to see if that is CP_UTF8 (65001) first. If so, they should not use the pointers.
+ * MemoryBarrier might be warranted before checking CodePage to protect out-of-order reads of the pointers.
+ * 
+ * See also: https://learn.microsoft.com/en-us/previous-versions/mt791523(v=vs.85)
+ */
 typedef struct _CPTABLEINFO
 {
     USHORT CodePage;                    // code page number (For UTF-8 the rest of the structure is unused)
@@ -30,12 +33,13 @@ typedef struct _CPTABLEINFO
     PUSHORT DBCSOffsets;                // pointer to DBCS offsets
 } CPTABLEINFO, *PCPTABLEINFO;
 
+/* See also: https://learn.microsoft.com/en-us/previous-versions/mt791531(v=vs.85) */
 typedef struct _NLSTABLEINFO
 {
-    CPTABLEINFO OemTableInfo;
-    CPTABLEINFO AnsiTableInfo;
-    PUSHORT UpperCaseTable;             // 844 format upcase table
-    PUSHORT LowerCaseTable;             // 844 format lower case table
+    CPTABLEINFO OemTableInfo;   // OEM table
+    CPTABLEINFO AnsiTableInfo;  // ANSI table
+    PUSHORT UpperCaseTable;     // 844 format upcase table
+    PUSHORT LowerCaseTable;     // 844 format lower case table
 } NLSTABLEINFO, *PNLSTABLEINFO;
 
 typedef struct _RTL_NLS_STATE
@@ -53,6 +57,7 @@ typedef struct _RTL_NLS_STATE
 
 /* phnt */
 
+/* Data exports (ntdll.lib/ntdllp.lib) */
 #if !defined(_KERNEL_MODE)
 NTSYSAPI USHORT NlsAnsiCodePage;
 NTSYSAPI BOOLEAN NlsMbCodePageTag;

@@ -112,7 +112,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Rtl.h">
       <Filter>NT\Rtl</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\Mui.h">
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Nls.h">
       <Filter>NT</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\ErrorHandling.h">

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../MinDef.h"
-#include "../Mui.h"
+#include "../Nls.h"
 #include "DataStructures/GenericTable.h"
 
 EXTERN_C_START

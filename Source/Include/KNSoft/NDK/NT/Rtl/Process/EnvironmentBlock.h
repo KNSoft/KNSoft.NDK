@@ -5,6 +5,11 @@
 #include "../DataStructures/Bitmap.h"
 #include "Process.h"
 #include "../../Ps/JobInfo.h"
+#include "../../Nls.h"
+#include "../../Win32K/Gdi.h"
+
+/* NT\Win32K\Win32KApi.h */
+typedef struct _KERNEL_CALLBACK_TABLE KERNEL_CALLBACK_TABLE, *PKERNEL_CALLBACK_TABLE;
 
 EXTERN_C_START
 
@@ -502,7 +507,7 @@ typedef struct _PEB
     PVOID ProcessHeap;                              // Pointer to the process default heap.
     PRTL_CRITICAL_SECTION FastPebLock;              // Pointer to a critical section used to synchronize access to the PEB.
     PSLIST_HEADER AtlThunkSListPtr;                 // Pointer to a singly linked list used by ATL.
-    PVOID IFEOKey;                                  // Pointer to the Image File Execution Options key.
+    HANDLE IFEOKey;                                 // Handle to the Image File Execution Options key.
 
     union
     {
@@ -524,7 +529,7 @@ typedef struct _PEB
     // User32 KERNEL_CALLBACK_TABLE (ntuser.h)
     union
     {
-        PVOID KernelCallbackTable;
+        PKERNEL_CALLBACK_TABLE KernelCallbackTable;
         PVOID UserSharedInfoPtr;
     };
 
@@ -537,9 +542,9 @@ typedef struct _PEB
     PVOID ReadOnlySharedMemoryBase;         // Reserved for CSRSS.
     PSILO_USER_SHARED_DATA SharedData;      // Pointer to the USER_SHARED_DATA for the current SILO.
     PVOID* ReadOnlyStaticServerData;        // Reserved for CSRSS.
-    PVOID AnsiCodePageData;                 // Pointer to the ANSI code page data. (PCPTABLEINFO)
-    PVOID OemCodePageData;                  // Pointer to the OEM code page data. (PCPTABLEINFO)
-    PVOID UnicodeCaseTableData;             // Pointer to the Unicode case table data. (PNLSTABLEINFO)
+    PCPTABLEINFO AnsiCodePageData;          // Pointer to the ANSI code page data.
+    PCPTABLEINFO OemCodePageData;           // Pointer to the OEM code page data.
+    PNLSTABLEINFO UnicodeCaseTableData;     // Pointer to the Unicode case table data.
     ULONG NumberOfProcessors;               // The total number of system processors.
     ULONG NtGlobalFlag;                     // Global flags for the system.
     LARGE_INTEGER CriticalSectionTimeout;   // Timeout for critical sections.
@@ -558,7 +563,7 @@ typedef struct _PEB
     //
     PVOID* ProcessHeaps;
 
-    PVOID GdiSharedHandleTable;             // Pointer to the system GDI shared handle table.
+    PGDI_HANDLE_ENTRY GdiSharedHandleTable; // Pointer to the system GDI shared handle table.
     PVOID ProcessStarterHelper;             // Pointer to the process starter helper.
     ULONG GdiDCAttributeList;               // The maximum number of GDI function calls during batch operations (GdiSetBatchLimit)
     PRTL_CRITICAL_SECTION LoaderLock;       // Pointer to the loader lock critical section.
@@ -698,7 +703,7 @@ typedef struct _PEB64
     };
     union
     {
-        /* +0x058 */ VOID* POINTER_64 KernelCallbackTable;
+        /* +0x058 */ VOID* POINTER_64 KernelCallbackTable; /* TODO: PKERNEL_CALLBACK_TABLE64 */
         /* +0x058 */ VOID* POINTER_64 UserSharedInfoPtr;
     };
     /* +0x060 */ ULONG SystemReserved;
@@ -710,9 +715,9 @@ typedef struct _PEB64
     /* +0x088 */ VOID* POINTER_64 ReadOnlySharedMemoryBase;
     /* +0x090 */ VOID* POINTER_64 SharedData;
     /* +0x098 */ VOID* POINTER_64* POINTER_64 ReadOnlyStaticServerData;
-    /* +0x0A0 */ VOID* POINTER_64 AnsiCodePageData;
-    /* +0x0A8 */ VOID* POINTER_64 OemCodePageData;
-    /* +0x0B0 */ VOID* POINTER_64 UnicodeCaseTableData;
+    /* +0x0A0 */ VOID* POINTER_64 AnsiCodePageData; /* TODO: PCPTABLEINFO64 */
+    /* +0x0A8 */ VOID* POINTER_64 OemCodePageData; /* TODO: PCPTABLEINFO64 */
+    /* +0x0B0 */ VOID* POINTER_64 UnicodeCaseTableData; /* TODO: PNLSTABLEINFO64 */
     /* +0x0B8 */ ULONG NumberOfProcessors;
     /* +0x0BC */ ULONG NtGlobalFlag;
     /* +0x0C0 */ LARGE_INTEGER CriticalSectionTimeout;
@@ -723,7 +728,7 @@ typedef struct _PEB64
     /* +0x0E8 */ ULONG NumberOfHeaps;
     /* +0x0EC */ ULONG MaximumNumberOfHeaps;
     /* +0x0F0 */ VOID* POINTER_64* POINTER_64 ProcessHeaps;
-    /* +0x0F8 */ VOID* POINTER_64 GdiSharedHandleTable;
+    /* +0x0F8 */ VOID* POINTER_64 GdiSharedHandleTable; /* TODO: PGDI_HANDLE_ENTRY64 */
     /* +0x100 */ VOID* POINTER_64 ProcessStarterHelper;
     /* +0x108 */ ULONG GdiDCAttributeList;
     /* +0x110 */ RTL_CRITICAL_SECTION64* POINTER_64 LoaderLock;
@@ -846,7 +851,7 @@ typedef struct _PEB32
     };
     union
     {
-        /* +0x02C */ VOID* POINTER_32 KernelCallbackTable;
+        /* +0x02C */ VOID* POINTER_32 KernelCallbackTable; /* TODO: PKERNEL_CALLBACK_TABLE32 */
         /* +0x02C */ VOID* POINTER_32 UserSharedInfoPtr;
     };
     /* +0x030 */  ULONG SystemReserved;
@@ -858,9 +863,9 @@ typedef struct _PEB32
     /* +0x04C */ VOID* POINTER_32 ReadOnlySharedMemoryBase;
     /* +0x050 */ VOID* POINTER_32 SharedData;
     /* +0x054 */ VOID* POINTER_32* POINTER_32 ReadOnlyStaticServerData;
-    /* +0x058 */ VOID* POINTER_32 AnsiCodePageData;
-    /* +0x05C */ VOID* POINTER_32 OemCodePageData;
-    /* +0x060 */ VOID* POINTER_32 UnicodeCaseTableData;
+    /* +0x058 */ VOID* POINTER_32 AnsiCodePageData; /* TODO: PCPTABLEINFO32 */
+    /* +0x05C */ VOID* POINTER_32 OemCodePageData; /* TODO: PCPTABLEINFO32 */
+    /* +0x060 */ VOID* POINTER_32 UnicodeCaseTableData; /* TODO: PNLSTABLEINFO32 */
     /* +0x064 */ ULONG NumberOfProcessors;
     /* +0x068 */ ULONG NtGlobalFlag;
     /* +0x070 */ LARGE_INTEGER CriticalSectionTimeout;
@@ -871,7 +876,7 @@ typedef struct _PEB32
     /* +0x088 */ ULONG NumberOfHeaps;
     /* +0x08C */ ULONG MaximumNumberOfHeaps;
     /* +0x090 */ VOID* POINTER_32* POINTER_32 ProcessHeaps;
-    /* +0x094 */ VOID* POINTER_32 GdiSharedHandleTable;
+    /* +0x094 */ VOID* POINTER_32 GdiSharedHandleTable; /* TODO: PGDI_HANDLE_ENTRY32 */
     /* +0x098 */ VOID* POINTER_32 ProcessStarterHelper;
     /* +0x09C */ ULONG GdiDCAttributeList;
     /* +0x0A0 */ RTL_CRITICAL_SECTION32* POINTER_32 LoaderLock;

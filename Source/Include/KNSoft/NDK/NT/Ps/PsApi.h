@@ -701,9 +701,10 @@ NtAlertResumeThread(
     );
 
 /**
- * Tests whether the current thread has an alert pending.
+ * The NtTestAlert routine indicates whether the current thread has an alert pending
+ * and executes asynchronous procedure calls (APCs) queued to the current thread.
  *
- * @return NTSTATUS Successful or errant status.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -715,10 +716,10 @@ NtTestAlert(
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 // rev
 /**
- * Sends an alert to the specified thread.
+ * The NtAlertThreadByThreadId routine sends an alert to the specified thread.
  *
- * @param ThreadId The thread ID of the thread to be alerted.
- * @return NTSTATUS Successful or errant status.
+ * \param ThreadId The thread ID of the thread to be alerted.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -731,11 +732,11 @@ NtAlertThreadByThreadId(
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
 /**
- * Sends an alert to the specified thread by its thread ID, with an optional lock.
+ * The NtAlertThreadByThreadIdEx routine sends an alert to the specified thread by its thread ID, with an optional lock.
  *
- * @param ThreadId The thread ID of the thread to be alerted.
- * @param Lock An optional pointer to an SRW lock to be used during the alert.
- * @return NTSTATUS Successful or errant status.
+ * \param ThreadId The thread ID of the thread to be alerted.
+ * \param Lock An optional pointer to an SRW lock to be used during the alert.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -746,13 +747,13 @@ NtAlertThreadByThreadIdEx(
     );
 
 /**
- * Sends an alert to multiple threads by their thread IDs.
+ * The NtAlertMultipleThreadByThreadId routine sends an alert to multiple threads by their thread IDs.
  *
- * @param MultipleThreadId A pointer to an array of thread IDs to be alerted.
- * @param Count The number of thread IDs in the array.
- * @param Boost A pointer to a boost value to be applied to the threads.
- * @param BoostCount The number of boost values in the array.
- * @return NTSTATUS Successful or errant status.
+ * \param MultipleThreadId A pointer to an array of thread IDs to be alerted.
+ * \param Count The number of thread IDs in the array.
+ * \param Boost A pointer to a boost value to be applied to the threads.
+ * \param BoostCount The number of boost values in the array.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -769,11 +770,11 @@ NtAlertMultipleThreadByThreadId(
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 // rev
 /**
- * Waits for an alert to be delivered to the specified thread.
+ * The NtAlertThreadByThreadIdEx routine sWaits for an alert to be delivered to the specified thread.
  *
- * @param Address The address to wait for an alert on.
- * @param Timeout The timeout value for waiting, or NULL for no timeout.
- * @return NTSTATUS Successful or errant status.
+ * \param Address The address to wait for an alert on.
+ * \param Timeout The timeout value for waiting, or NULL for no timeout.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -1816,13 +1817,13 @@ typedef enum _PSSNT_QUERY_INFORMATION_CLASS
 
 // rev
 /**
- * Captures a snapshot of the specified process.
- * 
- * @param SnapshotHandle Pointer to a variable that receives the snapshot handle.
- * @param ProcessHandle Handle to the process.
- * @param CaptureFlags Flags indicating what to capture.
- * @param ThreadContextFlags Optional flags for capturing thread context.
- * @return NTSTATUS Successful or errant status.
+ * The PssNtCaptureSnapshot routine captures a snapshot of the specified process.
+ *
+ * \param SnapshotHandle Pointer to a variable that receives the snapshot handle.
+ * \param ProcessHandle Handle to the process.
+ * \param CaptureFlags Flags indicating what to capture.
+ * \param ThreadContextFlags Optional flags for capturing thread context.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
@@ -1836,14 +1837,14 @@ PssNtCaptureSnapshot(
 
 // rev
 /**
- * Duplicates a process snapshot from one process to another.
- * 
- * @param SourceProcessHandle Handle to the source process.
- * @param SnapshotHandle Handle to the snapshot to duplicate.
- * @param TargetProcessHandle Handle to the target process.
- * @param TargetSnapshotHandle Pointer to a variable that receives the duplicated snapshot handle.
- * @param Flags Optional flags for duplication.
- * @return NTSTATUS Successful or errant status.
+ * The PssNtDuplicateSnapshot routine duplicates a process snapshot from one process to another.
+ *
+ * \param SourceProcessHandle Handle to the source process.
+ * \param SnapshotHandle Handle to the snapshot to duplicate.
+ * \param TargetProcessHandle Handle to the target process.
+ * \param TargetSnapshotHandle Pointer to a variable that receives the duplicated snapshot handle.
+ * \param Flags Optional flags for duplication.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
@@ -1858,11 +1859,10 @@ PssNtDuplicateSnapshot(
 
 // rev
 /**
- * Frees a remote process snapshot.
- * 
- * @param ProcessHandle A handle to the process that contains the snapshot. The handle must have PROCESS_VM_READ, PROCESS_VM_OPERATION, and PROCESS_DUP_HANDLE rights. 
- * @param SnapshotHandle Handle to the snapshot to free.
- * @return NTSTATUS Successful or errant status.
+ * The PssNtFreeSnapshot routine frees a snapshot.
+ *
+ * \param SnapshotHandle Handle to the snapshot to free.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
@@ -1873,11 +1873,11 @@ PssNtFreeSnapshot(
 
 // rev
 /**
- * Frees a snapshot.
- * 
- * @param ProcessHandle A handle to the process that contains the snapshot. The handle must have PROCESS_VM_READ, PROCESS_VM_OPERATION, and PROCESS_DUP_HANDLE rights.
- * @param SnapshotHandle Handle to the snapshot to free.
- * @return NTSTATUS Successful or errant status.
+ * The PssNtFreeRemoteSnapshot routine frees a remote process snapshot.
+ *
+ * \param ProcessHandle A handle to the process that contains the snapshot. The handle must have PROCESS_VM_READ, PROCESS_VM_OPERATION, and PROCESS_DUP_HANDLE rights.
+ * \param SnapshotHandle Handle to the snapshot to free.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
@@ -1889,13 +1889,13 @@ PssNtFreeRemoteSnapshot(
 
 // rev
 /**
- * Queries information from a the specified snapshot.
- * 
- * @param SnapshotHandle Handle to the snapshot.
- * @param InformationClass The information class to query.
- * @param Buffer Pointer to a buffer that receives the queried information.
- * @param BufferLength Length of the buffer.
- * @return NTSTATUS Successful or errant status.
+ * The PssNtQuerySnapshot routine queries information from the specified snapshot.
+ *
+ * \param SnapshotHandle Handle to the snapshot.
+ * \param InformationClass The information class to query.
+ * \param Buffer Pointer to a buffer that receives the queried information.
+ * \param BufferLength Length of the buffer.
+ * \return NTSTATUS Successful or errant status.
  */
 NTSYSAPI
 NTSTATUS
