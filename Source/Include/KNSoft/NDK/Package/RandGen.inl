@@ -19,7 +19,7 @@
 static ULONG g_ulRandSeed = 0;
 
 __forceinline
-unsigned int
+unsigned __int32
 Rand_SW32(void)
 {
     return ((RtlRandomEx(&g_ulRandSeed) & 0xFFFF) << 16) | (RtlRandomEx(&g_ulRandSeed) & 0xFFFF);
@@ -27,7 +27,6 @@ Rand_SW32(void)
 
 __forceinline
 unsigned __int64
-NTAPI
 Rand_SW64(VOID)
 {
     ULONGLONG p;
@@ -39,118 +38,133 @@ Rand_SW64(VOID)
 }
 
 __forceinline
-unsigned short
+unsigned __int16
 Rand_SW16(void)
 {
-    return (unsigned short)RtlRandomEx(&g_ulRandSeed);
+    return (unsigned __int16)RtlRandomEx(&g_ulRandSeed);
 }
 
-/*
- * Generate hardware random numbers by calling RDRAND on x64/x86.
- * ARM is not supported yet, and RDRAND is not emulated on WoA, fallback to software
- */
-
+/* Generate hardware random numbers by calling RDRAND on x64/x86 */
 #if (defined(_M_X64) && !defined(_M_ARM64EC)) || defined(_M_IX86)
+#define _RAND_HAS_RDRAND_ 1
+#else
+#define _RAND_HAS_RDRAND_ 0
+#endif
+
+#if _RAND_HAS_RDRAND_
+
+/* Try 1000000 times to patch a CPU bug like Microsoft SymCrypt */
 
 __forceinline
 _Success_(return != FALSE)
 LOGICAL
-Rand_HW32(
-    _Out_ unsigned int* Random)
+Rand_RdRand32(
+    _Out_ unsigned __int32* Random)
 {
-    if (SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64 &&
-        SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
+    for (unsigned int i = 0; i < 1000000; i++)
     {
-        *Random = Rand_SW32();
-        return TRUE;
-    }
-
-    unsigned int i, p;
-
-    for (i = 0; i < 1000000; i++)
-    {
-        if (_rdrand32_step(&p) != 0)
+        if (_rdrand32_step(Random) != 0)
         {
-            *Random = p;
             return TRUE;
         }
     }
-
     return FALSE;
 }
 
 __forceinline
 _Success_(return != FALSE)
 LOGICAL
-Rand_HW64(
+Rand_RdRand64(
     _Out_ unsigned __int64* Random)
 {
-    if (SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64 &&
-        SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
-    {
-        *Random = Rand_SW64();
-        return TRUE;
-    }
-
-    unsigned int i;
-    unsigned __int64 p;
-
-    for (i = 0; i < 1000000; i++)
+    for (unsigned int i = 0; i < 1000000; i++)
     {
         if (
-#if defined(_M_X64)
-            _rdrand64_step(&p) != 0
+#if _WIN64
+            _rdrand64_step(Random) != 0
 #else
-            _rdrand32_step((unsigned int*)&p) != 0 && _rdrand32_step((unsigned int*)Add2Ptr(&p, sizeof(unsigned int))) != 0
+            _rdrand32_step((unsigned int*)&Random) != 0 &&
+            _rdrand32_step((unsigned int*)Add2Ptr(&Random, sizeof(unsigned int))) != 0
 #endif
             )
         {
-            *Random = p;
             return TRUE;
         }
     }
-
     return FALSE;
 }
 
 __forceinline
 _Success_(return != FALSE)
 LOGICAL
-Rand_HW16(
-    _Out_ unsigned short* Random)
+Rand_RdRand16(
+    _Out_ unsigned __int16* Random)
 {
-    if (SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64 &&
-        SharedUserData->NativeProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
+    for (unsigned int i = 0; i < 1000000; i++)
     {
-        *Random = Rand_SW16();
-        return TRUE;
-    }
-
-    unsigned int i;
-    unsigned short p;
-
-    for (i = 0; i < 1000000; i++)
-    {
-        if (_rdrand16_step(&p) != 0)
+        if (_rdrand16_step(Random) != 0)
         {
-            *Random = p;
             return TRUE;
         }
     }
-
     return FALSE;
 }
 
-#else
+#endif /* _RAND_HAS_RDRAND_ */
+
+static int g_iFallbackToSW = -1;
+
+__forceinline
+LOGICAL
+_Rand_FallbackToSW(VOID)
+{
+    if (g_iFallbackToSW != -1)
+    {
+        return !!g_iFallbackToSW;
+    }
+
+    /*
+     * RDRAND is not emulated on WoA yet,
+     * and SharedUserData->NativeProcessorArchitecture is avaliable since NT 6.2.
+     */
+    if (SharedUserData->NtMajorVersion < 10)
+    {
+        /* WoA since NT 10 */
+        g_iFallbackToSW = FALSE;
+    } else if (NtReadTebPVOID(WowTebOffset) == NULL)
+    {
+        /* Not in WOW */
+        g_iFallbackToSW = FALSE;
+    } else if (SharedUserData->NativeProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 ||
+               SharedUserData->NativeProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
+    {
+        /* RDRAND is supported natively */
+        g_iFallbackToSW = FALSE;
+    } else
+    {
+        g_iFallbackToSW = TRUE;
+    }
+    return !!g_iFallbackToSW;
+}
 
 __forceinline
 _Success_(return != FALSE)
 LOGICAL
 Rand_HW32(
-    _Out_ unsigned int* Random)
+    _Out_ unsigned __int32* Random)
 {
-    *Random = Rand_SW32();
-    return TRUE;
+#if _RAND_HAS_RDRAND_
+    if (_Rand_FallbackToSW())
+    {
+#endif
+        *Random = Rand_SW32();
+        return TRUE;
+#if _RAND_HAS_RDRAND_
+    } else
+    {
+        return Rand_RdRand32(Random);
+    }
+#endif
 }
 
 __forceinline
@@ -159,21 +173,39 @@ LOGICAL
 Rand_HW64(
     _Out_ unsigned __int64* Random)
 {
-    *Random = Rand_SW64();
-    return TRUE;
+#if _RAND_HAS_RDRAND_
+    if (_Rand_FallbackToSW())
+    {
+#endif
+        *Random = Rand_SW64();
+        return TRUE;
+#if _RAND_HAS_RDRAND_
+    } else
+    {
+        return Rand_RdRand64(Random);
+    }
+#endif
 }
 
 __forceinline
 _Success_(return != FALSE)
 LOGICAL
 Rand_HW16(
-    _Out_ unsigned short* Random)
+    _Out_ unsigned __int16* Random)
 {
-    *Random = Rand_SW16();
-    return TRUE;
-}
-
+#if _RAND_HAS_RDRAND_
+    if (_Rand_FallbackToSW())
+    {
 #endif
+        *Random = Rand_SW16();
+        return TRUE;
+#if _RAND_HAS_RDRAND_
+    } else
+    {
+        return Rand_RdRand16(Random);
+    }
+#endif
+}
 
 __forceinline
 size_t
@@ -210,7 +242,7 @@ Rand_64(VOID)
 }
 
 __forceinline
-unsigned int
+unsigned __int32
 Rand_32(VOID)
 {
     unsigned int p;
@@ -218,10 +250,10 @@ Rand_32(VOID)
 }
 
 __forceinline
-unsigned short
+unsigned __int16
 Rand_16(VOID)
 {
-    unsigned short p;
+    unsigned __int16 p;
     return Rand_HW16(&p) ? p : Rand_SW16();
 }
 
