@@ -117,7 +117,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemNumaProximityNodeInformation,                     // qs: SYSTEM_NUMA_PROXIMITY_MAP
     SystemDynamicTimeZoneInformation,                       // qs: RTL_DYNAMIC_TIME_ZONE_INFORMATION (requires SeTimeZonePrivilege)
     SystemCodeIntegrityInformation,                         // q: SYSTEM_CODEINTEGRITY_INFORMATION // SeCodeIntegrityQueryInformation
-    SystemProcessorMicrocodeUpdateInformation,              // s: SYSTEM_PROCESSOR_MICROCODE_UPDATE_INFORMATION
+    SystemProcessorMicrocodeUpdateInformation,              // s: SYSTEM_PROCESSOR_MICROCODE_UPDATE_INFORMATION (requires SeLoadDriverPrivilege)
     SystemProcessorBrandString,                             // q: CHAR[] // HaliQuerySystemInformation -> HalpGetProcessorBrandString, info class 23
     SystemVirtualAddressInformation,                        // q: SYSTEM_VA_LIST_INFORMATION[]; s: SYSTEM_VA_LIST_INFORMATION[] (requires SeIncreaseQuotaPrivilege) // MmQuerySystemVaInformation
     SystemLogicalProcessorAndGroupInformation,              // q: SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX (EX in: LOGICAL_PROCESSOR_RELATIONSHIP RelationshipType) // since WIN7 // NtQuerySystemInformationEx // KeQueryLogicalProcessorRelationship
@@ -284,7 +284,7 @@ typedef struct _SYSTEM_BASIC_INFORMATION
     ULONG AllocationGranularity;            // The granularity for the starting address at which virtual memory can be allocated.
     ULONG_PTR MinimumUserModeAddress;       // A pointer to the lowest memory address accessible to applications and dynamic-link libraries (DLLs).
     ULONG_PTR MaximumUserModeAddress;       // A pointer to the highest memory address accessible to applications and dynamic-link libraries (DLLs).
-    KAFFINITY ActiveProcessorsAffinityMask; // A mask representing the set of processors configured in the current processor group. // deprecated 
+    KAFFINITY ActiveProcessorsAffinityMask; // A mask representing the set of processors configured in the current processor group. // deprecated
     UCHAR NumberOfProcessors;               // The number of logical processors in the current processor group. // deprecated
 } SYSTEM_BASIC_INFORMATION, *PSYSTEM_BASIC_INFORMATION;
 
@@ -443,6 +443,7 @@ typedef struct _SYSTEM_THREAD_INFORMATION
 /**
  * The SYSTEM_PROCESS_INFORMATION structure contains information about a process running on a system.
  */
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_PROCESS_INFORMATION
 {
     ULONG NextEntryOffset;                  // The address of the previous item plus the value in the NextEntryOffset member. For the last item in the array, NextEntryOffset is 0.
@@ -457,9 +458,9 @@ typedef struct _SYSTEM_PROCESS_INFORMATION
     UNICODE_STRING ImageName;               // The file name of the executable image.
     KPRIORITY BasePriority;                 // The starting priority of the process.
     HANDLE UniqueProcessId;                 // The identifier of the process.
-    HANDLE InheritedFromUniqueProcessId;    // The identifier of the process that created this process. Not updated and incorrectly refers to processes with recycled identifiers. 
+    HANDLE InheritedFromUniqueProcessId;    // The identifier of the process that created this process. Not updated and incorrectly refers to processes with recycled identifiers.
     ULONG HandleCount;                      // The current number of open handles used by the process.
-    ULONG SessionId;                        // The identifier of the Remote Desktop Services session under which the specified process is running. 
+    ULONG SessionId;                        // The identifier of the Remote Desktop Services session under which the specified process is running.
     ULONG_PTR UniqueProcessKey;             // since VISTA (requires SystemExtendedProcessInformation)
     SIZE_T PeakVirtualSize;                 // The peak size, in bytes, of the virtual memory used by the process.
     SIZE_T VirtualSize;                     // The current size, in bytes, of virtual memory used by the process.
@@ -512,6 +513,11 @@ typedef struct _SYSTEM_EXTENDED_THREAD_INFORMATION
     ULONG_PTR Reserved4;
 } SYSTEM_EXTENDED_THREAD_INFORMATION, *PSYSTEM_EXTENDED_THREAD_INFORMATION;
 
+/**
+ * The SYSTEM_EXTENDED_PROCESS_INFORMATION structure contains extended information about a process running on a system.
+ * https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-system_extended_process_information
+ */
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_EXTENDED_PROCESS_INFORMATION
 {
     ULONG NextEntryOffset;                  // The address of the previous item plus the value in the NextEntryOffset member. For the last item in the array, NextEntryOffset is 0.
@@ -526,9 +532,9 @@ typedef struct _SYSTEM_EXTENDED_PROCESS_INFORMATION
     UNICODE_STRING ImageName;               // The file name of the executable image.
     KPRIORITY BasePriority;                 // The starting priority of the process.
     HANDLE UniqueProcessId;                 // The identifier of the process.
-    HANDLE InheritedFromUniqueProcessId;    // The identifier of the process that created this process. Not updated and incorrectly refers to processes with recycled identifiers. 
+    HANDLE InheritedFromUniqueProcessId;    // The identifier of the process that created this process. Not updated and incorrectly refers to processes with recycled identifiers.
     ULONG HandleCount;                      // The current number of open handles used by the process.
-    ULONG SessionId;                        // The identifier of the Remote Desktop Services session under which the specified process is running. 
+    ULONG SessionId;                        // The identifier of the Remote Desktop Services session under which the specified process is running.
     HANDLE UniqueProcessKey;                // since VISTA (requires SystemExtendedProcessInformation)
     SIZE_T PeakVirtualSize;                 // The peak size, in bytes, of the virtual memory used by the process.
     SIZE_T VirtualSize;                     // The current size, in bytes, of virtual memory used by the process.
@@ -651,6 +657,7 @@ typedef struct _SYSTEM_HANDLE_INFORMATION
     _Field_size_(NumberOfHandles) SYSTEM_HANDLE_TABLE_ENTRY_INFO Handles[1];
 } SYSTEM_HANDLE_INFORMATION, *PSYSTEM_HANDLE_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_OBJECTTYPE_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -666,6 +673,7 @@ typedef struct _SYSTEM_OBJECTTYPE_INFORMATION
     UNICODE_STRING TypeName;
 } SYSTEM_OBJECTTYPE_INFORMATION, *PSYSTEM_OBJECTTYPE_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_OBJECT_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -682,6 +690,7 @@ typedef struct _SYSTEM_OBJECT_INFORMATION
     UNICODE_STRING NameInfo;
 } SYSTEM_OBJECT_INFORMATION, *PSYSTEM_OBJECT_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_PAGEFILE_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -907,6 +916,7 @@ typedef struct _SYSTEM_RANGE_START_INFORMATION
     ULONG_PTR SystemRangeStart;
 } SYSTEM_RANGE_START_INFORMATION, *PSYSTEM_RANGE_START_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_VERIFIER_INFORMATION_LEGACY // pre-19H1
 {
     ULONG NextEntryOffset;
@@ -942,6 +952,7 @@ typedef struct _SYSTEM_VERIFIER_INFORMATION_LEGACY // pre-19H1
     SIZE_T PeakNonPagedPoolUsageInBytes;
 } SYSTEM_VERIFIER_INFORMATION_LEGACY, *PSYSTEM_VERIFIER_INFORMATION_LEGACY;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_VERIFIER_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1112,6 +1123,7 @@ typedef struct _SYSTEM_POOL_INFORMATION
     _Field_size_(NumberOfEntries) SYSTEM_POOL_ENTRY Entries[1];
 } SYSTEM_POOL_INFORMATION, *PSYSTEM_POOL_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_SESSION_POOLTAG_INFORMATION
 {
     SIZE_T NextEntryOffset;
@@ -1120,6 +1132,7 @@ typedef struct _SYSTEM_SESSION_POOLTAG_INFORMATION
     _Field_size_(Count) SYSTEM_POOLTAG TagInfo[1];
 } SYSTEM_SESSION_POOLTAG_INFORMATION, *PSYSTEM_SESSION_POOLTAG_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_SESSION_MAPPED_VIEW_INFORMATION
 {
     SIZE_T NextEntryOffset;
@@ -1517,6 +1530,13 @@ typedef struct _SYSTEM_CODEINTEGRITY_INFORMATION
     };
 } SYSTEM_CODEINTEGRITY_INFORMATION, *PSYSTEM_CODEINTEGRITY_INFORMATION;
 
+// rev
+// Loads mcupdate.dll via ntosext.sys to perform microcode updates.
+#define PROCESSOR_MICROCODE_OPERATION_LOAD 0x01
+// rev
+// Unloads mcupdate.dll via ntosext.sys to preform microcode updates.
+#define PROCESSOR_MICROCODE_OPERATION_UNLOAD 0x02
+
 // private
 typedef struct _SYSTEM_PROCESSOR_MICROCODE_UPDATE_INFORMATION
 {
@@ -1543,6 +1563,112 @@ typedef struct _SYSTEM_VA_LIST_INFORMATION
     SIZE_T VirtualLimit;
     SIZE_T AllocationFailures;
 } SYSTEM_VA_LIST_INFORMATION, *PSYSTEM_VA_LIST_INFORMATION;
+
+// private
+//typedef enum _LOGICAL_PROCESSOR_RELATIONSHIP
+//{
+//    RelationProcessorCore,
+//    RelationNumaNode,
+//    RelationCache,
+//    RelationProcessorPackage,
+//    RelationGroup,
+//    RelationProcessorDie,
+//    RelationNumaNodeEx,
+//    RelationProcessorModule,
+//    RelationAll = 0xffff
+//} LOGICAL_PROCESSOR_RELATIONSHIP;
+//
+// private
+//typedef struct _SYSTEM_LOGICAL_PROCESSOR_INFORMATION
+//{
+//    ULONG_PTR ProcessorMask;
+//    LOGICAL_PROCESSOR_RELATIONSHIP Relationship;
+//    union
+//    {
+//        struct
+//        {
+//            UCHAR Flags;
+//        } ProcessorCore;
+//        struct
+//        {
+//            ULONG NodeNumber;
+//        } NumaNode;
+//        CACHE_DESCRIPTOR Cache;
+//        ULONGLONG Reserved[2];
+//    };
+//} SYSTEM_LOGICAL_PROCESSOR_INFORMATION, *PSYSTEM_LOGICAL_PROCESSOR_INFORMATION;
+//
+// private
+//typedef struct _PROCESSOR_RELATIONSHIP
+//{
+//    UCHAR Flags;
+//    UCHAR EfficiencyClass;
+//    UCHAR Reserved[20];
+//    USHORT GroupCount;
+//    _Field_size_(GroupCount) GROUP_AFFINITY GroupMask[ANYSIZE_ARRAY];
+//} PROCESSOR_RELATIONSHIP, *PPROCESSOR_RELATIONSHIP;
+//
+// private
+//typedef struct _NUMA_NODE_RELATIONSHIP
+//{
+//    ULONG NodeNumber;
+//    UCHAR Reserved[18];
+//    USHORT GroupCount;
+//    union
+//    {
+//        GROUP_AFFINITY GroupMask;
+//        _Field_size_(GroupCount) GROUP_AFFINITY GroupMasks[ANYSIZE_ARRAY];
+//    };
+//} NUMA_NODE_RELATIONSHIP, *PNUMA_NODE_RELATIONSHIP;
+//
+// private
+//typedef struct _CACHE_RELATIONSHIP
+//{
+//    UCHAR Level;
+//    UCHAR Associativity;
+//    USHORT LineSize;
+//    ULONG CacheSize;
+//    PROCESSOR_CACHE_TYPE Type;
+//    UCHAR Reserved[18];
+//    USHORT GroupCount;
+//    union
+//    {
+//        GROUP_AFFINITY GroupMask;
+//        _Field_size_(GroupCount) GROUP_AFFINITY GroupMasks[ANYSIZE_ARRAY];
+//    };
+//} CACHE_RELATIONSHIP, *PCACHE_RELATIONSHIP;
+//
+// private
+//typedef struct _PROCESSOR_GROUP_INFO
+//{
+//    UCHAR MaximumProcessorCount;
+//    UCHAR ActiveProcessorCount;
+//    UCHAR Reserved[38];
+//    KAFFINITY ActiveProcessorMask;
+//} PROCESSOR_GROUP_INFO, *PPROCESSOR_GROUP_INFO;
+//
+// private
+//typedef struct _GROUP_RELATIONSHIP
+//{
+//    USHORT MaximumGroupCount;
+//    USHORT ActiveGroupCount;
+//    UCHAR Reserved[20];
+//    _Field_size_(ActiveGroupCount) PROCESSOR_GROUP_INFO GroupInfo[ANYSIZE_ARRAY];
+//} GROUP_RELATIONSHIP, *PGROUP_RELATIONSHIP;
+//
+// private
+//typedef _Struct_size_bytes_(Size) struct _SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX
+//{
+//    LOGICAL_PROCESSOR_RELATIONSHIP Relationship;
+//    ULONG Size;
+//    _Field_size_bytes_(Size - (sizeof(LOGICAL_PROCESSOR_RELATIONSHIP) + sizeof(ULONG))) union
+//    {
+//        PROCESSOR_RELATIONSHIP Processor;
+//        NUMA_NODE_RELATIONSHIP NumaNode;
+//        CACHE_RELATIONSHIP Cache;
+//        GROUP_RELATIONSHIP Group;
+//    };
+//} SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX, *PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX;
 
 // rev
 typedef enum _STORE_INFORMATION_CLASS
@@ -2461,6 +2587,7 @@ typedef struct _SYSTEM_SECUREBOOT_POLICY_INFORMATION
 } SYSTEM_SECUREBOOT_POLICY_INFORMATION, *PSYSTEM_SECUREBOOT_POLICY_INFORMATION;
 
 // private
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_PAGEFILE_INFORMATION_EX
 {
     union // HACK union declaration for convenience (dmex)
@@ -2986,8 +3113,7 @@ typedef enum _SYSTEM_CODEINTEGRITY_IMAGE_TYPE
 } SYSTEM_CODEINTEGRITY_IMAGE_TYPE;
 
 /**
- * @def SYSTEM_CODEINTEGRITY_IMAGE_TYPE_USER
- * @brief Flag for validating user-mode images (EXE/DLL).
+ * The SYSTEM_CODEINTEGRITY_IMAGE_TYPE_USER constant is used for validating user-mode images (EXE/DLL).
  *
  * Validation includes:
  * - Digital signature
@@ -2997,8 +3123,7 @@ typedef enum _SYSTEM_CODEINTEGRITY_IMAGE_TYPE
 #define SYSTEM_CODEINTEGRITY_IMAGE_TYPE_USER     0
 
 /**
- * @def SYSTEM_CODEINTEGRITY_IMAGE_TYPE_KERNEL
- * @brief Flag for validating kernel-mode images (SYS/Native).
+ * The SYSTEM_CODEINTEGRITY_IMAGE_TYPE_KERNEL constant is used for validating kernel-mode images (SYS/Native).
  *
  * Validation includes:
  * - Signed by a trusted certificate authority (or cross-signed).
@@ -3007,8 +3132,7 @@ typedef enum _SYSTEM_CODEINTEGRITY_IMAGE_TYPE
 #define SYSTEM_CODEINTEGRITY_IMAGE_TYPE_KERNEL   1
 
 /**
- * @def SYSTEM_CODEINTEGRITY_IMAGE_TYPE_BOOT
- * @brief Flag for validating boot-critical images (SYS/Native).
+ * The SYSTEM_CODEINTEGRITY_IMAGE_TYPE_BOOT constant is used for validating boot-critical images (SYS/Native).
  *
  * Validation includes:
  * - Signed only by Microsoft.
@@ -3018,7 +3142,6 @@ typedef enum _SYSTEM_CODEINTEGRITY_IMAGE_TYPE
 
 /**
  * The SYSTEM_CODEINTEGRITY_CERTIFICATE_INFORMATION structure contains information to validate the integrity of an image.
- *
  * \note The return status of NtQuerySystemInformation indicates the result of the code integrity validation as determined by the type specified.
  */
 typedef struct _SYSTEM_CODEINTEGRITY_CERTIFICATE_INFORMATION
@@ -3586,7 +3709,7 @@ typedef struct _SYSTEM_OSL_RAMDISK_INFORMATION
 } SYSTEM_OSL_RAMDISK_INFORMATION, *PSYSTEM_OSL_RAMDISK_INFORMATION;
 
 // private
-typedef enum _CI_POLICY_MGMT_OPERATION 
+typedef enum _CI_POLICY_MGMT_OPERATION
 {
     CI_POLICY_MGMT_OPERATION_NONE = 0,
     CI_POLICY_MGMT_OPERATION_OPEN_TX = 1,
@@ -3600,10 +3723,10 @@ typedef enum _CI_POLICY_MGMT_OPERATION
 } CI_POLICY_MGMT_OPERATION;
 
 // private
-typedef struct _SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT 
+typedef struct _SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT
 {
     CI_POLICY_MGMT_OPERATION Operation;
-    UCHAR UseInProgressState; 
+    UCHAR UseInProgressState;
     ULONG Arg1Len;
     PUCHAR Arg1;
     ULONG Arg2Len;
@@ -3611,14 +3734,14 @@ typedef struct _SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT
 } SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT, *PSYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT;
 
 // private
-typedef struct _SYSTEM_REF_TRACE_INFORMATION_EX 
+typedef struct _SYSTEM_REF_TRACE_INFORMATION_EX
 {
     ULONG Version;
     ULONGLONG MemoryLimits;
-    union 
+    union
     {
         ULONG Flags;
-        struct 
+        struct
         {
             ULONG TraceEnable        : 1;
             ULONG TracePermanent     : 1;
@@ -3634,6 +3757,7 @@ typedef struct _SYSTEM_REF_TRACE_INFORMATION_EX
 } SYSTEM_REF_TRACE_INFORMATION_EX, *PSYSTEM_REF_TRACE_INFORMATION_EX;
 
 // private
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_BASICPROCESS_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -3644,7 +3768,7 @@ typedef struct _SYSTEM_BASICPROCESS_INFORMATION
 } SYSTEM_BASICPROCESS_INFORMATION, *PSYSTEM_BASICPROCESS_INFORMATION;
 
 // private
-typedef struct _SYSTEM_HANDLECOUNT_INFORMATION 
+typedef struct _SYSTEM_HANDLECOUNT_INFORMATION
 {
     ULONG ProcessCount;
     ULONG ThreadCount;

@@ -906,6 +906,7 @@ typedef struct _PS_MITIGATION_AUDIT_OPTIONS_MAP_V3
     PS_MITIGATION_AUDIT_OPTIONS_MAP, *PPS_MITIGATION_AUDIT_OPTIONS_MAP;
 
 // private // WIN8 to REDSTONE
+_Struct_size_bytes_(Size)
 typedef struct _PS_SYSTEM_DLL_INIT_BLOCK_V1
 {
     ULONG Size;
@@ -930,6 +931,7 @@ typedef struct _PS_SYSTEM_DLL_INIT_BLOCK_V1
 } PS_SYSTEM_DLL_INIT_BLOCK_V1, *PPS_SYSTEM_DLL_INIT_BLOCK_V1;
 
 // RS2 - 19H2
+_Struct_size_bytes_(Size)
 typedef struct _PS_SYSTEM_DLL_INIT_BLOCK_V2
 {
     ULONG Size;
@@ -955,6 +957,7 @@ typedef struct _PS_SYSTEM_DLL_INIT_BLOCK_V2
 } PS_SYSTEM_DLL_INIT_BLOCK_V2, *PPS_SYSTEM_DLL_INIT_BLOCK_V2;
 
 // private // since 20H1
+_Struct_size_bytes_(Size)
 typedef struct _PS_SYSTEM_DLL_INIT_BLOCK_V3
 {
     ULONG Size;
@@ -1842,6 +1845,22 @@ typedef struct _LDR_SOFTWARE_ENCLAVE
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
 // rev from CreateEnclave
+/**
+ * The LdrCreateEnclave routine creates a new uninitialized enclave. An enclave is an isolated region of code and data within the address space for an application. Only code that runs within the enclave can access data within the same enclave.
+ *
+ * \param ProcessHandle A handle to the process for which you want to create an enclave.
+ * \param BaseAddress The preferred base address of the enclave. Specify NULL to have the operating system assign the base address.
+ * \param Reserved Reserved.
+ * \param Size The size of the enclave that you want to create, including the size of the code that you will load into the enclave, in bytes.
+ * \param InitialCommitment The amount of memory to commit for the enclave, in bytes. This parameter is not used for virtualization-based security (VBS) enclaves.
+ * \param EnclaveType The architecture type of the enclave that you want to create. To verify that an enclave type is supported, call IsEnclaveTypeSupported.
+ * \param EnclaveInformation A pointer to the architecture-specific information to use to create the enclave.
+ * \param EnclaveInformationLength The length of the structure that the EnclaveInformation parameter points to, in bytes.
+ * For the ENCLAVE_TYPE_SGX and ENCLAVE_TYPE_SGX2 enclave types, this value must be 4096. For the ENCLAVE_TYPE_VBS enclave type, this value must be sizeof(ENCLAVE_CREATE_INFO_VBS), which is 36 bytes.
+ * \param EnclaveError An optional pointer to a variable that receives an enclave error code that is architecture-specific.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-createenclave
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1857,6 +1876,18 @@ LdrCreateEnclave(
     _Out_ PULONG EnclaveError);
 
 // rev from InitializeEnclave
+/**
+ * The LdrInitializeEnclave routine initializes an enclave that you created and loaded with data.
+ *
+ * \param ProcessHandle A handle to the process for which the enclave was created.
+ * \param BaseAddress Any address within the enclave.
+ * \param EnclaveInformation A pointer to the architecture-specific information to use to initialize the enclave.
+ * \param EnclaveInformationLength The length of the structure that the EnclaveInformation parameter points to, in bytes.
+ * For the ENCLAVE_TYPE_SGX and ENCLAVE_TYPE_SGX2 enclave types, this value must be 4096. For the ENCLAVE_TYPE_VBS enclave type, this value must be sizeof(ENCLAVE_CREATE_INFO_VBS), which is 36 bytes.
+ * \param EnclaveError An optional pointer to a variable that receives an enclave error code that is architecture-specific.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-initializeenclave
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1868,6 +1899,13 @@ LdrInitializeEnclave(
     _Out_ PULONG EnclaveError);
 
 // rev from DeleteEnclave
+/**
+ * The LdrDeleteEnclave routine deletes the specified enclave.
+ *
+ * \param BaseAddress The base address of the enclave that you want to delete.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-deleteenclave
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1875,6 +1913,15 @@ LdrDeleteEnclave(
     _In_ PVOID BaseAddress);
 
 // rev from CallEnclave
+/**
+ * The LdrCallEnclave routine calls a function within an enclave. LdrCallEnclave can also be called within an enclave to call a function outside of the enclave.
+ *
+ * \param Routine The address of the function that you want to call.
+ * \param Flags The flags to modify the call function.
+ * \param RoutineParamReturn The parameter than you want to pass to the function.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-callenclave
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1884,6 +1931,16 @@ LdrCallEnclave(
     _Inout_ PVOID* RoutineParamReturn);
 
 // rev from LoadEnclaveImage
+/**
+ * The LdrLoadEnclaveModule routine loads an image and all of its imports into an enclave.
+ *
+ * \param BaseAddress The base address of the enclave in which the module will be loaded.
+ * This address must correspond to an enclave previously created by using LdrCreateEnclave.
+ * \param DllPath A NULL-terminated string that contains the path of the image to load.
+ * \param DllName A NULL-terminated string that contains the name of the image to load.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-loadenclaveimagew
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

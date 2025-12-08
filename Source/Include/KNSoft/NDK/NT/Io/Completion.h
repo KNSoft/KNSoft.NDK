@@ -111,6 +111,20 @@ NtRemoveIoCompletionEx(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+/**
+ * The NtCreateWaitCompletionPacket routine creates a wait completion packet object.
+ *
+ * A wait completion packet is a kernel object that can be associated with wait
+ * or I/O completion sources and later queried via I/O completion mechanisms.
+ *
+ * \param WaitCompletionPacketHandle Pointer to a variable that receives a handle
+ *        to the newly created wait completion packet object.
+ * \param DesiredAccess The access mask that specifies the requested access to
+ *        the wait completion packet object.
+ * \param ObjectAttributes Optional pointer to an OBJECT_ATTRIBUTES structure that
+ *        supplies the object name and other attributes. May be NULL.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -119,6 +133,35 @@ NtCreateWaitCompletionPacket(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtAssociateWaitCompletionPacket routine associates a wait completion packet
+ * with an I/O completion port or other target object so that a completion packet
+ * will be queued when the target object becomes signaled or an I/O completes.
+ *
+ * This routine links the specified wait completion packet with the target
+ * completion object so the packet will carry the supplied context and status
+ * information when it is delivered.
+ *
+ * \param[in] WaitCompletionPacketHandle Handle to the wait completion packet object.
+ * \param[in] IoCompletionHandle Handle to an I/O completion port (or compatible object)
+ *        with which the wait completion packet should be associated.
+ * \param[in] TargetObjectHandle Handle to the object to watch for completion or
+ *        signalling (for example, a waitable kernel object).
+ * \param[in] KeyContext Optional pointer to caller-specified context that will be
+ *        stored in the completion packet and returned to the consumer.
+ * \param[in] ApcContext Optional pointer to caller-specified APC/context value that
+ *        will be stored in the completion packet and returned to the consumer.
+ * \param[in] IoStatus The NTSTATUS value to be placed in the completion packet.
+ * \param[in] IoStatusInformation Additional information ( ULONG_PTR ) to be placed
+ *        in the completion packet (commonly used for number of bytes transferred).
+ * \param[out] AlreadySignaled Optional pointer to a BOOLEAN that, on return, is set
+ *        to TRUE if the packet was already signaled at the time of association;
+ *        otherwise FALSE. May be NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks Use this routine to arrange for notification of a target object's
+ *          completion by queuing a wait completion packet containing the
+ *          supplied context and status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -132,6 +175,18 @@ NtAssociateWaitCompletionPacket(
     _In_ ULONG_PTR IoStatusInformation,
     _Out_opt_ PBOOLEAN AlreadySignaled);
 
+/**
+ * The NtCancelWaitCompletionPacket routine cancels a previously associated wait
+ * completion packet or removes a signaled packet from its queue.
+ *
+ * \param[in] WaitCompletionPacketHandle Handle to the wait completion packet object to cancel.
+ * \param[in] RemoveSignaledPacket If TRUE and the packet is already signaled, remove
+ *        the signaled packet from the target queue; if FALSE, cancellation will
+ *        prevent future signaling but will not remove an already queued packet.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks After successful cancellation, the wait completion packet will no
+ *          longer be delivered as a result of the previously associated target.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -266,7 +266,7 @@ NtResumeProcess(
     );
 
 /**
- * Retrieves information about the specified process.
+ * The NtQueryInformationProcess routine retrieves information about the specified process.
  *
  * @param ProcessHandle A handle to the process.
  * @param ProcessInformationClass The type of process information to be retrieved.
@@ -348,7 +348,7 @@ NtGetNextThread(
 #endif
 
 /**
- * Sets information for the specified process.
+ * The NtSetInformationProcess routine sets information for the specified process.
  *
  * @param ProcessHandle A handle to the process.
  * @param ProcessInformationClass The type of process information to be set.
@@ -1266,6 +1266,7 @@ typedef struct _PS_ATTRIBUTE
     PSIZE_T ReturnLength;
 } PS_ATTRIBUTE, *PPS_ATTRIBUTE;
 
+_Struct_size_bytes_(TotalLength)
 typedef struct _PS_ATTRIBUTE_LIST
 {
     SIZE_T TotalLength;
@@ -1422,6 +1423,7 @@ typedef enum _PS_CREATE_STATE
     PsCreateMaximumStates
 } PS_CREATE_STATE;
 
+_Struct_size_bytes_(Size)
 typedef struct _PS_CREATE_INFO
 {
     SIZE_T Size;

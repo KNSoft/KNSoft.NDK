@@ -8,7 +8,7 @@ EXTERN_C_START
 
 /**
  * The NtLoadDriver function loads a driver specified by the DriverServiceName parameter.
- * 
+ *
  * @param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to load.
  * @return NTSTATUS Successful or errant status.
  */
@@ -20,7 +20,7 @@ NtLoadDriver(
 
 /**
  * The NtUnloadDriver function unloads a driver specified by the DriverServiceName parameter.
- * 
+ *
  * @param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to unload.
  * @return NTSTATUS Successful or errant status.
  */

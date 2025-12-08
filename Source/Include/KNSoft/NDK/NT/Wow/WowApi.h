@@ -20,6 +20,17 @@ NtWow64AllocateVirtualMemory64(
     _In_ ULONG AllocationType,
     _In_ ULONG Protect);
 
+// rev
+/**
+ * The NtWow64QueryInformationProcess64 routine retrieves information about the specified process.
+ *
+ * \param ProcessHandle A handle to the process.
+ * \param ProcessInformationClass The type of process information to be retrieved.
+ * \param ProcessInformation A pointer to a buffer that receives the process information.
+ * \param ProcessInformationLength The size of the buffer pointed to by the ProcessInformation parameter.
+ * \param ReturnLength An optional pointer to a variable that receives the size of the data returned.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -113,6 +113,7 @@ typedef enum _SYSTEM_ENVIRONMENT_INFORMATION_CLASS
     MaxSystemEnvironmentInfoClass
 } SYSTEM_ENVIRONMENT_INFORMATION_CLASS;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _VARIABLE_NAME
 {
     ULONG NextEntryOffset;
@@ -120,6 +121,7 @@ typedef struct _VARIABLE_NAME
     WCHAR Name[ANYSIZE_ARRAY];
 } VARIABLE_NAME, *PVARIABLE_NAME;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _VARIABLE_NAME_AND_VALUE
 {
     ULONG NextEntryOffset;
@@ -139,6 +141,7 @@ NtEnumerateSystemEnvironmentValuesEx(
     _Out_ PVOID Buffer,
     _Inout_ PULONG BufferLength);
 
+// private
 typedef struct _BOOT_ENTRY
 {
     ULONG Version;
@@ -151,12 +154,15 @@ typedef struct _BOOT_ENTRY
     _Field_size_bytes_(OsOptionsLength) UCHAR OsOptions[ANYSIZE_ARRAY];
 } BOOT_ENTRY, *PBOOT_ENTRY;
 
+// private
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _BOOT_ENTRY_LIST
 {
     ULONG NextEntryOffset;
     BOOT_ENTRY BootEntry;
 } BOOT_ENTRY_LIST, *PBOOT_ENTRY_LIST;
 
+// private
 typedef struct _BOOT_OPTIONS
 {
     ULONG Version;
@@ -167,6 +173,7 @@ typedef struct _BOOT_OPTIONS
     WCHAR HeadlessRedirection[1];
 } BOOT_OPTIONS, *PBOOT_OPTIONS;
 
+// private
 typedef struct _FILE_PATH
 {
     ULONG Version;
@@ -175,6 +182,7 @@ typedef struct _FILE_PATH
     _Field_size_bytes_(Length) UCHAR FilePath[ANYSIZE_ARRAY];
 } FILE_PATH, *PFILE_PATH;
 
+// private
 typedef struct _EFI_DRIVER_ENTRY
 {
     ULONG Version;
@@ -184,6 +192,8 @@ typedef struct _EFI_DRIVER_ENTRY
     ULONG DriverFilePathOffset;
 } EFI_DRIVER_ENTRY, *PEFI_DRIVER_ENTRY;
 
+// private
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _EFI_DRIVER_ENTRY_LIST
 {
     ULONG NextEntryOffset;

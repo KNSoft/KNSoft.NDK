@@ -716,11 +716,35 @@ NtSetIRTimer(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+
+//
+// NtCreateTimer2 Attributes
+//
+#define TIMER2_ATTRIBUTE_HIGH_RESOLUTION 0x00000004UL
+#define TIMER2_ATTRIBUTE_NOTIFICATION    0x80000000UL
+#define TIMER2_ATTRIBUTE_KNOWN_MASK      (TIMER2_ATTRIBUTE_HIGH_RESOLUTION | TIMER2_ATTRIBUTE_NOTIFICATION)
+#define TIMER2_ATTRIBUTE_RESERVED_MASK   (~TIMER2_ATTRIBUTE_KNOWN_MASK)
+#define TIMER2_ATTRIBUTE_FOR_TYPE(T)     (((T) == NotificationTimer) ? TIMER2_ATTRIBUTE_NOTIFICATION : 0)
+#define TIMER2_BUILD_ATTRIBUTES(T, R)    (TIMER2_ATTRIBUTE_FOR_TYPE(T) | ((R) ? TIMER2_ATTRIBUTE_HIGH_RESOLUTION : 0))
+
+// rev
+typedef union _TIMER2_ATTRIBUTES
+{
+    ULONG Value;
+    struct
+    {
+        ULONG Reserved0 : 2;
+        ULONG HighResolution : 1;
+        ULONG Reserved1 : 28;
+        TIMER_TYPE NotificationType : 1;
+    };
+} TIMER2_ATTRIBUTES;
+
 /**
  * The NtCreateTimer2 routine creates a timer object.
  *
  * \param TimerHandle A pointer to a variable that receives the handle to the timer object.
- * \param Reserved1 Reserved parameter.
+ * \param Reserved Reserved parameter.
  * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * \param Attributes Timer attributes (TIMER_TYPE).
  * \param DesiredAccess The access mask that specifies the requested access to the timer object.
@@ -731,11 +755,12 @@ NTSTATUS
 NTAPI
 NtCreateTimer2(
     _Out_ PHANDLE TimerHandle,
-    _In_opt_ PVOID Reserved1,
+    _In_opt_ PVOID Reserved,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
-    _In_ ULONG Attributes, // TIMER_TYPE
+    _In_ ULONG Attributes, // TIMER2_ATTRIBUTES or TIMER2_BUILD_ATTRIBUTES
     _In_ ACCESS_MASK DesiredAccess
-);
+    );
+
 #endif
 
 typedef struct _T2_SET_PARAMETERS_V0

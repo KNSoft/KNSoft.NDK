@@ -92,7 +92,17 @@ typedef struct _PEB_LDR_DATA32
 #define KACF_OLEAUT32ENABLEUNSAFELOADTYPELIBRELATIVE  0x00800000
 #define KACF_ALLOWMAXIMIZEDWINDOWGAMMA                0x01000000
 #define KACF_DONOTADDTOCACHE                          0x80000000
-#define KACF_DISABLEPOSIXDELETEFILE                  0x100000000 // rev KernelBase!InternalDeleteFileW
+#define KACF_DISABLEPOSIXDELETEFILE                   0x100000000 // rev KernelBase!InternalDeleteFileW
+
+// PEB->CrossProcessFlags
+#define PEB_FLAG_PROCESS_IN_JOB                       0x00000001 // Process is part of a job
+#define PEB_FLAG_PROCESS_INITIALIZING                 0x00000002 // Process is initializing
+#define PEB_FLAG_PROCESS_USING_VEH                    0x00000004 // Process is using VEH
+#define PEB_FLAG_PROCESS_USING_VCH                    0x00000008 // Process is using VCH
+#define PEB_FLAG_PROCESS_USING_FTH                    0x00000010 // Process is using FTH
+#define PEB_FLAG_PROCESS_PREVIOUSLY_THROTTLED         0x00000020 // Process was previously throttled
+#define PEB_FLAG_PROCESS_CURRENTLY_THROTTLED          0x00000040 // Process is currently throttled
+#define PEB_FLAG_PROCESS_IMAGES_HOT_PATCHED           0x00000080 // Process images are hot patched (RS5+)
 
 // private
 #define API_SET_SECTION_NAME ".apiset"

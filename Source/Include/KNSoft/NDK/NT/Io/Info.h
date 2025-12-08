@@ -401,6 +401,7 @@ typedef struct _FILE_RENAME_INFORMATION_EX
  * The FILE_STREAM_INFORMATION structure contains information about a file stream.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_stream_information
  */
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_STREAM_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -508,6 +509,10 @@ typedef struct _FILE_REPARSE_POINT_INFORMATION
     ULONG Tag;
 } FILE_REPARSE_POINT_INFORMATION, *PFILE_REPARSE_POINT_INFORMATION;
 
+/**
+ * The FILE_LINK_ENTRY_INFORMATION structure contains information about a file link entry.
+ */
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_LINK_ENTRY_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -562,13 +567,17 @@ typedef struct _FILE_SFIO_VOLUME_INFORMATION
     ULONG MinimumTransferSize;
 } FILE_SFIO_VOLUME_INFORMATION, *PFILE_SFIO_VOLUME_INFORMATION;
 
+/**
+ * The IO_PRIORITY_HINT enumeration type specifies the priority hint for an IRP.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ne-wdm-_io_priority_hint
+ */
 typedef enum _IO_PRIORITY_HINT
 {
-    IoPriorityVeryLow = 0, // Defragging, content indexing and other background I/Os.
-    IoPriorityLow, // Prefetching for applications.
-    IoPriorityNormal, // Normal I/Os.
-    IoPriorityHigh, // Used by filesystems for checkpoint I/O.
-    IoPriorityCritical, // Used by memory manager. Not available for applications.
+    IoPriorityVeryLow,     // Defragging, content indexing and other background I/Os.
+    IoPriorityLow,         // Prefetching for applications.
+    IoPriorityNormal,      // Normal I/Os.
+    IoPriorityHigh,        // Used by filesystems for checkpoint I/O.
+    IoPriorityCritical,    // Used by memory manager. Not available for applications.
     MaxIoPriorityTypes
 } IO_PRIORITY_HINT;
 
@@ -591,8 +600,22 @@ typedef struct _FILE_IO_PRIORITY_HINT_INFORMATION_EX
     BOOLEAN BoostOutstanding;
 } FILE_IO_PRIORITY_HINT_INFORMATION_EX, *PFILE_IO_PRIORITY_HINT_INFORMATION_EX;
 
+/**
+ * FILE_SKIP_COMPLETION_PORT_ON_SUCCESS
+ * Skip posting a completion packet to the I/O completion port if the operation completes successfully.
+ */
 #define FILE_SKIP_COMPLETION_PORT_ON_SUCCESS 0x1
+
+/**
+ * FILE_SKIP_SET_EVENT_ON_HANDLE
+ * Skip setting the event on the file handle when the operation completes.
+ */
 #define FILE_SKIP_SET_EVENT_ON_HANDLE 0x2
+
+/**
+ * FILE_SKIP_SET_USER_EVENT_ON_FAST_IO
+ * Skip setting the user event when a fast I/O operation completes.
+ */
 #define FILE_SKIP_SET_USER_EVENT_ON_FAST_IO 0x4
 
 typedef struct _FILE_IO_COMPLETION_NOTIFICATION_INFORMATION
@@ -761,6 +784,7 @@ typedef struct _FILE_ID_INFORMATION
  * The FILE_ID_EXTD_DIR_INFORMATION structure is used to query 128-bit file reference number information for the files in a directory.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-file_id_extd_dir_information
  */
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_EXTD_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -786,6 +810,7 @@ typedef struct _FILE_ID_EXTD_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_EXTD_DIR_INFORMATION, FileNameLength)      \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_LINK_ENTRY_FULL_ID_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -801,6 +826,7 @@ typedef struct _FILE_LINKS_FULL_ID_INFORMATION
     FILE_LINK_ENTRY_FULL_ID_INFORMATION Entry;
 } FILE_LINKS_FULL_ID_INFORMATION, *PFILE_LINKS_FULL_ID_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_EXTD_BOTH_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -828,6 +854,7 @@ typedef struct _FILE_ID_EXTD_BOTH_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_EXTD_BOTH_DIR_INFORMATION, FileNameLength)     \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_64_EXTD_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -853,6 +880,7 @@ typedef struct _FILE_ID_64_EXTD_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_64_EXTD_DIR_INFORMATION, FileNameLength)       \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_64_EXTD_BOTH_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -880,6 +908,7 @@ typedef struct _FILE_ID_64_EXTD_BOTH_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_64_EXTD_BOTH_DIR_INFORMATION, FileNameLength)      \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_ALL_EXTD_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -906,6 +935,7 @@ typedef struct _FILE_ID_ALL_EXTD_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_ALL_EXTD_DIR_INFORMATION, FileNameLength)       \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_ALL_EXTD_BOTH_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1067,6 +1097,7 @@ typedef struct _MUP_PROVIDER_INFORMATION
 
 // NtQueryDirectoryFile types
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_INFORMATION_DEFINITION
 {
     FILE_INFORMATION_CLASS Class;
@@ -1075,6 +1106,7 @@ typedef struct _FILE_INFORMATION_DEFINITION
     ULONG FileNameLengthOffset;
 } FILE_INFORMATION_DEFINITION, *PFILE_INFORMATION_DEFINITION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_DIRECTORY_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1097,6 +1129,7 @@ typedef struct _FILE_DIRECTORY_INFORMATION
     FIELD_OFFSET(FILE_DIRECTORY_INFORMATION, FileNameLength)    \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_FULL_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1120,6 +1153,7 @@ typedef struct _FILE_FULL_DIR_INFORMATION
     FIELD_OFFSET(FILE_FULL_DIR_INFORMATION, FileNameLength)     \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_FULL_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1144,6 +1178,7 @@ typedef struct _FILE_ID_FULL_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_FULL_DIR_INFORMATION, FileNameLength)  \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_BOTH_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1169,6 +1204,7 @@ typedef struct _FILE_BOTH_DIR_INFORMATION
     FIELD_OFFSET(FILE_BOTH_DIR_INFORMATION, FileNameLength)     \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_BOTH_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1195,6 +1231,7 @@ typedef struct _FILE_ID_BOTH_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_BOTH_DIR_INFORMATION, FileNameLength)  \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_NAMES_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1210,6 +1247,7 @@ typedef struct _FILE_NAMES_INFORMATION
     FIELD_OFFSET(FILE_NAMES_INFORMATION, FileNameLength)    \
 }
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_ID_GLOBAL_TX_DIR_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1255,6 +1293,7 @@ typedef struct _FILE_OBJECTID_INFORMATION
     };
 } FILE_OBJECTID_INFORMATION, *PFILE_OBJECTID_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_DIRECTORY_NEXT_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1262,6 +1301,7 @@ typedef struct _FILE_DIRECTORY_NEXT_INFORMATION
 
 // NtQueryEaFile/NtSetEaFile types
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_FULL_EA_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1273,6 +1313,7 @@ typedef struct _FILE_FULL_EA_INFORMATION
     // UCHAR EaValue[1]
 } FILE_FULL_EA_INFORMATION, *PFILE_FULL_EA_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_GET_EA_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1282,6 +1323,7 @@ typedef struct _FILE_GET_EA_INFORMATION
 
 // NtQueryQuotaInformationFile/NtSetQuotaInformationFile types
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_GET_QUOTA_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1289,6 +1331,7 @@ typedef struct _FILE_GET_QUOTA_INFORMATION
     _Field_size_bytes_(SidLength) SID Sid;
 } FILE_GET_QUOTA_INFORMATION, *PFILE_GET_QUOTA_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_QUOTA_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1686,9 +1729,9 @@ NtQueryDirectoryFile(
 /**
  * File systems maintain per-FileObject directory cursor information. When multiple threads do queries using the same FileObject,
  * access to the per-FileObject structure is single threaded to prevent corruption of the cursor state.
- * This flag tells the file system to not update per-FileObject cursor state information thus allowing multiple threads 
+ * This flag tells the file system to not update per-FileObject cursor state information thus allowing multiple threads
  * to query in parallel using the same handle. It behaves as if SL_RESTART_SCAN is specified on each call. If a wild card pattern
- * is given on the next call, the operation will not pick up where the last query ended. 
+ * is given on the next call, the operation will not pick up where the last query ended.
  * This allows for true asynchronous directory query support. Not all file systems support this flag.
  */
 #define FILE_QUERY_NO_CURSOR_UPDATE 0x00000010
@@ -1777,7 +1820,7 @@ NtSetQuotaInformationFile(
  * The NtQueryVolumeInformationFile routine retrieves information about the volume associated with a given file, directory, storage device, or volume.
  *
  * \param[in] FileHandle A handle to the file, directory, storage device, or volume for which volume information is being requested.
- * \param[out] IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FsInformation. 
+ * \param[out] IoStatusBlock A pointer to an IO_STATUS_BLOCK structure that receives the final completion status, and the number of bytes written to the buffer pointed to by FsInformation.
  * \param[out] FsInformation A pointer to a caller-allocated buffer that receives the desired information about the volume.
  * \param[in] Length The size, in bytes, of the buffer pointed to by FsInformation.
  * \param[in] FsInformationClass The type of information to be returned about the volume.
@@ -1868,6 +1911,8 @@ typedef enum _DIRECTORY_NOTIFY_INFORMATION_CLASS
 } DIRECTORY_NOTIFY_INFORMATION_CLASS, *PDIRECTORY_NOTIFY_INFORMATION_CLASS;
 
 #if !defined(NTDDI_WIN10_RS5) || (NTDDI_VERSION < NTDDI_WIN10_RS5)
+
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_NOTIFY_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1876,6 +1921,7 @@ typedef struct _FILE_NOTIFY_INFORMATION
     WCHAR FileName[1];
 } FILE_NOTIFY_INFORMATION, *PFILE_NOTIFY_INFORMATION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_NOTIFY_EXTENDED_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1897,6 +1943,7 @@ typedef struct _FILE_NOTIFY_EXTENDED_INFORMATION
     ULONG FileNameLength;
     WCHAR FileName[1];
 } FILE_NOTIFY_EXTENDED_INFORMATION, *PFILE_NOTIFY_EXTENDED_INFORMATION;
+
 #endif
 
 #define FILE_NAME_FLAG_HARDLINK      0    // not part of a name pair
@@ -1906,6 +1953,8 @@ typedef struct _FILE_NOTIFY_EXTENDED_INFORMATION
 #define FILE_NAME_FLAGS_UNSPECIFIED  0x80 // not specified by file system (do not combine with other flags)
 
 #if !defined(NTDDI_WIN10_NI) || (NTDDI_VERSION < NTDDI_WIN10_NI)
+
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_NOTIFY_FULL_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -1929,6 +1978,7 @@ typedef struct _FILE_NOTIFY_FULL_INFORMATION
     BYTE Reserved;
     WCHAR FileName[1];
 } FILE_NOTIFY_FULL_INFORMATION, *PFILE_NOTIFY_FULL_INFORMATION;
+
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS3)

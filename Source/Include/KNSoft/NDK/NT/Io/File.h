@@ -280,7 +280,7 @@ NtCreateFile(
  * The NtOpenFile routine opens an existing file, device, directory, or volume, and returns a handle for the file object.
  *
  * \param[out] FileHandle Pointer to a variable that receives a handle to the file.
- * \param[in] DesiredAccess The requested access to the object. 
+ * \param[in] DesiredAccess The requested access to the object.
  * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the file's attributes, including file name.
  * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
  * \param[in] ShareAccess Specifies the type of share access for the file.
@@ -349,7 +349,7 @@ NtFlushBuffersFile(
 //  This is equivalent to how NtFlushBuffersFile has always worked.
 //
 
-// If set, File data and metadata in the file cache will be written, and the 
+// If set, File data and metadata in the file cache will be written, and the
 // underlying storage is synchronized to flush its cache.
 // Windows file systems supported: NTFS, ReFS, FAT, exFAT.
 //
@@ -464,7 +464,7 @@ NtDeviceIoControlFile(
  * \param[in] FileHandle A handle to the file object representing the file or directory on which the specified action is to be performed.
  * \param[in] Event A handle for a caller-created event. This parameter is optional and can be NULL. It must be NULL if the caller will wait for the FileHandle to be set to the Signaled state.
  * \param[in] ApcRoutine Address of a caller-supplied APC routine to be called when the requested operation completes. This parameter is optional and can be NULL.
- * \param[in] ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object. 
+ * \param[in] ApcContext Pointer to a caller-determined context area. This parameter value is used as the APC context if the caller supplies an APC, or is used as the completion context if an I/O completion object has been associated with the file object.
  * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
  * \param[in] FsControlCode FSCTL_XXX code that indicates which file system control operation is to be carried out.
  * \param[in] InputBuffer Pointer to a caller-allocated input buffer that contains device-specific information to be given to the target driver.
@@ -577,6 +577,32 @@ NtWriteFileGather(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_VB)
 
+/**
+ * The NtCopyFileChunk routine copies a contiguous range of bytes (a chunk)
+ * from a source file to a destination file. The operation may be performed
+ * synchronously or asynchronously depending on the file handles and flags.
+ *
+ * \param[in] SourceHandle Handle to the source file. The handle must be opened
+ *            with access that allows reading the specified range.
+ * \param[in] DestinationHandle Handle to the destination file. The handle must
+ *            be opened with access that allows writing to the specified range.
+ * \param[in] EventHandle Optional handle to an event object. If provided,
+ *            the event is set when the operation completes. May be NULL.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that
+ *            receives the final completion status and information about the operation.
+ * \param[in] Length The number of bytes to copy.
+ * \param[in] SourceOffset Pointer to a LARGE_INTEGER specifying the byte
+ *            offset in the source file at which copying begins.
+ * \param[in] DestOffset Pointer to a LARGE_INTEGER specifying the byte
+ *            offset in the destination file at which copying begins.
+ * \param[in] SourceKey Optional pointer to a source file key. May be NULL.
+ * \param[in] DestKey Optional pointer to a destination file key. May be NULL.
+ * \param[in] Flags Additional flags controlling copy semantics.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks The exact meaning and required privileges for `Flags` and keys may
+ *          depend on the Windows version and file system. Consumers should
+ *          verify handle access rights and the platform's support for this call.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
