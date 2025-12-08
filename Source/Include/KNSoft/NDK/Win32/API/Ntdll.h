@@ -5,15 +5,15 @@
 EXTERN_C_START
 
 NTSYSAPI
-BOOL 
-NTAPI 
+BOOL
+NTAPI
 ApiSetQueryApiSetPresence(
     _In_ PCUNICODE_STRING Namespace,
     _Out_ PBOOLEAN Present);
 
 NTSYSAPI
-BOOL 
-NTAPI 
+BOOL
+NTAPI
 ApiSetQueryApiSetPresenceEx(
     _In_ PCUNICODE_STRING Namespace,
     _Out_ PBOOLEAN IsInSchema,

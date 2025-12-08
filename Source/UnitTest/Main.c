@@ -28,8 +28,6 @@ CONST UNITTEST_ENTRY UnitTestList[] = {
     { 0 }
 };
 
-ULONG flagcounts[32] = { 0 };
-
 int
 _cdecl
 wmain(
