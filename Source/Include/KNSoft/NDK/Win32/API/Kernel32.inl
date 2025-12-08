@@ -502,19 +502,20 @@ _Inline_InitializeCriticalSectionAndSpinCount(
     _Out_ LPCRITICAL_SECTION lpCriticalSection,
     _In_ DWORD dwSpinCount)
 {
-#if _KNSOFT_NDK_NTDDI_MIN >= NTDDI_VISTA
-    RtlInitializeCriticalSectionAndSpinCount(lpCriticalSection, dwSpinCount);
-    return TRUE;
-#else
-    NTSTATUS Status = RtlInitializeCriticalSectionAndSpinCount(lpCriticalSection, dwSpinCount);
-    if (NT_SUCCESS(Status))
+    if (IS_NT_VERSION_GE(NT_VERSION_VISTA))
     {
+        RtlInitializeCriticalSectionAndSpinCount(lpCriticalSection, dwSpinCount);
         return TRUE;
+    } else
+    {
+        NTSTATUS Status = RtlInitializeCriticalSectionAndSpinCount(lpCriticalSection, dwSpinCount);
+        if (NT_SUCCESS(Status))
+        {
+            return TRUE;
+        }
+        _Inline_BaseSetLastNTError(Status);
+        return FALSE;
     }
-
-    _Inline_BaseSetLastNTError(Status);
-    return FALSE;
-#endif
 }
 
 __inline
@@ -1481,7 +1482,7 @@ _Inline_InterlockedPushListSListEx(
     _In_ ULONG Count)
 {
     return
-#if _KNSOFT_NDK_NTDDI_MIN >= NTDDI_WIN8
+#if NT_VERSION_MIN >= NT_VERSION_WIN8
         RtlInterlockedPushListSListEx
 #else
         RtlInterlockedPushListSList

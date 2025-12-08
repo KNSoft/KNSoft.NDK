@@ -2,18 +2,10 @@
 
 #pragma once
 
-#include <SdkDdkVer.h>
+/* Version control */
+#include "Version.h"
 
-/* Patch undocumented NTDDI versions */
-#define NTDDI_WIN10_GE NTDDI_WIN11_ZN /* Introduced in Windows SDK 10.0.26100.1 (Win11), later than all NTDDI_WIN10_* */
-#define NTDDI_WIN11_DT NTDDI_WIN11_GE /* Introduced in Windows SDK 10.0.26100.3916, later than NTDDI_WIN11_GE */
-
-/* Minimum support NT6.0 by default */
-#ifndef _KNSOFT_NDK_NTDDI_MIN
-#define _KNSOFT_NDK_NTDDI_MIN NTDDI_VISTA
-#endif
-
-// MS-Spec: Nonstandard extension used: zero-sized array in struct/union
+/* MS-Spec: Nonstandard extension used: zero-sized array in struct/union */
 #pragma warning(disable: 4200)
 
 #if defined(_DEBUG) && !defined(DBG)

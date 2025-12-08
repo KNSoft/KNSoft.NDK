@@ -40,3 +40,14 @@
 #include "Extension/Runtime.h"
 #include "Extension/Security.h"
 #endif
+
+__forceinline
+ULONG
+GET_NT_VERSION(VOID)
+{
+    return NT_VERSION(SharedUserData->NtMajorVersion,
+                      SharedUserData->NtMinorVersion,
+                      SharedUserData->NtBuildNumber);
+}
+
+#define IS_NT_VERSION_GE(NtVersion) (NT_VERSION_MIN >= NtVersion || GET_NT_VERSION() >= NtVersion)
