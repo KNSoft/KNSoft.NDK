@@ -112,41 +112,6 @@ Rand_RdRand16(
 
 #endif /* _RAND_HAS_RDRAND_ */
 
-static int g_iFallbackToSW = -1;
-
-__forceinline
-LOGICAL
-_Rand_FallbackToSW(VOID)
-{
-    if (g_iFallbackToSW != -1)
-    {
-        return !!g_iFallbackToSW;
-    }
-
-    /*
-     * RDRAND is not emulated on WoA yet,
-     * and SharedUserData->NativeProcessorArchitecture is avaliable since NT 6.2.
-     */
-    if (SharedUserData->NtMajorVersion < 10)
-    {
-        /* WoA since NT 10 */
-        g_iFallbackToSW = FALSE;
-    } else if (NtReadTebPVOID(WowTebOffset) == NULL)
-    {
-        /* Not in WOW */
-        g_iFallbackToSW = FALSE;
-    } else if (SharedUserData->NativeProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 ||
-               SharedUserData->NativeProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
-    {
-        /* RDRAND is supported natively */
-        g_iFallbackToSW = FALSE;
-    } else
-    {
-        g_iFallbackToSW = TRUE;
-    }
-    return !!g_iFallbackToSW;
-}
-
 __forceinline
 _Success_(return != FALSE)
 LOGICAL
@@ -154,17 +119,13 @@ Rand_HW32(
     _Out_ unsigned __int32* Random)
 {
 #if _RAND_HAS_RDRAND_
-    if (_Rand_FallbackToSW())
-    {
-#endif
-        *Random = Rand_SW32();
-        return TRUE;
-#if _RAND_HAS_RDRAND_
-    } else
+    if (SharedUserData->ProcessorFeatures[PF_RDRAND_INSTRUCTION_AVAILABLE])
     {
         return Rand_RdRand32(Random);
     }
 #endif
+    *Random = Rand_SW32();
+    return TRUE;
 }
 
 __forceinline
@@ -174,17 +135,13 @@ Rand_HW64(
     _Out_ unsigned __int64* Random)
 {
 #if _RAND_HAS_RDRAND_
-    if (_Rand_FallbackToSW())
-    {
-#endif
-        *Random = Rand_SW64();
-        return TRUE;
-#if _RAND_HAS_RDRAND_
-    } else
+    if (SharedUserData->ProcessorFeatures[PF_RDRAND_INSTRUCTION_AVAILABLE])
     {
         return Rand_RdRand64(Random);
     }
 #endif
+    *Random = Rand_SW64();
+    return TRUE;
 }
 
 __forceinline
@@ -194,17 +151,13 @@ Rand_HW16(
     _Out_ unsigned __int16* Random)
 {
 #if _RAND_HAS_RDRAND_
-    if (_Rand_FallbackToSW())
-    {
-#endif
-        *Random = Rand_SW16();
-        return TRUE;
-#if _RAND_HAS_RDRAND_
-    } else
+    if (SharedUserData->ProcessorFeatures[PF_RDRAND_INSTRUCTION_AVAILABLE])
     {
         return Rand_RdRand16(Random);
     }
 #endif
+    *Random = Rand_SW16();
+    return TRUE;
 }
 
 __forceinline
