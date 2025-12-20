@@ -84,9 +84,9 @@ RtlVerifyVersionInfo(
 /**
  * The RtlGetEnabledExtendedFeatures routine returns a mask of extended processor features that are enabled by the system.
  *
- * \param FeatureMask A 64-bit feature mask. This parameter indicates a set of extended processor features for which the caller 
+ * \param FeatureMask A 64-bit feature mask. This parameter indicates a set of extended processor features for which the caller
  * requests information about whether the features are enabled.
- * \return A 64-bitmask of enabled extended processor features. The routine calculates this mask as the intersection (bitwise AND) 
+ * \return A 64-bitmask of enabled extended processor features. The routine calculates this mask as the intersection (bitwise AND)
  * between all enabled features and the value of the FeatureMask parameter.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlgetenabledextendedfeatures
  */
@@ -188,7 +188,7 @@ RtlIsProcessorFeaturePresent(
 
 // rev
 /**
- * The RtlGetCurrentProcessorNumber routine retrieves the number of the processor the current thread was running 
+ * The RtlGetCurrentProcessorNumber routine retrieves the number of the processor the current thread was running
  * on during the call to this function.
  *
  * \return The function returns the current processor number.
@@ -201,10 +201,10 @@ RtlGetCurrentProcessorNumber(VOID);
 
 // rev
 /**
- * The RtlGetCurrentProcessorNumberEx routine retrieves the processor group and number of the logical processor 
+ * The RtlGetCurrentProcessorNumberEx routine retrieves the processor group and number of the logical processor
  * in which the calling thread is running.
  *
- * \param ProcessorNumber A pointer to a PROCESSOR_NUMBER structure that receives the processor group and number 
+ * \param ProcessorNumber A pointer to a PROCESSOR_NUMBER structure that receives the processor group and number
  * of the logical processor the calling thread is running.
  * \return This function does not return a value.
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessornumberex

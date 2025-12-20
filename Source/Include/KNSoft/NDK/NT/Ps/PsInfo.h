@@ -92,7 +92,7 @@ typedef enum _PROCESSINFOCLASS
     ProcessSubsystemInformation,                    // q: SUBSYSTEM_INFORMATION_TYPE // since REDSTONE2
     ProcessEnergyValues,                            // q: PROCESS_ENERGY_VALUES, PROCESS_EXTENDED_ENERGY_VALUES, PROCESS_EXTENDED_ENERGY_VALUES_V1
     ProcessPowerThrottlingState,                    // qs: POWER_THROTTLING_PROCESS_STATE
-    ProcessActivityThrottlePolicy,                  // q: PROCESS_ACTIVITY_THROTTLE_POLICY // ProcessReserved3Information
+    ProcessActivityThrottlePolicy,                  // qs: PROCESS_ACTIVITY_THROTTLE_POLICY // ProcessReserved3Information
     ProcessWin32kSyscallFilterInformation,          // q: WIN32K_SYSCALL_FILTER
     ProcessDisableSystemAllowedCpuSets,             // s: BOOLEAN // 80
     ProcessWakeInformation,                         // q: PROCESS_WAKE_INFORMATION // (kernel-mode only)
@@ -147,7 +147,7 @@ typedef enum _THREADINFOCLASS
     ThreadDescriptorTableEntry,                     // q: DESCRIPTOR_TABLE_ENTRY (or WOW64_DESCRIPTOR_TABLE_ENTRY)
     ThreadEnableAlignmentFaultFixup,                // s: BOOLEAN
     ThreadEventPair,                                // q: Obsolete
-    ThreadQuerySetWin32StartAddress,                // qs: PVOID (requires THREAD_SET_LIMITED_INFORMATION)
+    ThreadQuerySetWin32StartAddress,                // q: PVOID
     ThreadZeroTlsCell,                              // s: ULONG // TlsIndex // 10
     ThreadPerformanceCount,                         // q: LARGE_INTEGER
     ThreadAmILastThread,                            // q: ULONG
@@ -991,8 +991,8 @@ typedef enum _PS_PROTECTED_SIGNER
     (PsProtectionLevel)->Type = (PsType); \
 
 /**
- * The PROCESS_MEMORY_EXHAUSTION_TYPE enumeration defines the different memory exhaustion typess.
- * 
+ * The PROCESS_MEMORY_EXHAUSTION_TYPE enumeration defines the different memory exhaustion types.
+ *
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ne-processthreadsapi-process_memory_exhaustion_type
  */
 //typedef enum _PROCESS_MEMORY_EXHAUSTION_TYPE
@@ -1129,10 +1129,10 @@ typedef struct _PROCESS_CHILD_PROCESS_INFORMATION
  * process to adjust the system timer resolution (such as timeBeginPeriod or NtSetTimerResolution)
  * are honored. When this flag is enabled, such requests are ignored.
  *
- * This behavior is part of Windows’ power‑throttling mechanism introduced in Windows 11 and is
+ * This behavior is part of Windows power-throttling mechanism introduced in Windows 11 and is
  * enabled by default for all processes. Changes to the system timer resolution can alter the
  * behavior of system timers, wait timeouts, and sleep durations, often causing unintended
- * side effects in applications. Higher‑precision timer resolutions also negatively impact
+ * side effects in applications. Higher-precision timer resolutions also negatively impact
  * battery life and overall system performance.
  *
  * \note Enabled by default since Windows 11. This may cause performance issues for legacy
@@ -1154,6 +1154,53 @@ typedef struct _POWER_THROTTLING_PROCESS_STATE
     ULONG ControlMask;   // A mask that specifies the control settings for power throttling.
     ULONG StateMask;     // A mask that specifies the current state of power throttling.
 } POWER_THROTTLING_PROCESS_STATE, *PPOWER_THROTTLING_PROCESS_STATE;
+
+// private
+#ifndef PROCESS_POWER_THROTTLING_CURRENT_VERSION
+#define PROCESS_POWER_THROTTLING_CURRENT_VERSION 1
+#endif
+#ifndef PROCESS_POWER_THROTTLING_EXECUTION_SPEED
+#define PROCESS_POWER_THROTTLING_EXECUTION_SPEED 0x1
+#endif
+#ifndef PROCESS_POWER_THROTTLING_IGNORE_TIMER_RESOLUTION
+#define PROCESS_POWER_THROTTLING_IGNORE_TIMER_RESOLUTION 0x4
+#endif
+#ifndef PROCESS_POWER_THROTTLING_VALID_FLAGS
+#define PROCESS_POWER_THROTTLING_VALID_FLAGS \
+    ((PROCESS_POWER_THROTTLING_EXECUTION_SPEED | PROCESS_POWER_THROTTLING_IGNORE_TIMER_RESOLUTION))
+#endif
+
+// private
+//typedef struct _PROCESS_POWER_THROTTLING_STATE
+//{
+//    ULONG Version;
+//    ULONG ControlMask;
+//    ULONG StateMask;
+//} PROCESS_POWER_THROTTLING_STATE, *PPROCESS_POWER_THROTTLING_STATE;
+
+// private
+typedef enum _PROCESS_ACTIVITY_THROTTLE_POLICY_OP
+{
+    ProcessActivityThrottlePolicyDisable = 0,
+    ProcessActivityThrottlePolicyEnable = 1,
+    ProcessActivityThrottlePolicyDefault = 2,
+    MaxProcessActivityThrottlePolicy
+} PROCESS_ACTIVITY_THROTTLE_POLICY_OP;
+
+// PROCESS_ACTIVITY_THROTTLE_POLICY PolicyFlags
+#define PROCESS_ACTIVITY_THROTTLE_EXECUTIONSPEED 0x1
+#define PROCESS_ACTIVITY_THROTTLE_DELAYTIMERS 0x2
+#define PROCESS_ACTIVITY_THROTTLE_ALL \
+    ((PROCESS_ACTIVITY_THROTTLE_EXECUTIONSPEED | PROCESS_ACTIVITY_THROTTLE_DELAYTIMERS))
+
+/**
+ * The PROCESS_ACTIVITY_THROTTLE_POLICY structure is used to manage the activity throttle of a process.
+ */
+typedef struct _PROCESS_ACTIVITY_THROTTLE_POLICY
+{
+    PROCESS_ACTIVITY_THROTTLE_POLICY_OP Operation;
+    ULONG PolicyFlags;
+} PROCESS_ACTIVITY_THROTTLE_POLICY, *PPROCESS_ACTIVITY_THROTTLE_POLICY;
 
 // rev (tyranid)
 #define WIN32K_SYSCALL_FILTER_STATE_ENABLE 0x1

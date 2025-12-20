@@ -61,6 +61,17 @@ typedef enum _HARDERROR_RESPONSE
 
 #define HARDERROR_OVERRIDE_ERRORMODE 0x10000000
 
+/**
+ * The NtRaiseHardError routine raises a hard error or serious error dialog box being displayed to the user.
+ *
+ * \param[in] ErrorStatus The NTSTATUS code that describes the error condition.
+ * \param[in] NumberOfParameters The number of parameters in the Parameters array.
+ * \param[in] UnicodeStringParameterMask A bitmask indicating which entries in the Parameters array are Unicode strings.
+ * \param[in] Parameters An array of parameters to be used in the error message.
+ * \param[in] ValidResponseOptions Specifies the valid responses that the user can select in the error dialog.
+ * \param[out] Response Receives the user's response to the error dialog.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Analysis_noreturn_
 DECLSPEC_NORETURN
 NTSYSCALLAPI

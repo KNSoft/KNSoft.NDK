@@ -28,9 +28,9 @@ NTAPI
 RtlNewSecurityGrantedAccess(
     _In_ ACCESS_MASK DesiredAccess,
     _Out_ PPRIVILEGE_SET NewPrivileges,
-    _Inout_ PULONG Length, 
+    _Inout_ PULONG Length,
     _In_opt_ HANDLE TokenHandle,
-    _In_ PGENERIC_MAPPING GenericMapping,   
+    _In_ PGENERIC_MAPPING GenericMapping,
     _Out_ PACCESS_MASK RemainingDesiredAccess);
 
 #endif

@@ -188,10 +188,10 @@ typedef struct _RTL_FEATURE_CONFIGURATION_UPDATE
     RTL_FEATURE_ENABLED_STATE EnabledState;
     RTL_FEATURE_ENABLED_STATE_OPTIONS EnabledStateOptions;
 
-    union 
+    union
     {
         ULONG VariantFlags;
-        struct 
+        struct
         {
             ULONG Variant : 8;
             ULONG ChangeTimeUpgrade : 1;
@@ -200,7 +200,7 @@ typedef struct _RTL_FEATURE_CONFIGURATION_UPDATE
         } DUMMYSTRUCTNAME;
     } DUMMYUNIONNAME;
 
-    UCHAR Reserved[3]; 
+    UCHAR Reserved[3];
     RTL_FEATURE_VARIANT_PAYLOAD_KIND VariantPayloadKind;
     RTL_FEATURE_VARIANT_PAYLOAD VariantPayload;
     RTL_FEATURE_CONFIGURATION_OPERATION Operation;

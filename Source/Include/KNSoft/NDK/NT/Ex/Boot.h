@@ -170,7 +170,7 @@ typedef struct _BOOT_OPTIONS
     ULONG Timeout;
     ULONG CurrentBootEntryId;
     ULONG NextBootEntryId;
-    WCHAR HeadlessRedirection[1];
+    _Field_size_bytes_(Length) WCHAR HeadlessRedirection[1];
 } BOOT_OPTIONS, *PBOOT_OPTIONS;
 
 // private

@@ -179,7 +179,7 @@ RtlQueryPerformanceCounter(
  * The RtlQueryPerformanceFrequency routine retrieves the frequency of the performance counter. The frequency of the performance counter is fixed at system boot and is consistent across all processors.
  * Therefore, the frequency need only be queried upon application initialization, and the result can be cached.
  *
- * \param PerformanceFrequency A pointer to a variable that receives the current performance-counter frequency, in counts per second. 
+ * \param PerformanceFrequency A pointer to a variable that receives the current performance-counter frequency, in counts per second.
  * \return Returns TRUE if the function succeeds, otherwise FALSE. On systems that run Windows XP or later, the function will always succeed and will thus never return zero.
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency
  */
@@ -290,7 +290,7 @@ RtlEncodeRemotePointer(
 
 // rev
 /**
- * The RtlDecodeRemotePointer routine decodes a pointer in a specified process that was previously 
+ * The RtlDecodeRemotePointer routine decodes a pointer in a specified process that was previously
  * encoded with RtlEncodePointer or RtlEncodeRemotePointer.
  *
  * \param ProcessHandle Handle to the remote process that owns the pointer.
@@ -830,6 +830,16 @@ VOID NTAPI RTL_OVERLAPPED_COMPLETION_ROUTINE(
     );
 typedef RTL_OVERLAPPED_COMPLETION_ROUTINE* PRTL_OVERLAPPED_COMPLETION_ROUTINE;
 
+/**
+ * Associates the I/O completion port owned by the thread pool with the specified file handle.
+ * On completion of an I/O request involving this file, a non-I/O worker thread will execute the specified callback function.
+ *
+ * \param FileHandle A handle to the file or device for which to set the I/O completion callback.
+ * \param Function A pointer to the callback function to be executed when an I/O operation completes.
+ * \param Flags Reserved; must be zero.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-bindiocompletioncallback
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

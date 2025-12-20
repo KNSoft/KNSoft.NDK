@@ -10,21 +10,21 @@ EXTERN_C_START
 
 typedef enum _MEMORY_INFORMATION_CLASS
 {
-    MemoryBasicInformation, // q: MEMORY_BASIC_INFORMATION
-    MemoryWorkingSetInformation, // q: MEMORY_WORKING_SET_INFORMATION
-    MemoryMappedFilenameInformation, // q: UNICODE_STRING
-    MemoryRegionInformation, // q: MEMORY_REGION_INFORMATION
-    MemoryWorkingSetExInformation, // q: MEMORY_WORKING_SET_EX_INFORMATION // since VISTA
-    MemorySharedCommitInformation, // q: MEMORY_SHARED_COMMIT_INFORMATION // since WIN8
-    MemoryImageInformation, // q: MEMORY_IMAGE_INFORMATION
-    MemoryRegionInformationEx, // MEMORY_REGION_INFORMATION
-    MemoryPrivilegedBasicInformation, // MEMORY_BASIC_INFORMATION
-    MemoryEnclaveImageInformation, // MEMORY_ENCLAVE_IMAGE_INFORMATION // since REDSTONE3
-    MemoryBasicInformationCapped, // 10
-    MemoryPhysicalContiguityInformation, // MEMORY_PHYSICAL_CONTIGUITY_INFORMATION // since 20H1
-    MemoryBadInformation, // since WIN11
-    MemoryBadInformationAllProcesses, // since 22H1
-    MemoryImageExtensionInformation, // MEMORY_IMAGE_EXTENSION_INFORMATION // since 24H2
+    MemoryBasicInformation,                     // q: MEMORY_BASIC_INFORMATION
+    MemoryWorkingSetInformation,                // q: MEMORY_WORKING_SET_INFORMATION
+    MemoryMappedFilenameInformation,            // q: UNICODE_STRING
+    MemoryRegionInformation,                    // q: MEMORY_REGION_INFORMATION
+    MemoryWorkingSetExInformation,              // q: MEMORY_WORKING_SET_EX_INFORMATION // since VISTA
+    MemorySharedCommitInformation,              // q: MEMORY_SHARED_COMMIT_INFORMATION // since WIN8
+    MemoryImageInformation,                     // q: MEMORY_IMAGE_INFORMATION
+    MemoryRegionInformationEx,                  // q: MEMORY_REGION_INFORMATION
+    MemoryPrivilegedBasicInformation,           // q: MEMORY_BASIC_INFORMATION
+    MemoryEnclaveImageInformation,              // q: MEMORY_ENCLAVE_IMAGE_INFORMATION // since REDSTONE3
+    MemoryBasicInformationCapped,               // q: 10
+    MemoryPhysicalContiguityInformation,        // q: MEMORY_PHYSICAL_CONTIGUITY_INFORMATION // since 20H1
+    MemoryBadInformation,                       // q: MEMORY_BAD_INFORMATION // since WIN11
+    MemoryBadInformationAllProcesses,           // qs: not implemented // since 22H1
+    MemoryImageExtensionInformation,            // q: MEMORY_IMAGE_EXTENSION_INFORMATION // since 24H2
     MaxMemoryInfoClass
 } MEMORY_INFORMATION_CLASS;
 
@@ -220,7 +220,9 @@ typedef struct _MEMORY_ENCLAVE_IMAGE_INFORMATION
     UCHAR AuthorID[32];
 } MEMORY_ENCLAVE_IMAGE_INFORMATION, *PMEMORY_ENCLAVE_IMAGE_INFORMATION;
 
-// private
+/**
+ * The MEMORY_PHYSICAL_CONTIGUITY_UNIT_STATE structure describes the eligibility state or contiguity unit.
+ */
 typedef enum _MEMORY_PHYSICAL_CONTIGUITY_UNIT_STATE
 {
     MemoryNotContiguous,
@@ -230,21 +232,25 @@ typedef enum _MEMORY_PHYSICAL_CONTIGUITY_UNIT_STATE
     MemoryContiguityStateMax,
 } MEMORY_PHYSICAL_CONTIGUITY_UNIT_STATE;
 
-// private
+/**
+ * The MEMORY_PHYSICAL_CONTIGUITY_UNIT_INFORMATION structure describes the per-unit contiguity state.
+ */
 typedef struct _MEMORY_PHYSICAL_CONTIGUITY_UNIT_INFORMATION
 {
     union
     {
+        ULONG AllInformation;
         struct
         {
             ULONG State : 2;
             ULONG Reserved : 30;
         };
-        ULONG AllInformation;
     };
 } MEMORY_PHYSICAL_CONTIGUITY_UNIT_INFORMATION, *PMEMORY_PHYSICAL_CONTIGUITY_UNIT_INFORMATION;
 
-// private
+/**
+ * The MEMORY_PHYSICAL_CONTIGUITY_INFORMATION structure describes a virtual range and contiguity unit characteristics for physical contiguity queries.
+ */
 typedef struct _MEMORY_PHYSICAL_CONTIGUITY_INFORMATION
 {
     PVOID VirtualAddress;
@@ -254,106 +260,145 @@ typedef struct _MEMORY_PHYSICAL_CONTIGUITY_INFORMATION
     PMEMORY_PHYSICAL_CONTIGUITY_UNIT_INFORMATION ContiguityUnitInformation;
 } MEMORY_PHYSICAL_CONTIGUITY_INFORMATION, *PMEMORY_PHYSICAL_CONTIGUITY_INFORMATION;
 
-// private
+// rev
+/**
+ * The MEMORY_BAD_INFORMATION structure reports a range of memory that has been marked bad or otherwise problematic.
+ */
+typedef struct _MEMORY_BAD_INFORMATION
+{
+    PVOID BadAddress; // Starting address of the bad memory range.
+    ULONG_PTR Length; // Length in bytes of the bad range.
+    ULONG Flags;      // Flags describing the nature of the bad memory.
+    ULONG Reserved;
+} MEMORY_BAD_INFORMATION, *PMEMORY_BAD_INFORMATION;
+
+/**
+ * The RTL_SCP_CFG_ARM64_HEADER structure contains ARM64 SCP/CFG descriptors; RVAs to handlers
+ * and helper routines used when configuring CFG/SCP emulation on ARM64.
+ */
 typedef struct _RTL_SCP_CFG_ARM64_HEADER
 {
-    ULONG EcInvalidCallHandlerRva;
-    ULONG EcCfgCheckRva;
-    ULONG EcCfgCheckESRva;
-    ULONG EcCallCheckRva;
-    ULONG CpuInitializationCompleteLoadRva;
-    ULONG LdrpValidateEcCallTargetInitRva;
-    ULONG SyscallFfsSizeRva;
-    ULONG SyscallFfsBaseRva;
+    ULONG EcInvalidCallHandlerRva;        // RVA to invalid EC call handler.
+    ULONG EcCfgCheckRva;                  // RVA to EC CFG check routine.
+    ULONG EcCfgCheckESRva;                // RVA to EC CFG check exception stub RVA.
+    ULONG EcCallCheckRva;                 // RVA to EC call-check routine.
+    ULONG CpuInitializationCompleteLoadRva; // RVA related to CPU init completion load.
+    ULONG LdrpValidateEcCallTargetInitRva; // RVA used by loader validation init.
+    ULONG SyscallFfsSizeRva;               // RVA describing syscall FFS size.
+    ULONG SyscallFfsBaseRva;               // RVA describing syscall FFS base.
 } RTL_SCP_CFG_ARM64_HEADER, *PRTL_SCP_CFG_ARM64_HEADER;
 
-// private
+/**
+ * The RTL_SCP_CFG_PAGE_TYPE enumeration describes page types used by SCP/CFG image extensions.
+ */
 typedef enum _RTL_SCP_CFG_PAGE_TYPE
 {
-    RtlScpCfgPageTypeNop,
-    RtlScpCfgPageTypeDefault,
-    RtlScpCfgPageTypeExportSuppression,
-    RtlScpCfgPageTypeFptr,
-    RtlScpCfgPageTypeMax,
-    RtlScpCfgPageTypeNone
+    RtlScpCfgPageTypeNop,                 // No-op / placeholder page.
+    RtlScpCfgPageTypeDefault,             // Default handling page.
+    RtlScpCfgPageTypeExportSuppression,   // Export-suppression descriptor page.
+    RtlScpCfgPageTypeFptr,                // Page that contains function pointers.
+    RtlScpCfgPageTypeMax,                 // Upper bound for the enum.
+    RtlScpCfgPageTypeNone                 // Explicit 'none' value.
 } RTL_SCP_CFG_PAGE_TYPE;
 
-// private
+/**
+ * The RTL_SCP_CFG_COMMON_HEADER structure contains RVAs to dispatch and check
+ * routines used by SCP/CFG configuration blocks.
+ */
 typedef struct _RTL_SCP_CFG_COMMON_HEADER
 {
-    ULONG CfgDispatchRva;
-    ULONG CfgDispatchESRva;
-    ULONG CfgCheckRva;
-    ULONG CfgCheckESRva;
-    ULONG InvalidCallHandlerRva;
-    ULONG FnTableRva;
+    ULONG CfgDispatchRva;         // RVA to CFG dispatch routine.
+    ULONG CfgDispatchESRva;       // RVA to CFG dispatch exception stub.
+    ULONG CfgCheckRva;            // RVA to CFG checking routine.
+    ULONG CfgCheckESRva;          // RVA to CFG checking exception stub.
+    ULONG InvalidCallHandlerRva;  // RVA to invalid-call handler.
+    ULONG FnTableRva;             // RVA to function-pointer table.
 } RTL_SCP_CFG_COMMON_HEADER, *PRTL_SCP_CFG_COMMON_HEADER;
 
-// private
+/**
+ * The RTL_SCP_CFG_HEADER structure contains the common SCP/CFG configuration header.
+ */
 typedef struct _RTL_SCP_CFG_HEADER
 {
     RTL_SCP_CFG_COMMON_HEADER Common;
 } RTL_SCP_CFG_HEADER, *PRTL_SCP_CFG_HEADER;
 
-// private
+/**
+ * The RTL_SCP_CFG_REGION_BOUNDS structure describes inclusive start/end
+ * addresses of an SCP/CFG-protected region.
+ */
 typedef struct _RTL_SCP_CFG_REGION_BOUNDS
 {
-    PVOID StartAddress;
-    PVOID EndAddress;
+    PVOID StartAddress; // Inclusive start address of the region.
+    PVOID EndAddress;   // Inclusive end address of the region.
 } RTL_SCP_CFG_REGION_BOUNDS, *PRTL_SCP_CFG_REGION_BOUNDS;
 
-// private
+/**
+ * The RTL_SCP_CFG_NTDLL_EXPORTS structure contains ntdll export descriptors and
+ * region bounds used to implement or validate CFG/SCP behavior at runtime.
+ */
 typedef struct _RTL_SCP_CFG_NTDLL_EXPORTS
 {
-    RTL_SCP_CFG_REGION_BOUNDS ScpRegions[4];
-    PVOID CfgDispatchFptr;
-    PVOID CfgDispatchESFptr;
-    PVOID CfgCheckFptr;
-    PVOID CfgCheckESFptr;
-    PVOID IllegalCallHandler;
+    RTL_SCP_CFG_REGION_BOUNDS ScpRegions[4]; // Array of SCP region bounds (max 4).
+    PVOID CfgDispatchFptr;                   // Pointer to CFG dispatch function.
+    PVOID CfgDispatchESFptr;                 // Pointer to CFG dispatch exception stub.
+    PVOID CfgCheckFptr;                      // Pointer to CFG check function.
+    PVOID CfgCheckESFptr;                    // Pointer to CFG check exception stub.
+    PVOID IllegalCallHandler;                // Pointer to handler invoked for illegal calls.
 } RTL_SCP_CFG_NTDLL_EXPORTS, *PRTL_SCP_CFG_NTDLL_EXPORTS;
 
-// private
+/**
+ * The RTL_SCP_CFG_NTDLL_EXPORTS_ARM64EC structure contains ARM64-specific ntdll
+ * export descriptors used for EC / ARM64EC handling.
+ */
 typedef struct _RTL_SCP_CFG_NTDLL_EXPORTS_ARM64EC
 {
-    PVOID EcInvalidCallHandler;
-    PVOID EcCfgCheckFptr;
-    PVOID EcCfgCheckESFptr;
-    PVOID EcCallCheckFptr;
-    PVOID CpuInitializationComplete;
-    PVOID LdrpValidateEcCallTargetInit;
+    PVOID EcInvalidCallHandler;           // Pointer to invalid EC call handler.
+    PVOID EcCfgCheckFptr;                 // Pointer to EC CFG check function.
+    PVOID EcCfgCheckESFptr;               // Pointer to EC CFG check exception stub.
+    PVOID EcCallCheckFptr;                // Pointer to EC call-check routine.
+    PVOID CpuInitializationComplete;      // Pointer to CPU initialization completion routine.
+    PVOID LdrpValidateEcCallTargetInit;   // Pointer to loader validation init routine.
     struct
     {
-        PVOID SyscallFfsSize;
+        PVOID SyscallFfsSize;             // Pointer to syscall FFS size descriptor.
         union
         {
-            PVOID Ptr;
-            ULONG Value;
+            PVOID Ptr;                    // Pointer form of FFS size descriptor.
+            ULONG Value;                  // Value form of FFS size descriptor.
         };
     };
-    PVOID SyscallFfsBase;
+    PVOID SyscallFfsBase;                 // Pointer to syscall FFS base.
 } RTL_SCP_CFG_NTDLL_EXPORTS_ARM64EC, *PRTL_SCP_CFG_NTDLL_EXPORTS_ARM64EC;
 
-// private
+/**
+ * The RTL_RETPOLINE_ROUTINES structure contains indices/offsets and jump-table
+ * descriptors used for retpoline/runtime patching.
+ */
 typedef struct _RTL_RETPOLINE_ROUTINES
 {
-    ULONG SwitchtableJump[16];
-    ULONG CfgIndirectRax;
-    ULONG NonCfgIndirectRax;
-    ULONG ImportR10;
-    ULONG JumpHpat;
+    ULONG SwitchtableJump[16]; // Jump offsets for switchtable entries.
+    ULONG CfgIndirectRax;      // Index/offset for indirect calls using RAX under CFG.
+    ULONG NonCfgIndirectRax;   // Index/offset for indirect calls not under CFG.
+    ULONG ImportR10;           // Import slot/index for R10-based imports.
+    ULONG JumpHpat;            // Hot-spot jump table offset.
 } RTL_RETPOLINE_ROUTINES, *PRTL_RETPOLINE_ROUTINES;
 
-// private
+/**
+ * The RTL_KSCP_ROUTINES structure contains the kernel-side
+ * SCP-related routine descriptors used for XFG/CFG/retpoline support.
+ */
 typedef struct _RTL_KSCP_ROUTINES
 {
-    ULONG UnwindDataOffset;
+    ULONG UnwindDataOffset;  // Offset to unwind data for the routines.
     RTL_RETPOLINE_ROUTINES RetpolineRoutines;
-    ULONG CfgDispatchSmep;
-    ULONG CfgDispatchNoSmep;
+    ULONG CfgDispatchSmep;   // CFG dispatch variant when SMEP is enabled.
+    ULONG CfgDispatchNoSmep; // CFG dispatch variant when SMEP is not enabled.
 } RTL_KSCP_ROUTINES, *PRTL_KSCP_ROUTINES;
 
-// private
+/**
+ * The MEMORY_IMAGE_EXTENSION_TYPE enumeration specifies the supported image extension types.
+ */
 typedef enum _MEMORY_IMAGE_EXTENSION_TYPE
 {
     MemoryImageExtensionCfgScp,
@@ -361,13 +406,16 @@ typedef enum _MEMORY_IMAGE_EXTENSION_TYPE
     MemoryImageExtensionTypeMax,
 } MEMORY_IMAGE_EXTENSION_TYPE;
 
-// private
+/**
+ * The MEMORY_IMAGE_EXTENSION_INFORMATION structure describes an optional image extension
+ * containing additional metadata or features (for example, CFG/SCP related extensions).
+ */
 typedef struct _MEMORY_IMAGE_EXTENSION_INFORMATION
 {
-    MEMORY_IMAGE_EXTENSION_TYPE ExtensionType;
-    ULONG Flags;
-    PVOID ExtensionImageBaseRva;
-    SIZE_T ExtensionSize;
+    MEMORY_IMAGE_EXTENSION_TYPE ExtensionType; // Type of the image extension (MEMORY_IMAGE_EXTENSION_TYPE).
+    ULONG Flags;                               // Extension-specific flags.
+    PVOID ExtensionImageBaseRva;               // Relative virtual address of the extension image base.
+    SIZE_T ExtensionSize;                      // Size, in bytes, of the extension region.
 } MEMORY_IMAGE_EXTENSION_INFORMATION, *PMEMORY_IMAGE_EXTENSION_INFORMATION;
 
 /**
@@ -534,14 +582,30 @@ typedef enum _VIRTUAL_MEMORY_INFORMATION_CLASS
 
 #if !defined(_KERNEL_MODE)
 
+/**
+ * The MEMORY_RANGE_ENTRY structure describes a contiguous region of virtual address space.
+ */
 typedef struct _MEMORY_RANGE_ENTRY
 {
-    PVOID VirtualAddress;
-    SIZE_T NumberOfBytes;
+    PVOID VirtualAddress;        // A pointer to the starting virtual address of the region.
+    SIZE_T NumberOfBytes;        // The size, in bytes, of the region.
 } MEMORY_RANGE_ENTRY, *PMEMORY_RANGE_ENTRY;
 
+/**
+ * Attempt to populate specified single or multiple address ranges
+ * into the process working set (bring pages into physical memory).
+ */
 #define VM_PREFETCH_TO_WORKING_SET 0x1 // since 24H4
 
+// rev
+/**
+ * The MEMORY_PREFETCH_INFORMATION structure defines prefetch-control flags that
+ * determine how prefetch operations are executed on the supplied address ranges.
+ *
+ * \remarks The behavior and success of prefetch operations depend on OS policy,
+ * working set limits, privileges, and presence of backing storage.
+ * \sa NtSetInformationVirtualMemory, VIRTUAL_MEMORY_INFORMATION_CLASS, VmPrefetchInformation
+ */
 typedef struct _MEMORY_PREFETCH_INFORMATION
 {
     ULONG Flags;
@@ -574,6 +638,7 @@ typedef struct _CFG_CALL_TARGET_LIST_INFORMATION
 } CFG_CALL_TARGET_LIST_INFORMATION, *PCFG_CALL_TARGET_LIST_INFORMATION;
 
 // rev
+// VmPageDirtyStateInformation
 typedef struct _MEMORY_PAGE_DIRTY_STATE_INFORMATION
 {
     ULONG Flags;
@@ -588,6 +653,21 @@ typedef struct _MEMORY_REMOVE_WORKING_SET_INFORMATION
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The NtSetInformationVirtualMemory routine performs an operation on a specified list of address ranges in the user address space of a process.
+ *
+ * \param ProcessHandle Specifies an open handle for the process in the context of which the operation is to be performed. This handle cannot be invalid.
+ * \param VmInformationClass Specifies the type of operation to perform.
+ * \param NumberOfEntries Number of entries in the array pointed to by the VirtualAddresses parameter. This parameter cannot be 0.
+ * \param VirtualAddresses Pointer to an array of MEMORY_RANGE_ENTRY structures in which each entry specifies a virtual address range to be processed.
+ * The virtual address ranges may cover any part of the process address space accessible by the target process.
+ * \param VmInformation A pointer to a buffer that contains memory information.
+ * Note: If VmInformationClass is VmPrefetchInformation, this parameter cannot be this parameter cannot be NULL and must point to a ULONG variable that is set to 0.
+ * \param VmInformationLength The size of the buffer pointed to by VmInformation.
+ * If VmInformationClass is VmPrefetchInformation, this must be sizeof (ULONG).
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwsetinformationvirtualmemory
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

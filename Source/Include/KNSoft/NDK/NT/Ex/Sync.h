@@ -530,6 +530,15 @@ typedef enum _TIMER_INFORMATION_CLASS
     TimerBasicInformation // TIMER_BASIC_INFORMATION
 } TIMER_INFORMATION_CLASS;
 
+typedef enum _TIMER_SET_INFORMATION_CLASS
+{
+    TimerSetCoalescableTimer, // TIMER_SET_COALESCABLE_TIMER_INFO
+    MaxTimerInfoClass
+} TIMER_SET_INFORMATION_CLASS;
+
+/**
+ * The TIMER_BASIC_INFORMATION structure contains basic information about a timer object.
+ */
 typedef struct _TIMER_BASIC_INFORMATION
 {
     LARGE_INTEGER RemainingTime;
@@ -545,12 +554,6 @@ TIMER_APC_ROUTINE(
     _In_ ULONG TimerLowValue,
     _In_ LONG TimerHighValue);
 typedef TIMER_APC_ROUTINE* PTIMER_APC_ROUTINE;
-
-typedef enum _TIMER_SET_INFORMATION_CLASS
-{
-    TimerSetCoalescableTimer, // TIMER_SET_COALESCABLE_TIMER_INFO
-    MaxTimerInfoClass
-} TIMER_SET_INFORMATION_CLASS;
 
 typedef struct _TIMER_SET_COALESCABLE_TIMER_INFO
 {
@@ -681,28 +684,86 @@ NtQueryTimer(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+// ExCheckValidIRTimerId
+typedef enum _IR_TIMER_PROVIDER_INDEX
+{
+    IR_TIMER_PROVIDER_TESTIDENTIFIER, // Token(Service SID)
+    IR_TIMER_PROVIDER_BROKERINFRASTRUCTURE, // Token(Service SID)
+    IR_TIMER_PROVIDER_TIMEBROKERSVC, // Token(Service SID)
+    IR_TIMER_PROVIDER_LFSVC,
+    IR_TIMER_PROVIDER_WINLOGON,
+    IR_TIMER_PROVIDER_POWER,
+    IR_TIMER_PROVIDER_SENSORSERVICE,
+    IR_TIMER_PROVIDER_NTOSPO,
+    IR_TIMER_PROVIDER_ACPI,
+    IR_TIMER_PROVIDER_BUTTON,
+    IR_TIMER_PROVIDER_MSGPIOCLX,
+    IR_TIMER_PROVIDER_BUTTONCONVERTER,
+    IR_TIMER_PROVIDER_MSGPIOWIN32,
+    IR_TIMER_PROVIDER_KNETPWRDEPBROKER,
+    IR_TIMER_PROVIDER_CMBATT,
+    IR_TIMER_PROVIDER_BTHPORT,
+    IR_TIMER_PROVIDER_AUDIOSRV, // TOKEN(SERVICE SID)
+    IR_TIMER_PROVIDER_ARTESTIDENTIFIER, // TOKEN(SERVICE SID)
+    IR_TIMER_PROVIDER_BATTC,
+    IR_TIMER_PROVIDER_MAXINDEX
+} IR_TIMER_PROVIDER_INDEX;
+
+//CONST USHORT IR_TIMER_PROVIDER_ID_MAX[] =
+//{
+//    1,  // IR_TIMER_PROVIDER_TESTIDENTIFIER
+//    1,  // IR_TIMER_PROVIDER_BROKERINFRASTRUCTURE
+//    1,  // IR_TIMER_PROVIDER_TIMEBROKERSVC
+//    11, // IR_TIMER_PROVIDER_LFSVC (0x0B)
+//    1,  // IR_TIMER_PROVIDER_WINLOGON
+//    2,  // IR_TIMER_PROVIDER_POWER
+//    1,  // IR_TIMER_PROVIDER_SENSORSERVICE
+//    6,  // IR_TIMER_PROVIDER_NTOSPO
+//    1,  // IR_TIMER_PROVIDER_ACPI
+//    1,  // IR_TIMER_PROVIDER_BUTTON
+//    2,  // MsGpioClx
+//    1,  // ButtonConverter
+//    2,  // MsGpioWin32
+//    2,  // KNetPwrDepBroker
+//    1,  // Cmbatt
+//    2,  // Bthport
+//    1,  // AudioSrv
+//    1,  // ArTestIdentifier
+//    1   // Battc
+//};
+
+// rev
+#define IR_TIMERID_PROVIDER(TimerId) ((USHORT)HIWORD((ULONG)(TimerId)))
+#define IR_TIMERID_ID(TimerId) ((USHORT)LOWORD((ULONG)(TimerId)))
+#define IR_TIMERID_IS_NONZERO(TimerId) (IR_TIMERID_ID(TimerId) != 0)
+#define IR_TIMERID_ATTRIBUTES(ProviderIndex, ProviderId) \
+    ((ULONG)MAKELONG((USHORT)(ProviderId), (USHORT)(ProviderIndex)))
+
 /**
  * The NtCreateIRTimer routine creates an IR timer object.
+ * IR timers are interruptdriven and designed for high-resolution timing in system components.
  *
  * \param TimerHandle A pointer to a variable that receives the handle to the IR timer object.
- * \param Reserved Reserved parameter.
+ * \param TimerId A pointer to a timer identifier that specifies the provider.
  * \param DesiredAccess The access mask that specifies the requested access to the timer object.
  * \return NTSTATUS Successful or errant status.
+ * \remarks The TimerId must be non-NULL and point to a valid timer identifier.
  */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtCreateIRTimer(
     _Out_ PHANDLE TimerHandle,
-    _In_ PVOID Reserved,
+    _In_ PULONG TimerId,
     _In_ ACCESS_MASK DesiredAccess
-);
+    );
 
 /**
  * The NtSetIRTimer routine sets an IR timer object.
  *
  * \param TimerHandle A handle to the IR timer object.
- * \param DueTime An optional pointer to a LARGE_INTEGER that specifies the time at which the timer is to be set to the signaled state.
+ * \param DueTime An optional pointer to a LARGE_INTEGER that specifies
+ * the time at which the timer is to be set to the signaled state.
  * \return NTSTATUS Successful or errant status.
  */
 NTSYSCALLAPI
@@ -720,12 +781,28 @@ NtSetIRTimer(
 //
 // NtCreateTimer2 Attributes
 //
+#define TIMER2_ATTRIBUTE_IR_TIMER        0x00000002UL
 #define TIMER2_ATTRIBUTE_HIGH_RESOLUTION 0x00000004UL
 #define TIMER2_ATTRIBUTE_NOTIFICATION    0x80000000UL
-#define TIMER2_ATTRIBUTE_KNOWN_MASK      (TIMER2_ATTRIBUTE_HIGH_RESOLUTION | TIMER2_ATTRIBUTE_NOTIFICATION)
-#define TIMER2_ATTRIBUTE_RESERVED_MASK   (~TIMER2_ATTRIBUTE_KNOWN_MASK)
-#define TIMER2_ATTRIBUTE_FOR_TYPE(T)     (((T) == NotificationTimer) ? TIMER2_ATTRIBUTE_NOTIFICATION : 0)
-#define TIMER2_BUILD_ATTRIBUTES(T, R)    (TIMER2_ATTRIBUTE_FOR_TYPE(T) | ((R) ? TIMER2_ATTRIBUTE_HIGH_RESOLUTION : 0))
+// rev
+#define TIMER2_ATTRIBUTE_KNOWN_MASK (TIMER2_ATTRIBUTE_IR_TIMER | TIMER2_ATTRIBUTE_HIGH_RESOLUTION | TIMER2_ATTRIBUTE_NOTIFICATION)
+#define TIMER2_ATTRIBUTE_RESERVED_MASK (~TIMER2_ATTRIBUTE_KNOWN_MASK)
+
+#define TIMER2_ATTRIBUTE_FOR_TYPE(T) \
+    (((T) == NotificationTimer) ? TIMER2_ATTRIBUTE_NOTIFICATION : 0)
+
+// Build attributes for a *non-IR* timer
+//  - T: TIMER_TYPE (NotificationTimer/SynchronizationTimer)
+//  - R: bool for HighResolution
+//
+#define TIMER2_BUILD_ATTRIBUTES(T, R) \
+    (TIMER2_ATTRIBUTE_FOR_TYPE(T) | ((R) ? TIMER2_ATTRIBUTE_HIGH_RESOLUTION : 0))
+
+// Build attributes for an *IR* timer
+//  - R: bool for HighResolution
+//
+#define TIMER2_BUILD_IR_ATTRIBUTES(R) \
+    (TIMER2_ATTRIBUTE_IR_TIMER | ((R) ? TIMER2_ATTRIBUTE_HIGH_RESOLUTION : 0))
 
 // rev
 typedef union _TIMER2_ATTRIBUTES
@@ -733,10 +810,11 @@ typedef union _TIMER2_ATTRIBUTES
     ULONG Value;
     struct
     {
-        ULONG Reserved0 : 2;
-        ULONG HighResolution : 1;
-        ULONG Reserved1 : 28;
-        TIMER_TYPE NotificationType : 1;
+        ULONG Reserved0 : 1;      // bit 0 (reserved)
+        ULONG IrTimer : 1;        // bit 1 == TIMER2_ATTRIBUTE_IR_TIMER
+        ULONG HighResolution : 1; // bit 2 == TIMER2_ATTRIBUTE_HIGH_RESOLUTION
+        ULONG Reserved1 : 28;     // bits [3..30] (reserved)
+        TIMER_TYPE NotificationType : 1; // bit 31 == TIMER2_ATTRIBUTE_NOTIFICATION
     };
 } TIMER2_ATTRIBUTES;
 
@@ -744,7 +822,7 @@ typedef union _TIMER2_ATTRIBUTES
  * The NtCreateTimer2 routine creates a timer object.
  *
  * \param TimerHandle A pointer to a variable that receives the handle to the timer object.
- * \param Reserved Reserved parameter.
+ * \param TimerId For IR timers: A pointer to ULONG TIMERID (non-NULL). For non-IR timers: must be NULL.
  * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * \param Attributes Timer attributes (TIMER_TYPE).
  * \param DesiredAccess The access mask that specifies the requested access to the timer object.
@@ -755,7 +833,7 @@ NTSTATUS
 NTAPI
 NtCreateTimer2(
     _Out_ PHANDLE TimerHandle,
-    _In_opt_ PVOID Reserved,
+    _In_opt_ PULONG TimerId,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ ULONG Attributes, // TIMER2_ATTRIBUTES or TIMER2_BUILD_ATTRIBUTES
     _In_ ACCESS_MASK DesiredAccess

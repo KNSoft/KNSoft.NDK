@@ -50,8 +50,8 @@ typedef struct _RTL_PROCESS_BACKTRACE_INFORMATION
 // private
 typedef struct _RTL_PROCESS_BACKTRACES
 {
-    ULONG CommittedMemory;
-    ULONG ReservedMemory;
+    SIZE_T CommittedMemory;
+    SIZE_T ReservedMemory;
     ULONG NumberOfBackTraceLookups;
     ULONG NumberOfBackTraces;
     _Field_size_(NumberOfBackTraces) RTL_PROCESS_BACKTRACE_INFORMATION BackTraces[1];
@@ -322,7 +322,7 @@ RtlCreateProcessReflection(
  */
 NTSYSAPI
 NTSTATUS
-STDAPIVCALLTYPE
+NTAPI
 RtlSetProcessIsCritical(
     _In_ BOOLEAN NewValue,
     _Out_opt_ PBOOLEAN OldValue,
@@ -339,7 +339,7 @@ RtlSetProcessIsCritical(
  */
 NTSYSAPI
 NTSTATUS
-STDAPIVCALLTYPE
+NTAPI
 RtlSetThreadIsCritical(
     _In_ BOOLEAN NewValue,
     _Out_opt_ PBOOLEAN OldValue,

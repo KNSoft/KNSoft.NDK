@@ -178,7 +178,7 @@ typedef struct _SE_EXPORTS
 #define SE_MACHINE_ACCOUNT_PRIVILEGE (6L)           // Required to create a computer account.
 #define SE_TCB_PRIVILEGE (7L)                       // Required to act as part of the Trusted Computer Base.
 #define SE_SECURITY_PRIVILEGE (8L)                  // Required to perform a number of security-related functions, such as controlling and viewing audit messages. // Security operator.
-#define SE_TAKE_OWNERSHIP_PRIVILEGE (9L)            // Required to take ownership of an object without being granted discretionary access. 
+#define SE_TAKE_OWNERSHIP_PRIVILEGE (9L)            // Required to take ownership of an object without being granted discretionary access.
 #define SE_LOAD_DRIVER_PRIVILEGE (10L)              // Required to load or unload a device driver.
 #define SE_SYSTEM_PROFILE_PRIVILEGE (11L)           // Required to gather profiling information for the entire system.
 #define SE_SYSTEMTIME_PRIVILEGE (12L)               // Required to modify the system time.
@@ -195,7 +195,7 @@ typedef struct _SE_EXPORTS
 #define SE_CHANGE_NOTIFY_PRIVILEGE (23L)            // Required to receive notifications of changes to files or directories and skip all traversal access checks. It is enabled by default for all users.
 #define SE_REMOTE_SHUTDOWN_PRIVILEGE (24L)          // Required to shut down a system using a network request.
 #define SE_UNDOCK_PRIVILEGE (25L)                   // Required to undock a laptop.
-#define SE_SYNC_AGENT_PRIVILEGE (26L)               // Required for a domain controller to use the Lightweight Directory Access Protocol (LDAP) directory synchronization services. 
+#define SE_SYNC_AGENT_PRIVILEGE (26L)               // Required for a domain controller to use the Lightweight Directory Access Protocol (LDAP) directory synchronization services.
 #define SE_ENABLE_DELEGATION_PRIVILEGE (27L)        // Required to mark user and computer accounts as trusted for delegation.
 #define SE_MANAGE_VOLUME_PRIVILEGE (28L)            // Required to enable volume management privileges.
 #define SE_IMPERSONATE_PRIVILEGE (29L)              // Required to impersonate a client after authentication.
@@ -216,7 +216,7 @@ typedef enum _TOKEN_INFORMATION_CLASS
     TokenUser = 1,                        // q: TOKEN_USER, SE_TOKEN_USER
     TokenGroups,                          // q: TOKEN_GROUPS
     TokenPrivileges,                      // q: TOKEN_PRIVILEGES
-    TokenOwner,                           // qs: TOKEN_OWNER          
+    TokenOwner,                           // qs: TOKEN_OWNER
     TokenPrimaryGroup,                    // qs: TOKEN_PRIMARY_GROUP
     TokenDefaultDacl,                     // qs: TOKEN_DEFAULT_DACL
     TokenSource,                          // q: TOKEN_SOURCE
@@ -633,7 +633,7 @@ NtDuplicateToken(
  * The NtQueryInformationToken routine retrieves a specified type of information about an access token. The calling process must have appropriate access rights to obtain the information.
  *
  * @param TokenHandle A handle to an existing access token from which information is to be retrieved. If TokenInformationClass is set to TokenSource, the handle must have TOKEN_QUERY_SOURCE access.
- * For all other TokenInformationClass values, the handle must have TOKEN_QUERY access. 
+ * For all other TokenInformationClass values, the handle must have TOKEN_QUERY access.
  * @param TokenInformationClass A value from the TOKEN_INFORMATION_CLASS enumerated type identifying the type of information to be retrieved.
  * @param TokenInformation Pointer to a caller-allocated buffer that receives the requested information about the token.
  * @param TokenInformationLength Length, in bytes, of the caller-allocated TokenInformation buffer.
@@ -748,8 +748,8 @@ NtAdjustTokenClaimsAndDeviceGroups(
 // NtFilterToken Flags
 #define DISABLE_MAX_PRIVILEGE   0x1 // Disables all privileges in the new token except SE_CHANGE_NOTIFY_PRIVILEGE.
 #define SANDBOX_INERT           0x2 // Stores the TOKEN_SANDBOX_INERT flag in the token.
-#define LUA_TOKEN               0x4 
-#define WRITE_RESTRICTED        0x8 
+#define LUA_TOKEN               0x4
+#define WRITE_RESTRICTED        0x8
 
 /**
  * The NtFilterToken routine creates a new access token that is a restricted version of an existing access token.
@@ -976,7 +976,7 @@ NtAccessCheckByTypeResultList(
 
 /**
  * The NtGetCachedSigningLevel routine retrieves the cached signing level of a file.
- * 
+ *
  * \param File Handle to a file.
  * \param Flags Pointer to the flags set on the file.
  * \param SigningLevel Pointer to the signing level.
@@ -1000,7 +1000,7 @@ NtGetCachedSigningLevel(
 
 /**
  * The NtSetCachedSigningLevel routine sets the cached signing level of a file.
- * 
+ *
  * \param Flags Pointer to the flags set on the file.
  * \param InputSigningLevel Pointer to the signing level.
  * \param SourceFiles Pointer to a set of source file handles.

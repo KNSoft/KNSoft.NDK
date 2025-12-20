@@ -11,6 +11,8 @@ EXTERN_C_START
 
 typedef struct _TEB *PTEB;
 
+// rev
+// private
 typedef enum _SYSTEM_INFORMATION_CLASS
 {
     SystemBasicInformation,                                 // q: SYSTEM_BASIC_INFORMATION
@@ -174,23 +176,23 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemEnergyEstimationConfigInformation,                // q: SYSTEM_ENERGY_ESTIMATION_CONFIG_INFORMATION
     SystemHypervisorDetailInformation,                      // q: SYSTEM_HYPERVISOR_DETAIL_INFORMATION
     SystemProcessorCycleStatsInformation,                   // q: SYSTEM_PROCESSOR_CYCLE_STATS_INFORMATION (EX in: USHORT ProcessorGroup) // NtQuerySystemInformationEx // 160
-    SystemVmGenerationCountInformation,                     // s: 
+    SystemVmGenerationCountInformation,                     // s:
     SystemTrustedPlatformModuleInformation,                 // q: SYSTEM_TPM_INFORMATION
     SystemKernelDebuggerFlags,                              // q: SYSTEM_KERNEL_DEBUGGER_FLAGS
     SystemCodeIntegrityPolicyInformation,                   // qs: SYSTEM_CODEINTEGRITYPOLICY_INFORMATION
     SystemIsolatedUserModeInformation,                      // q: SYSTEM_ISOLATED_USER_MODE_INFORMATION
-    SystemHardwareSecurityTestInterfaceResultsInformation,  // q: 
+    SystemHardwareSecurityTestInterfaceResultsInformation,  // q:
     SystemSingleModuleInformation,                          // q: SYSTEM_SINGLE_MODULE_INFORMATION
     SystemAllowedCpuSetsInformation,                        // s: SYSTEM_WORKLOAD_ALLOWED_CPU_SET_INFORMATION
     SystemVsmProtectionInformation,                         // q: SYSTEM_VSM_PROTECTION_INFORMATION (previously SystemDmaProtectionInformation)
     SystemInterruptCpuSetsInformation,                      // q: SYSTEM_INTERRUPT_CPU_SET_INFORMATION // 170
     SystemSecureBootPolicyFullInformation,                  // q: SYSTEM_SECUREBOOT_POLICY_FULL_INFORMATION
-    SystemCodeIntegrityPolicyFullInformation,               // q: 
+    SystemCodeIntegrityPolicyFullInformation,               // q:
     SystemAffinitizedInterruptProcessorInformation,         // q: KAFFINITY_EX // (requires SeIncreaseBasePriorityPrivilege)
     SystemRootSiloInformation,                              // q: SYSTEM_ROOT_SILO_INFORMATION
     SystemCpuSetInformation,                                // q: SYSTEM_CPU_SET_INFORMATION // since THRESHOLD2
     SystemCpuSetTagInformation,                             // q: SYSTEM_CPU_SET_TAG_INFORMATION
-    SystemWin32WerStartCallout,                             // s: 
+    SystemWin32WerStartCallout,                             // s:
     SystemSecureKernelProfileInformation,                   // q: SYSTEM_SECURE_KERNEL_HYPERGUARD_PROFILE_INFORMATION
     SystemCodeIntegrityPlatformManifestInformation,         // q: SYSTEM_SECUREBOOT_PLATFORM_MANIFEST_INFORMATION // NtQuerySystemInformationEx // since REDSTONE
     SystemInterruptSteeringInformation,                     // q: in: SYSTEM_INTERRUPT_STEERING_INFORMATION_INPUT, out: SYSTEM_INTERRUPT_STEERING_INFORMATION_OUTPUT // NtQuerySystemInformationEx
@@ -211,7 +213,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemWriteConstraintInformation,                       // q: SYSTEM_WRITE_CONSTRAINT_INFORMATION
     SystemKernelVaShadowInformation,                        // q: SYSTEM_KERNEL_VA_SHADOW_INFORMATION
     SystemHypervisorSharedPageInformation,                  // q: SYSTEM_HYPERVISOR_SHARED_PAGE_INFORMATION // since REDSTONE4
-    SystemFirmwareBootPerformanceInformation,               // q: 
+    SystemFirmwareBootPerformanceInformation,               // q:
     SystemCodeIntegrityVerificationInformation,             // q: SYSTEM_CODEINTEGRITYVERIFICATION_INFORMATION
     SystemFirmwarePartitionInformation,                     // q: SYSTEM_FIRMWARE_PARTITION_INFORMATION // 200
     SystemSpeculationControlInformation,                    // q: SYSTEM_SPECULATION_CONTROL_INFORMATION // (CVE-2017-5715) REDSTONE3 and above.
@@ -229,7 +231,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemSecureSpeculationControlInformation,              // q: SECURE_SPECULATION_CONTROL_INFORMATION
     SystemSpacesBootInformation,                            // qs: // since 20H2
     SystemFwRamdiskInformation,                             // q: SYSTEM_FIRMWARE_RAMDISK_INFORMATION
-    SystemWheaIpmiHardwareInformation,                      // q: 
+    SystemWheaIpmiHardwareInformation,                      // q:
     SystemDifSetRuleClassInformation,                       // s: SYSTEM_DIF_VOLATILE_INFORMATION (requires SeDebugPrivilege)
     SystemDifClearRuleClassInformation,                     // s: NULL (requires SeDebugPrivilege)
     SystemDifApplyPluginVerificationOnDriver,               // q: SYSTEM_DIF_PLUGIN_DRIVER_INFORMATION (requires SeDebugPrivilege)
@@ -262,11 +264,13 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemBreakOnContextUnwindFailureInformation,           // q: ULONG (requires SeDebugPrivilege)
     SystemOslRamdiskInformation,                            // q: SYSTEM_OSL_RAMDISK_INFORMATION
     SystemCodeIntegrityPolicyManagementInformation,         // q: SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT // since 25H2
-    SystemMemoryNumaCacheInformation,                       // q: 
+    SystemMemoryNumaCacheInformation,                       // q:
     SystemProcessorFeaturesBitMapInformation,               // q: // 250
     SystemRefTraceInformationEx,                            // q: SYSTEM_REF_TRACE_INFORMATION_EX
     SystemBasicProcessInformation,                          // q: SYSTEM_BASICPROCESS_INFORMATION
     SystemHandleCountInformation,                           // q: SYSTEM_HANDLECOUNT_INFORMATION
+    SystemRuntimeAttestationReport,                         // q: // since 26H1
+    SystemPoolTagInformation2,                              // q: SYSTEM_POOLTAG_INFORMATION2
     MaxSystemInfoClass
 } SYSTEM_INFORMATION_CLASS;
 
@@ -289,29 +293,44 @@ typedef struct _SYSTEM_BASIC_INFORMATION
 } SYSTEM_BASIC_INFORMATION, *PSYSTEM_BASIC_INFORMATION;
 
 // SYSTEM_PROCESSOR_INFORMATION // ProcessorFeatureBits (see also SYSTEM_PROCESSOR_FEATURES_INFORMATION)
-#define KF_V86_VIS      0x00000001 // Virtual 8086 mode.
-#define KF_RDTSC        0x00000002 // RDTSC (Read Time-Stamp Counter) instruction.
-#define KF_CR4          0x00000004 // CR4 (Control Register 4) register.
-#define KF_CMOV         0x00000008 // CMOV (Conditional Move) instruction.
-#define KF_GLOBAL_PAGE  0x00000010 // Global memory pages.
-#define KF_LARGE_PAGE   0x00000020 // Large memory pages.
-#define KF_MTRR         0x00000040 // MTRR (Memory Type Range Registers).
-#define KF_CMPXCHG8B    0x00000080 // CMPXCHG8B (CompareExchange) instruction.
-#define KF_MMX          0x00000100 // MMX (MultiMedia eXtensions).
-#define KF_WORKING_PTE  0x00000200 // PTE (Page Table Entries).
-#define KF_PAT          0x00000400 // PAT (Page Attribute Table).
-#define KF_FXSR         0x00000800 // FXSR (Floating Point Extended Save and Restore).
-#define KF_FAST_SYSCALL 0x00001000 // Fast system calls.
-#define KF_XMMI         0x00002000 // XMMI (Streaming SIMD Extensions - 32-bit).
-#define KF_3DNOW        0x00004000 // AMD 3DNow! technology.
-#define KF_AMDK6MTRR    0x00008000 // AMD K6 MTRR.
-#define KF_XMMI64       0x00010000 // XMMI (Streaming SIMD Extensions - 64-bit).
-#define KF_DTS          0x00020000 // DTS (Digital Thermal Sensor).
-#define KF_NOEXECUTE    0x20000000 // No-Execute (NX) bit.
-#define KF_GLOBAL_32BIT_EXECUTE 0x40000000
-#define KF_GLOBAL_32BIT_NOEXECUTE 0x80000000
-#define KF_GLOBAL_32BIT_NOEXECUTE 0x80000000
+#define KF32_V86_VIS      0x00000001 // Virtual 8086 mode.
+#define KF32_RDTSC        0x00000002 // RDTSC (Read Time-Stamp Counter) instruction.
+#define KF32_CR4          0x00000004 // CR4 (Control Register 4) register.
+#define KF32_CMOV         0x00000008 // CMOV (Conditional Move) instruction.
+#define KF32_GLOBAL_PAGE  0x00000010 // Global memory pages.
+#define KF32_LARGE_PAGE   0x00000020 // Large memory pages.
+#define KF32_MTRR         0x00000040 // MTRR (Memory Type Range Registers).
+#define KF32_CMPXCHG8B    0x00000080 // CMPXCHG8B (CompareExchange) instruction.
+#define KF32_MMX          0x00000100 // MMX (MultiMedia eXtensions).
+#define KF32_WORKING_PTE  0x00000200 // PTE (Page Table Entries).
+#define KF32_PAT          0x00000400 // PAT (Page Attribute Table).
+#define KF32_FXSR         0x00000800 // FXSR (Floating Point Extended Save and Restore).
+#define KF32_FAST_SYSCALL 0x00001000 // Fast system calls.
+#define KF32_XMMI         0x00002000 // XMMI (Streaming SIMD Extensions - 32-bit).
+#define KF32_3DNOW        0x00004000 // AMD 3DNow! technology.
+#define KF32_AMDK6MTRR    0x00008000 // AMD K6 MTRR.
+#define KF32_XMMI64       0x00010000 // XMMI (Streaming SIMD Extensions - 64-bit).
+#define KF32_DTS          0x00020000 // DTS (Digital Thermal Sensor).
+#define KF32_TM2          0x00040000 // TM2 (Thermal Monitor 2).
+#define KF32_EST          0x00080000 // EST (Enhanced SpeedStep Technology).
+#define KF32_IA64         0x00100000 // Intel Itanium architecture.
+#define KF32_3DNOW2       0x00200000 // AMD 3DNow! technology, version 2.
+#define KF32_VMX          0x00400000 // VMX (Virtual Machine Extensions).
+#define KF32_SMX          0x00800000 // SMX (Safer Mode Extensions).
+#define KF32_EST2         0x01000000 // EST (Enhanced SpeedStep Technology), version 2.
+#define KF32_SSSE3        0x02000000 // SSSE3 (Supplemental Streaming SIMD Extensions 3).
+#define KF32_CX16         0x04000000 // CMPXCHG16B instruction.
+#define KF32_ETPRD        0x08000000 // ETPRD (Enhanced Time-Stamp Counter Priority Rotation Disable).
+#define KF32_PDCM         0x10000000 // PDCM (Performance and Debug Capability MSR).
+#define KF32_NOEXECUTE    0x20000000 // No-Execute (NX) bit.
+#define KF32_GLOBAL_32BIT_EXECUTE 0x40000000
+#define KF32_GLOBAL_32BIT_NOEXECUTE 0x80000000
 
+/**
+ * The SYSTEM_PROCESSOR_INFORMATION structure contains information about the current processor.
+ *
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/ns-sysinfoapi-system_info
+ */
 typedef struct _SYSTEM_PROCESSOR_INFORMATION
 {
     USHORT ProcessorArchitecture;
@@ -640,6 +659,7 @@ typedef struct _SYSTEM_CALL_TIME_INFORMATION
     LARGE_INTEGER TimeOfCalls[1];
 } SYSTEM_CALL_TIME_INFORMATION, *PSYSTEM_CALL_TIME_INFORMATION;
 
+// Note: This information class is deprecated since values are limited to 65535. Use SystemExtendedHandleInformation instead.
 typedef struct _SYSTEM_HANDLE_TABLE_ENTRY_INFO
 {
     USHORT UniqueProcessId;
@@ -686,7 +706,7 @@ typedef struct _SYSTEM_OBJECT_INFORMATION
     ULONG PagedPoolCharge;
     ULONG NonPagedPoolCharge;
     HANDLE ExclusiveProcessId;
-    PVOID SecurityDescriptor;
+    PSECURITY_DESCRIPTOR SecurityDescriptor;
     UNICODE_STRING NameInfo;
 } SYSTEM_OBJECT_INFORMATION, *PSYSTEM_OBJECT_INFORMATION;
 
@@ -2102,7 +2122,7 @@ typedef struct _SM_SYSTEM_STORE_TRIM_REQUEST
 {
     ULONG Version : 8;  // SYSTEM_STORE_TRIM_INFORMATION_VERSION
     ULONG Spare : 24;
-    SIZE_T PagesToTrim;
+    SIZE_T PagesToTrim; // TrimFlags // must be non-zero
     HANDLE PartitionHandle; // since 24H2
 } SM_SYSTEM_STORE_TRIM_REQUEST, *PSM_SYSTEM_STORE_TRIM_REQUEST;
 
@@ -2802,11 +2822,37 @@ typedef struct _OFFLINE_CRASHDUMP_CONFIGURATION_TABLE_V1
 } OFFLINE_CRASHDUMP_CONFIGURATION_TABLE_V1, *POFFLINE_CRASHDUMP_CONFIGURATION_TABLE_V1;
 
 // SYSTEM_PROCESSOR_FEATURES_INFORMATION // ProcessorFeatureBits
-#define KF_BRANCH 0x0000000000020000
-#define KF_XSTATE 0x0000000000800000
-#define KF_RDTSCP 0x0000000400000000
-#define KF_CET_SS 0x0000400000000000
-#define KF_XFD 0x0080000000000000
+#define KF64_SMEP              0x0000000000000001ULL // Supervisor Mode Execution Protection
+#define KF64_RDTSC             0x0000000000000002ULL // Read Time-Stamp Counter
+#define KF64_CR4               0x0000000000000004ULL // CR4 Register Features
+#define KF64_CMOV              0x0000000000000008ULL // Conditional Move Instructions
+#define KF64_GLOBAL_PAGE       0x0000000000000010ULL // Global Pages Support
+#define KF64_LARGE_PAGE        0x0000000000000020ULL // Large Page Support
+#define KF64_MTRR              0x0000000000000040ULL // Memory Type Range Registers
+#define KF64_CMPXCHG8B         0x0000000000000080ULL // CMPXCHG8B Instruction
+#define KF64_MMX               0x0000000000000100ULL // MMX Instructions
+#define KF64_DTS               0x0000000000000200ULL // Debug Store
+#define KF64_PAT               0x0000000000000400ULL // Page Attribute Table
+#define KF64_FXSR              0x0000000000000800ULL // FXSAVE and FXRSTOR Instructions
+#define KF64_FAST_SYSCALL      0x0000000000001000ULL // Fast System Call
+#define KF64_XMMI              0x0000000000002000ULL // Streaming SIMD Extensions
+#define KF64_3DNOW             0x0000000000004000ULL // 3DNow! Instructions
+#define KF64_AMDK6MTRR         0x0000000000008000ULL // AMD K6 Memory Type Range Registers
+#define KF64_XMMI64            0x0000000000010000ULL // Streaming SIMD Extensions 2
+#define KF64_BRANCH            0x0000000000020000ULL // Branch Prediction
+#define KF64_XSTATE            0x0000000000800000ULL // Extended States
+#define KF64_RDRAND            0x0000000100000000ULL // RDRAND Instruction
+#define KF64_SMAP              0x0000000200000000ULL // Supervisor Mode Access Prevention
+#define KF64_RDTSCP            0x0000000400000000ULL // RDTSCP Instruction
+#define KF64_HUGEPAGE          0x0000002000000000ULL // Huge Page Support
+#define KF64_XSAVES            0x0000004000000000ULL // XSAVES and XRSTORS Instructions
+#define KF64_FPU_LEAKAGE       0x0000020000000000ULL // FPU Data Leakage Mitigations
+#define KF64_CAT               0x0000100000000000ULL // Cache Allocation Technology
+#define KF64_CET_SS            0x0000400000000000ULL // Control-flow Enforcement Technology - Shadow Stack
+#define KF64_SSSE3             0x0000800000000000ULL // Supplemental Streaming SIMD Extensions 3
+#define KF64_SSE4_1            0x0001000000000000ULL // Streaming SIMD Extensions 4.1
+#define KF64_SSE4_2            0x0002000000000000ULL // Streaming SIMD Extensions 4.2
+#define KF64_XFD               0x0080000000000000ULL // eXtended FPU Data
 
 // private
 typedef struct _SYSTEM_PROCESSOR_FEATURES_INFORMATION
@@ -2815,10 +2861,57 @@ typedef struct _SYSTEM_PROCESSOR_FEATURES_INFORMATION
     ULONGLONG Reserved[3];
 } SYSTEM_PROCESSOR_FEATURES_INFORMATION, *PSYSTEM_PROCESSOR_FEATURES_INFORMATION;
 
+// EDID v1.4 detailed timing descriptor (18 bytes)
+typedef struct _SYSTEM_EDID_DETAILED_TIMING_DESCRIPTOR
+{
+    USHORT PixelClock;           // Pixel clock in 10 kHz units
+    UCHAR HorizontalActiveLo;    // Horizontal active pixels (low 8 bits)
+    UCHAR HorizontalBlankLo;     // Horizontal blanking pixels (low 8 bits)
+    UCHAR HorizontalActiveBlankHi; // High bits for horizontal active/blanking
+    UCHAR VerticalActiveLo;      // Vertical active lines (low 8 bits)
+    UCHAR VerticalBlankLo;       // Vertical blanking lines (low 8 bits)
+    UCHAR VerticalActiveBlankHi; // High bits for vertical active/blanking
+    UCHAR HorizontalSyncOffsetLo;// Horizontal sync offset (low 8 bits)
+    UCHAR HorizontalSyncPulseWidthLo; // Horizontal sync pulse width (low 8 bits)
+    UCHAR VerticalSyncOffsetPulseWidthLo; // Vertical sync offset/pulse width (low 4 bits each)
+    UCHAR SyncOffsetPulseWidthHi; // High bits for sync offset/pulse width
+    UCHAR HorizontalImageSizeLo; // Horizontal image size in mm (low 8 bits)
+    UCHAR VerticalImageSizeLo;   // Vertical image size in mm (low 8 bits)
+    UCHAR ImageSizeHi;           // High bits for image size
+    UCHAR HorizontalBorder;      // Horizontal border in pixels
+    UCHAR VerticalBorder;        // Vertical border in lines
+    UCHAR Flags;                 // Flags (interlaced, stereo, sync, etc.)
+} SYSTEM_EDID_DETAILED_TIMING_DESCRIPTOR, *PSYSTEM_EDID_DETAILED_TIMING_DESCRIPTOR;
+
 // EDID v1.4 standard data format
 typedef struct _SYSTEM_EDID_INFORMATION
 {
-    UCHAR Edid[128];
+    union
+    {
+        UCHAR Edid[128];
+        struct
+        {
+            UCHAR Header[8];                 // 00h: EDID header (00 FF FF FF FF FF FF 00)
+            UCHAR ManufacturerId[2];         // 08h: Manufacturer ID (big endian)
+            UCHAR ProductCode[2];            // 0Ah: Product code (little endian)
+            UCHAR SerialNumber[4];           // 0Ch: Serial number
+            UCHAR WeekOfManufacture;         // 10h: Week of manufacture
+            UCHAR YearOfManufacture;         // 11h: Year of manufacture (offset from 1990)
+            UCHAR EdidVersion;               // 12h: EDID version (should be 1)
+            UCHAR EdidRevision;              // 13h: EDID revision (should be 4)
+            UCHAR VideoInputDefinition;      // 14h: Video input parameters
+            UCHAR MaxHorizontalImageSize;    // 15h: Max horizontal image size (cm)
+            UCHAR MaxVerticalImageSize;      // 16h: Max vertical image size (cm)
+            UCHAR DisplayGamma;              // 17h: Display gamma (gamma*100 - 100)
+            UCHAR FeatureSupport;            // 18h: DPMS features, color encoding, etc.
+            UCHAR Chromaticity[10];          // 19h: Chromaticity coordinates
+            UCHAR EstablishedTimings[3];     // 23h: Established timings
+            UCHAR StandardTimings[16];       // 26h: Standard timings (8x2 bytes)
+            SYSTEM_EDID_DETAILED_TIMING_DESCRIPTOR DetailedTiming[4]; // 36h: 4 detailed timing descriptors (18 bytes each)
+            UCHAR ExtensionFlag;             // 7Eh: Number of (optional) 128-byte extension blocks
+            UCHAR Checksum;                  // 7Fh: Checksum (sum of all 128 bytes = 0)
+        };
+    };
 } SYSTEM_EDID_INFORMATION, *PSYSTEM_EDID_INFORMATION;
 
 // private
@@ -2964,7 +3057,8 @@ typedef struct _SYSTEM_ISOLATED_USER_MODE_INFORMATION
     BOOLEAN HardwareEnforcedHvpt : 1;
     BOOLEAN HardwareHvptAvailable : 1;
     BOOLEAN SpareFlags2 : 1;
-    BOOLEAN Spare0[6];
+    BOOLEAN EncryptionKeyTpmBound : 1;
+    BOOLEAN Spare0[5];
     ULONGLONG Spare1;
 } SYSTEM_ISOLATED_USER_MODE_INFORMATION, *PSYSTEM_ISOLATED_USER_MODE_INFORMATION;
 
@@ -3775,6 +3869,29 @@ typedef struct _SYSTEM_HANDLECOUNT_INFORMATION
     ULONG HandleCount;
 } SYSTEM_HANDLECOUNT_INFORMATION, *PSYSTEM_HANDLECOUNT_INFORMATION;
 
+// private
+typedef struct _SYSTEM_POOLTAG2
+{
+    union
+    {
+        UCHAR Tag[4];
+        ULONG TagUlong;
+    } DUMMYUNIONNAME;
+    SIZE_T PagedAllocs;
+    SIZE_T PagedFrees;
+    SIZE_T PagedUsed;
+    SIZE_T NonPagedAllocs;
+    SIZE_T NonPagedFrees;
+    SIZE_T NonPagedUsed;
+} SYSTEM_POOLTAG2, *PSYSTEM_POOLTAG2;
+
+// private
+typedef struct _SYSTEM_POOLTAG_INFORMATION2
+{
+    ULONG Count;
+    _Field_size_(Count) SYSTEM_POOLTAG2 TagInfo[1];
+} SYSTEM_POOLTAG_INFORMATION2, *PSYSTEM_POOLTAG_INFORMATION2;
+
 #pragma region Prefetch
 
 typedef enum _PF_BOOT_PHASE_ID
@@ -3850,9 +3967,9 @@ typedef struct _PREFETCHER_INFORMATION
 } PREFETCHER_INFORMATION, *PPREFETCHER_INFORMATION;
 
 // rev
-typedef struct _PF_SYSTEM_SUPERFETCH_RETRIEVE_TRACE 
+typedef struct _PF_SYSTEM_SUPERFETCH_RETRIEVE_TRACE
 {
-    union 
+    union
     {
         struct
         {
@@ -3927,13 +4044,13 @@ typedef enum _PF_EVENT_TYPE
 
 #define PF_LOG_EVENT_DATA_VERSION 1
 
-typedef struct _PF_LOG_EVENT_DATA 
+typedef struct _PF_LOG_EVENT_DATA
 {
     ULONG Version; // PF_LOG_EVENT_DATA_VERSION
-    union 
+    union
     {
         ULONG Packed; // [31:7]=DataSize, [6:5]=Flags, [4:0]=EventType (PF_EVENT_TYPE)
-        struct 
+        struct
         {
             ULONG DataSize : 25; // in bytes
             ULONG Flags    : 2;
@@ -3944,7 +4061,6 @@ typedef struct _PF_LOG_EVENT_DATA
     HANDLE PartitionHandle;
 } PF_LOG_EVENT_DATA , *PPF_LOG_EVENT_DATA ;
 
-// PFN operations (classes 0x06/0x07/0x16/0x1D/0x1D/0x29) — header 192 bytes, entries 24B each
 typedef struct _PFN_TRIPLET
 {
     ULONGLONG MaskOrKey;        // Compared against identity with 0x1FFFFFFFFFFFE00 mask
@@ -4055,7 +4171,7 @@ typedef struct _PF_SCENARIO_PHASE_INFO
 } PF_SCENARIO_PHASE_INFO, *PPF_SCENARIO_PHASE_INFO;
 
 // rev
-typedef struct _PF_WORKER_PRIORITY_CONTROL 
+typedef struct _PF_WORKER_PRIORITY_CONTROL
 {
     ULONG Version;
     KPRIORITY Priority; // 0..31 (STATUS_INVALID_PARAMETER if >31)
@@ -4199,16 +4315,16 @@ typedef struct _PF_PHYSICAL_MEMORY_RANGE_INFO_V2
 } PF_PHYSICAL_MEMORY_RANGE_INFO_V2, *PPF_PHYSICAL_MEMORY_RANGE_INFO_V2;
 
 // rev
-typedef struct _PF_START_TRACE_CONTROL 
+typedef struct _PF_START_TRACE_CONTROL
 {
-    struct 
+    struct
     {
         ULONG Type;
         ULONG Mode;
         ULONG Flags;
         ULONG Restart;
     };
-    struct 
+    struct
     {
         HANDLE PartitionHandle; // in
         HANDLE TraceHandleOut;  // out when Restart == 0
@@ -4356,7 +4472,7 @@ typedef enum _SUPERFETCH_INFORMATION_CLASS
     SuperfetchVirtualQuery,                    // q: PF_VIRTUAL_QUERY
     SuperfetchCombineStatsQuery,               // q: PF_PAGECOMBINE_AGGREGATE_STAT
     SuperfetchSetMinWsAgeRate,                 // s: PF_MIN_WS_AGE_RATE_CONTROL
-    SuperfetchDeprioritizeOldPagesInWs,        // s: PF_DEPRIORITIZE_OLD_PAGES 
+    SuperfetchDeprioritizeOldPagesInWs,        // s: PF_DEPRIORITIZE_OLD_PAGES
     SuperfetchFileExtentsQuery,                // q: PF_FILE_EXTENTS_INFO
     SuperfetchGpuUtilizationQuery,             // q: PF_GPU_UTILIZATION_INFO
     SuperfetchPfnSet,                          // s: PF_PFN_PRIO_REQUEST // since WIN11

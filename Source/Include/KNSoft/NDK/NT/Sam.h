@@ -83,6 +83,14 @@ SamRidToSid(
     _Outptr_ PSID *Sid
 );
 
+NTSYSAPI
+NTSTATUS
+NTAPI
+SamQueryLapsManagedAccount(
+    _In_ SAM_HANDLE ObjectHandle,
+    _Outptr_ PSID *AccountSid
+    );
+
 // Server
 
 #define SAM_SERVER_CONNECT 0x0001
@@ -976,10 +984,15 @@ typedef struct _LOGON_HOURS
     PUCHAR LogonHours;
 } LOGON_HOURS, *PLOGON_HOURS;
 
+/**
+ * The SR_SECURITY_DESCRIPTOR structure contains information about the security privileges of the user.
+ *
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/subauth/ns-subauth-sr_security_descriptor
+ */
 typedef struct _SR_SECURITY_DESCRIPTOR
 {
-    ULONG Length;
-    PUCHAR SecurityDescriptor;
+    ULONG Length;                   // Indicates the size in bytes of the structure.
+    PUCHAR SecurityDescriptor;      // Indicates the user's security privileges.
 } SR_SECURITY_DESCRIPTOR, *PSR_SECURITY_DESCRIPTOR;
 
 // SamQueryInformationUser/SamSetInformationUser types
@@ -1515,6 +1528,20 @@ SamEnumerateUsersInDomain(
     _In_ ULONG PreferedMaximumLength,
     _Out_ PULONG CountReturned
 );
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+SamEnumerateUsersInDomain2(
+    _In_ SAM_HANDLE DomainHandle,
+    _Inout_ PSAM_ENUMERATE_HANDLE EnumerationContext,
+    _In_ ULONG UserAccountControl,
+    _In_ ULONG Flags,
+    _Outptr_ PVOID *Buffer, // PSAM_RID_ENUMERATION *
+    _In_ ULONG PreferedMaximumLength,
+    _Out_ PULONG CountReturned
+    );
 
 NTSYSAPI
 NTSTATUS

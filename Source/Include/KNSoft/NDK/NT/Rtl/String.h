@@ -336,7 +336,7 @@ RtlDowncaseUnicodeChar(
 
 /**
  * The RtlCompareUnicodeString routine compares two Unicode strings.
- * 
+ *
  * \param[in] String1 Pointer to the first string.
  * \param[in] String2 Pointer to the second string.
  * \param[in] CaseInSensitive If TRUE, case should be ignored when doing the comparison.
@@ -355,7 +355,7 @@ RtlCompareUnicodeString(
 
 /**
  * The RtlCompareUnicodeStrings routine compares two Unicode strings.
- * 
+ *
  * \param[in] String1 Pointer to the first string.
  * \param[in] String1Length The length, in bytes, of the first string.
  * \param[in] String2 Pointer to the second string.

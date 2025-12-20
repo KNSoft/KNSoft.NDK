@@ -460,8 +460,8 @@ typedef struct _USER_PROCESS_CAP_INTERNAL
 
 // rev
 NTSYSCALLAPI
-NTSTATUS 
-NTAPI 
+NTSTATUS
+NTAPI
 NtUserSetProcessWin32Capabilities(
     _In_reads_(Count) const USER_PROCESS_CAP_ENTRY* Capabilities,
     _In_ ULONG Count

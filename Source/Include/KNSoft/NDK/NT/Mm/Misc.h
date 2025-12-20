@@ -127,14 +127,16 @@ typedef struct _MMPFN_MEMSNAP_INFORMATION
 /**
  * The NtAllocateVirtualMemory routine reserves, commits, or both, a region of pages within the user-mode virtual address space of a specified process.
  *
- * @param ProcessHandle A handle for the process for which the mapping should be done.
- * @param BaseAddress A pointer to a variable that will receive the base address of the allocated region of pages. If the initial value is not zero, the region is allocated at the specified virtual address.
- * @param ZeroBits The number of high-order address bits that must be zero in the base address of the section view. This value must be less than 21 and the initial value of BaseAddress must be zero.
- * @param RegionSize A pointer to a variable that will receive the actual size, in bytes, of the allocated region of pages.
- * @param AllocationType A bitmask containing flags that specify the type of allocation to be performed.
- * @param PageProtection A bitmask containing page protection flags that specify the protection desired for the committed region of pages.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwallocatevirtualmemory
+ * \param ProcessHandle A handle for the process for which the mapping should be done.
+ * \param BaseAddress A pointer to a variable that will receive the base address of the allocated region of pages.
+ * If the initial value is not zero, the region is allocated at the specified virtual address.
+ * \param ZeroBits The number of high-order address bits that must be zero in the base address of the section view.
+ * This value must be less than 21 and the initial value of BaseAddress must be zero.
+ * \param RegionSize A pointer to a variable that will receive the actual size, in bytes, of the allocated region of pages.
+ * \param AllocationType A bitmask containing flags that specify the type of allocation to be performed.
+ * \param PageProtection A bitmask containing page protection flags that specify the protection desired for the committed region of pages.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwallocatevirtualmemory
  */
 _Must_inspect_result_
 _When_(return == 0, __drv_allocatesMem(mem))
@@ -284,7 +286,7 @@ NtProtectVirtualMemory(
  * Flushes the instruction cache for a specified process.
  *
  * @param ProcessHandle A handle to the process whose instruction cache is to be flushed.
- * @param BaseAddress A pointer to the base address of the region of memory to be flushed.
+ * \param BaseAddress A pointer to the base address of the memory region to be flushed.
  * @param RegionSize A pointer to a variable that specifies the size of the region to be flushed.
  * @param IoStatus A pointer to an IO_STATUS_BLOCK structure that receives the status of the flush operation.
  * @return NTSTATUS Successful or errant status.
@@ -306,7 +308,8 @@ NtFlushVirtualMemory(
 #define MAP_SYSTEM 2 // Physical Memory // (requires SeLockMemoryPrivilege)
 
 /**
- * Locks the specified region of the process's virtual address space into physical memory, ensuring that subsequent access to the region will not incur a page fault.
+ * The NtLockVirtualMemory routine locks the specified region of the process's virtual address space into physical memory,
+ * ensuring that subsequent access to the region will not incur a page fault.
  *
  * @param ProcessHandle A handle to the process whose virtual address space is to be locked.
  * @param BaseAddress A pointer to the base address of the region of pages to be locked.
@@ -325,7 +328,8 @@ NtLockVirtualMemory(
     _In_ ULONG MapType);
 
 /**
- * Unlocks a specified range of pages in the virtual address space of a process, enabling the system to swap the pages out to the paging file if necessary.
+ * The NtUnlockVirtualMemory routine unlocks a specified range of pages in the virtual address space of a process,
+ * enabling the system to swap the pages out to the paging file if necessary.
  *
  * @param ProcessHandle A handle to the process whose virtual address space is to be unlocked.
  * @param BaseAddress A pointer to the base address of the region of pages to be unlocked.
@@ -364,15 +368,17 @@ typedef enum _SECTION_INHERIT
 /**
  * The NtCreateSection routine creates a section object.
  *
- * @param SectionHandle Pointer to a variable that receives a handle to the section object.
- * @param DesiredAccess The access mask that specifies the requested access to the section object.
- * @param ObjectAttributes Pointer to the base virtual address of the view to unmap. This value can be any virtual address within the view.
- * @param MaximumSize The maximum size, in bytes, of the section. The actual size when backed by the paging file, or the maximum the file can be extended or mapped when backed by an ordinary file.
- * @param SectionPageProtection Specifies the protection to place on each page in the section.
- * @param AllocationAttributes A bitmask of SEC_XXX flags that determines the allocation attributes of the section.
- * @param FileHandle Optionally specifies a handle for an open file object. If the value of FileHandle is NULL, the section is backed by the paging file. Otherwise, the section is backed by the specified file.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatesection
+ * \param SectionHandle Pointer to a variable that receives a handle to the section object.
+ * \param DesiredAccess The access mask that specifies the requested access to the section object.
+ * \param ObjectAttributes Pointer to the base virtual address of the view to unmap. This value can be any virtual address within the view.
+ * \param MaximumSize The maximum size, in bytes, of the section. The actual size when backed by the paging file,
+ * or the maximum the file can be extended or mapped when backed by an ordinary file.
+ * \param SectionPageProtection Specifies the protection to place on each page in the section.
+ * \param AllocationAttributes A bitmask of SEC_XXX flags that determines the allocation attributes of the section.
+ * \param FileHandle Optionally specifies a handle for an open file object. If the value of FileHandle is NULL,
+ * the section is backed by the paging file. Otherwise, the section is backed by the specified file.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatesection
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -390,17 +396,19 @@ NtCreateSection(
 /**
  * The NtCreateSectionEx routine creates a section object.
  *
- * @param SectionHandle Pointer to a variable that receives a handle to the section object.
- * @param DesiredAccess The access mask that specifies the requested access to the section object.
- * @param ObjectAttributes Pointer to the base virtual address of the view to unmap. This value can be any virtual address within the view.
- * @param MaximumSize The maximum size, in bytes, of the section. The actual size when backed by the paging file, or the maximum the file can be extended or mapped when backed by an ordinary file.
- * @param SectionPageProtection Specifies the protection to place on each page in the section.
- * @param AllocationAttributes A bitmask of SEC_XXX flags that determines the allocation attributes of the section.
- * @param FileHandle Optionally specifies a handle for an open file object. If the value of FileHandle is NULL, the section is backed by the paging file. Otherwise, the section is backed by the specified file.
- * @param ExtendedParameters An optional pointer to one or more extended parameters of type MEM_EXTENDED_PARAMETER.
- * @param ExtendedParameterCount Specifies the number of elements in the ExtendedParameters array.
- * @return NTSTATUS Successful or errant status.
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatesection
+ * \param SectionHandle Pointer to a variable that receives a handle to the section object.
+ * \param DesiredAccess The access mask that specifies the requested access to the section object.
+ * \param ObjectAttributes Pointer to the base virtual address of the view to unmap. This value can be any virtual address within the view.
+ * \param MaximumSize The maximum size, in bytes, of the section. The actual size when backed by the paging file,
+ * or the maximum the file can be extended or mapped when backed by an ordinary file.
+ * \param SectionPageProtection Specifies the protection to place on each page in the section.
+ * \param AllocationAttributes A bitmask of SEC_XXX flags that determines the allocation attributes of the section.
+ * \param FileHandle Optionally specifies a handle for an open file object. If the value of FileHandle is NULL,
+ * the section is backed by the paging file. Otherwise, the section is backed by the specified file.
+ * \param ExtendedParameters An optional pointer to one or more extended parameters of type MEM_EXTENDED_PARAMETER.
+ * \param ExtendedParameterCount Specifies the number of elements in the ExtendedParameters array.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatesection
  */
 NTSYSCALLAPI
 NTSTATUS
@@ -442,10 +450,10 @@ NtOpenSection(
  * @param BaseAddress A pointer to a variable that receives the base address of the view. If the value is not NULL, the view is allocated starting at the specified virtual address rounded down to the next 64-kilobyte address boundary.
  * @param ZeroBits The number of high-order address bits that must be zero in the base address of the section view. The value of this parameter must be less than 21 and is used only if BaseAddress is NULL.
  * @param CommitSize Specifies the size, in bytes, of the initially committed region of the view. CommitSize is meaningful only for page-file backed sections and is rounded up to the nearest multiple of PAGE_SIZE.
- * @param SectionOffset A pointer to a variable that receives the offset, in bytes, from the beginning of the section to the view. 
- * @param ViewSize A pointer to a variable that specifies the size of the view in bytes. If the initial value is zero, NtMapViewOfSection maps a view of the section that starts at SectionOffset and continues to the end of the section. 
- * @param InheritDisposition A value that specifies how the view is to be shared with child processes. 
- * @param AllocationType Specifies the type of allocation to be performed for the specified region of pages. The valid flags are MEM_RESERVE, MEM_TOP_DOWN, MEM_LARGE_PAGES, MEM_DIFFERENT_IMAGE_BASE_OK and MEM_REPLACE_PLACEHOLDER. Although MEM_COMMIT is not allowed, it is implied unless MEM_RESERVE is specified. 
+ * @param SectionOffset A pointer to a variable that receives the offset, in bytes, from the beginning of the section to the view.
+ * @param ViewSize A pointer to a variable that specifies the size of the view in bytes. If the initial value is zero, NtMapViewOfSection maps a view of the section that starts at SectionOffset and continues to the end of the section.
+ * @param InheritDisposition A value that specifies how the view is to be shared with child processes.
+ * @param AllocationType Specifies the type of allocation to be performed for the specified region of pages. The valid flags are MEM_RESERVE, MEM_TOP_DOWN, MEM_LARGE_PAGES, MEM_DIFFERENT_IMAGE_BASE_OK and MEM_REPLACE_PLACEHOLDER. Although MEM_COMMIT is not allowed, it is implied unless MEM_RESERVE is specified.
  * @param PageProtection Specifies the page protection to be applied to the mapped view. Not used with SEC_IMAGE, must be set to PAGE_READONLY for SEC_IMAGE_NO_EXECUTE. For non-image sections, the value must be compatible with the section's page protection from NtCreateSection.
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwmapviewofsection
@@ -827,7 +835,7 @@ NtCreateEnclave(
  * @param PageInformation A pointer to information that describes the pages that you want to add to the enclave.
  * @param PageInformationLength The length of the structure that the PageInformation parameter points to, in bytes.
  * @param NumberOfBytesWritten A pointer to a variable that receives the number of bytes that NtLoadEnclaveData copied into the enclave.
- * @param EnclaveError An optional pointer to a variable that receives an enclave error code that is architecture-specific. 
+ * @param EnclaveError An optional pointer to a variable that receives an enclave error code that is architecture-specific.
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-loadenclavedata
  */

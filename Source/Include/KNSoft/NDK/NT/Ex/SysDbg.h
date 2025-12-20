@@ -194,6 +194,17 @@ typedef struct _SYSDBG_KD_PULL_REMOTE_FILE
     UNICODE_STRING ImageFileName;
 } SYSDBG_KD_PULL_REMOTE_FILE, *PSYSDBG_KD_PULL_REMOTE_FILE;
 
+/**
+ * The NtSystemDebugControl routine provides system debugging and diagnostic control of the system.
+ *
+ * \param[in] Command The debug control command to execute (of type SYSDBG_COMMAND).
+ * \param[in] InputBuffer Optional pointer to a buffer containing input data for the command.
+ * \param[in] InputBufferLength Length, in bytes, of the input buffer.
+ * \param[out] OutputBuffer Optional pointer to a buffer that receives output data from the command.
+ * \param[in] OutputBufferLength Length, in bytes, of the output buffer.
+ * \param[out] ReturnLength Optional pointer to a variable that receives the number of bytes returned in the output buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

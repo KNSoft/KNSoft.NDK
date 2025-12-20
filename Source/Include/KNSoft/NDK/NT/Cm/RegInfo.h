@@ -131,7 +131,7 @@ typedef struct _KEY_CACHED_INFORMATION
 // msdn
 /**
  * \def REG_KEY_DONT_VIRTUALIZE
- * \brief The REG_KEY_DONT_VIRTUALIZE flag disables write registry virtualization. 
+ * \brief The REG_KEY_DONT_VIRTUALIZE flag disables write registry virtualization.
  *
  * If this flag is set and a create key or set value operation fails because the caller
  * does not have sufficient access right to the parent key, the registry fails the operation.
@@ -432,6 +432,7 @@ typedef enum _REG_ACTION
     KeyModified
 } REG_ACTION;
 
+_Struct_size_bytes_(NextEntryOffset)
 typedef struct _REG_NOTIFY_INFORMATION
 {
     ULONG NextEntryOffset;
