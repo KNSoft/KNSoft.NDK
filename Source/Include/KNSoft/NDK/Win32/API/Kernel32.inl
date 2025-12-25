@@ -1421,6 +1421,42 @@ _Inline_TerminateProcess(
     return FALSE;
 }
 
+__inline
+VOID
+WINAPI
+_Inline_RaiseException(
+    _In_ DWORD dwExceptionCode,
+    _In_ DWORD dwExceptionFlags,
+    _In_ DWORD nNumberOfArguments,
+    _In_reads_opt_(nNumberOfArguments) CONST ULONG_PTR* lpArguments)
+{
+    EXCEPTION_RECORD ExceptionRecord = { 0 };
+ 
+    ExceptionRecord.ExceptionCode = dwExceptionCode;
+    ExceptionRecord.ExceptionFlags = dwExceptionFlags & EXCEPTION_NONCONTINUABLE;
+    ExceptionRecord.ExceptionAddress = (PVOID)_Inline_RaiseException;
+ 
+    if (lpArguments != NULL)
+    {
+        if (nNumberOfArguments > EXCEPTION_MAXIMUM_PARAMETERS)
+        {
+            ExceptionRecord.NumberParameters = EXCEPTION_MAXIMUM_PARAMETERS;
+        } else
+        {
+            ExceptionRecord.NumberParameters = nNumberOfArguments;
+        }
+        memcpy(ExceptionRecord.ExceptionInformation,
+               lpArguments,
+               ExceptionRecord.NumberParameters * sizeof(*lpArguments));
+    }
+    else
+    {
+        ExceptionRecord.NumberParameters = 0;
+    }
+
+    RtlRaiseException(&ExceptionRecord);
+}
+
 /* SList */
 
 __inline
