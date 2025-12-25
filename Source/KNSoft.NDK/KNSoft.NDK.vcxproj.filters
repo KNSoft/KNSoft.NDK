@@ -491,6 +491,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Version.h">
       <Filter>NT</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msidle.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">
@@ -572,10 +575,10 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Guid.inl">
       <Filter>NT\Rtl</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="..\Include\KNSoft\NDK\NT\Ldr.inl">
       <Filter>NT</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">

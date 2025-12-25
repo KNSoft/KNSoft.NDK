@@ -162,4 +162,13 @@
     <Export Name="PARTITION_SPACES_GUID" Type="Const" />
     <Export Name="PARTITION_SYSTEM_GUID" Type="Const" />
   </Dll>
+  <Dll Name="msidle.dll">
+    <Export Name="BeginIdleDetection" Ordinal="3" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="EndIdleDetection" Ordinal="4" CallConv="__stdcall" Arg="int" />
+    <Export Name="SetIdleTimeout" Ordinal="5" CallConv="__stdcall" Arg="int int" />
+    <Export Name="SetIdleNotify" Ordinal="6" CallConv="__stdcall" Arg="int" />
+    <Export Name="SetBusyNotify" Ordinal="7" CallConv="__stdcall" Arg="int" />
+    <Export Name="GetIdleMinutes" Ordinal="8" CallConv="__stdcall" Arg="int" />
+    <Export Name="GetIdleSeconds" Ordinal="9" CallConv="__stdcall" Arg="int" />
+  </Dll>
 </LibCreate>
