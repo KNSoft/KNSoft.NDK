@@ -13,7 +13,7 @@ UnitTest_GetStdOutput(VOID)
 {
     HANDLE StdOutputHandle;
 
-    if (NtCurrentPeb()->ProcessParameters->WindowFlags & STARTF_USEMONITOR)
+    if (IS_NT_VERSION_GE(NT_VERSION_VISTA) && NtCurrentPeb()->ProcessParameters->WindowFlags & STARTF_USEMONITOR)
     {
         return NULL;
     }
