@@ -966,24 +966,25 @@ _Inline_GetStdHandle(
     _In_ DWORD nStdHandle)
 {
     HANDLE StdHandle;
+    PRTL_USER_PROCESS_PARAMETERS ProcParam = NtCurrentPeb()->ProcessParameters;
 
     if (nStdHandle == STD_INPUT_HANDLE)
     {
-        if (NtCurrentPeb()->ProcessParameters->WindowFlags & STARTF_USEHOTKEY)
+        if (IS_NT_VERSION_GE(NT_VERSION_VISTA) && ProcParam->WindowFlags & STARTF_USEHOTKEY)
         {
             return NULL;
         }
-        StdHandle = NtCurrentPeb()->ProcessParameters->StandardInput;
+        StdHandle = ProcParam->StandardInput;
     } else if (nStdHandle == STD_OUTPUT_HANDLE)
     {
-        if (NtCurrentPeb()->ProcessParameters->WindowFlags & STARTF_USEMONITOR)
+        if (IS_NT_VERSION_GE(NT_VERSION_VISTA) && ProcParam->WindowFlags & STARTF_USEMONITOR)
         {
             return NULL;
         }
-        StdHandle = NtCurrentPeb()->ProcessParameters->StandardOutput;
+        StdHandle = ProcParam->StandardOutput;
     } else if (nStdHandle == STD_ERROR_HANDLE)
     {
-        StdHandle = NtCurrentPeb()->ProcessParameters->StandardError;
+        StdHandle = ProcParam->StandardError;
     } else
     {
         StdHandle = INVALID_HANDLE_VALUE;
