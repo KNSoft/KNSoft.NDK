@@ -362,11 +362,23 @@ typedef struct _KUSER_SHARED_DATA
     //
     /* +0x2EC */ BOOLEAN SafeBootMode;
 
-    //
-    // Virtualization flags.
-    //
     union
     {
+        //
+        // NT6.1 only, next as 16-bit union at 0x3C6
+        //
+        union {
+            /* +0x2ED */ UCHAR TscQpcData_W7;
+            struct {
+                /* +0x2ED */ UCHAR TscQpcEnabled_W7 : 1;    // 0x01
+                /* +0x2ED */ UCHAR TscQpcSpareFlag_W7 : 1;  // 0x02
+                /* +0x2ED */ UCHAR TscQpcShift_W7 : 6;      // 0xFC
+            };
+        };
+
+        //
+        // Virtualization flags.
+        //
         /* +0x2ED */ UCHAR VirtualizationFlags;
 
 #if defined(_ARM64_)
@@ -593,7 +605,6 @@ typedef struct _KUSER_SHARED_DATA
         /* +0x3C6 */ USHORT QpcData;
         struct
         {
-
             //
             // A bitfield indicating whether performance counter queries can
             // read the counter directly (bypassing the system call) and flags.
@@ -605,10 +616,11 @@ typedef struct _KUSER_SHARED_DATA
                 {
                     /* +0x3C6 */ volatile UCHAR BypassAllowed : 1;      // QPC may bypass the syscall and use a fast user-mode path.
                     /* +0x3C6 */ volatile UCHAR HypervisorAssist : 1;   // Hypervisor-assisted QPC conversion.
-                    /* +0x3C6 */ volatile UCHAR Reserved_2_3 : 2;       // Reserved/unused
+                    /* +0x3C6 */ volatile UCHAR Disable32Bit : 1;       // SHARED_GLOBAL_FLAGS_QPC_BYPASS_DISABLE_32BIT
+                    /* +0x3C6 */ volatile UCHAR Reserved_2_3 : 1;       // Reserved/unused
                     /* +0x3C6 */ volatile UCHAR UseMfence : 1;          // MFENCE before RDTSC in relevant paths.
                     /* +0x3C6 */ volatile UCHAR UseLfence : 1;          // LFENCE before RDTSC in relevant paths.
-                    /* +0x3C6 */ volatile UCHAR Reserved_6 : 1;         // Reserved/unused
+                    /* +0x3C6 */ volatile UCHAR A73_ERRATA : 1;         // SHARED_GLOBAL_FLAGS_QPC_BYPASS_A73_ERRATA
                     /* +0x3C6 */ volatile UCHAR UseRdtscp : 1;          // RDTSCP instead of RDTSC in the fast path.
                 };
             };

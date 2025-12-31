@@ -10,8 +10,7 @@ NTAPI
 _Inline_RtlQueryPerformanceFrequency(
     _Out_ PLARGE_INTEGER PerformanceFrequency)
 {
-    if (SharedUserData->NtMajorVersion > 6 ||
-        SharedUserData->NtMajorVersion == 6 && SharedUserData->NtMinorVersion >= 2)
+    if (IS_NT_VERSION_GE(NT_VERSION_WIN8))
     {
         PerformanceFrequency->QuadPart = SharedUserData->QpcFrequency;
     } else

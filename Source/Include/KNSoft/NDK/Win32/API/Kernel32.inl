@@ -376,7 +376,11 @@ WINAPI
 _Inline_QueryPerformanceCounter(
     _Out_ LARGE_INTEGER* lpPerformanceCount)
 {
+#if NT_VERSION_MIN >= NT_VERSION_WIN7
     RtlQueryPerformanceCounter(lpPerformanceCount);
+#else
+    NtQueryPerformanceCounter(lpPerformanceCount, NULL);
+#endif
     return TRUE;
 }
 
