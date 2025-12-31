@@ -26,6 +26,7 @@ EXTERN_C_START
 //
 //    The layout itself cannot change since this structure has been exported
 //    in ntddk, ntifs.h, and nthal.h for some time.
+
 //
 // Define NX support policy values.
 //

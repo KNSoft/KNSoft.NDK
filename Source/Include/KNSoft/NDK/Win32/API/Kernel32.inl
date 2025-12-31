@@ -450,11 +450,11 @@ _Inline_GetSystemTimeAsFileTime(
 #if _WIN64
     *(PULONGLONG)lpSystemTimeAsFileTime = *(PULONGLONG)&SharedUserData->SystemTime;
 #else
-    ULONG HighPart;
+    register ULONG HighPart;
     while (TRUE)
     {
         HighPart = SharedUserData->SystemTime.High1Time;
-        if (SharedUserData->SystemTime.High1Time == SharedUserData->SystemTime.High2Time)
+        if (HighPart == SharedUserData->SystemTime.High2Time)
         {
             break;
         }
@@ -1499,8 +1499,7 @@ _Inline_RaiseException(
         memcpy(ExceptionRecord.ExceptionInformation,
                lpArguments,
                ExceptionRecord.NumberParameters * sizeof(*lpArguments));
-    }
-    else
+    } else
     {
         ExceptionRecord.NumberParameters = 0;
     }

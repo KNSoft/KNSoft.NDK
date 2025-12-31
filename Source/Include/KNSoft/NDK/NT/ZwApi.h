@@ -1060,7 +1060,7 @@ NTSTATUS
 NTAPI
 ZwCreateIRTimer(
     _Out_ PHANDLE TimerHandle,
-    _In_ PVOID Reserved,
+    _In_ PULONG TimerId,
     _In_ ACCESS_MASK DesiredAccess
     );
 
@@ -1420,9 +1420,9 @@ NTSTATUS
 NTAPI
 ZwCreateTimer2(
     _Out_ PHANDLE TimerHandle,
-    _In_opt_ PVOID Reserved1,
+    _In_opt_ PULONG TimerId,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
-    _In_ ULONG Attributes, // TIMER_TYPE
+    _In_ ULONG Attributes, // TIMER2_ATTRIBUTES or TIMER2_BUILD_ATTRIBUTES
     _In_ ACCESS_MASK DesiredAccess
     );
 
