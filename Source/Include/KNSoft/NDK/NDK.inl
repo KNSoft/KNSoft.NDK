@@ -15,3 +15,4 @@
 #include "NT/NT.inl"
 #include "Win32/API/Kernel32.inl"
 #include "Win32/API/Shell32.inl"
+#include "Win32/API/msidle.inl"
