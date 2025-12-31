@@ -124,4 +124,13 @@ SetChildWindowNoActivate(
     _In_ HWND WindowHandle
     );
 
+/* See also NtUserGetWindowProcessHandle */
+WINUSERAPI
+HANDLE
+NTAPI
+GetWindowProcessHandle(
+    _In_ HWND WindowHandle,
+    _In_ ACCESS_MASK DesiredAccess
+    );
+
 EXTERN_C_END

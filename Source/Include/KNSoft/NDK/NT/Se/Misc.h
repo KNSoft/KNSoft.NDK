@@ -211,6 +211,12 @@ typedef struct _SE_EXPORTS
 // Authz
 
 #if defined(_KERNEL_MODE)
+/**
+ * The TOKEN_INFORMATION_CLASS enumeration contains values that specify the type of information
+ * being assigned to or retrieved from an access token.
+ *
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winnt/ne-winnt-token_information_class
+ */
 typedef enum _TOKEN_INFORMATION_CLASS
 {
     TokenUser = 1,                        // q: TOKEN_USER, SE_TOKEN_USER
@@ -224,22 +230,22 @@ typedef enum _TOKEN_INFORMATION_CLASS
     TokenImpersonationLevel,              // q: SECURITY_IMPERSONATION_LEVEL
     TokenStatistics,                      // q: TOKEN_STATISTICS // 10
     TokenRestrictedSids,                  // q: TOKEN_GROUPS
-    TokenSessionId,                       // q; s: ULONG (requires SeTcbPrivilege)
+    TokenSessionId,                       // qs: ULONG (requires SeTcbPrivilege)
     TokenGroupsAndPrivileges,             // q: TOKEN_GROUPS_AND_PRIVILEGES
     TokenSessionReference,                // s: ULONG (requires SeTcbPrivilege)
     TokenSandBoxInert,                    // q: ULONG
-    TokenAuditPolicy,                     // q; s: TOKEN_AUDIT_POLICY (requires SeSecurityPrivilege/SeTcbPrivilege)
-    TokenOrigin,                          // q; s: TOKEN_ORIGIN (requires SeTcbPrivilege)
+    TokenAuditPolicy,                     // qs: TOKEN_AUDIT_POLICY (requires SeSecurityPrivilege/SeTcbPrivilege)
+    TokenOrigin,                          // qs: TOKEN_ORIGIN (requires SeTcbPrivilege)
     TokenElevationType,                   // q: TOKEN_ELEVATION_TYPE
-    TokenLinkedToken,                     // q; s: TOKEN_LINKED_TOKEN (requires SeCreateTokenPrivilege)
+    TokenLinkedToken,                     // qs: TOKEN_LINKED_TOKEN (requires SeCreateTokenPrivilege)
     TokenElevation,                       // q: TOKEN_ELEVATION // 20
     TokenHasRestrictions,                 // q: ULONG
     TokenAccessInformation,               // q: TOKEN_ACCESS_INFORMATION
-    TokenVirtualizationAllowed,           // q; s: ULONG (requires SeCreateTokenPrivilege)
-    TokenVirtualizationEnabled,           // q; s: ULONG
-    TokenIntegrityLevel,                  // q; s: TOKEN_MANDATORY_LABEL
-    TokenUIAccess,                        // q; s: ULONG (requires SeTcbPrivilege)
-    TokenMandatoryPolicy,                 // q; s: TOKEN_MANDATORY_POLICY (requires SeTcbPrivilege)
+    TokenVirtualizationAllowed,           // qs: ULONG (requires SeCreateTokenPrivilege)
+    TokenVirtualizationEnabled,           // qs: ULONG
+    TokenIntegrityLevel,                  // qs: TOKEN_MANDATORY_LABEL
+    TokenUIAccess,                        // qs: ULONG (requires SeTcbPrivilege)
+    TokenMandatoryPolicy,                 // qs: TOKEN_MANDATORY_POLICY (requires SeTcbPrivilege)
     TokenLogonSid,                        // q: TOKEN_GROUPS
     TokenIsAppContainer,                  // q: ULONG // since WIN8
     TokenCapabilities,                    // q: TOKEN_GROUPS // 30
@@ -254,7 +260,7 @@ typedef enum _TOKEN_INFORMATION_CLASS
     TokenSecurityAttributes,              // qs: TOKEN_SECURITY_ATTRIBUTES_[AND_OPERATION_]INFORMATION (requires SeTcbPrivilege)
     TokenIsRestricted,                    // q: ULONG // 40
     TokenProcessTrustLevel,               // q: TOKEN_PROCESS_TRUST_LEVEL // since WINBLUE
-    TokenPrivateNameSpace,                // q; s: ULONG (requires SeTcbPrivilege) // since THRESHOLD
+    TokenPrivateNameSpace,                // qs: ULONG (requires SeTcbPrivilege) // since THRESHOLD
     TokenSingletonAttributes,             // q: TOKEN_SECURITY_ATTRIBUTES_INFORMATION // since REDSTONE
     TokenBnoIsolation,                    // q: TOKEN_BNO_ISOLATION_INFORMATION // since REDSTONE2
     TokenChildProcessFlags,               // s: ULONG  (requires SeTcbPrivilege) // since REDSTONE3

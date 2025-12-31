@@ -209,19 +209,34 @@ NtUserCreateWindowStation(
     _In_opt_ PVOID KeyboardLayoutOffset,
     _In_opt_ PVOID NlsTableOffset,
     _In_opt_ PVOID KeyboardDescriptor,
-    _In_opt_ PUNICODE_STRING LanguageIdString,
+    _In_opt_ PCUNICODE_STRING LanguageIdString,
     _In_opt_ ULONG KeyboardLocale
     );
 
+/**
+ * The NtUserGetClassName routine retrieves a string that specifies the window type.
+ *
+ * \param WindowHandle A handle to the window and, indirectly, the class to which the window belongs.
+ * \param RealClassName Return the superclass or baseclass name when the window is a superclass.
+ * \param ClassName A pointer to a string that receives the window type.
+ * \return A handle to the foreground window, or NULL if no foreground window exists.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-realgetwindowclassw
+ */
 NTSYSCALLAPI
-HWND
+ULONG
 NTAPI
 NtUserGetClassName(
     _In_ HWND WindowHandle,
-    _In_ BOOL Real,
+    _In_ BOOL RealClassName,
     _Out_ PUNICODE_STRING ClassName
     );
 
+/**
+ * The NtUserGetForegroundWindow routine retrieves a handle to the foreground window.
+ *
+ * \return A handle to the foreground window, or NULL if no foreground window exists.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getforegroundwindow
+ */
 NTSYSCALLAPI
 HWND
 NTAPI
@@ -251,8 +266,14 @@ NtUserGetIconSize(
     _Out_ PULONG YY
     );
 
+/**
+ * The NtUserGetProcessWindowStation routine retrieves the window station handle associated with the current process.
+ *
+ * \return A handle to the window station, or NULL if the operation fails.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getprocesswindowstation
+ */
 NTSYSCALLAPI
-HWND
+HWINSTA
 NTAPI
 NtUserGetProcessWindowStation(
     VOID

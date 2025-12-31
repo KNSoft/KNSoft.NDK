@@ -598,13 +598,26 @@ typedef struct _KUSER_SHARED_DATA
             // A bitfield indicating whether performance counter queries can
             // read the counter directly (bypassing the system call) and flags.
             //
-            /* +0x3C6 */ volatile UCHAR QpcBypassEnabled;
+            union
+            {
+                /* +0x3C6 */ volatile UCHAR QpcBypassEnabled;
+                struct
+                {
+                    /* +0x3C6 */ volatile UCHAR BypassAllowed : 1;      // QPC may bypass the syscall and use a fast user-mode path.
+                    /* +0x3C6 */ volatile UCHAR HypervisorAssist : 1;   // Hypervisor-assisted QPC conversion.
+                    /* +0x3C6 */ volatile UCHAR Reserved_2_3 : 2;       // Reserved/unused
+                    /* +0x3C6 */ volatile UCHAR UseMfence : 1;          // MFENCE before RDTSC in relevant paths.
+                    /* +0x3C6 */ volatile UCHAR UseLfence : 1;          // LFENCE before RDTSC in relevant paths.
+                    /* +0x3C6 */ volatile UCHAR Reserved_6 : 1;         // Reserved/unused
+                    /* +0x3C6 */ volatile UCHAR UseRdtscp : 1;          // RDTSCP instead of RDTSC in the fast path.
+                };
+            };
 
             //
             // Reserved, leave as zero for backward compatibility. Was shift
             // applied to the raw counter value to derive QPC count.
             //
-            /* +0x3C6 */ UCHAR QpcReserved;
+            /* +0x3C7 */ UCHAR QpcReserved;
         };
     };
 

@@ -256,8 +256,8 @@ NTAPI
 ZwAlertMultipleThreadByThreadId(
     _In_ PHANDLE MultipleThreadId,
     _In_ ULONG Count,
-    _In_ PVOID Boost,
-    _In_ ULONG BoostCount
+    _Inout_updates_opt_(ExtendedParameterCount) PPS_ALERT_THREAD_EXTENDED_PARAMETER ExtendedParameters,
+    _In_ ULONG ExtendedParameterCount
     );
 
 NTSYSCALLAPI
@@ -1420,7 +1420,7 @@ NTSTATUS
 NTAPI
 ZwCreateTimer2(
     _Out_ PHANDLE TimerHandle,
-    _In_opt_ PULONG TimerId,
+    _In_opt_ PVOID Reserved,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ ULONG Attributes, // TIMER2_ATTRIBUTES or TIMER2_BUILD_ATTRIBUTES
     _In_ ACCESS_MASK DesiredAccess

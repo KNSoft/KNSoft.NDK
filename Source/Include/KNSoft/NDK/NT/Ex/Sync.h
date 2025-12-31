@@ -827,13 +827,14 @@ typedef union _TIMER2_ATTRIBUTES
  * \param Attributes Timer attributes (TIMER_TYPE).
  * \param DesiredAccess The access mask that specifies the requested access to the timer object.
  * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-createwaitabletimerexw
  */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtCreateTimer2(
     _Out_ PHANDLE TimerHandle,
-    _In_opt_ PULONG TimerId,
+    _In_opt_ PVOID Reserved,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ ULONG Attributes, // TIMER2_ATTRIBUTES or TIMER2_BUILD_ATTRIBUTES
     _In_ ACCESS_MASK DesiredAccess
@@ -841,6 +842,7 @@ NtCreateTimer2(
 
 #endif
 
+// rev
 typedef struct _T2_SET_PARAMETERS_V0
 {
     ULONG Version;
@@ -852,6 +854,16 @@ typedef PVOID PT2_CANCEL_PARAMETERS;
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+/**
+ * The NtSetTimer2 routine activates the timer object for a specified interval with optional periodic behavior.
+ *
+ * \param TimerHandle A handle to the timer object to set.
+ * \param DueTime A pointer to a LARGE_INTEGER specifying the absolute or relative time when the timer should expire.
+ * \param Period An optional pointer to a LARGE_INTEGER specifying the period for periodic timer notifications, in 100-nanosecond intervals. If NULL, the timer is non-periodic.
+ * \param Parameters A pointer to a T2_SET_PARAMETERS structure containing additional timer configuration parameters.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-setwaitabletimer
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -860,15 +872,23 @@ NtSetTimer2(
     _In_ PLARGE_INTEGER DueTime,
     _In_opt_ PLARGE_INTEGER Period,
     _In_ PT2_SET_PARAMETERS Parameters
-);
+    );
 
+/**
+ * The NtCancelTimer2 routine sets the specified waitable timer to the inactive state.
+ *
+ * \param TimerHandle A handle to the timer object to set.
+ * \param Parameters A pointer to a PT2_CANCEL_PARAMETERS structure containing additional parameters.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-cancelwaitabletimer
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtCancelTimer2(
     _In_ HANDLE TimerHandle,
     _In_ PT2_CANCEL_PARAMETERS Parameters
-);
+    );
 
 #endif
 

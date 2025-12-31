@@ -255,7 +255,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemSecureKernelDebuggerInformation,                  // qs: NtQuerySystemInformationEx
     SystemOriginalImageFeatureInformation,                  // q: in: SYSTEM_ORIGINAL_IMAGE_FEATURE_INFORMATION_INPUT, out: SYSTEM_ORIGINAL_IMAGE_FEATURE_INFORMATION_OUTPUT // NtQuerySystemInformationEx
     SystemMemoryNumaInformation,                            // q: SYSTEM_MEMORY_NUMA_INFORMATION_INPUT, SYSTEM_MEMORY_NUMA_INFORMATION_OUTPUT // NtQuerySystemInformationEx
-    SystemMemoryNumaPerformanceInformation,                 // q: SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_INPUTSYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_INPUT, SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_OUTPUT // since 24H2 // 240
+    SystemMemoryNumaPerformanceInformation,                 // q: SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_INPUT, SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_OUTPUT // since 24H2 // 240
     SystemCodeIntegritySignedPoliciesFullInformation,       // qs: NtQuerySystemInformationEx
     SystemSecureCoreInformation,                            // qs: SystemSecureSecretsInformation
     SystemTrustedAppsRuntimeInformation,                    // q: SYSTEM_TRUSTEDAPPS_RUNTIME_INFORMATION
@@ -1529,22 +1529,22 @@ typedef struct _SYSTEM_CODEINTEGRITY_INFORMATION
         ULONG CodeIntegrityOptions;
         struct
         {
-            ULONG Enabled : 1;
-            ULONG TestSign : 1;
-            ULONG UmciEnabled : 1;
-            ULONG UmciAuditModeEnabled : 1;
-            ULONG UmciExclusionPathsEnabled : 1;
-            ULONG TestBuild : 1;
-            ULONG PreproductionBuild : 1;
-            ULONG DebugModeEnabled : 1;
-            ULONG FlightBuild : 1;
-            ULONG FlightingEnabled : 1;
-            ULONG HvciKmciEnabled : 1;
-            ULONG HvciKmciAuditModeEnabled : 1;
-            ULONG HvciKmciStrictModeEnabled : 1;
-            ULONG HvciIumEnabled : 1;
-            ULONG WhqlEnforcementEnabled : 1;
-            ULONG WhqlAuditModeEnabled : 1;
+            ULONG Enabled : 1;                          // CODEINTEGRITY_OPTION_ENABLED
+            ULONG TestSign : 1;                         // CODEINTEGRITY_OPTION_TESTSIGN
+            ULONG UmciEnabled : 1;                      // CODEINTEGRITY_OPTION_UMCI_ENABLED
+            ULONG UmciAuditModeEnabled : 1;             // CODEINTEGRITY_OPTION_UMCI_AUDITMODE_ENABLED
+            ULONG UmciExclusionPathsEnabled : 1;        // CODEINTEGRITY_OPTION_UMCI_EXCLUSIONPATHS_ENABLED
+            ULONG TestBuild : 1;                        // CODEINTEGRITY_OPTION_TEST_BUILD
+            ULONG PreproductionBuild : 1;               // CODEINTEGRITY_OPTION_PREPRODUCTION_BUILD
+            ULONG DebugModeEnabled : 1;                 // CODEINTEGRITY_OPTION_DEBUGMODE_ENABLE
+            ULONG FlightBuild : 1;                      // CODEINTEGRITY_OPTION_FLIGHT_BUILD
+            ULONG FlightingEnabled : 1;                 // CODEINTEGRITY_OPTION_FLIGHTING_ENABLED
+            ULONG HvciKmciEnabled : 1;                  // CODEINTEGRITY_OPTION_HVCI_KMCI_ENABLED
+            ULONG HvciKmciAuditModeEnabled : 1;         // CODEINTEGRITY_OPTION_HVCI_KMCI_AUDITMODE_ENABLED
+            ULONG HvciKmciStrictModeEnabled : 1;        // CODEINTEGRITY_OPTION_HVCI_KMCI_STRICTMODE_ENABLED
+            ULONG HvciIumEnabled : 1;                   // CODEINTEGRITY_OPTION_HVCI_IUM_ENABLED
+            ULONG WhqlEnforcementEnabled : 1;           // CODEINTEGRITY_OPTION_WHQL_ENFORCEMENT_ENABLED
+            ULONG WhqlAuditModeEnabled : 1;             // CODEINTEGRITY_OPTION_WHQL_AUDITMODE_ENABLED
             ULONG Spare : 16;
         };
     };
@@ -3360,6 +3360,10 @@ typedef struct _SYSTEM_KERNEL_VA_SHADOW_INFORMATION
 } SYSTEM_KERNEL_VA_SHADOW_INFORMATION, *PSYSTEM_KERNEL_VA_SHADOW_INFORMATION;
 
 // private
+/**
+ * The SYSTEM_CODEINTEGRITYVERIFICATION_INFORMATION structure contains information
+ * required for code integrity verification of an image.
+ */
 typedef struct _SYSTEM_CODEINTEGRITYVERIFICATION_INFORMATION
 {
     HANDLE FileHandle;
@@ -3370,9 +3374,10 @@ typedef struct _SYSTEM_CODEINTEGRITYVERIFICATION_INFORMATION
 // rev
 typedef struct _SYSTEM_HYPERVISOR_USER_SHARED_DATA
 {
-    ULONGLONG TimeUpdateLock; // QpcSystemTimeIncrement?
-    volatile ULONGLONG QpcMultiplier;
-    volatile ULONGLONG QpcBias; // HvlGetQpcBias
+    volatile ULONG TimeUpdateLock;
+    ULONG Reserved0;
+    ULONGLONG QpcMultiplier;
+    ULONGLONG QpcBias;
 } SYSTEM_HYPERVISOR_USER_SHARED_DATA, *PSYSTEM_HYPERVISOR_USER_SHARED_DATA;
 
 // private
