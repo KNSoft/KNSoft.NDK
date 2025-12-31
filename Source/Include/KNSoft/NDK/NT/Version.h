@@ -77,9 +77,9 @@
 #define NT_VERSION_MIN_CONSTRAINED NT_VERSION_WIN10
 #endif
 
-/* Minimum support NT6.0 by default */
+/* Minimum support NT6.1 by default */
 #ifndef NT_VERSION_MIN
-#define NT_VERSION_MIN NT_VERSION_VISTA
+#define NT_VERSION_MIN NT_VERSION_WIN7
 #endif
 
 /* Adjust NT_VERSION_MIN if it is lower than NT_VERSION_MIN_CONSTRAINED */
