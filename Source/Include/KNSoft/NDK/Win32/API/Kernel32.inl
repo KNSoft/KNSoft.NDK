@@ -391,6 +391,56 @@ _Inline_QueryPerformanceFrequency(
 }
 
 __inline
+DWORD
+WINAPI
+_Inline_GetTickCount(VOID)
+{
+#if _WIN64
+    return (ULONG)((SharedUserData->TickCountMultiplier * SharedUserData->TickCountQuad) >> 24);
+#else
+    register ULONG HighPart;
+    if (SharedUserData->TickCountMultiplier < 0x1000000UL)
+    {
+        while (TRUE)
+        {
+            HighPart = SharedUserData->TickCount.High1Time;
+            if (HighPart == SharedUserData->TickCount.High2Time)
+            {
+                break;
+            }
+            YieldProcessor();
+        }
+        return (ULONG)((UInt32x32To64(SharedUserData->TickCountMultiplier, SharedUserData->TickCount.LowPart) >> 24) +
+                       (UInt32x32To64(SharedUserData->TickCountMultiplier, HighPart) << 8));
+    }
+    return UInt32x32To64(SharedUserData->TickCountMultiplier, SharedUserData->TickCount.LowPart) >> 24;
+#endif
+}
+
+__inline
+ULONGLONG
+WINAPI
+_Inline_GetTickCount64(VOID)
+{
+#if _WIN64
+    return (SharedUserData->TickCountMultiplier * SharedUserData->TickCountQuad) >> 24;
+#else
+    register ULONG HighPart;
+    while (TRUE)
+    {
+        HighPart = SharedUserData->TickCount.High1Time;
+        if (HighPart == SharedUserData->TickCount.High2Time)
+        {
+            break;
+        }
+        YieldProcessor();
+    }
+    return (UInt32x32To64(SharedUserData->TickCountMultiplier, SharedUserData->TickCount.LowPart) >> 24) +
+        (UInt32x32To64(SharedUserData->TickCountMultiplier, HighPart) << 8);
+#endif
+}
+
+__inline
 VOID
 WINAPI
 _Inline_GetSystemTimeAsFileTime(
