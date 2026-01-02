@@ -9,7 +9,11 @@ EXTERN_C_START
 typedef struct _RTL_RB_TREE
 {
     PRTL_BALANCED_NODE Root;
-    PRTL_BALANCED_NODE Min;
+    union
+    {
+        UCHAR Encoded : 1;
+        PRTL_BALANCED_NODE Min;
+    };
 } RTL_RB_TREE, *PRTL_RB_TREE;
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)

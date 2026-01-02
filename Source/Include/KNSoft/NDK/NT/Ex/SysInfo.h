@@ -3897,7 +3897,65 @@ typedef struct _SYSTEM_POOLTAG_INFORMATION2
     _Field_size_(Count) SYSTEM_POOLTAG2 TagInfo[1];
 } SYSTEM_POOLTAG_INFORMATION2, *PSYSTEM_POOLTAG_INFORMATION2;
 
-#pragma region Prefetch
+#pragma region Prefetch / Superfetch
+
+typedef enum _PREFETCHER_INFORMATION_CLASS
+{
+    PrefetcherRetrieveTrace = 1,            // q: PF_RETRIEVE_TRACE
+    PrefetcherSystemParameters,             // q: PF_SYSTEM_PREFETCH_PARAMETERS
+    PrefetcherBootPhase,                    // s: PF_BOOT_PHASE_ID
+    PrefetcherSpare1,                       // q: PrefetcherRetrieveBootLoaderTrace
+    PrefetcherOperationProcess,             // s: PF_OPERATION_PROCESS
+    PrefetcherCacheEntryUpdate,             // s: PF_CACHE_ENTRY_UPDATE
+    PrefetcherSpare2,
+    PrefetcherAppLaunchScenarioControl,     // s: PF_APP_LAUNCH_SCENARIO_CONTROL
+    PrefetcherInformationMax
+} PREFETCHER_INFORMATION_CLASS;
+
+#define PREFETCHER_INFORMATION_VERSION 23 // rev
+#define PREFETCHER_INFORMATION_MAGIC ('kuhC') // rev
+
+typedef struct _PREFETCHER_INFORMATION
+{
+    _In_ ULONG Version;
+    _In_ ULONG Magic;
+    _In_ PREFETCHER_INFORMATION_CLASS PrefetcherInformationClass;
+    _Inout_ PVOID PrefetcherInformation;
+    _Inout_ ULONG PrefetcherInformationLength;
+} PREFETCHER_INFORMATION, *PPREFETCHER_INFORMATION;
+
+// rev
+typedef struct _PF_RETRIEVE_TRACE
+{
+    UCHAR Buffer[1];
+} PF_RETRIEVE_TRACE, *PPF_RETRIEVE_TRACE;
+
+typedef enum _PF_ENABLE_STATUS
+{
+    PfSvNotSpecified,
+    PfSvEnabled,
+    PfSvDisabled,
+    PfSvMaxEnableStatus
+} PF_ENABLE_STATUS;
+
+// rev
+typedef struct _PF_TRACE_LIMITS
+{
+    ULONG MaxNumPages;
+    ULONG MaxNumSections;
+    LONGLONG TimerPeriod;
+} PF_TRACE_LIMITS, *PPF_TRACE_LIMITS;
+
+// rev
+typedef struct _PF_SYSTEM_PREFETCH_PARAMETERS
+{
+    PF_ENABLE_STATUS EnableStatus[2];
+    PF_TRACE_LIMITS TraceLimits[2];
+    ULONG MaxNumActiveTraces;
+    ULONG MaxNumSavedTraces;
+    WCHAR RootDirPath[32];
+    WCHAR HostingApplicationList[128];
+} PF_SYSTEM_PREFETCH_PARAMETERS, *PPF_SYSTEM_PREFETCH_PARAMETERS;
 
 typedef enum _PF_BOOT_PHASE_ID
 {
@@ -3913,30 +3971,23 @@ typedef enum _PF_BOOT_PHASE_ID
     PfMaxBootPhaseId = 900
 } PF_BOOT_PHASE_ID;
 
-typedef enum _PF_ENABLE_STATUS
-{
-    PfSvNotSpecified,
-    PfSvEnabled,
-    PfSvDisabled,
-    PfSvMaxEnableStatus
-} PF_ENABLE_STATUS;
+#define PF_SN_OPERATION_PROCESS_VERSION 1
 
-typedef struct _PF_TRACE_LIMITS
+typedef enum _PF_OPERATION_PROCESS_ACTION
 {
-    ULONG MaxNumPages;
-    ULONG MaxNumSections;
-    LONGLONG TimerPeriod;
-} PF_TRACE_LIMITS, *PPF_TRACE_LIMITS;
+    PfSnOpProcessBegin = 0,
+    PfSnOpProcessEnd = 1,
+    PfSnOpProcessMax = 2
+} PF_OPERATION_PROCESS_ACTION;
 
-typedef struct _PF_SYSTEM_PREFETCH_PARAMETERS
+typedef struct _PF_OPERATION_PROCESS
 {
-    PF_ENABLE_STATUS EnableStatus[2];
-    PF_TRACE_LIMITS TraceLimits[2];
-    ULONG MaxNumActiveTraces;
-    ULONG MaxNumSavedTraces;
-    WCHAR RootDirPath[32];
-    WCHAR HostingApplicationList[128];
-} PF_SYSTEM_PREFETCH_PARAMETERS, *PPF_SYSTEM_PREFETCH_PARAMETERS;
+    UCHAR Version;
+    UCHAR Action; // PF_SYSTEM_OPERATION_PROCESS_ACTION
+    USHORT Reserved;
+    ULONG OpFlags;
+    ULONG Value;
+} PF_OPERATION_PROCESS, *PPF_OPERATION_PROCESS;
 
 #define PF_BOOT_CONTROL_VERSION 1
 
@@ -3946,30 +3997,70 @@ typedef struct _PF_BOOT_CONTROL
     ULONG DisableBootPrefetching;
 } PF_BOOT_CONTROL, *PPF_BOOT_CONTROL;
 
-typedef enum _PREFETCHER_INFORMATION_CLASS
+#define PF_CACHE_ENTRY_UPDATE_VERSION 2
+
+typedef struct _PF_CACHE_ENTRY_UPDATE
 {
-    PrefetcherRetrieveTrace = 1, // q: CHAR[]
-    PrefetcherSystemParameters, // q: PF_SYSTEM_PREFETCH_PARAMETERS
-    PrefetcherBootPhase, // s: PF_BOOT_PHASE_ID
-    PrefetcherSpare1, // PrefetcherRetrieveBootLoaderTrace // q: CHAR[]
-    PrefetcherBootControl, // s: PF_BOOT_CONTROL
-    PrefetcherScenarioPolicyControl,
-    PrefetcherSpare2,
-    PrefetcherAppLaunchScenarioControl,
-    PrefetcherInformationMax
-} PREFETCHER_INFORMATION_CLASS;
+    ULONG Version;
+    UCHAR Name[64];
+    ULONG NewValue;
+} PF_CACHE_ENTRY_UPDATE, *PPF_CACHE_ENTRY_UPDATE;
 
-#define PREFETCHER_INFORMATION_VERSION 23 // rev
-#define PREFETCHER_INFORMATION_MAGIC ('kuhC') // rev
+#define PF_APP_LAUNCH_SCENARIO_CONTROL_VERSION 1
 
-typedef struct _PREFETCHER_INFORMATION
+typedef struct _PF_APP_LAUNCH_SCENARIO_CONTROL
+{
+    ULONG Version;
+    ULONG Enable; // must be non-zero
+    HANDLE ProcessHandle;
+} PF_APP_LAUNCH_SCENARIO_CONTROL, *PPF_APP_LAUNCH_SCENARIO_CONTROL;
+
+// rev
+typedef enum _SUPERFETCH_INFORMATION_CLASS
+{
+    SuperfetchRetrieveTrace = 1,               // q: PF_SYSTEM_SUPERFETCH_RETRIEVE_TRACE // PfGetCompletedTrace
+    SuperfetchSystemParameters,                // q: PF_SYSTEM_SUPERFETCH_PARAMETERS
+    SuperfetchLogEvent,                        // s: PF_LOG_EVENT_DATA
+    SuperfetchGenerateTrace,                   // s: PF_GENERATE_TRACE_CONTROL
+    SuperfetchPrefetch,
+    SuperfetchPfnQuery,                        // q: PF_PFN_PRIO_REQUEST
+    SuperfetchPfnSetPriority,                  // s: PF_PFN_PRIO_REQUEST // MmSetPfnListInfo
+    SuperfetchPrivSourceQuery,                 // q: PF_PRIVSOURCE_QUERY_REQUEST
+    SuperfetchSequenceNumberQuery,             // q: ULONG
+    SuperfetchScenarioPhase,                   // s: PF_SCENARIO_PHASE_INFO // 10
+    SuperfetchWorkerPriority,                  // s: PF_WORKER_PRIORITY_CONTROL
+    SuperfetchScenarioQuery,                   // q: PF_SCENARIO_QUERY_INFO
+    SuperfetchScenarioPrefetch,                // s: PF_SCENARIO_PREFETCH_INFO
+    SuperfetchRobustnessControl,               // s: PF_ROBUSTNESS_CONTROL
+    SuperfetchTimeControl,                     // s: PF_TIME_CONTROL
+    SuperfetchMemoryListQuery,                 // q: PF_MEMORY_LIST_INFO
+    SuperfetchMemoryRangesQuery,               // q: PF_PHYSICAL_MEMORY_RANGE_INFO_V1/V2
+    SuperfetchTracingControl,                  // s: PF_ACCESS_TRACING_CONTROL
+    SuperfetchTrimWhileAgingControl,           // s: PF_TRIM_WHILE_AGING_CONTROL
+    SuperfetchRepurposedByPrefetch,            // q: PF_REPURPOSED_BY_PREFETCH_INFO // 20
+    SuperfetchChannelPowerRequest,
+    SuperfetchMovePages,                       // s: PF_PFN_PRIO_REQUEST // MmRelocatePfnList
+    SuperfetchVirtualQuery,                    // q: PF_VIRTUAL_QUERY
+    SuperfetchCombineStatsQuery,               // q: PF_PAGECOMBINE_AGGREGATE_STAT
+    SuperfetchSetMinWsAgeRate,                 // s: PF_MIN_WS_AGE_RATE_CONTROL
+    SuperfetchDeprioritizeOldPagesInWs,        // s: PF_DEPRIORITIZE_OLD_PAGES
+    SuperfetchFileExtentsQuery,                // q: PF_FILE_EXTENTS_INFO
+    SuperfetchGpuUtilizationQuery,             // q: PF_GPU_UTILIZATION_INFO
+    SuperfetchPfnSet,                          // s: PF_PFN_PRIO_REQUEST // since WIN11
+    SuperfetchInformationMax
+} SUPERFETCH_INFORMATION_CLASS;
+
+#define SUPERFETCH_INFORMATION_VERSION 45 // rev
+#define SUPERFETCH_INFORMATION_MAGIC ('kuhC') // rev
+
+typedef struct _SUPERFETCH_INFORMATION
 {
     _In_ ULONG Version;
     _In_ ULONG Magic;
-    _In_ PREFETCHER_INFORMATION_CLASS PrefetcherInformationClass;
-    _Inout_ PVOID PrefetcherInformation;
-    _Inout_ ULONG PrefetcherInformationLength;
-} PREFETCHER_INFORMATION, *PPREFETCHER_INFORMATION;
+    _In_ SUPERFETCH_INFORMATION_CLASS SuperfetchInformationClass;
+    _Inout_ PVOID SuperfetchInformation;
+    _Inout_ ULONG SuperfetchInformationLength;
+} SUPERFETCH_INFORMATION, *PSUPERFETCH_INFORMATION;
 
 // rev
 typedef struct _PF_SYSTEM_SUPERFETCH_RETRIEVE_TRACE
@@ -4119,8 +4210,9 @@ typedef struct _PF_PRIVSOURCE_INFO
     SIZE_T WsPrivatePages;
     SIZE_T TotalPrivatePages;
     ULONG SessionID;
-    CHAR ImageName[16];
-    union {
+    UCHAR ImageName[16];
+    union
+    {
         SIZE_T WsSwapPages;                 // process only PF_PRIVSOURCE_QUERY_WS_SWAP_PAGES.
         SIZE_T SessionPagedPoolPages;       // session only.
         SIZE_T StoreSizePages;              // process only PF_PRIVSOURCE_QUERY_STORE_INFO.
@@ -4184,6 +4276,18 @@ typedef struct _PF_WORKER_PRIORITY_CONTROL
 } PF_WORKER_PRIORITY_CONTROL, *PPF_WORKER_PRIORITY_CONTROL;
 
 // rev
+#define PF_SCENARIO_QUERY_INFO_VERSION 4
+
+// rev
+typedef struct _PF_SCENARIO_QUERY_INFO 
+{
+    ULONG_PTR Version;
+    ULONG_PTR Field1;
+    ULONG_PTR Field2;
+    ULONG_PTR Field3;
+} PF_SCENARIO_QUERY_INFO , *PPF_SCENARIO_QUERY_INFO;
+
+// rev
 typedef struct _PF_MEMORY_LIST_NODE
 {
     ULONGLONG Node : 8;
@@ -4217,7 +4321,23 @@ typedef enum _PF_ROBUSTNESS_CONTROL_COMMAND
     PfRpControlRobustAllStart = 2,
     PfRpControlRobustAllStop = 3,
     PfRpControlCommandMax = 4
-} PF_ROBUSTNESS_CONTROL_COMMAND, *PPF_ROBUSTNESS_CONTROL_COMMAND;
+} PF_ROBUSTNESS_CONTROL_COMMAND;
+
+// rev
+#define PF_ROBUSTNESS_CONTROL_VERSION 1
+
+// rev
+typedef struct _PF_ROBUSTNESS_CONTROL
+{
+    ULONG Version;
+    PF_ROBUSTNESS_CONTROL_COMMAND Command;
+    ULONG DeprioProcessCount;
+    ULONG ExemptProcessCount;
+    ULONG DeprioFileCount;
+    ULONG ExemptFileCount;
+    PF_ROBUST_PROCESS_ENTRY ProcessEntries[1];
+    PF_ROBUST_FILE_ENTRY FileEntries[1];
+} PF_ROBUSTNESS_CONTROL, *PPF_ROBUSTNESS_CONTROL;
 
 // rev
 typedef struct _PF_SCENARIO_PREFETCH_INFO
@@ -4263,22 +4383,6 @@ typedef struct _PF_TRIM_WHILE_AGING_CONTROL_2
 } PF_TRIM_WHILE_AGING_CONTROL_2, *PPF_TRIM_WHILE_AGING_CONTROL_2;
 
 // rev
-#define PF_ROBUSTNESS_CONTROL_VERSION 1
-
-// rev
-typedef struct _PF_ROBUSTNESS_CONTROL
-{
-    ULONG Version;
-    PF_ROBUSTNESS_CONTROL_COMMAND Command;
-    ULONG DeprioProcessCount;
-    ULONG ExemptProcessCount;
-    ULONG DeprioFileCount;
-    ULONG ExemptFileCount;
-    PF_ROBUST_PROCESS_ENTRY ProcessEntries[1];
-    PF_ROBUST_FILE_ENTRY FileEntries[1];
-} PF_ROBUSTNESS_CONTROL, *PPF_ROBUSTNESS_CONTROL;
-
-// rev
 typedef struct _PF_TIME_CONTROL
 {
     LONG TimeAdjustment;
@@ -4315,8 +4419,8 @@ typedef struct _PF_PHYSICAL_MEMORY_RANGE_INFO_V2
 {
     ULONG Version;
     ULONG Flags;
-    ULONG RangeCount;
-    PF_PHYSICAL_MEMORY_RANGE Ranges[ANYSIZE_ARRAY];
+    SIZE_T RangeCount;
+    PF_PHYSICAL_MEMORY_RANGE Ranges[1];
 } PF_PHYSICAL_MEMORY_RANGE_INFO_V2, *PPF_PHYSICAL_MEMORY_RANGE_INFO_V2;
 
 // rev
@@ -4439,6 +4543,26 @@ typedef struct _PF_FILE_EXTENTS_INFO
 } PF_FILE_EXTENTS_INFO, *PPF_FILE_EXTENTS_INFO;
 
 // rev
+#define PF_FILE_EXTENTS_INFO_VERSION2 2
+
+typedef struct _PF_FILE_EXTENTS_INFO_V2
+{
+    ULONG Version;      // must be 2 
+    ULONG Reserved0;
+    PWSTR PathUtf16;
+
+    ULONG PathBytes;    // must be even, within bounds
+    ULONG PathMeta;     // used to compute an index (>>1) tested for '\\'
+    ULONG ParamA;       // must be nonzero and < PathBytes (per checks)
+    ULONG Reserved1;
+
+    PVOID OutMeta0;
+    PVOID OutBuffer;
+    ULONG OutBufferBytesRequested;
+    ULONG Reserved2;
+} PF_FILE_EXTENTS_INFO_V2, *PPF_FILE_EXTENTS_INFO_V2;
+
+// rev
 #define PF_GPU_UTILIZATION_INFO_VERSION 1
 
 // rev
@@ -4448,53 +4572,6 @@ typedef struct _PF_GPU_UTILIZATION_INFO
     ULONG SessionId;
     ULONGLONG GpuTime;
 } PF_GPU_UTILIZATION_INFO, *PPF_GPU_UTILIZATION_INFO;
-
-// rev
-typedef enum _SUPERFETCH_INFORMATION_CLASS
-{
-    SuperfetchRetrieveTrace = 1,               // q: PF_SYSTEM_SUPERFETCH_RETRIEVE_TRACE // PfGetCompletedTrace
-    SuperfetchSystemParameters,                // q: PF_SYSTEM_SUPERFETCH_PARAMETERS
-    SuperfetchLogEvent,                        // s: PF_LOG_EVENT_DATA
-    SuperfetchGenerateTrace,                   // s: PF_GENERATE_TRACE_CONTROL
-    SuperfetchPrefetch,
-    SuperfetchPfnQuery,                        // q: PF_PFN_PRIO_REQUEST
-    SuperfetchPfnSetPriority,                  // s: PF_PFN_PRIO_REQUEST // MmSetPfnListInfo
-    SuperfetchPrivSourceQuery,                 // q: PF_PRIVSOURCE_QUERY_REQUEST
-    SuperfetchSequenceNumberQuery,             // q: ULONG
-    SuperfetchScenarioPhase,                   // s: PF_SCENARIO_PHASE_INFO // 10
-    SuperfetchWorkerPriority,                  // s: PF_WORKER_PRIORITY_CONTROL
-    SuperfetchScenarioQuery,
-    SuperfetchScenarioPrefetch,                // s: PF_SCENARIO_PREFETCH_INFO
-    SuperfetchRobustnessControl,               // s: PF_ROBUSTNESS_CONTROL
-    SuperfetchTimeControl,                     // s: PF_TIME_CONTROL
-    SuperfetchMemoryListQuery,                 // q: PF_MEMORY_LIST_INFO
-    SuperfetchMemoryRangesQuery,               // q: PF_PHYSICAL_MEMORY_RANGE_INFO_V1/V2
-    SuperfetchTracingControl,                  // s: PF_ACCESS_TRACING_CONTROL
-    SuperfetchTrimWhileAgingControl,           // s: PF_TRIM_WHILE_AGING_CONTROL
-    SuperfetchRepurposedByPrefetch,            // q: PF_REPURPOSED_BY_PREFETCH_INFO // 20
-    SuperfetchChannelPowerRequest,
-    SuperfetchMovePages,                       // s: PF_PFN_PRIO_REQUEST // MmRelocatePfnList
-    SuperfetchVirtualQuery,                    // q: PF_VIRTUAL_QUERY
-    SuperfetchCombineStatsQuery,               // q: PF_PAGECOMBINE_AGGREGATE_STAT
-    SuperfetchSetMinWsAgeRate,                 // s: PF_MIN_WS_AGE_RATE_CONTROL
-    SuperfetchDeprioritizeOldPagesInWs,        // s: PF_DEPRIORITIZE_OLD_PAGES
-    SuperfetchFileExtentsQuery,                // q: PF_FILE_EXTENTS_INFO
-    SuperfetchGpuUtilizationQuery,             // q: PF_GPU_UTILIZATION_INFO
-    SuperfetchPfnSet,                          // s: PF_PFN_PRIO_REQUEST // since WIN11
-    SuperfetchInformationMax
-} SUPERFETCH_INFORMATION_CLASS;
-
-#define SUPERFETCH_INFORMATION_VERSION 45 // rev
-#define SUPERFETCH_INFORMATION_MAGIC ('kuhC') // rev
-
-typedef struct _SUPERFETCH_INFORMATION
-{
-    _In_ ULONG Version;
-    _In_ ULONG Magic;
-    _In_ SUPERFETCH_INFORMATION_CLASS SuperfetchInformationClass;
-    _Inout_ PVOID SuperfetchInformation;
-    _Inout_ ULONG SuperfetchInformationLength;
-} SUPERFETCH_INFORMATION, *PSUPERFETCH_INFORMATION;
 
 #pragma endregion
 
