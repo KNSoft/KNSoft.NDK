@@ -29,7 +29,7 @@ TEST_FUNC(UnitTestFramework)
     TEST_RESULT(Skip);
 
     /* Move the result to local and verify */
-    C_ASSERT(sizeof(Result) == sizeof(*TEST_PARAMETER_RESULT));
+    _STATIC_ASSERT(sizeof(Result) == sizeof(*TEST_PARAMETER_RESULT));
     RtlCopyMemory(&Result, TEST_PARAMETER_RESULT, sizeof(Result));
     RtlZeroMemory(TEST_PARAMETER_RESULT, sizeof(*TEST_PARAMETER_RESULT));
 

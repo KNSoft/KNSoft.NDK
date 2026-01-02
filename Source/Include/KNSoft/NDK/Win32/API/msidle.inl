@@ -22,7 +22,7 @@ SetIdleTimer(VOID)
     if (_Inline_MSIdle_g_pIdleTimer != NULL)
     {
         LARGE_INTEGER liDueTime;
-        liDueTime.QuadPart = -10000LL * ulPeriod;
+        liDueTime.QuadPart = Int32x32To64(ulPeriod, -10000);
         _Inline_SetThreadpoolTimer(_Inline_MSIdle_g_pIdleTimer, (PFILETIME)&liDueTime, ulPeriod, ulPeriod);
     }
 }
