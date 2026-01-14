@@ -236,16 +236,19 @@ _InterlockedReadPointer(
 #if defined(_M_IX86)
 
 #define CONTEXT_PC Eip
+#define CONTEXT_SP Esp
 #define MACHINE_TYPE IMAGE_FILE_MACHINE_I386
 
 #elif defined(_M_X64)
 
 #define CONTEXT_PC Rip
+#define CONTEXT_SP Rsp
 #define MACHINE_TYPE IMAGE_FILE_MACHINE_AMD64
 
 #elif defined(_M_ARM64)
 
 #define CONTEXT_PC Pc
+#define CONTEXT_SP Sp
 #define MACHINE_TYPE IMAGE_FILE_MACHINE_ARM64
 
 #endif
