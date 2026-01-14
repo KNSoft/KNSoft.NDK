@@ -864,7 +864,7 @@ typedef struct _PEB32
         /* +0x02C */ VOID* POINTER_32 KernelCallbackTable; /* TODO: PKERNEL_CALLBACK_TABLE32 */
         /* +0x02C */ VOID* POINTER_32 UserSharedInfoPtr;
     };
-    /* +0x030 */  ULONG SystemReserved;
+    /* +0x030 */ ULONG SystemReserved;
     /* +0x034 */ ULONG AtlThunkSListPtr32;
     /* +0x038 */ VOID* POINTER_32 ApiSetMap;
     /* +0x03C */ ULONG TlsExpansionCounter;
