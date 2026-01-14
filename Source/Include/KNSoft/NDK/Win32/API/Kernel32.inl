@@ -402,7 +402,7 @@ _Inline_GetTickCount(VOID)
 #if _WIN64
     return (ULONG)((SharedUserData->TickCountMultiplier * SharedUserData->TickCountQuad) >> 24);
 #else
-    register ULONG HighPart;
+    REGISTER ULONG HighPart;
     if (SharedUserData->TickCountMultiplier < 0x1000000UL)
     {
         while (TRUE)
@@ -429,7 +429,7 @@ _Inline_GetTickCount64(VOID)
 #if _WIN64
     return (SharedUserData->TickCountMultiplier * SharedUserData->TickCountQuad) >> 24;
 #else
-    register ULONG HighPart;
+    REGISTER ULONG HighPart;
     while (TRUE)
     {
         HighPart = SharedUserData->TickCount.High1Time;
@@ -454,7 +454,7 @@ _Inline_GetSystemTimeAsFileTime(
 #if _WIN64
     *(PULONGLONG)lpSystemTimeAsFileTime = *(PULONGLONG)&SharedUserData->SystemTime;
 #else
-    register ULONG HighPart;
+    REGISTER ULONG HighPart;
     while (TRUE)
     {
         HighPart = SharedUserData->SystemTime.High1Time;

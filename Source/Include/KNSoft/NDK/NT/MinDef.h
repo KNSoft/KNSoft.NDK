@@ -310,7 +310,7 @@ typedef void* POINTER_32 PVOID32;
 
 #pragma endregion
 
-#pragma region Microsoft Specific
+#pragma region Microsoft / Language Specific
 
 #define DECLSPEC_ALLOCATOR __declspec(allocator)
 #define DECLSPEC_EXPORT __declspec(dllexport)
@@ -349,6 +349,13 @@ typedef typeof(nullptr) nullptr_t;
 #else
 #define _STATIC_ASSERT C_ASSERT
 #endif
+#endif
+
+/* register keyword has been deprecated in C++ */
+#ifdef __cplusplus
+#define REGISTER
+#else
+#define REGISTER register
 #endif
 
 #pragma endregion
