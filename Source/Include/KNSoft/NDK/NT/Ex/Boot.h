@@ -444,6 +444,9 @@ NtFilterBootOption(
     _In_ ULONG DataSize);
 #endif
 
+/**
+ * The SHUTDOWN_ACTION enumeration specifies the type of system shutdown to perform.
+ */
 typedef enum _SHUTDOWN_ACTION
 {
     ShutdownNoReboot,
@@ -452,6 +455,15 @@ typedef enum _SHUTDOWN_ACTION
     ShutdownRebootForRecovery // since WIN11
 } SHUTDOWN_ACTION;
 
+/**
+ * The NtShutdownSystem routine initiates a system shutdown using the specified
+ * shutdown action.
+ *
+ * \param Action A SHUTDOWN_ACTION value that specifies whether the system
+ * should halt, reboot, power off, or reboot for recovery.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks The calling process must have the SE_SHUTDOWN_NAME privilege.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -460,12 +472,26 @@ NtShutdownSystem(
 
 #pragma region Boot Display
 
+/**
+ * The NtDisplayString routine displays a Unicode string on the system display
+ * during early boot or in environments where a console is not yet available.
+ *
+ * \param String A pointer to a UNICODE_STRING structure that contains the text to display.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtDisplayString(
     _In_ PUNICODE_STRING String);
 
+/**
+ * The NtDrawText routine displays a Unicode string on the system display during
+ * early boot or in environments where a standard console is not yet available.
+ *
+ * \param Text A pointer to a UNICODE_STRING structure that contains the text to draw on the screen.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -92,6 +92,15 @@ SetWindowStationUser(
     _In_ ULONG UserSidLength
     );
 
+/* See also NtUserGetProcessUIContextInformation */
+WINUSERAPI
+BOOL
+NTAPI
+GetProcessUIContextInformation(
+    _In_ HANDLE ProcessHandle,
+    _Out_ PPROCESS_UICONTEXT_INFORMATION UIContext
+    );
+
 /* See also NtUserGhostWindowFromHungWindow */
 WINUSERAPI
 HWND

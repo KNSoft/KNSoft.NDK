@@ -198,17 +198,42 @@ typedef struct _KUSER_SHARED_DATA
     // Time zone ID.
     //
     /* +0x240 */ ULONG TimeZoneId;
+
+    //
+    // Minimum size of a large page on the system, in bytes.
+    //
+    // N.B. Returned by GetLargePageMinimum() function.
+    //
     /* +0x244 */ ULONG LargePageMinimum;
 
     //
-    // This value controls the AIT Sampling rate.
+    // This value controls the Application Impact Telemetry (AIT) Sampling rate.
+    //
+    // This value determines how frequently the system records AIT events,
+    // which are used by the Application Experience and compatibility
+    // subsystems to evaluate application behavior, performance, and
+    // potential compatibility issues.
+    //
+    // Lower values increase sampling frequency, while higher values reduce it.
+    // The kernel updates this field as part of its internal telemetry and
+    // heuristics logic.
     //
     /* +0x248 */ ULONG AitSamplingValue;
 
     //
-    // This value controls switchback processing.
+    // This value controls Application Compatibility (AppCompat) switchback processing.
     //
-    /* +0x24C */ ULONG AppCompatFlag;
+    union
+    {
+        /* +0x24C */ ULONG AppCompatFlag;
+        struct
+        {
+            /* +0x24C */ ULONG SwitchbackEnabled : 1;    // Basic switchback processing
+            /* +0x24C */ ULONG ExtendedHeuristics : 1;   // Extended switchback heuristics
+            /* +0x24C */ ULONG TelemetryFallback : 1;    // Telemetry-driven fallback
+            /* +0x24C */ ULONG Reserved : 29;
+        } AppCompatFlags;
+    };
 
     //
     // Current Kernel Root RNG state seed version
@@ -218,8 +243,27 @@ typedef struct _KUSER_SHARED_DATA
     //
     // This value controls assertion failure handling.
     //
+    // Historically (prior to Windows 10), this value was also used by
+    // Code Integrity (CI), AppLocker, and related security components to
+    // determine the minimum validation requirements for executable images,
+    // drivers, and privileged operations.
+    //
+    // In modern Windows versions, this field is used primarily by the kernel's
+    // diagnostic and validation infrastructure to decide how assertion failures
+    // should be handled (e.g., logging, debugger break-in, or bugcheck).
+    //
     /* +0x258 */ ULONG GlobalValidationRunlevel;
 
+    //
+    // Monotonic stamp incremented by the kernel whenever the system's
+    // time zone bias value changes.
+    //
+    // N.B. This field must be accessed via the RtlGetSystemTimeAndBias API for
+    //      an accurate result.
+    // This value is read before and after accessing the bias fields to determine
+    // whether the time zone data changed during the read. If the stamp differs,
+    // the caller must re-read the bias values to ensure consistency.
+    //
     /* +0x25C */ volatile LONG TimeZoneBiasStamp;
 
     //
@@ -237,6 +281,14 @@ typedef struct _KUSER_SHARED_DATA
     /* +0x264 */ NT_PRODUCT_TYPE NtProductType;
     /* +0x268 */ BOOLEAN ProductTypeIsValid;
     /* +0x269 */ BOOLEAN Reserved0[1];
+
+    //
+    // Native hardware processor architecture of the running system.
+    //
+    // N.B. User-mode components read this field to determine the true system
+    // architecture, especially in WOW64 scenarios where the process architecture
+    // differs from the native one.
+    //
     /* +0x26A */ USHORT NativeProcessorArchitecture;
 
     //
@@ -432,6 +484,9 @@ typedef struct _KUSER_SHARED_DATA
         } DUMMYSTRUCTNAME2;
     } DUMMYUNIONNAME2;
 
+    //
+    // Reserved padding field to preserve structure alignment and compatibility.
+    //
     /* +0x2F4 */ ULONG DataFlagsPad[1];
 
     //
@@ -441,6 +496,16 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. The following field is only used on 32-bit systems.
     //
     /* +0x2F8 */ ULONGLONG TestRetInstruction;
+
+    //
+    // Query-performance counter (QPC) frequency, in counts per second.
+    //
+    // N.B. This value represents the fixed frequency of the system's high-resolution
+    // performance counter. It is used by user-mode time routines to convert QPC
+    // ticks into elapsed time without requiring a system call. The frequency is
+    // constant for the lifetime of the system and reflects the hardware or
+    // virtualized timer source selected by the kernel.
+    //
     /* +0x300 */ LONGLONG QpcFrequency;
 
     //
@@ -590,9 +655,17 @@ typedef struct _KUSER_SHARED_DATA
     /* +0x3B8 */ volatile ULONGLONG QpcBias;
 
     //
-    // Number of active processors and groups.
+    // Number of active logical processors.
     //
     /* +0x3C0 */ ULONG ActiveProcessorCount;
+
+    //
+    // Number of active processor groups.
+    //
+    // N.B. This value is volatile because group membership and processor
+    // availability may change dynamically due to hot-add, hot-remove,
+    // or power management events.
+    //
     /* +0x3C4 */ volatile UCHAR ActiveGroupCount;
 
     //

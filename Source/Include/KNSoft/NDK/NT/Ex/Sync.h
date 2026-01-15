@@ -834,19 +834,45 @@ NTSTATUS
 NTAPI
 NtCreateTimer2(
     _Out_ PHANDLE TimerHandle,
-    _In_opt_ PVOID Reserved,
+    _In_opt_ PULONG TimerId,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
-    _In_ ULONG Attributes, // TIMER2_ATTRIBUTES or TIMER2_BUILD_ATTRIBUTES
+    _In_ ULONG Attributes,
     _In_ ACCESS_MASK DesiredAccess
     );
 
 #endif
 
 // rev
+#define TIMER2_SET_PARAMETERS_CURRENT_VERSION 0
+
+// rev
+/**
+ * The T2_SET_PARAMETERS structure configures the high-resolution or coalescable timers,
+ * and specify a "no-wake tolerance" value, which controls how much the kernel
+ * may delay the timers for coalescing or power efficiency.
+ * \remarks Setting NoWakeTolerance to 0 requests **no coalescing** and the most precise
+ * wake-up behavior the system can provide.
+ */
 typedef struct _T2_SET_PARAMETERS_V0
 {
+    /**
+     * Structure version. Must be set to zero.
+     */
     ULONG Version;
+    /**
+     * Reserved.
+     */
     ULONG Reserved;
+    /**
+     * Maximum tolerable delay (in 100-ns units) for timer coalescing.
+     * - Set to 0 for **no coalescing** (strict wake-up).
+     * - Set to a positive value to allow the kernel to delay the timer
+     *   by up to this amount for power efficiency.
+     * Example:
+     *   If NoWakeTolerance = 0 --> High-resolution, best precision, min jitter, zero coalescing, low power savings.
+     *   If NoWakeTolerance > 0 --> Normal-resolution, allow up to this value of coalescing, normal power savings.
+     *   If NoWakeTolerance = -1 --> Low-resolution, worst precision, max jitter, max coalescing, max power savings.
+     */
     LONGLONG NoWakeTolerance;
 } T2_SET_PARAMETERS, *PT2_SET_PARAMETERS;
 
@@ -871,7 +897,7 @@ NtSetTimer2(
     _In_ HANDLE TimerHandle,
     _In_ PLARGE_INTEGER DueTime,
     _In_opt_ PLARGE_INTEGER Period,
-    _In_ PT2_SET_PARAMETERS Parameters
+    _In_opt_ PT2_SET_PARAMETERS Parameters
     );
 
 /**

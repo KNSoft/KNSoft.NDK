@@ -103,6 +103,17 @@ NtConvertBetweenAuxiliaryCounterAndPerformanceCounter(
 
 #endif
 
+/**
+ * The NtGetTickCount routine retrieves the number of milliseconds that have elapsed since the system was started, up to 49.7 days.
+ *
+ * \return ULONG The return value is the number of milliseconds that have elapsed since the system was started.
+ * \remarks The elapsed time is stored as a ULONG value. Therefore, the time will wrap around to zero if the system
+ * is run continuously for 49.7 days. To avoid this problem, use the NtGetTickCount64 function. Otherwise, check
+ * for an overflow condition when comparing times. The resolution of the NtGetTickCount function is limited to
+ * the resolution of the system timer, which is typically in the range of 10 milliseconds to 16 milliseconds.
+ * The resolution of the NtGetTickCount function is not affected by adjustments made by the GetSystemTimeAdjustment function.
+ * \see https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount
+ */
 NTSYSCALLAPI
 ULONG
 NtGetTickCount(VOID);

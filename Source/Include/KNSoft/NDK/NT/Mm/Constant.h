@@ -16,6 +16,17 @@
 #define ADDRESS_AND_SIZE_TO_SPAN_PAGES(Va,Size) ((BYTE_OFFSET (Va) + ((SIZE_T) (Size)) + (PAGE_SIZE - 1)) >> PAGE_SHIFT)
 
 /* WDK/KNSoft.NDK */
+
+/**
+ * MM_SHARED_USER_DATA_VA pointer to the Windows KUSER_SHARED_DATA structure at its fixed
+ * user-mode mapping address (0x7FFE0000).
+ *
+ * The Windows kernel exposes a read-only data structure, mapped into every user-mode
+ * process at the fixed virtual address `0x7FFE0000`. This region contains frequently
+ * accessed system information and avoids the overhead of system calls for data that
+ * the kernel updates frequently. The mapping is always present and identical across
+ * all user processes, it provides a fast and efficient way to retrieve system state.
+ */
 #define MM_SHARED_USER_DATA_VA 0x7FFE0000
 
 #define MM_ALLOCATION_GRANULARITY 0x10000

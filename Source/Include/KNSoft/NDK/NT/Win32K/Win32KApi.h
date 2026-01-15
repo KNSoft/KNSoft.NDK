@@ -125,11 +125,43 @@ NtUserCloseWindowStation(
     _In_ HWINSTA WindowStationHandle
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The NtUserDisableProcessWindowFiltering routine disables window filtering
+ * so you can enumerate immersive windows from the desktop.
+ *
+ * \return Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/sbscs/application-manifests#disableWindowFiltering
+ */
+NTSYSCALLAPI
+BOOL
+NTAPI
+NtUserDisableProcessWindowFiltering(
+    VOID
+    );
+#endif
+
 NTSYSCALLAPI
 BOOL
 NTAPI
 NtUserDisableProcessWindowsGhosting(
     VOID
+    );
+
+NTSYSCALLAPI
+HANDLE
+NTAPI
+NtUserGetProp(
+    _In_ HWND WindowHandle,
+    _In_ PCWSTR String
+    );
+
+NTSYSCALLAPI
+HANDLE
+NTAPI
+NtUserGetProp2(
+    _In_ HWND WindowHandle,
+    _In_ PCUNICODE_STRING String
     );
 
 typedef enum _CONSOLECONTROL
@@ -277,6 +309,35 @@ HWINSTA
 NTAPI
 NtUserGetProcessWindowStation(
     VOID
+    );
+
+typedef enum _PROCESS_UICONTEXT
+{
+    PROCESS_UICONTEXT_DESKTOP,
+    PROCESS_UICONTEXT_IMMERSIVE,
+    PROCESS_UICONTEXT_IMMERSIVE_BROKER,
+    PROCESS_UICONTEXT_IMMERSIVE_BROWSER
+} PROCESS_UICONTEXT;
+
+typedef enum _PROCESS_UI_FLAGS
+{
+    PROCESS_UIF_NONE,
+    PROCESS_UIF_AUTHORING_MODE,
+    PROCESS_UIF_RESTRICTIONS_DISABLED
+} PROCESS_UI_FLAGS;
+
+typedef struct _PROCESS_UICONTEXT_INFORMATION
+{
+    PROCESS_UICONTEXT ProcessUIContext;
+    PROCESS_UI_FLAGS Flags;
+} PROCESS_UICONTEXT_INFORMATION, *PPROCESS_UICONTEXT_INFORMATION;
+    
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtUserGetProcessUIContextInformation(
+    _In_ HANDLE ProcessHandle,
+    _Out_ PPROCESS_UICONTEXT_INFORMATION UIContext
     );
 
 NTSYSCALLAPI

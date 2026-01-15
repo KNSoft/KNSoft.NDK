@@ -1285,10 +1285,10 @@ typedef struct _SYSTEM_THREAD_CID_PRIORITY_INFORMATION
     KPRIORITY Priority;
 } SYSTEM_THREAD_CID_PRIORITY_INFORMATION, *PSYSTEM_THREAD_CID_PRIORITY_INFORMATION;
 
-// private
 /**
  * The SYSTEM_PROCESSOR_IDLE_CYCLE_TIME_INFORMATION structure contains the cumulative number of clock cycles a logical processor
  * has spent running its idle thread, deferred procedure calls (DPCs) and interrupt service routines (ISRs) since it became active.
+ * \see https://learn.microsoft.com/en-us/windows/win32/api/realtimeapiset/nf-realtimeapiset-queryidleprocessorcycletimeex
  */
 typedef struct _SYSTEM_PROCESSOR_IDLE_CYCLE_TIME_INFORMATION
 {
@@ -1330,7 +1330,11 @@ typedef struct _SYSTEM_SPECIAL_POOL_INFORMATION
     ULONG Flags;
 } SYSTEM_SPECIAL_POOL_INFORMATION, *PSYSTEM_SPECIAL_POOL_INFORMATION;
 
-// private
+/**
+ * The SYSTEM_PROCESS_ID_INFORMATION structure retrieves the executable image
+ * name associated with a specific process ID. The caller supplies a process ID,
+ * and on return the system fills the UNICODE_STRING with the corresponding image path.
+ */
 typedef struct _SYSTEM_PROCESS_ID_INFORMATION
 {
     HANDLE ProcessId;
@@ -3199,6 +3203,9 @@ typedef struct _SYSTEM_MEMORY_USAGE_INFORMATION
 } SYSTEM_MEMORY_USAGE_INFORMATION, *PSYSTEM_MEMORY_USAGE_INFORMATION;
 
 // rev
+/**
+ * The SYSTEM_CODEINTEGRITY_IMAGE_TYPE constant is used for validating user-mode images (EXE/DLL).
+ */
 typedef enum _SYSTEM_CODEINTEGRITY_IMAGE_TYPE
 {
     SystemCodeIntegrityImageTypeUser,
@@ -3236,6 +3243,7 @@ typedef enum _SYSTEM_CODEINTEGRITY_IMAGE_TYPE
 
 /**
  * The SYSTEM_CODEINTEGRITY_CERTIFICATE_INFORMATION structure contains information to validate the integrity of an image.
+ *
  * \note The return status of NtQuerySystemInformation indicates the result of the code integrity validation as determined by the type specified.
  */
 typedef struct _SYSTEM_CODEINTEGRITY_CERTIFICATE_INFORMATION
@@ -3246,6 +3254,7 @@ typedef struct _SYSTEM_CODEINTEGRITY_CERTIFICATE_INFORMATION
 
 /**
  * The SYSTEM_PHYSICAL_MEMORY_INFORMATION structure retrieves the physical memory layout of the system.
+ *
  * \remarks The addresses are physical, not virtual.
  */
 typedef struct _SYSTEM_PHYSICAL_MEMORY_INFORMATION
@@ -3255,13 +3264,18 @@ typedef struct _SYSTEM_PHYSICAL_MEMORY_INFORMATION
     ULONGLONG HighestPhysicalAddress;       // Highest accessible physical address (byte address, inclusive).
 } SYSTEM_PHYSICAL_MEMORY_INFORMATION, *PSYSTEM_PHYSICAL_MEMORY_INFORMATION;
 
-// private
+/**
+ * The SYSTEM_ACTIVITY_MODERATION_STATE type contains the moderation state applied to an application,
+ * with respect to background throttling, resource reduction, and related heuristics.
+ *
+ * \remarks The state may be assigned automatically by the system or explicitly overridden by the user.
+ */
 typedef enum _SYSTEM_ACTIVITY_MODERATION_STATE
 {
-    SystemActivityModerationStateSystemManaged,
-    SystemActivityModerationStateUserManagedAllowThrottling,
-    SystemActivityModerationStateUserManagedDisableThrottling,
-    MaxSystemActivityModerationState
+    SystemActivityModerationStateSystemManaged, // The system applies heuristics based on the appropriate moderation behavior.
+    SystemActivityModerationStateUserManagedAllowThrottling, // User allows the system to throttle the application.
+    SystemActivityModerationStateUserManagedDisableThrottling, // User disables throttling for the application.
+    MaxSystemActivityModerationState // Upper bound for validation; not a real state.
 } SYSTEM_ACTIVITY_MODERATION_STATE;
 
 // private - REDSTONE2
@@ -3287,21 +3301,32 @@ typedef struct _SYSTEM_ACTIVITY_MODERATION_INFO
 } SYSTEM_ACTIVITY_MODERATION_INFO, *PSYSTEM_ACTIVITY_MODERATION_INFO;
 
 // rev
-#include <pshpack1.h>
+/**
+ * The SYSTEM_ACTIVITY_MODERATION_APP_SETTINGS structure describes the moderation state
+ * and classification of an application as used by the system's activity moderation framework.
+ * These settings influence how aggressively the system may throttle, defer, or
+ * suppress certain background activities for the application.
+ *
+ * The structure maintains a stable binary layout because it is stored in
+ * serialized policy blobs and consumed by system components that expect
+ * fixed field offsets.
+ */
 typedef struct _SYSTEM_ACTIVITY_MODERATION_APP_SETTINGS
 {
-    LARGE_INTEGER LastUpdatedTime; // QuerySystemTime
-    SYSTEM_ACTIVITY_MODERATION_STATE ModerationState;
-    UCHAR Reserved[4];
-    SYSTEM_ACTIVITY_MODERATION_APP_TYPE AppType;
-    UCHAR Flags[4];
+    LARGE_INTEGER LastUpdatedTime; // Timestamp of the last update to this settings block.
+    SYSTEM_ACTIVITY_MODERATION_STATE ModerationState; // Current moderation state assigned to the application.
+    UCHAR Reserved[4]; // Reserved for future expansion
+    SYSTEM_ACTIVITY_MODERATION_APP_TYPE AppType; // Current application type for moderation purposes.
+    ULONG Flags; // Additional moderation flags.
 } SYSTEM_ACTIVITY_MODERATION_APP_SETTINGS, *PSYSTEM_ACTIVITY_MODERATION_APP_SETTINGS;
-#include <poppack.h>
 
-// private
+/**
+ * The SYSTEM_ACTIVITY_MODERATION_USER_SETTINGS structure provides the activity-moderation
+ * registry location where moderation policies or overrides may be stored.
+ */
 typedef struct _SYSTEM_ACTIVITY_MODERATION_USER_SETTINGS
 {
-    HANDLE UserKeyHandle;
+    HANDLE UserKeyHandle; // Handle to the user registry key for activity moderation settings.
 } SYSTEM_ACTIVITY_MODERATION_USER_SETTINGS, *PSYSTEM_ACTIVITY_MODERATION_USER_SETTINGS;
 
 // private
@@ -3372,17 +3397,69 @@ typedef struct _SYSTEM_CODEINTEGRITYVERIFICATION_INFORMATION
 } SYSTEM_CODEINTEGRITYVERIFICATION_INFORMATION, *PSYSTEM_CODEINTEGRITYVERIFICATION_INFORMATION;
 
 // rev
+/**
+ * The SYSTEM_HYPERVISOR_USER_SHARED_DATA structure contains information shared with the hypervisor and user-mode.
+ *
+ * This structure is populated by the hypervisor (when present) to allow user-mode components to perform
+ * high-resolution time calculations without requiring a hypercall or kernel transition.
+ */
 typedef struct _SYSTEM_HYPERVISOR_USER_SHARED_DATA
 {
+    /**
+     * Lock used to synchronize updates to the timing fields.
+     *
+     * The hypervisor increments this value before and after updating the
+     * QPC multiplier and bias. User-mode callers can sample this value
+     * before and after reading the timing fields to detect whether an
+     * update occurred mid-read and retry if necessary.
+     */
     volatile ULONG TimeUpdateLock;
+
+    /**
+     * Reserved field - The hypervisor does not assign this field.
+     */
     ULONG Reserved0;
+
+    /**
+     * Multiplier used to convert hypervisor QPC ticks to host time.
+     *
+     * This value is applied to the hypervisor's virtualized performance
+     * counter to compute a stable, high-resolution timebase. The multiplier
+     * is chosen by the hypervisor based on the underlying hardware timer
+     * source and virtualization mode.
+     */
     ULONGLONG QpcMultiplier;
+
+    /**
+     * Bias applied after QPC multiplication to produce final time.
+     *
+     * The hypervisor uses this bias to align the virtualized QPC value with
+     * the host's notion of system time. Combined with QpcMultiplier, this
+     * allows user-mode components to compute consistent time values even
+     * under virtualization.
+     */
     ULONGLONG QpcBias;
 } SYSTEM_HYPERVISOR_USER_SHARED_DATA, *PSYSTEM_HYPERVISOR_USER_SHARED_DATA;
 
-// private
+/**
+ * The SYSTEM_HYPERVISOR_SHARED_PAGE_INFORMATION structure describes
+ * the user-mode mapping of the hypervisor shared page.
+ *
+ * This structure provides the virtual address at which the hypervisor's
+ * user-accessible shared data page is mapped. When a hypervisor is present,
+ * the kernel maps a read-only page into user mode containing timing and
+ * virtualization-related information (see SYSTEM_HYPERVISOR_USER_SHARED_DATA).
+ *
+ * User-mode components can read this page directly to obtain high-resolution
+ * time conversion parameters or other hypervisor-provided data without
+ * requiring a hypercall or kernel transition.
+ */
 typedef struct _SYSTEM_HYPERVISOR_SHARED_PAGE_INFORMATION
 {
+    /**
+     * User-mode virtual address of the hypervisor shared data page.
+     * If no hypervisor is present, this pointer is NULL.
+     */
     PSYSTEM_HYPERVISOR_USER_SHARED_DATA HypervisorSharedUserVa;
 } SYSTEM_HYPERVISOR_SHARED_PAGE_INFORMATION, *PSYSTEM_HYPERVISOR_SHARED_PAGE_INFORMATION;
 
@@ -3776,7 +3853,10 @@ typedef struct _SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_OUTPUT
     SYSTEM_MEMORY_NUMA_PERFORMANCE_ENTRY PerformanceEntries[1];
 } SYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_OUTPUT, *PSYSTEM_MEMORY_NUMA_PERFORMANCE_INFORMATION_OUTPUT;
 
-// private
+/**
+ * The SYSTEM_OSL_RAMDISK_ENTRY structure describes a single RAM disk region
+ * used by the operating system loader.
+ */
 typedef struct _SYSTEM_OSL_RAMDISK_ENTRY
 {
     ULONG BlockSize;
@@ -3784,7 +3864,10 @@ typedef struct _SYSTEM_OSL_RAMDISK_ENTRY
     SIZE_T Size;
 } SYSTEM_OSL_RAMDISK_ENTRY, *PSYSTEM_OSL_RAMDISK_ENTRY;
 
-// private
+/**
+ * The SYSTEM_TRUSTEDAPPS_RUNTIME_INFORMATION structure describes runtime
+ * information related to Trusted Apps support.
+ */
 typedef struct _SYSTEM_TRUSTEDAPPS_RUNTIME_INFORMATION
 {
     union
@@ -3799,7 +3882,10 @@ typedef struct _SYSTEM_TRUSTEDAPPS_RUNTIME_INFORMATION
     PVOID RemoteBreakingRoutine;
 } SYSTEM_TRUSTEDAPPS_RUNTIME_INFORMATION, *PSYSTEM_TRUSTEDAPPS_RUNTIME_INFORMATION;
 
-// private
+/**
+ * The SYSTEM_OSL_RAMDISK_INFORMATION structure describes a variable-length
+ * array of RAM disk entries used by the operating system loader.
+ */
 typedef struct _SYSTEM_OSL_RAMDISK_INFORMATION
 {
     ULONG Version;
@@ -3807,7 +3893,10 @@ typedef struct _SYSTEM_OSL_RAMDISK_INFORMATION
     SYSTEM_OSL_RAMDISK_ENTRY Entries[1];
 } SYSTEM_OSL_RAMDISK_INFORMATION, *PSYSTEM_OSL_RAMDISK_INFORMATION;
 
-// private
+/**
+ * The CI_POLICY_MGMT_OPERATION enumeration specifies the type of Code Integrity
+ * policy management operation requested.
+ */
 typedef enum _CI_POLICY_MGMT_OPERATION
 {
     CI_POLICY_MGMT_OPERATION_NONE = 0,
@@ -3821,7 +3910,11 @@ typedef enum _CI_POLICY_MGMT_OPERATION
     CI_POLICY_MGMT_OPERATION_MAX = 8
 } CI_POLICY_MGMT_OPERATION;
 
-// private
+/**
+ * The SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT structure describes parameters
+ * used to manage Code Integrity policies through the system information
+ * interface.
+ */
 typedef struct _SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT
 {
     CI_POLICY_MGMT_OPERATION Operation;
@@ -3832,7 +3925,10 @@ typedef struct _SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT
     PUCHAR Arg2;
 } SYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT, *PSYSTEM_CODEINTEGRITYPOLICY_MANAGEMENT;
 
-// private
+/**
+ * The SYSTEM_REF_TRACE_INFORMATION_EX structure describes configuration
+ * parameters for object reference tracing.
+ */
 typedef struct _SYSTEM_REF_TRACE_INFORMATION_EX
 {
     ULONG Version;
@@ -3855,7 +3951,10 @@ typedef struct _SYSTEM_REF_TRACE_INFORMATION_EX
     ULONG TracedObjectLimit;
 } SYSTEM_REF_TRACE_INFORMATION_EX, *PSYSTEM_REF_TRACE_INFORMATION_EX;
 
-// private
+/**
+ * The SYSTEM_BASICPROCESS_INFORMATION structure describes basic process
+ * information returned when enumerating processes.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_BASICPROCESS_INFORMATION
 {
@@ -3866,7 +3965,10 @@ typedef struct _SYSTEM_BASICPROCESS_INFORMATION
     UNICODE_STRING ImageName;
 } SYSTEM_BASICPROCESS_INFORMATION, *PSYSTEM_BASICPROCESS_INFORMATION;
 
-// private
+/**
+ * The SYSTEM_HANDLECOUNT_INFORMATION structure provides global counts of
+ * processes, threads, and handles in the system.
+ */
 typedef struct _SYSTEM_HANDLECOUNT_INFORMATION
 {
     ULONG ProcessCount;
@@ -3874,7 +3976,10 @@ typedef struct _SYSTEM_HANDLECOUNT_INFORMATION
     ULONG HandleCount;
 } SYSTEM_HANDLECOUNT_INFORMATION, *PSYSTEM_HANDLECOUNT_INFORMATION;
 
-// private
+/**
+ * The SYSTEM_POOLTAG2 structure describes allocation statistics for a single
+ * pool tag, including paged and nonpaged usage.
+ */
 typedef struct _SYSTEM_POOLTAG2
 {
     union
@@ -3890,7 +3995,10 @@ typedef struct _SYSTEM_POOLTAG2
     SIZE_T NonPagedUsed;
 } SYSTEM_POOLTAG2, *PSYSTEM_POOLTAG2;
 
-// private
+/**
+ * The SYSTEM_POOLTAG_INFORMATION2 structure describes a variable-length array
+ * of SYSTEM_POOLTAG2 entries representing pool tag usage statistics.
+ */
 typedef struct _SYSTEM_POOLTAG_INFORMATION2
 {
     ULONG Count;
@@ -4629,6 +4737,18 @@ NtSetSystemInformation(
     _In_ ULONG SystemInformationLength
 );
 
+/**
+ * The NtQueryLicenseValue routine retrieves a licensing-related value from the
+ * system licensing database.
+ *
+ * \param ValueName A pointer to a UNICODE_STRING structure that contains the name of the license value to query.
+ * \param Type An optional pointer that receives the type of the returned data.
+ * \param Data An optional buffer that receives the value data.
+ * \param DataSize The size, in bytes, of the buffer pointed to by Data.
+ * \param ResultDataSize A pointer that receives the number of bytes required to store the complete value data.
+ * \return NTSTATUS Successful or errant status.
+ * \see https://learn.microsoft.com/en-us/windows/win32/api/slpublic/nf-slpublic-slquerylicensevaluefromapp
+ */
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
