@@ -102,7 +102,7 @@ _Inline_EndIdleDetection(
         return FALSE;
     }
     _InterlockedExchangePointer((void* volatile*)&_Inline_MSIdle_g_pfnCallback, NULL);
-    Timer = _InterlockedExchangePointer((void* volatile*)&_Inline_MSIdle_g_pIdleTimer, NULL);
+    Timer = (PTP_TIMER)_InterlockedExchangePointer((void* volatile*)&_Inline_MSIdle_g_pIdleTimer, NULL);
     if (Timer != NULL)
     {
         _Inline_SetThreadpoolTimer(Timer, NULL, 0, 0);

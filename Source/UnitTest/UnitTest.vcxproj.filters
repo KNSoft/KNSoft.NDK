@@ -18,6 +18,7 @@
     </ClCompile>
     <ClCompile Include="Assembly.c" />
     <ClCompile Include="RandGen.c" />
+    <ClCompile Include="CppCompile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NT">

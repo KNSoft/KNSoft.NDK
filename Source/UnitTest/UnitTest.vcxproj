@@ -216,6 +216,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Assembly.c" />
+    <ClCompile Include="CppCompile.cpp" />
     <ClCompile Include="Extension\MSVC.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="NT\Bcd.c" />
