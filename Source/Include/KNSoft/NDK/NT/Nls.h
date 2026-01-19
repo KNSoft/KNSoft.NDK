@@ -151,6 +151,7 @@ typedef enum _CMF_WHAT_FLAGS
     CmfFlagB = 0x00080000, // Enables directory update path
     CmfFlagC = 0x00100000, // Enables segment unmap path
 } CMF_WHAT_FLAGS;
+DEFINE_ENUM_FLAG_OPERATORS(CMF_WHAT_FLAGS);
 
 /**
  * The NtMapCMFModule routine maps a Code Map File (CMF) module into memory
@@ -185,6 +186,7 @@ typedef enum _MUI_REGISTRY_INFO_FLAGS
     MUIRegInfoClear = 0x2,      // Clear the cached MUI registry info.
     MUIRegInfoCommit = 0x8      // Commit/update state (increments counter).
 } MUI_REGISTRY_INFO_FLAGS;
+DEFINE_ENUM_FLAG_OPERATORS(MUI_REGISTRY_INFO_FLAGS);
 
 /**
  * Flags for NtGetMUIRegistryInfo.

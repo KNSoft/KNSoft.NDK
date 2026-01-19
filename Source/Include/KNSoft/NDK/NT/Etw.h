@@ -2706,14 +2706,13 @@ typedef struct _ETW_WAKE_COUNTER_EVENT
 //
 
 #include <pshpack1.h>
+
 typedef struct _ETW_HEAP_EVENT_COMMON
 {
     SYSTEM_TRACE_HEADER Header;    // Header
     PVOID Handle;                  // Handle of Heap
 } ETW_HEAP_EVENT_COMMON, *PETW_HEAP_EVENT_COMMON;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_ALLOC
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2723,9 +2722,7 @@ typedef struct _ETW_HEAP_EVENT_ALLOC
     ULONG Source;                   // Type ie Lookaside, Lowfrag or main path
 
 } ETW_HEAP_EVENT_ALLOC, *PETW_HEAP_EVENT_ALLOC;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_FREE
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2734,9 +2731,7 @@ typedef struct _ETW_HEAP_EVENT_FREE
     ULONG Source;                   // Type ie Lookaside, Lowfrag or main path
 
 } ETW_HEAP_EVENT_FREE, *PETW_HEAP_EVENT_FREE;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_REALLOC
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2747,9 +2742,7 @@ typedef struct _ETW_HEAP_EVENT_REALLOC
     SIZE_T OldSize;                 // Old Size in bytes
     ULONG Source;                   // Type ie Lookaside, Lowfrag or main path
 } ETW_HEAP_EVENT_REALLOC, *PETW_HEAP_EVENT_REALLOC;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_EXPANSION
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2762,9 +2755,7 @@ typedef struct _ETW_HEAP_EVENT_EXPANSION
     ULONG NoOfUCRs;                 // Number of uncommitted ranges
     SIZE_T AllocatedSpace;          // Memory allocated
 } ETW_HEAP_EVENT_EXPANSION, *PETW_HEAP_EVENT_EXPANSION;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_CONTRACTION
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2778,9 +2769,7 @@ typedef struct _ETW_HEAP_EVENT_CONTRACTION
     SIZE_T AllocatedSpace;          // Memory allocated
 
 } ETW_HEAP_EVENT_CONTRACTION, *PETW_HEAP_EVENT_CONTRACTION;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_CREATE
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2790,6 +2779,7 @@ typedef struct _ETW_HEAP_EVENT_CREATE
     SIZE_T CommitSize;
     SIZE_T AllocatedSize;
 } ETW_HEAP_EVENT_CREATE, *PETW_HEAP_EVENT_CREATE;
+
 #include <poppack.h>
 
 #define HEAP_LOG_CREATE_HEAP 1
@@ -2841,6 +2831,7 @@ typedef struct _HEAP_SUBSEGMENT_ALLOC
 } HEAP_SUBSEGMENT_ALLOC, *PHEAP_SUBSEGMENT_ALLOC;
 
 #include <pshpack1.h>
+
 typedef struct _HEAP_SUBSEGMENT_INIT
 {
     SYSTEM_TRACE_HEADER Header;
@@ -2850,18 +2841,14 @@ typedef struct _HEAP_SUBSEGMENT_INIT
     SIZE_T BlockCount;
     ULONG AffinityIndex;
 } HEAP_SUBSEGMENT_INIT, *PHEAP_SUBSEGMENT_INIT;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _HEAP_AFFINITY_MANAGER_ENABLE
 {
     SYSTEM_TRACE_HEADER Header;
     PVOID HeapHandle;
     ULONG BucketIndex;
 } HEAP_AFFINITY_MANAGER_ENABLE, *PHEAP_AFFINITY_MANAGER_ENABLE;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _HEAP_AFFINITY_SLOT_ASSIGN
 {
     SYSTEM_TRACE_HEADER Header;
@@ -2869,9 +2856,7 @@ typedef struct _HEAP_AFFINITY_SLOT_ASSIGN
     PVOID SubSegment;
     ULONG SlotIndex;
 } HEAP_AFFINITY_SLOT_ASSIGN, *PHEAP_AFFINITY_SLOT_ASSIGN;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _HEAP_REUSE_THRESHOLD_ACTIVATED
 {
     SYSTEM_TRACE_HEADER Header;
@@ -2879,18 +2864,14 @@ typedef struct _HEAP_REUSE_THRESHOLD_ACTIVATED
     PVOID SubSegment;
     ULONG BucketIndex;
 } HEAP_REUSE_THRESHOLD_ACTIVATED, *PHEAP_REUSE_THRESHOLD_ACTIVATED;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _HEAP_SUBSEGMENT_ACTIVATED
 {
     SYSTEM_TRACE_HEADER Header;
     PVOID HeapHandle;
     PVOID SubSegment;
 } HEAP_SUBSEGMENT_ACTIVATED, *PHEAP_SUBSEGMENT_ACTIVATED;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_SNAPSHOT
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2905,17 +2886,13 @@ typedef struct _ETW_HEAP_EVENT_SNAPSHOT
     ULONG UCRLength;
     SIZE_T AllocatedSpace;          // Total allocated space in heap, in bytes
 } ETW_HEAP_EVENT_SNAPSHOT, *PETW_HEAP_EVENT_SNAPSHOT;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_RUNDOWN_RANGE
 {
     PVOID Address;
     SIZE_T Size;
 } ETW_HEAP_EVENT_RUNDOWN_RANGE, *PETW_HEAP_EVENT_RUNDOWN_RANGE;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _ETW_HEAP_EVENT_RUNDOWN
 {
     SYSTEM_TRACE_HEADER Header;     // Header
@@ -2926,6 +2903,7 @@ typedef struct _ETW_HEAP_EVENT_RUNDOWN
     ULONG Reserved;   // for padding
     ETW_HEAP_EVENT_RUNDOWN_RANGE Ranges[1];
 } ETW_HEAP_EVENT_RUNDOWN, *PETW_HEAP_EVENT_RUNDOWN;
+
 #include <poppack.h>
 
 typedef struct _HEAP_EVENT_RANGE_CREATE
@@ -4060,6 +4038,7 @@ typedef struct _PERFINFO_MARK_EVENT
 //
 
 #include <pshpack1.h>
+
 typedef struct _PERFINFO_DRIVER_MAJORFUNCTION
 {
     ULONG MajorFunction;
@@ -4069,17 +4048,13 @@ typedef struct _PERFINFO_DRIVER_MAJORFUNCTION
     PVOID Irp;
     ULONG UniqMatchId;
 } PERFINFO_DRIVER_MAJORFUNCTION, *PPERFINFO_DRIVER_MAJORFUNCTION;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _PERFINFO_DRIVER_MAJORFUNCTION_RET
 {
     PVOID Irp;
     ULONG UniqMatchId;
 } PERFINFO_DRIVER_MAJORFUNCTION_RET, *PPERFINFO_DRIVER_MAJORFUNCTION_RET;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _PERFINFO_DRIVER_COMPLETE_REQUEST
 {
     //
@@ -4099,9 +4074,7 @@ typedef struct _PERFINFO_DRIVER_COMPLETE_REQUEST
     ULONG UniqMatchId;
 
 } PERFINFO_DRIVER_COMPLETE_REQUEST, *PPERFINFO_DRIVER_COMPLETE_REQUEST;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _PERFINFO_DRIVER_COMPLETE_REQUEST_RET
 {
     //
@@ -4111,15 +4084,14 @@ typedef struct _PERFINFO_DRIVER_COMPLETE_REQUEST_RET
     PVOID Irp;
     ULONG UniqMatchId;
 } PERFINFO_DRIVER_COMPLETE_REQUEST_RET, *PPERFINFO_DRIVER_COMPLETE_REQUEST_RET;
-#include <poppack.h>
 
-#include <pshpack1.h>
 typedef struct _PERFINFO_DRIVER_COMPLETIONROUTINE
 {
     PVOID Routine;
     PVOID IrpPtr;
     ULONG UniqMatchId;
 } PERFINFO_DRIVER_COMPLETIONROUTINE, *PPERFINFO_DRIVER_COMPLETIONROUTINE;
+
 #include <poppack.h>
 
 //

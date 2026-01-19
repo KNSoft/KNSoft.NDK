@@ -269,8 +269,8 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemRefTraceInformationEx,                            // q: SYSTEM_REF_TRACE_INFORMATION_EX
     SystemBasicProcessInformation,                          // q: SYSTEM_BASICPROCESS_INFORMATION
     SystemHandleCountInformation,                           // q: SYSTEM_HANDLECOUNT_INFORMATION
-    SystemRuntimeAttestationReport,                         // q: // since 26H1
-    SystemPoolTagInformation2,                              // q: SYSTEM_POOLTAG_INFORMATION2
+    SystemRuntimeAttestationReport,                         // q:
+    SystemPoolTagInformation2,                              // q: SYSTEM_POOLTAG_INFORMATION2 // since 26H1
     MaxSystemInfoClass
 } SYSTEM_INFORMATION_CLASS;
 
@@ -942,30 +942,24 @@ typedef struct _SYSTEM_VERIFIER_INFORMATION_LEGACY // pre-19H1
     ULONG NextEntryOffset;
     ULONG Level;
     UNICODE_STRING DriverName;
-
     ULONG RaiseIrqls;
     ULONG AcquireSpinLocks;
     ULONG SynchronizeExecutions;
     ULONG AllocationsAttempted;
-
     ULONG AllocationsSucceeded;
     ULONG AllocationsSucceededSpecialPool;
     ULONG AllocationsWithNoTag;
     ULONG TrimRequests;
-
     ULONG Trims;
     ULONG AllocationsFailed;
     ULONG AllocationsFailedDeliberately;
     ULONG Loads;
-
     ULONG Unloads;
     ULONG UnTrackedPool;
     ULONG CurrentPagedPoolAllocations;
     ULONG CurrentNonPagedPoolAllocations;
-
     ULONG PeakPagedPoolAllocations;
     ULONG PeakNonPagedPoolAllocations;
-
     SIZE_T PagedPoolUsageInBytes;
     SIZE_T NonPagedPoolUsageInBytes;
     SIZE_T PeakPagedPoolUsageInBytes;
@@ -980,32 +974,25 @@ typedef struct _SYSTEM_VERIFIER_INFORMATION
     ULONG RuleClasses[2];
     ULONG TriageContext;
     ULONG AreAllDriversBeingVerified;
-
     UNICODE_STRING DriverName;
-
     ULONG RaiseIrqls;
     ULONG AcquireSpinLocks;
     ULONG SynchronizeExecutions;
     ULONG AllocationsAttempted;
-
     ULONG AllocationsSucceeded;
     ULONG AllocationsSucceededSpecialPool;
     ULONG AllocationsWithNoTag;
     ULONG TrimRequests;
-
     ULONG Trims;
     ULONG AllocationsFailed;
     ULONG AllocationsFailedDeliberately;
     ULONG Loads;
-
     ULONG Unloads;
     ULONG UnTrackedPool;
     ULONG CurrentPagedPoolAllocations;
     ULONG CurrentNonPagedPoolAllocations;
-
     ULONG PeakPagedPoolAllocations;
     ULONG PeakNonPagedPoolAllocations;
-
     SIZE_T PagedPoolUsageInBytes;
     SIZE_T NonPagedPoolUsageInBytes;
     SIZE_T PeakPagedPoolUsageInBytes;

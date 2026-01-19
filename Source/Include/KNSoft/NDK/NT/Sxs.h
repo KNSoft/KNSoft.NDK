@@ -11,8 +11,6 @@ EXTERN_C_START
 
 #define ACTIVATION_CONTEXT_FLAG_NO_INHERIT 0x00000001
 
-#include <pshpack4.h>
-
 typedef struct _ACTIVATION_CONTEXT_DATA
 {
     ULONG Magic;
@@ -198,11 +196,19 @@ typedef struct _ACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION
     ULONG ManifestPathType; // ACTIVATION_CONTEXT_PATH_TYPE_*
     ULONG ManifestPathLength;
     ULONG ManifestPathOffset; // to WCHAR[], from section header
-    LARGE_INTEGER ManifestLastWriteTime;
+    struct
+    {
+        ULONG LowPart;
+        LONG HighPart;
+    } ManifestLastWriteTime;
     ULONG PolicyPathType; // ACTIVATION_CONTEXT_PATH_TYPE_*
     ULONG PolicyPathLength;
     ULONG PolicyPathOffset; // to WCHAR[], from section header
-    LARGE_INTEGER PolicyLastWriteTime;
+    struct
+    {
+        ULONG LowPart;
+        LONG HighPart;
+    } PolicyLastWriteTime;
     ULONG MetadataSatelliteRosterIndex;
     ULONG Unused2;
     ULONG ManifestVersionMajor;
@@ -348,14 +354,14 @@ typedef struct _ACTIVATION_CONTEXT_DATA_TYPE_LIBRARY_VERSION
 
 typedef struct _ACTIVATION_CONTEXT_DATA_COM_TYPE_LIBRARY_REDIRECTION
 {
-    ULONG   Size;
-    ULONG   Flags;
-    ULONG   NameLength;
-    ULONG   NameOffset; // to WCHAR[], from section header
-    USHORT  ResourceId;
-    USHORT  LibraryFlags; // LIBFLAG_* oaidl.h
-    ULONG   HelpDirLength;
-    ULONG   HelpDirOffset; // to WCHAR[], from this struct base
+    ULONG Size;
+    ULONG Flags;
+    ULONG NameLength;
+    ULONG NameOffset; // to WCHAR[], from section header
+    USHORT ResourceId;
+    USHORT LibraryFlags; // LIBFLAG_* oaidl.h
+    ULONG HelpDirLength;
+    ULONG HelpDirOffset; // to WCHAR[], from this struct base
     ACTIVATION_CONTEXT_DATA_TYPE_LIBRARY_VERSION Version;
 } ACTIVATION_CONTEXT_DATA_COM_TYPE_LIBRARY_REDIRECTION, *PACTIVATION_CONTEXT_DATA_COM_TYPE_LIBRARY_REDIRECTION;
 
@@ -372,13 +378,13 @@ typedef struct _ACTIVATION_CONTEXT_DATA_COM_PROGID_REDIRECTION
 
 typedef struct _ACTIVATION_CONTEXT_DATA_CLR_SURROGATE
 {
-    ULONG   Size;
-    ULONG   Flags;
-    GUID    SurrogateIdent;
-    ULONG   VersionOffset; // to WCHAR[], from this struct base
-    ULONG   VersionLength;
-    ULONG   TypeNameOffset; // to WCHAR[], from this struct base
-    ULONG   TypeNameLength;
+    ULONG Size;
+    ULONG Flags;
+    GUID SurrogateIdent;
+    ULONG VersionOffset; // to WCHAR[], from this struct base
+    ULONG VersionLength;
+    ULONG TypeNameOffset; // to WCHAR[], from this struct base
+    ULONG TypeNameLength;
 } ACTIVATION_CONTEXT_DATA_CLR_SURROGATE, *PACTIVATION_CONTEXT_DATA_CLR_SURROGATE;
 
 #define ACTIVATION_CONTEXT_DATA_APPLICATION_SETTINGS_FORMAT_LONGHORN 1
@@ -417,8 +423,6 @@ typedef struct _ACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION_LEGACY
     ULONG ElementCount;
     COMPATIBILITY_CONTEXT_ELEMENT_LEGACY Elements[ANYSIZE_ARRAY];
 } ACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION_LEGACY, *PACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION_LEGACY;
-
-#include <poppack.h>
 
 typedef struct _ASSEMBLY_STORAGE_MAP_ENTRY
 {
@@ -488,8 +492,9 @@ ACTIVATION_CONTEXT_NOTIFY_ROUTINE(
     _In_ PACTIVATION_CONTEXT_DATA ActivationContextData,
     _In_opt_ PVOID NotificationContext,
     _In_opt_ PVOID NotificationData,
-    _Inout_ PBOOLEAN DisableThisNotification);
-typedef ACTIVATION_CONTEXT_NOTIFY_ROUTINE *PACTIVATION_CONTEXT_NOTIFY_ROUTINE;
+    _Inout_ PBOOLEAN DisableThisNotification
+);
+typedef ACTIVATION_CONTEXT_NOTIFY_ROUTINE* PACTIVATION_CONTEXT_NOTIFY_ROUTINE;
 
 typedef struct _ACTIVATION_CONTEXT
 {

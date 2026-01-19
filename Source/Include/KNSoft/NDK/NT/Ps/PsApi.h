@@ -1828,6 +1828,7 @@ NtAllocateReserveObject(
 // Process snapshotting
 
 // Capture/creation flags.
+_Enum_is_bitflag_
 typedef enum _PSSNT_CAPTURE_FLAGS
 {
     PSSNT_CAPTURE_NONE                                = 0x00000000,
@@ -1856,6 +1857,7 @@ typedef enum _PSSNT_CAPTURE_FLAGS
 } PSSNT_CAPTURE_FLAGS;
 DEFINE_ENUM_FLAG_OPERATORS(PSSNT_CAPTURE_FLAGS);
 
+_Enum_is_bitflag_
 typedef enum _PSSNT_DUPLICATE_FLAGS
 {
     PSSNT_DUPLICATE_NONE         = 0x00,

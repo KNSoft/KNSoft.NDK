@@ -6,6 +6,7 @@ EXTERN_C_START
 
 /* phnt */
 
+_Enum_is_bitflag_
 typedef enum _AHC_INFO_CLASS
 {
     AhcInfoClassSdbQueryResult          = 0x00000001,

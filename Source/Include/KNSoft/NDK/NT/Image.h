@@ -143,8 +143,6 @@ typedef struct _IMAGE_DVRT_ARM64X_DELTA_FIXUP_RECORD
 
 /* phnt */
 
-#include <pshpack4.h>
-
 typedef struct _IMAGE_DEBUG_POGO_ENTRY
 {
     ULONG Rva;
@@ -189,8 +187,6 @@ typedef struct _IMAGE_ARM64EC_CODE_MAP_ENTRY
 
     ULONG Length;
 } IMAGE_ARM64EC_CODE_MAP_ENTRY, *PIMAGE_ARM64EC_CODE_MAP_ENTRY;
-
-#include <poppack.h>
 
 #define IMAGE_DYNAMIC_RELOCATION_ARM64X                         0x00000006
 #define IMAGE_DYNAMIC_RELOCATION_MM_SHARED_USER_DATA_VA         0x7FFE0000
