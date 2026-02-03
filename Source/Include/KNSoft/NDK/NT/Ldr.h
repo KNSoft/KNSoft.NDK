@@ -1309,7 +1309,7 @@ LdrResSearchResource(
     _In_ ULONG Flags,
     _Out_opt_ PVOID* ResourceBuffer,
     _Out_opt_ PSIZE_T ResourceLength,
-    _Out_writes_bytes_opt_(*CultureNameLength) PVOID CultureName, // WCHAR buffer[6]
+    _Out_writes_bytes_opt_(*CultureNameLength) PWSTR CultureName, // WCHAR buffer[6]
     _Out_opt_ PULONG CultureNameLength
     );
 

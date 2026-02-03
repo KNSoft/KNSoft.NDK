@@ -104,7 +104,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemRefTraceInformation,                              // qs: SYSTEM_REF_TRACE_INFORMATION // ObQueryRefTraceInformation
     SystemSpecialPoolInformation,                           // qs: SYSTEM_SPECIAL_POOL_INFORMATION (requires SeDebugPrivilege) // MmSpecialPoolTag, then MmSpecialPoolCatchOverruns != 0
     SystemProcessIdInformation,                             // q: SYSTEM_PROCESS_ID_INFORMATION
-    SystemErrorPortInformation,                             // s: (requires SeTcbPrivilege)
+    SystemErrorPortInformation,                             // s: HANDLE (requires SeTcbPrivilege)
     SystemBootEnvironmentInformation,                       // q: SYSTEM_BOOT_ENVIRONMENT_INFORMATION // 90
     SystemHypervisorInformation,                            // q: SYSTEM_HYPERVISOR_QUERY_INFORMATION
     SystemVerifierInformationEx,                            // qs: SYSTEM_VERIFIER_INFORMATION_EX
@@ -269,7 +269,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
     SystemRefTraceInformationEx,                            // q: SYSTEM_REF_TRACE_INFORMATION_EX
     SystemBasicProcessInformation,                          // q: SYSTEM_BASICPROCESS_INFORMATION
     SystemHandleCountInformation,                           // q: SYSTEM_HANDLECOUNT_INFORMATION
-    SystemRuntimeAttestationReport,                         // q:
+    SystemRuntimeAttestationReport,                         // q: SYSTEM_RUNTIME_REPORT_INPUT
     SystemPoolTagInformation2,                              // q: SYSTEM_POOLTAG_INFORMATION2 // since 26H1
     MaxSystemInfoClass
 } SYSTEM_INFORMATION_CLASS;
@@ -2601,7 +2601,7 @@ typedef struct _SYSTEM_SECUREBOOT_POLICY_INFORMATION
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _SYSTEM_PAGEFILE_INFORMATION_EX
 {
-    union // HACK union declaration for convenience (dmex)
+    union // union declaration for convenience (dmex)
     {
         SYSTEM_PAGEFILE_INFORMATION Info;
         struct
@@ -3962,6 +3962,100 @@ typedef struct _SYSTEM_HANDLECOUNT_INFORMATION
     ULONG ThreadCount;
     ULONG HandleCount;
 } SYSTEM_HANDLECOUNT_INFORMATION, *PSYSTEM_HANDLECOUNT_INFORMATION;
+
+//
+// Code Integrity Report Definitions.
+//
+
+typedef struct _CODE_INTEGRITY_RUNTIME_REPORT
+{
+    //
+    // The Code Integrity runtime report header.
+    //
+
+    RUNTIME_REPORT_HEADER Header;
+
+    //
+    // The number of generations (updates) of policy there have been since boot.
+    // The initial generation at boot is 1.
+    //
+
+    UINT64 CurrentGeneration;
+
+    //
+    // The number of generations of policy that are in this report. This is
+    // non-zero with the current generation reported first, followed by prior
+    // generations in order of ascending age.
+    //
+
+    ULONG NumberOfGenerations;
+
+} CODE_INTEGRITY_RUNTIME_REPORT;
+
+#define CODE_INTEGRITY_REPORT_GENERATION_VERSION_CURRENT    (1)
+
+typedef struct _CODE_INTEGRITY_REPORT_GENERATION_HEADER
+{
+    //
+    // Version of this structure.
+    //
+
+    USHORT Version;
+
+    //
+    // Reserved Field.
+    //
+
+    USHORT Reserved;
+
+    //
+    // The number of bytes consumed by this generation, including this header
+    // and all CODE_INTEGRITY_REPORT_RECORD_HEADER structures and payloads.
+    //
+
+    ULONG RecordSize;
+
+    //
+    // Secure Kernel / Hypervisor secure time reference when this policy was
+    // commited.
+    //
+
+    ULONG64 CommitTime;
+
+} CODE_INTEGRITY_REPORT_GENERATION_HEADER;
+
+#define CODE_INTEGRITY_REPORT_RECORD_VERSION_CURRENT    (1)
+
+typedef struct _CODE_INTEGRITY_REPORT_RECORD_HEADER
+{
+    //
+    // Version of this structure.
+    //
+
+    USHORT Version;
+
+    //
+    // Reserved Field.
+    //
+
+    USHORT Reserved;
+
+    //
+    // The number of bytes consumed by this record, including this header.
+    //
+
+	ULONG RecordSize;
+
+    //
+    // The event code (type) of this record. The same codes as the Measured
+    // Boot TCG Log are used, for example SIPAEVENT_OS_REVOCATION_LIST, and
+    // indicate the structure type of the payload that immediately follows
+    // this header.
+    //
+
+	ULONG SipaEventCode;
+
+} CODE_INTEGRITY_REPORT_RECORD_HEADER;
 
 /**
  * The SYSTEM_POOLTAG2 structure describes allocation statistics for a single

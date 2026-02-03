@@ -135,7 +135,7 @@ typedef struct _VARIABLE_NAME_AND_VALUE
 
 /**
  * The NtEnumerateSystemEnvironmentValuesEx routine enumerates system environment values with extended information.
- * 
+ *
  * \param InformationClass The class of system environment information to retrieve.
  * \param Buffer Pointer to a buffer that receives the system environment values data.
  * \param BufferLength Pointer to a ULONG variable that specifies the size of the Buffer on input.

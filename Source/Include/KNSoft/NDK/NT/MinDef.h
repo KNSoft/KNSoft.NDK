@@ -377,7 +377,7 @@ typedef const GUID* PCGUID;
 typedef struct _WNF_STATE_NAME
 {
     union
-    {   
+    {
         ULONGLONG Value;
         ULONG Data[2];
         struct
