@@ -494,6 +494,15 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msidle.h">
       <Filter>Win32\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl_h.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl_i.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">
@@ -593,5 +602,10 @@
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.CRT.xml">
       <Filter>Win32\API</Filter>
     </Precomp4C_LibCreate>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl">
+      <Filter>Win32\API</Filter>
+    </Midl>
   </ItemGroup>
 </Project>

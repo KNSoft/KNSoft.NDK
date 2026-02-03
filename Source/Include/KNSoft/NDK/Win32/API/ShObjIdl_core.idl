@@ -1,0 +1,363 @@
+/*
+ * Undocumented Virtual Desktop Interfaces
+ * See also:
+ *   https://github.com/MScholtes/VirtualDesktop (MIT License)
+ *   https://github.com/microsoft/TypeAgent/blob/main/dotnet/autoShell/AutoShell_Win32.cs (MIT License)
+ */
+
+import "WTypes.idl";
+import "hstring.idl";
+import "Unknwn.idl";
+import "ObjectArray.idl";
+
+#pragma region IApplicationView
+
+typedef enum
+{
+    AVCT_NONE = 0,
+    AVCT_DEFAULT = 1,
+    AVCT_VIRTUAL_DESKTOP = 2
+} APPLICATION_VIEW_CLOAK_TYPE;
+
+typedef enum
+{
+    AVCP_NONE = 0,
+    AVCP_SMALL_SCREEN = 1,
+    AVCP_TABLET_SMALL_SCREEN = 2,
+    AVCP_VERY_SMALL_SCREEN = 3,
+    AVCP_HIGH_SCALE_FACTOR = 4
+} APPLICATION_VIEW_COMPATIBILITY_POLICY;
+
+/* Latest, since Win10 17661 */
+[
+    object,
+    uuid(372E1D3B-38D3-42E4-A15B-8AB2B178F513),
+    pointer_default(unique)
+]
+interface IApplicationView : IUnknown
+{
+    HRESULT SetFocus();
+    HRESULT SwitchTo();
+    HRESULT TryInvokeBack([in] IUnknown* /* IAsyncCallback* */ Callback);
+    HRESULT GetThumbnailWindow([out] HWND* hwnd);
+    HRESULT GetMonitor([out] IUnknown** /* IImmersiveMonitor** */ immersiveMonitor);
+    HRESULT GetVisibility([out] int* visibility);
+    HRESULT SetCloak([in, v1_enum] APPLICATION_VIEW_CLOAK_TYPE cloakType, int unknown);
+    HRESULT GetPosition([in, ptr] GUID* guid /* GUID for IApplicationViewPosition */, [out] IUnknown** /* IApplicationViewPosition** */ position);
+    HRESULT SetPosition([in] IUnknown* /* IApplicationViewPosition* */ position);
+    HRESULT InsertAfterWindow([in] HWND hwnd);
+    HRESULT GetExtendedFramePosition([out] RECT* rect);
+    HRESULT GetAppUserModelId([out, string] wchar_t** Id);
+    HRESULT SetAppUserModelId([in, string] wchar_t* Id);
+    HRESULT IsEqualByAppUserModelId([in, string] wchar_t* Id, [out] int* result);
+    HRESULT GetViewState([out] unsigned int* state);
+    HRESULT SetViewState([in] unsigned int state);
+    HRESULT GetNeediness([out] int* neediness);
+    HRESULT GetLastActivationTimestamp([out] unsigned long* timestamp);
+    HRESULT SetLastActivationTimestamp([in] unsigned long timestamp);
+    HRESULT GetVirtualDesktopId([out] GUID* guid);
+    HRESULT SetVirtualDesktopId([in, ptr] GUID* guid);
+    HRESULT GetShowInSwitchers([out] int* flag);
+    HRESULT SetShowInSwitchers([in] int flag);
+    HRESULT GetScaleFactor([out] int* factor);
+    HRESULT CanReceiveInput([out] boolean* canReceiveInput);
+    HRESULT GetCompatibilityPolicyType([out, v1_enum] APPLICATION_VIEW_COMPATIBILITY_POLICY* flags);
+    HRESULT SetCompatibilityPolicyType([in, v1_enum] APPLICATION_VIEW_COMPATIBILITY_POLICY flags);
+    /* ===== Above methods are not changed ===== */
+    HRESULT GetSizeConstraints([in] IUnknown* /* IImmersiveMonitor* */ monitor, [out] SIZE* size1, [out] SIZE* size2);
+    HRESULT GetSizeConstraintsForDpi([in] unsigned int uint1, [out] SIZE* size1, [out] SIZE* size2);
+    HRESULT SetSizeConstraintsForDpi([in] unsigned int uint1, [in, ptr] SIZE* size1, [in, ptr] SIZE* size2);
+    HRESULT OnMinSizePreferencesUpdated([in] HWND hwnd);
+    HRESULT ApplyOperation([in] IUnknown* /* IApplicationViewOperation* */ operation);
+    HRESULT IsTray([out] boolean* isTray);
+    HRESULT IsInHighZOrderBand([out] boolean* isInHighZOrderBand);
+    HRESULT IsSplashScreenPresented([out] boolean* isSplashScreenPresented);
+    HRESULT Flash();
+    HRESULT GetRootSwitchableOwner([out] IApplicationView** rootSwitchableOwner);
+    HRESULT EnumerateOwnershipTree([out] IObjectArray** ownershipTree);
+    HRESULT GetEnterpriseId([out, string] wchar_t** enterpriseId);
+    HRESULT IsMirrored([out] boolean* isMirrored);
+    HRESULT Unknown1([out] int* unknown);
+    HRESULT Unknown2([out] int* unknown);
+    HRESULT Unknown3([out] int* unknown);
+    HRESULT Unknown4([out] int* unknown);
+    HRESULT Unknown5([out] int* unknown);
+    HRESULT Unknown6(int unknown);
+    HRESULT Unknown7();
+    HRESULT Unknown8([out] int* unknown);
+    HRESULT Unknown9(int unknown);
+    HRESULT Unknown10(int unknownX, int unknownY);
+    HRESULT Unknown11(int unknown);
+    HRESULT Unknown12([out] SIZE* size1);
+}
+
+/* Since Win10 1803 (17134), before Win10 17661 */
+[
+    object,
+    uuid(871F602A-2B58-42B4-8C4B-6C43D642C06F),
+    pointer_default(unique)
+]
+interface IApplicationView_17134 : IUnknown
+{
+    HRESULT SetFocus();
+    HRESULT SwitchTo();
+    HRESULT TryInvokeBack([in] IUnknown* /* IAsyncCallback* */ Callback);
+    HRESULT GetThumbnailWindow([out] HWND* hwnd);
+    HRESULT GetMonitor([out] IUnknown** /* IImmersiveMonitor** */ immersiveMonitor);
+    HRESULT GetVisibility([out] int* visibility);
+    HRESULT SetCloak([in, v1_enum] APPLICATION_VIEW_CLOAK_TYPE cloakType, int unknown);
+    HRESULT GetPosition([in, ptr] GUID* guid /* GUID for IApplicationViewPosition */, [out] IUnknown** /* IApplicationViewPosition** */ position);
+    HRESULT SetPosition([in] IUnknown* /* IApplicationViewPosition* */ position);
+    HRESULT InsertAfterWindow([in] HWND hwnd);
+    HRESULT GetExtendedFramePosition([out] RECT* rect);
+    HRESULT GetAppUserModelId([out, string] wchar_t** Id);
+    HRESULT SetAppUserModelId([in, string] wchar_t* Id);
+    HRESULT IsEqualByAppUserModelId([in, string] wchar_t* Id, [out] int* result);
+    HRESULT GetViewState([out] unsigned int* state);
+    HRESULT SetViewState([in] unsigned int state);
+    HRESULT GetNeediness([out] int* neediness);
+    HRESULT GetLastActivationTimestamp([out] unsigned long* timestamp);
+    HRESULT SetLastActivationTimestamp([in] unsigned long timestamp);
+    HRESULT GetVirtualDesktopId([out] GUID* guid);
+    HRESULT SetVirtualDesktopId([in, ptr] GUID* guid);
+    HRESULT GetShowInSwitchers([out] int* flag);
+    HRESULT SetShowInSwitchers([in] int flag);
+    HRESULT GetScaleFactor([out] int* factor);
+    HRESULT CanReceiveInput([out] boolean* canReceiveInput);
+    HRESULT GetCompatibilityPolicyType([out, v1_enum] APPLICATION_VIEW_COMPATIBILITY_POLICY* flags);
+    HRESULT SetCompatibilityPolicyType([in, v1_enum] APPLICATION_VIEW_COMPATIBILITY_POLICY flags);
+    HRESULT GetSizeConstraints([in] IUnknown* /* IImmersiveMonitor* */ monitor, [out] SIZE* size1, [out] SIZE* size2);
+    HRESULT GetSizeConstraintsForDpi([in] unsigned int uint1, [out] SIZE* size1, [out] SIZE* size2);
+    HRESULT SetSizeConstraintsForDpi([in] unsigned int uint1, [in, ptr] SIZE* size1, [in, ptr] SIZE* size2);
+    HRESULT OnMinSizePreferencesUpdated([in] HWND hwnd);
+    HRESULT ApplyOperation([in] IUnknown* /* IApplicationViewOperation* */ operation);
+    HRESULT IsTray([out] boolean* isTray);
+    HRESULT IsInHighZOrderBand([out] boolean* isInHighZOrderBand);
+    HRESULT IsSplashScreenPresented([out] boolean* isSplashScreenPresented);
+    HRESULT Flash();
+    HRESULT GetRootSwitchableOwner([out] IApplicationView_17134** rootSwitchableOwner);
+    HRESULT EnumerateOwnershipTree([out] IObjectArray** ownershipTree);
+    HRESULT GetEnterpriseId([out, string] wchar_t** enterpriseId);
+    HRESULT IsMirrored([out] boolean* isMirrored);
+    HRESULT Unknown1([out] int* unknown);
+    HRESULT Unknown2([out] int* unknown);
+    HRESULT Unknown3([out] int* unknown);
+    HRESULT Unknown4([out] int* unknown);
+}
+
+/* Before Win10 1803 (17134) */
+[
+    object,
+    uuid(9AC0B5C8-1484-4C5B-9533-4134A0F97CEA),
+    pointer_default(unique)
+]
+interface IApplicationView_0 : IUnknown
+{
+    HRESULT SetFocus();
+    HRESULT SwitchTo();
+    HRESULT TryInvokeBack([in] IUnknown* /* IAsyncCallback* */ Callback);
+    HRESULT GetThumbnailWindow([out] HWND* hwnd);
+    HRESULT GetMonitor([out] IUnknown** /* IImmersiveMonitor** */ immersiveMonitor);
+    HRESULT GetVisibility([out] int* visibility);
+    HRESULT SetCloak([in, v1_enum] APPLICATION_VIEW_CLOAK_TYPE cloakType, int unknown);
+    HRESULT GetPosition([in, ptr] GUID* guid /* GUID for IApplicationViewPosition */, [out] IUnknown** /* IApplicationViewPosition** */ position);
+    HRESULT SetPosition([in] IUnknown* /* IApplicationViewPosition* */ position);
+    HRESULT InsertAfterWindow([in] HWND hwnd);
+    HRESULT GetExtendedFramePosition([out] RECT* rect);
+    HRESULT GetAppUserModelId([out, string] wchar_t** Id);
+    HRESULT SetAppUserModelId([in, string] wchar_t* Id);
+    HRESULT IsEqualByAppUserModelId([in, string] wchar_t* Id, [out] int* result);
+    HRESULT GetViewState([out] unsigned int* state);
+    HRESULT SetViewState([in] unsigned int state);
+    HRESULT GetNeediness([out] int* neediness);
+    HRESULT GetLastActivationTimestamp([out] unsigned long* timestamp);
+    HRESULT SetLastActivationTimestamp([in] unsigned long timestamp);
+    HRESULT GetVirtualDesktopId([out] GUID* guid);
+    HRESULT SetVirtualDesktopId([in, ptr] GUID* guid);
+    HRESULT GetShowInSwitchers([out] int* flag);
+    HRESULT SetShowInSwitchers([in] int flag);
+    HRESULT GetScaleFactor([out] int* factor);
+    HRESULT CanReceiveInput([out] boolean* canReceiveInput);
+    HRESULT GetCompatibilityPolicyType([out, v1_enum] APPLICATION_VIEW_COMPATIBILITY_POLICY* flags);
+    HRESULT SetCompatibilityPolicyType([in, v1_enum] APPLICATION_VIEW_COMPATIBILITY_POLICY flags);
+    HRESULT GetPositionPriority([out] IUnknown** /* IShellPositionerPriority** */ priority);
+    HRESULT SetPositionPriority([in] IUnknown* /* IShellPositionerPriority* */ priority);
+    HRESULT GetSizeConstraints([in] IUnknown* /* IImmersiveMonitor* */ monitor, [out] SIZE* size1, [out] SIZE* size2);
+    HRESULT GetSizeConstraintsForDpi([in] unsigned int uint1, [out] SIZE* size1, [out] SIZE* size2);
+    HRESULT SetSizeConstraintsForDpi([in] unsigned int uint1, [in, ptr] SIZE* size1, [in, ptr] SIZE* size2);
+    HRESULT QuerySizeConstraintsFromApp();
+    HRESULT OnMinSizePreferencesUpdated([in] HWND hwnd);
+    HRESULT ApplyOperation([in] IUnknown* /* IApplicationViewOperation* */ operation);
+    HRESULT IsTray([out] boolean* isTray);
+    HRESULT IsInHighZOrderBand([out] boolean* isInHighZOrderBand);
+    HRESULT IsSplashScreenPresented([out] boolean* isSplashScreenPresented);
+    HRESULT Flash();
+    HRESULT GetRootSwitchableOwner([out] IApplicationView_0** rootSwitchableOwner);
+    HRESULT EnumerateOwnershipTree([out] IObjectArray** ownershipTree);
+    HRESULT GetEnterpriseId([out, string] wchar_t** enterpriseId);
+    HRESULT IsMirrored([out] boolean* isMirrored);
+}
+
+#pragma endregion
+
+#pragma region IApplicationViewCollection
+
+/* Latest, since Win10 17661 */
+[
+    object,
+    uuid(1841C6D7-4F9D-42C0-AF41-8747538F10E5),
+    pointer_default(unique)
+]
+interface IApplicationViewCollection : IUnknown
+{
+    HRESULT GetViews([out] IObjectArray** array);
+    HRESULT GetViewsByZOrder([out] IObjectArray** array);
+    HRESULT GetViewsByAppUserModelId([in, string] wchar_t* Id, [out] IObjectArray** array);
+    HRESULT GetViewForHwnd([in, ptr] HWND hwnd, [out] IApplicationView** view);
+    HRESULT GetViewForApplication([in] IUnknown* application, [out] IApplicationView** view);
+    HRESULT GetViewForAppUserModelId([in, string] wchar_t* Id, [out] IApplicationView** view);
+    HRESULT GetViewInFocus([out] IApplicationView** view);
+    /* ===== Above methods are not changed ===== */
+    HRESULT Unknown1([out] IApplicationView** view);
+    HRESULT RefreshCollection();
+    HRESULT RegisterForApplicationViewChanges([in] IUnknown* listener, [out] int* cookie);
+    HRESULT UnregisterForApplicationViewChanges([in] int cookie);
+}
+
+/*
+ * Before Win10 1803 (17134)
+ * Since Win10 1803 (17134), before Win10 17661
+ * Methods are changed but UUID is the same
+ */
+[
+    object,
+    uuid(2C08ADF0-A386-4B35-9250-0FE183476FCC),
+    pointer_default(unique)
+]
+interface IApplicationViewCollection_0 : IUnknown
+{
+    HRESULT GetViews([out] IObjectArray** array);
+    HRESULT GetViewsByZOrder([out] IObjectArray** array);
+    HRESULT GetViewsByAppUserModelId([in, string] wchar_t* Id, [out] IObjectArray** array);
+    HRESULT GetViewForHwnd([in, ptr] HWND hwnd, [out] IApplicationView** view);
+    HRESULT GetViewForApplication([in] IUnknown* application, [out] IApplicationView** view);
+    HRESULT GetViewForAppUserModelId([in, string] wchar_t* Id, [out] IApplicationView** view);
+    HRESULT GetViewInFocus([out] IApplicationView** view);
+
+    /* Since 17134 */
+    HRESULT Unknown1([out] IApplicationView** view);
+
+    HRESULT RefreshCollection();
+    HRESULT RegisterForApplicationViewChanges([in] IUnknown* listener, [out] int* cookie);
+
+    /* Before 17661 */
+    HRESULT RegisterForApplicationViewPositionChanges([in] IUnknown* listener, [out] int* cookie);
+
+    HRESULT UnregisterForApplicationViewChanges([in] int cookie);
+}
+
+#pragma endregion
+
+#pragma region IVirtualDesktop
+
+/* IVirtualDesktop */
+
+/* Latest, since Win11 22621 */
+[
+    object,
+    uuid(3F07F4BE-B107-441A-AF0F-39D82529072C),
+    pointer_default(unique)
+]
+interface IVirtualDesktop : IUnknown
+{
+    HRESULT IsViewVisible([in] IApplicationView* view, [out] boolean* isVisible);
+    HRESULT GetId([out] GUID* guid);
+    /* ===== Above methods are not changed ===== */
+    HRESULT GetName([out] HSTRING* name);
+    HRESULT GetWallpaperPath([out] HSTRING* path);
+    HRESULT IsRemote([out] boolean* isRemote);
+}
+
+/* Since Win11 22000, before Win11 22621 */
+[
+    object,
+    uuid(536D3495-B208-4CC9-AE26-DE8111275BF8),
+    pointer_default(unique)
+]
+interface IVirtualDesktop_22000 : IUnknown
+{
+    HRESULT IsViewVisible([in] IApplicationView* view, [out] boolean* isVisible);
+    HRESULT GetId([out] GUID* guid);
+    HRESULT Unknown1(int* unknown);
+    HRESULT GetName([out] HSTRING* name);
+    HRESULT GetWallpaperPath([out] HSTRING* path);
+}
+
+/* Since Win10 20348, before Win11 22000 */
+[
+    object,
+    uuid(62FDF88B-11CA-4AFB-8BD8-2296DFAE49E2),
+    pointer_default(unique)
+]
+interface IVirtualDesktop_20348 : IUnknown
+{
+    HRESULT IsViewVisible([in] IApplicationView* view, [out] boolean* isVisible);
+    HRESULT GetId([out] GUID* guid);
+    HRESULT Unknown1(int* unknown);
+    HRESULT GetName([out] HSTRING* name);
+}
+
+/* Win10 at least 17763, assume this is the oldest version */
+[
+    object,
+    uuid(FF72FFDD-BE7E-43FC-9C03-AD81681E88E4),
+    pointer_default(unique)
+]
+interface IVirtualDesktop_0 : IUnknown
+{
+    HRESULT IsViewVisible([in] IApplicationView* view, [out] boolean* isVisible);
+    HRESULT GetId([out] GUID* guid);
+}
+
+#pragma endregion
+
+#pragma region IVirtualDesktopPinnedApps
+
+[
+    object,
+    uuid(4CE81583-1E4C-4632-A621-07A53543148F),
+    pointer_default(unique)
+]
+interface IVirtualDesktopPinnedApps : IUnknown
+{
+    HRESULT IsAppIdPinned([in, string] wchar_t* appId);
+    HRESULT PinAppID([in, string] wchar_t* appId);
+    HRESULT UnpinAppID([in, string] wchar_t* appId);
+    HRESULT IsViewPinned([in] IApplicationView* applicationView, [out] boolean* pinned);
+    HRESULT PinView([in] IApplicationView* applicationView);
+    HRESULT UnpinView([in] IApplicationView* applicationView);
+}
+
+#pragma endregion
+
+#pragma region IVirtualDesktopManagerInternal
+
+/*
+ * This interface changes frequently, only unchanged methods are listed
+ */
+[
+    object,
+    uuid(53F5CA0B-158F-4124-900C-057158060B27),
+    pointer_default(unique)
+]
+interface IVirtualDesktopManagerInternal : IUnknown
+{
+    HRESULT GetCount([out] int* Count);
+    // HRESULT GetCount([in] HANDLE* hWndOrMon, [out] int* Count);
+
+    /* Only following methods are not changed */
+    HRESULT MoveViewToDesktop([in] IApplicationView* view, [in] IVirtualDesktop* desktop);
+    HRESULT CanViewMoveDesktops([in] IApplicationView* view, [out] boolean* canMove);
+}
+
+#pragma endregion

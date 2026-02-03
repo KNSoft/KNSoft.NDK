@@ -233,6 +233,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Hash.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ole32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\SecHost.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl_h.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl_i.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\User32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\UserMgrCli.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\WinSta.h" />
@@ -282,6 +285,19 @@
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.CRT.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl">
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)</OutputDirectory>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(IntDir)</OutputDirectory>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)</OutputDirectory>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Directory)%(Filename)_IID.h</InterfaceIdentifierFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">%(Directory)%(Filename)_IID.h</InterfaceIdentifierFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath)_i.h</InterfaceIdentifierFileName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Directory)%(Filename)_h.h</HeaderFileName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">%(Directory)%(Filename)_h.h</HeaderFileName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath)_h.h</HeaderFileName>
+    </Midl>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
