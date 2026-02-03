@@ -35,19 +35,19 @@
     </ItemDefinitionGroup>
 
     <!-- Enable Safe SEH for MASM Release x86, as well as CL default -->
-    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
         <MASM>
             <UseSafeExceptionHandlers>true</UseSafeExceptionHandlers>
         </MASM>
     </ItemDefinitionGroup>
 
     <!-- Use static runtime libraries -->
-    <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
         <ClCompile>
             <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
         </ClCompile>
     </ItemDefinitionGroup>
-    <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ItemDefinitionGroup Condition="'$(Configuration)' == 'Debug'">
         <ClCompile>
             <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
         </ClCompile>
