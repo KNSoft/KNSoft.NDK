@@ -70,6 +70,12 @@
     <Filter Include="Assembly">
       <UniqueIdentifier>{0bbb76ba-4844-48bd-ad6f-68228ff3e7af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Win32\API\ShObjIdl">
+      <UniqueIdentifier>{126c92fb-2301-4663-9e4b-6795c6fbaba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\API\ShObjIdl\VirtualDesktop">
+      <UniqueIdentifier>{e91c8aa7-9871-40c8-bf32-37113cbf9397}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
@@ -494,14 +500,17 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msidle.h">
       <Filter>Win32\API</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\ShObjIdl_core.h">
+      <Filter>Win32\API\ShObjIdl</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl_h.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.h">
+      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl_i.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_h.h">
+      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_i.h">
+      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -604,8 +613,8 @@
     </Precomp4C_LibCreate>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl">
-      <Filter>Win32\API</Filter>
+    <Midl Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl">
+      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
     </Midl>
   </ItemGroup>
 </Project>

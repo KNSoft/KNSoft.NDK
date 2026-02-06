@@ -33,7 +33,7 @@
 #include "Win32/API/WinSta.h"
 #include "Win32/API/AdvAPI32.h"
 #include "Win32/API/ComBase.h"
-#include "Win32/API/ShObjIdl_core.h"
+#include "Win32/API/ShObjIdl/ShObjIdl_core.h"
 #include "Win32/API/msidle.h"
 
 /* Additional headers */

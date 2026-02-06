@@ -6,7 +6,7 @@
  /* File created by MIDL compiler version 8.01.0628 */
 /* at Tue Jan 19 11:14:07 2038
  */
-/* Compiler settings for ..\Include\KNSoft\NDK\Win32\API\ShObjIdl_core.idl:
+/* Compiler settings for ..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.01.0628 
     protocol : all , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
@@ -35,8 +35,8 @@
 #include "ole2.h"
 #endif /*COM_NO_WINDOWS_H*/
 
-#ifndef __ShObjIdl_core2Eidl_h_h__
-#define __ShObjIdl_core2Eidl_h_h__
+#ifndef __VirtualDesktop2Eidl_h_h__
+#define __VirtualDesktop2Eidl_h_h__
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
@@ -140,12 +140,12 @@ extern "C"{
 #endif 
 
 
-/* interface __MIDL_itf_ShObjIdl_core_0000_0000 */
+/* interface __MIDL_itf_VirtualDesktop_0000_0000 */
 /* [local] */ 
 
 #pragma region IApplicationView
 typedef /* [public][public][public][public] */ 
-enum __MIDL___MIDL_itf_ShObjIdl_core_0000_0000_0001
+enum __MIDL___MIDL_itf_VirtualDesktop_0000_0000_0001
     {
         AVCT_NONE	= 0,
         AVCT_DEFAULT	= 1,
@@ -153,7 +153,7 @@ enum __MIDL___MIDL_itf_ShObjIdl_core_0000_0000_0001
     } 	APPLICATION_VIEW_CLOAK_TYPE;
 
 typedef /* [public][public][public][public][public][public][public] */ 
-enum __MIDL___MIDL_itf_ShObjIdl_core_0000_0000_0002
+enum __MIDL___MIDL_itf_VirtualDesktop_0000_0000_0002
     {
         AVCP_NONE	= 0,
         AVCP_SMALL_SCREEN	= 1,
@@ -164,8 +164,8 @@ enum __MIDL___MIDL_itf_ShObjIdl_core_0000_0000_0002
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0000_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0000_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0000_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0000_v0_0_s_ifspec;
 
 #ifndef __IApplicationView_INTERFACE_DEFINED__
 #define __IApplicationView_INTERFACE_DEFINED__
@@ -1949,15 +1949,15 @@ EXTERN_C const IID IID_IApplicationView_0;
 #endif 	/* __IApplicationView_0_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_ShObjIdl_core_0000_0003 */
+/* interface __MIDL_itf_VirtualDesktop_0000_0003 */
 /* [local] */ 
 
 #pragma endregion
 #pragma region IApplicationViewCollection
 
 
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0003_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0003_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0003_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0003_v0_0_s_ifspec;
 
 #ifndef __IApplicationViewCollection_INTERFACE_DEFINED__
 #define __IApplicationViewCollection_INTERFACE_DEFINED__
@@ -2376,15 +2376,15 @@ EXTERN_C const IID IID_IApplicationViewCollection_0;
 #endif 	/* __IApplicationViewCollection_0_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_ShObjIdl_core_0000_0005 */
+/* interface __MIDL_itf_VirtualDesktop_0000_0005 */
 /* [local] */ 
 
 #pragma endregion
 #pragma region IVirtualDesktop
 
 
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0005_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0005_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0005_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0005_v0_0_s_ifspec;
 
 #ifndef __IVirtualDesktop_INTERFACE_DEFINED__
 #define __IVirtualDesktop_INTERFACE_DEFINED__
@@ -2862,15 +2862,15 @@ EXTERN_C const IID IID_IVirtualDesktop_0;
 #endif 	/* __IVirtualDesktop_0_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_ShObjIdl_core_0000_0009 */
+/* interface __MIDL_itf_VirtualDesktop_0000_0009 */
 /* [local] */ 
 
 #pragma endregion
 #pragma region IVirtualDesktopPinnedApps
 
 
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0009_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0009_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0009_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0009_v0_0_s_ifspec;
 
 #ifndef __IVirtualDesktopPinnedApps_INTERFACE_DEFINED__
 #define __IVirtualDesktopPinnedApps_INTERFACE_DEFINED__
@@ -3013,15 +3013,15 @@ EXTERN_C const IID IID_IVirtualDesktopPinnedApps;
 #endif 	/* __IVirtualDesktopPinnedApps_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_ShObjIdl_core_0000_0010 */
+/* interface __MIDL_itf_VirtualDesktop_0000_0010 */
 /* [local] */ 
 
 #pragma endregion
 #pragma region IVirtualDesktopManagerInternal
 
 
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0010_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0010_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0010_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0010_v0_0_s_ifspec;
 
 #ifndef __IVirtualDesktopManagerInternal_INTERFACE_DEFINED__
 #define __IVirtualDesktopManagerInternal_INTERFACE_DEFINED__
@@ -3133,14 +3133,14 @@ EXTERN_C const IID IID_IVirtualDesktopManagerInternal;
 #endif 	/* __IVirtualDesktopManagerInternal_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_ShObjIdl_core_0000_0011 */
+/* interface __MIDL_itf_VirtualDesktop_0000_0011 */
 /* [local] */ 
 
 #pragma endregion
 
 
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0011_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_ShObjIdl_core_0000_0011_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0011_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0011_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
