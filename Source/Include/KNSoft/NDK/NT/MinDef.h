@@ -264,6 +264,7 @@ typedef const SID* PCSID;
 #include <wingdi.h>
 #include <guiddef.h>
 #include <winioctl.h>
+#include <WinUser.h>
 
 #pragma endregion
 
@@ -328,13 +329,6 @@ EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #define typeof decltype
 #elif __STDC_VERSION__ < 202311L && _MSC_FULL_VER >= 193933428
 #define typeof __typeof__
-#endif
-
-#if __STDC_VERSION__ >= 202311L
-#ifndef __cplusplus
-#define nullptr ((void *)0)
-#endif
-typedef typeof(nullptr) nullptr_t;
 #endif
 
 #define FIELD_TYPE(type, field) typeof(((type*)NULL)->field)

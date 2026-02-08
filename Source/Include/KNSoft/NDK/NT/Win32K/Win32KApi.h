@@ -2,8 +2,6 @@
 
 #include "../MinDef.h"
 
-#include <WinUser.h>
-
 EXTERN_C_START
 
 /* phnt */
@@ -2951,7 +2949,7 @@ NtUserScaleSystemMetricForDPIWithoutCache(
     _In_ ULONG ToDpi
     );
 
-#endif // PHNT_VERSION >= PHNT_WINDOWS_11
+#endif // (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
 typedef _Function_class_(FN_DISPATCH)
 NTSTATUS NTAPI FN_DISPATCH(

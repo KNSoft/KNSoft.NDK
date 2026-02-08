@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <WinUser.h>
+#include "../../NT/MinDef.h"
 
 #ifndef WM_COPYGLOBALDATA
 #define WM_COPYGLOBALDATA 0x49
