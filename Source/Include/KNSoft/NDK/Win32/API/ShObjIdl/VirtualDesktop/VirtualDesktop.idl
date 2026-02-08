@@ -342,8 +342,15 @@ interface IVirtualDesktopPinnedApps : IUnknown
 
 #pragma region IVirtualDesktopManagerInternal
 
+typedef enum
+{
+    VDMI_ADD_LEFT_DIRECTION = 3,
+    VDMI_ADD_RIGHT_DIRECTION = 4
+} VDMI_ADJACENT_DESKTOP_DIRECTION;
+
 /*
- * This interface changes frequently, only unchanged methods are listed
+ * This interface changes frequently,
+ * support the latest version only (Win11 24h2, 26100)
  */
 [
     object,
@@ -353,11 +360,30 @@ interface IVirtualDesktopPinnedApps : IUnknown
 interface IVirtualDesktopManagerInternal : IUnknown
 {
     HRESULT GetCount([out] int* Count);
-    // HRESULT GetCount([in] HANDLE* hWndOrMon, [out] int* Count);
 
-    /* Only following methods are not changed */
+    /* Only following 2 methods are not changed */
     HRESULT MoveViewToDesktop([in] IApplicationView* view, [in] IVirtualDesktop* desktop);
     HRESULT CanViewMoveDesktops([in] IApplicationView* view, [out] boolean* canMove);
+
+    HRESULT GetCurrentDesktop([out] IVirtualDesktop** desktop);
+    HRESULT GetDesktops([out] IObjectArray** desktops);
+    HRESULT GetAdjacentDesktop([in] IVirtualDesktop* from, [in, v1_enum] VDMI_ADJACENT_DESKTOP_DIRECTION direction, [out] IVirtualDesktop** desktop);
+    HRESULT SwitchDesktop([in] IVirtualDesktop* desktop);
+    HRESULT SwitchDesktopAndMoveForegroundView([in] IVirtualDesktop* desktop);
+    HRESULT CreateDesktop([out] IVirtualDesktop** desktop);
+    HRESULT MoveDesktop([in] IVirtualDesktop* desktop, [in] int nIndex);
+    HRESULT RemoveDesktop([in] IVirtualDesktop* desktop, [in] IVirtualDesktop* fallback);
+    HRESULT FindDesktop([in, ptr] GUID* desktopid, [out] IVirtualDesktop** desktop);
+    HRESULT GetDesktopSwitchIncludeExcludeViews([in] IVirtualDesktop* desktop, [out] IObjectArray** unknown1, [out] IObjectArray** unknown2);
+    HRESULT SetDesktopName([in] IVirtualDesktop* desktop, [in] HSTRING* name);
+    HRESULT SetDesktopWallpaper([in] IVirtualDesktop* desktop, [in] HSTRING* path);
+    HRESULT UpdateWallpaperPathForAllDesktops([in] HSTRING* path);
+    HRESULT CopyDesktopState([in] IApplicationView* pView0, [in] IApplicationView* pView1);
+    HRESULT CreateRemoteDesktop([in] HSTRING* path, [out] IVirtualDesktop** desktop);
+    HRESULT SwitchRemoteDesktop([in] IVirtualDesktop* desktop, [in] int switchtype);
+    HRESULT SwitchDesktopWithAnimation([in] IVirtualDesktop* desktop);
+    HRESULT GetLastActiveDesktop([out] IVirtualDesktop** desktop);
+    HRESULT WaitForAnimationToComplete();
 }
 
 #pragma endregion

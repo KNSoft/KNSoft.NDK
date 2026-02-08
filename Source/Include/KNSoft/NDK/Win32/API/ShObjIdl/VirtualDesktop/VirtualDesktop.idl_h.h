@@ -3018,6 +3018,13 @@ EXTERN_C const IID IID_IVirtualDesktopPinnedApps;
 
 #pragma endregion
 #pragma region IVirtualDesktopManagerInternal
+typedef /* [public][public] */ 
+enum __MIDL___MIDL_itf_VirtualDesktop_0000_0010_0001
+    {
+        VDMI_ADD_LEFT_DIRECTION	= 3,
+        VDMI_ADD_RIGHT_DIRECTION	= 4
+    } 	VDMI_ADJACENT_DESKTOP_DIRECTION;
+
 
 
 extern RPC_IF_HANDLE __MIDL_itf_VirtualDesktop_0000_0010_v0_0_c_ifspec;
@@ -3048,6 +3055,74 @@ EXTERN_C const IID IID_IVirtualDesktopManagerInternal;
         virtual HRESULT STDMETHODCALLTYPE CanViewMoveDesktops( 
             /* [in] */ IApplicationView *view,
             /* [out] */ boolean *canMove) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCurrentDesktop( 
+            /* [out] */ IVirtualDesktop **desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDesktops( 
+            /* [out] */ IObjectArray **desktops) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetAdjacentDesktop( 
+            /* [in] */ IVirtualDesktop *from,
+            /* [v1_enum][in] */ VDMI_ADJACENT_DESKTOP_DIRECTION direction,
+            /* [out] */ IVirtualDesktop **desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SwitchDesktop( 
+            /* [in] */ IVirtualDesktop *desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SwitchDesktopAndMoveForegroundView( 
+            /* [in] */ IVirtualDesktop *desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateDesktop( 
+            /* [out] */ IVirtualDesktop **desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE MoveDesktop( 
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ int nIndex) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveDesktop( 
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ IVirtualDesktop *fallback) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE FindDesktop( 
+            /* [full][in] */ GUID *desktopid,
+            /* [out] */ IVirtualDesktop **desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDesktopSwitchIncludeExcludeViews( 
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [out] */ IObjectArray **unknown1,
+            /* [out] */ IObjectArray **unknown2) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDesktopName( 
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ HSTRING *name) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetDesktopWallpaper( 
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ HSTRING *path) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE UpdateWallpaperPathForAllDesktops( 
+            /* [in] */ HSTRING *path) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CopyDesktopState( 
+            /* [in] */ IApplicationView *pView0,
+            /* [in] */ IApplicationView *pView1) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateRemoteDesktop( 
+            /* [in] */ HSTRING *path,
+            /* [out] */ IVirtualDesktop **desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SwitchRemoteDesktop( 
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ int switchtype) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SwitchDesktopWithAnimation( 
+            /* [in] */ IVirtualDesktop *desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLastActiveDesktop( 
+            /* [out] */ IVirtualDesktop **desktop) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE WaitForAnimationToComplete( void) = 0;
         
     };
     
@@ -3090,6 +3165,112 @@ EXTERN_C const IID IID_IVirtualDesktopManagerInternal;
             /* [in] */ IApplicationView *view,
             /* [out] */ boolean *canMove);
         
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, GetCurrentDesktop)
+        HRESULT ( STDMETHODCALLTYPE *GetCurrentDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [out] */ IVirtualDesktop **desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, GetDesktops)
+        HRESULT ( STDMETHODCALLTYPE *GetDesktops )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [out] */ IObjectArray **desktops);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, GetAdjacentDesktop)
+        HRESULT ( STDMETHODCALLTYPE *GetAdjacentDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *from,
+            /* [v1_enum][in] */ VDMI_ADJACENT_DESKTOP_DIRECTION direction,
+            /* [out] */ IVirtualDesktop **desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, SwitchDesktop)
+        HRESULT ( STDMETHODCALLTYPE *SwitchDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, SwitchDesktopAndMoveForegroundView)
+        HRESULT ( STDMETHODCALLTYPE *SwitchDesktopAndMoveForegroundView )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, CreateDesktop)
+        HRESULT ( STDMETHODCALLTYPE *CreateDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [out] */ IVirtualDesktop **desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, MoveDesktop)
+        HRESULT ( STDMETHODCALLTYPE *MoveDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ int nIndex);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, RemoveDesktop)
+        HRESULT ( STDMETHODCALLTYPE *RemoveDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ IVirtualDesktop *fallback);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, FindDesktop)
+        HRESULT ( STDMETHODCALLTYPE *FindDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [full][in] */ GUID *desktopid,
+            /* [out] */ IVirtualDesktop **desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, GetDesktopSwitchIncludeExcludeViews)
+        HRESULT ( STDMETHODCALLTYPE *GetDesktopSwitchIncludeExcludeViews )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [out] */ IObjectArray **unknown1,
+            /* [out] */ IObjectArray **unknown2);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, SetDesktopName)
+        HRESULT ( STDMETHODCALLTYPE *SetDesktopName )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ HSTRING *name);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, SetDesktopWallpaper)
+        HRESULT ( STDMETHODCALLTYPE *SetDesktopWallpaper )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ HSTRING *path);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, UpdateWallpaperPathForAllDesktops)
+        HRESULT ( STDMETHODCALLTYPE *UpdateWallpaperPathForAllDesktops )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ HSTRING *path);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, CopyDesktopState)
+        HRESULT ( STDMETHODCALLTYPE *CopyDesktopState )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IApplicationView *pView0,
+            /* [in] */ IApplicationView *pView1);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, CreateRemoteDesktop)
+        HRESULT ( STDMETHODCALLTYPE *CreateRemoteDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ HSTRING *path,
+            /* [out] */ IVirtualDesktop **desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, SwitchRemoteDesktop)
+        HRESULT ( STDMETHODCALLTYPE *SwitchRemoteDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop,
+            /* [in] */ int switchtype);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, SwitchDesktopWithAnimation)
+        HRESULT ( STDMETHODCALLTYPE *SwitchDesktopWithAnimation )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [in] */ IVirtualDesktop *desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, GetLastActiveDesktop)
+        HRESULT ( STDMETHODCALLTYPE *GetLastActiveDesktop )( 
+            IVirtualDesktopManagerInternal * This,
+            /* [out] */ IVirtualDesktop **desktop);
+        
+        DECLSPEC_XFGVIRT(IVirtualDesktopManagerInternal, WaitForAnimationToComplete)
+        HRESULT ( STDMETHODCALLTYPE *WaitForAnimationToComplete )( 
+            IVirtualDesktopManagerInternal * This);
+        
         END_INTERFACE
     } IVirtualDesktopManagerInternalVtbl;
 
@@ -3121,6 +3302,63 @@ EXTERN_C const IID IID_IVirtualDesktopManagerInternal;
 
 #define IVirtualDesktopManagerInternal_CanViewMoveDesktops(This,view,canMove)	\
     ( (This)->lpVtbl -> CanViewMoveDesktops(This,view,canMove) ) 
+
+#define IVirtualDesktopManagerInternal_GetCurrentDesktop(This,desktop)	\
+    ( (This)->lpVtbl -> GetCurrentDesktop(This,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_GetDesktops(This,desktops)	\
+    ( (This)->lpVtbl -> GetDesktops(This,desktops) ) 
+
+#define IVirtualDesktopManagerInternal_GetAdjacentDesktop(This,from,direction,desktop)	\
+    ( (This)->lpVtbl -> GetAdjacentDesktop(This,from,direction,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_SwitchDesktop(This,desktop)	\
+    ( (This)->lpVtbl -> SwitchDesktop(This,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_SwitchDesktopAndMoveForegroundView(This,desktop)	\
+    ( (This)->lpVtbl -> SwitchDesktopAndMoveForegroundView(This,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_CreateDesktop(This,desktop)	\
+    ( (This)->lpVtbl -> CreateDesktop(This,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_MoveDesktop(This,desktop,nIndex)	\
+    ( (This)->lpVtbl -> MoveDesktop(This,desktop,nIndex) ) 
+
+#define IVirtualDesktopManagerInternal_RemoveDesktop(This,desktop,fallback)	\
+    ( (This)->lpVtbl -> RemoveDesktop(This,desktop,fallback) ) 
+
+#define IVirtualDesktopManagerInternal_FindDesktop(This,desktopid,desktop)	\
+    ( (This)->lpVtbl -> FindDesktop(This,desktopid,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_GetDesktopSwitchIncludeExcludeViews(This,desktop,unknown1,unknown2)	\
+    ( (This)->lpVtbl -> GetDesktopSwitchIncludeExcludeViews(This,desktop,unknown1,unknown2) ) 
+
+#define IVirtualDesktopManagerInternal_SetDesktopName(This,desktop,name)	\
+    ( (This)->lpVtbl -> SetDesktopName(This,desktop,name) ) 
+
+#define IVirtualDesktopManagerInternal_SetDesktopWallpaper(This,desktop,path)	\
+    ( (This)->lpVtbl -> SetDesktopWallpaper(This,desktop,path) ) 
+
+#define IVirtualDesktopManagerInternal_UpdateWallpaperPathForAllDesktops(This,path)	\
+    ( (This)->lpVtbl -> UpdateWallpaperPathForAllDesktops(This,path) ) 
+
+#define IVirtualDesktopManagerInternal_CopyDesktopState(This,pView0,pView1)	\
+    ( (This)->lpVtbl -> CopyDesktopState(This,pView0,pView1) ) 
+
+#define IVirtualDesktopManagerInternal_CreateRemoteDesktop(This,path,desktop)	\
+    ( (This)->lpVtbl -> CreateRemoteDesktop(This,path,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_SwitchRemoteDesktop(This,desktop,switchtype)	\
+    ( (This)->lpVtbl -> SwitchRemoteDesktop(This,desktop,switchtype) ) 
+
+#define IVirtualDesktopManagerInternal_SwitchDesktopWithAnimation(This,desktop)	\
+    ( (This)->lpVtbl -> SwitchDesktopWithAnimation(This,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_GetLastActiveDesktop(This,desktop)	\
+    ( (This)->lpVtbl -> GetLastActiveDesktop(This,desktop) ) 
+
+#define IVirtualDesktopManagerInternal_WaitForAnimationToComplete(This)	\
+    ( (This)->lpVtbl -> WaitForAnimationToComplete(This) ) 
 
 #endif /* COBJMACROS */
 
