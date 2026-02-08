@@ -8,7 +8,7 @@
 #include "../../Nls.h"
 #include "../../Win32K/Gdi.h"
 
-/* NT\Win32K\Win32KApi.h */
+/* Win32k types */
 typedef struct _KERNEL_CALLBACK_TABLE KERNEL_CALLBACK_TABLE, *PKERNEL_CALLBACK_TABLE;
 
 EXTERN_C_START
@@ -1200,6 +1200,55 @@ typedef struct _RTL_PERTHREAD_CURDIR32
     VOID* POINTER_32 Environment;
 } RTL_PERTHREAD_CURDIR32, *PRTL_PERTHREAD_CURDIR32;
 
+// private
+typedef struct _CALLBACKWND
+{
+    HWND hwnd;
+    ULONG_PTR pwnd;
+    PACTIVATION_CONTEXT ActCtx;
+} CALLBACKWND, *PCALLBACKWND;
+
+// private
+typedef struct tagDPICONTEXTINFO
+{
+    ULONG dpiContext;
+    LOGICAL Dirty;
+} DPICONTEXTINFO, *PDPICONTEXTINFO;
+
+// private + rev
+typedef struct tagCLIENTINFO
+{
+    ULONG_PTR CI_flags;
+    ULONG_PTR Spins;
+    ULONG ExpWinVer;
+    ULONG CompatFlags;
+    ULONG CompatFlags2;
+    ULONG TIFlags;
+    struct tagDESKTOPINFO* DeskInfo;
+    PVOID DesktopBase; // ClientDelta before RS2
+    HHOOK hkCurrent;
+    ULONG Hooks;
+    CALLBACKWND CallbackWnd;
+    ULONG HookCurrent;
+    LONG InDDEMLCallback;
+    struct tagCLIENTTHREADINFO* ClientThreadInfo;
+    ULONG_PTR HookData;
+    ULONG KeyCache;
+    UCHAR KeyState[8];
+    ULONG AsyncKeyCache;
+    UCHAR AsyncKeyState[8];
+    UCHAR AsyncKeyStateRecentDown[8];
+    HKL hKL;
+    USHORT CodePage;
+    UCHAR DbcsCFOld[2];
+    UCHAR DbcsCFNew[2];
+    MSG msgDbcsCB;
+    PULONG RegisteredClasses;
+    HANDLE mmcssHandle;
+    ULONG_PTR CI_exflags;
+    DPICONTEXTINFO dci;
+} CLIENTINFO, *PCLIENTINFO;
+
 /**
  * Thread Environment Block (TEB) structure.
  *
@@ -1262,7 +1311,12 @@ typedef struct _TEB
     ULONG GdiClientTID;
     PVOID GdiThreadLocalInfo;
 
-    ULONG_PTR Win32ClientInfo[62];  // Reserved for User32 (Win32k).
+    // Reserved for User32 (Win32k).
+    union
+    {
+        CLIENTINFO Win32ClientInfo;
+        ULONG_PTR Win32ClientInfoArea[62];
+    };
 
     // Reserved for opengl32.dll
     PVOID glDispatchTable[233];
@@ -1431,7 +1485,13 @@ typedef struct _TEB64
     /* +0x07F0 */ ULONG GdiClientPID;
     /* +0x07F4 */ ULONG GdiClientTID;
     /* +0x07F8 */ VOID* POINTER_64 GdiThreadLocalInfo;
-    /* +0x0800 */ ULONGLONG Win32ClientInfo[62];
+
+    union
+    {
+        // TODO: CLIENTINFO64 /* +0x0800 */ CLIENTINFO64 Win32ClientInfo;
+        /* +0x0800 */ ULONG_PTR Win32ClientInfoArea[62];
+    };
+
     /* +0x09F0 */ VOID* POINTER_64 glDispatchTable[233];
     /* +0x1138 */ ULONGLONG glReserved1[29];
     /* +0x1220 */ VOID* POINTER_64 glReserved2;
@@ -1586,7 +1646,13 @@ typedef struct _TEB32
     /* +0x06C0 */ ULONG GdiClientPID;
     /* +0x06C4 */ ULONG GdiClientTID;
     /* +0x06C8 */ VOID* POINTER_32 GdiThreadLocalInfo;
-    /* +0x06CC */ ULONG Win32ClientInfo[62];
+
+    union
+    {
+        // TODO: CLIENTINFO32 /* +0x06CC */ CLIENTINFO32 Win32ClientInfo;
+        /* +0x06CC */ ULONG_PTR Win32ClientInfoArea[62];
+    };
+
     /* +0x07C4 */ VOID* POINTER_32 glDispatchTable[233];
     /* +0x0B68 */ ULONG glReserved1[29];
     /* +0x0BDC */ VOID* POINTER_32 glReserved2;

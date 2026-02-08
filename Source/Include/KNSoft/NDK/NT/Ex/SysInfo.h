@@ -4364,7 +4364,7 @@ typedef struct _CODE_INTEGRITY_REPORT_RECORD_HEADER
     // The number of bytes consumed by this record, including this header.
     //
 
-	ULONG RecordSize;
+    ULONG RecordSize;
 
     //
     // The event code (type) of this record. The same codes as the Measured
@@ -4373,7 +4373,7 @@ typedef struct _CODE_INTEGRITY_REPORT_RECORD_HEADER
     // this header.
     //
 
-	ULONG SipaEventCode;
+    ULONG SipaEventCode;
 
 } CODE_INTEGRITY_REPORT_RECORD_HEADER;
 
