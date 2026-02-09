@@ -42,6 +42,28 @@
     <Export Name="IsServerSideWindow" CallConv="__stdcall" Arg="ptr" />
     <Export Name="IsTopLevelWindow" CallConv="__stdcall" Arg="ptr" />
   </Dll>
+  <Dll Name="combase.dll">
+    <Export Name="WindowsCompareStringOrdinal" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="WindowsConcatString" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="WindowsCreateString" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="WindowsCreateStringReference" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+    <Export Name="WindowsDeleteString" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="WindowsDeleteStringBuffer" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="WindowsDuplicateString" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="WindowsGetStringLen" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="WindowsGetStringRawBuffer" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="WindowsInspectString" CallConv="__stdcall" Arg="ptr int ptr ptr ptr ptr" />
+    <Export Name="WindowsInspectString2" CallConv="__stdcall" Arg="ptr int ptr ptr ptr ptr" />
+    <Export Name="WindowsIsStringEmpty" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="WindowsPreallocateStringBuffer" CallConv="__stdcall" Arg="int ptr ptr" />
+    <Export Name="WindowsPromoteStringBuffer" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="WindowsReplaceString" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="WindowsStringHasEmbeddedNull" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="WindowsSubstring" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="WindowsSubstringWithSpecifiedLength" CallConv="__stdcall" Arg="ptr int int ptr" />
+    <Export Name="WindowsTrimStringEnd" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="WindowsTrimStringStart" CallConv="__stdcall" Arg="ptr ptr ptr" />
+  </Dll>
   <Dll Name="SECHOST.dll">
     <Export Name="ChangeServiceConfig2A" CallConv="__stdcall" Arg="ptr int ptr" />
     <Export Name="ChangeServiceConfig2W" CallConv="__stdcall" Arg="ptr int ptr" />
