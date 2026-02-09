@@ -36,11 +36,6 @@
 #include "Win32/API/ShObjIdl/ShObjIdl_core.h"
 #include "Win32/API/msidle.h"
 
-/* Additional headers */
-
-#include <intrin.h>
-#include <suppress.h>
-
 /* Enable extensions */
 
 #ifndef _KNSOFT_NDK_NO_EXTENSION

@@ -261,6 +261,7 @@ typedef const SID* PCSID;
 
 #endif
 
+#include <ntstatus.h>
 #include <wingdi.h>
 #include <guiddef.h>
 #include <winioctl.h>
@@ -268,7 +269,8 @@ typedef const SID* PCSID;
 
 #pragma endregion
 
-#include <ntstatus.h>
+#include <intrin.h>
+#include <suppress.h>
 
 #pragma region Addendum
 
