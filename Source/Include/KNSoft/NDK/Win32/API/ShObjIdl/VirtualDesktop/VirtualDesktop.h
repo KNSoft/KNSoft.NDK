@@ -2,8 +2,11 @@
 
 #include "../../../../NT/MinDef.h"
 
+/* MIDL generates files, ignore inconsistent annotation warning */
+#pragma warning(disable: __WARNING_UNMATCHED_DEFN)
 #include "VirtualDesktop.idl_h.h"
 #include "VirtualDesktop.idl_i.h"
+#pragma warning(default: __WARNING_UNMATCHED_DEFN)
 
 #include <initguid.h>
 
