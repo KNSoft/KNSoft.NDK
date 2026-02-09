@@ -600,6 +600,9 @@
     <None Include="..\Include\KNSoft\NDK\Win32\API\msidle.inl">
       <Filter>Win32\API</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\API\ComBase.inl">
+      <Filter>Win32\API</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">

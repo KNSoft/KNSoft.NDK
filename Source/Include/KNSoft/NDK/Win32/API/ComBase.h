@@ -42,4 +42,14 @@ WINAPI
 CoGetMTAUsageInfo(VOID);
 #endif
 
+typedef struct _HSTRING_INTERNAL
+{
+    DWORD Unknown0;
+    DWORD Length;
+    DWORD Unknown1[2];
+    PCWSTR Buffer;
+    _Interlocked_operand_ LONG volatile RefCount;
+    // ...
+} HSTRING_INTERNAL, *PHSTRING_INTERNAL;
+
 EXTERN_C_END
