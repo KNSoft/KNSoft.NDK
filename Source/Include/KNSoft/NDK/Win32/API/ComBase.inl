@@ -20,12 +20,11 @@ _Inline_WindowsGetStringRawBuffer(
     _In_opt_ HSTRING string,
     _Out_opt_ UINT32* length)
 {
-    PHSTRING_INTERNAL p;
+    PHSTRING_INTERNAL p = (PHSTRING_INTERNAL)string;
     PCWSTR psz;
     
     if (string != NULL)
     {
-        p = (PHSTRING_INTERNAL)string;
         psz = p->Buffer;
     } else
     {
