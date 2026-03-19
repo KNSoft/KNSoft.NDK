@@ -17,6 +17,9 @@ EXTERN_C_START
 
 #endif
 
+/**
+ * The IMAGE_CHPE_METADATA_X86 structure represents CHPE metadata for x86.
+ */
 typedef struct _IMAGE_CHPE_METADATA_X86
 {
     ULONG  Version;
@@ -33,6 +36,9 @@ typedef struct _IMAGE_CHPE_METADATA_X86
     ULONG  WowA64RdtscFunctionPointer; // Present if Version >= 3
 } IMAGE_CHPE_METADATA_X86, *PIMAGE_CHPE_METADATA_X86;
 
+/**
+ * The IMAGE_CHPE_RANGE_ENTRY structure represents a CHPE range entry.
+ */
 typedef struct _IMAGE_CHPE_RANGE_ENTRY
 {
     union
@@ -48,6 +54,9 @@ typedef struct _IMAGE_CHPE_RANGE_ENTRY
     ULONG Length;
 } IMAGE_CHPE_RANGE_ENTRY, *PIMAGE_CHPE_RANGE_ENTRY;
 
+/**
+ * The IMAGE_ARM64EC_METADATA structure represents ARM64EC metadata.
+ */
 typedef struct _IMAGE_ARM64EC_METADATA
 {
     ULONG  Version;
@@ -103,12 +112,18 @@ typedef struct _IMAGE_ARM64EC_METADATA_V2
     ULONG  ReservedBitField;    // reserved and unused by the linker
 } IMAGE_ARM64EC_METADATA_V2;
 
+/**
+ * The IMAGE_ARM64EC_REDIRECTION_ENTRY structure represents an ARM64EC redirection entry.
+ */
 typedef struct _IMAGE_ARM64EC_REDIRECTION_ENTRY
 {
     ULONG Source;
     ULONG Destination;
 } IMAGE_ARM64EC_REDIRECTION_ENTRY, *PIMAGE_ARM64EC_REDIRECTION_ENTRY;
 
+/**
+ * The IMAGE_ARM64EC_CODE_RANGE_ENTRY_POINT structure represents an ARM64EC code range entry point.
+ */
 typedef struct _IMAGE_ARM64EC_CODE_RANGE_ENTRY_POINT
 {
     ULONG StartRva;
@@ -124,6 +139,9 @@ typedef struct _IMAGE_ARM64EC_CODE_RANGE_ENTRY_POINT
 #define IMAGE_DVRT_ARM64X_FIXUP_SIZE_4BYTES     2
 #define IMAGE_DVRT_ARM64X_FIXUP_SIZE_8BYTES     3
 
+/**
+ * The IMAGE_DVRT_ARM64X_FIXUP_RECORD structure represents an ARM64X fixup record.
+ */
 typedef struct _IMAGE_DVRT_ARM64X_FIXUP_RECORD
 {
     USHORT Offset : 12;
@@ -132,6 +150,9 @@ typedef struct _IMAGE_DVRT_ARM64X_FIXUP_RECORD
     // Value of variable Size when IMAGE_DVRT_ARM64X_FIXUP_TYPE_VALUE
 } IMAGE_DVRT_ARM64X_FIXUP_RECORD, *PIMAGE_DVRT_ARM64X_FIXUP_RECORD;
 
+/**
+ * The IMAGE_DVRT_ARM64X_DELTA_FIXUP_RECORD structure represents an ARM64X delta fixup record.
+ */
 typedef struct _IMAGE_DVRT_ARM64X_DELTA_FIXUP_RECORD
 {
     USHORT Offset : 12;
@@ -143,6 +164,9 @@ typedef struct _IMAGE_DVRT_ARM64X_DELTA_FIXUP_RECORD
 
 /* phnt */
 
+/**
+ * The IMAGE_DEBUG_POGO_ENTRY structure represents a POGO (Profile Guided Optimization) entry.
+ */
 typedef struct _IMAGE_DEBUG_POGO_ENTRY
 {
     ULONG Rva;
@@ -150,6 +174,9 @@ typedef struct _IMAGE_DEBUG_POGO_ENTRY
     CHAR Name[1];
 } IMAGE_DEBUG_POGO_ENTRY, *PIMAGE_DEBUG_POGO_ENTRY;
 
+/**
+ * The IMAGE_DEBUG_POGO_SIGNATURE structure represents a POGO signature.
+ */
 typedef struct _IMAGE_DEBUG_POGO_SIGNATURE
 {
     ULONG Signature;
@@ -161,6 +188,9 @@ typedef struct _IMAGE_DEBUG_POGO_SIGNATURE
 #define IMAGE_DEBUG_POGO_SIGNATURE_PGU 'PGU\0' // coffgrp PGU (0x50475500)
 #define IMAGE_DEBUG_POGO_SIGNATURE_SPGO 'SPGO' // coffgrp SPGO (0x5350474F)
 
+/**
+ * The IMAGE_RELOCATION_RECORD structure represents a relocation record.
+ */
 typedef struct _IMAGE_RELOCATION_RECORD
 {
     USHORT Offset : 12;
@@ -172,7 +202,9 @@ typedef struct _IMAGE_RELOCATION_RECORD
 #define IMAGE_ARM64EC_CODE_MAP_TYPE_ARM64EC 1
 #define IMAGE_ARM64EC_CODE_MAP_TYPE_AMD64   2
 
-// rev
+/**
+ * The IMAGE_ARM64EC_CODE_MAP_ENTRY structure represents an ARM64EC code map entry.
+ */
 typedef struct _IMAGE_ARM64EC_CODE_MAP_ENTRY
 {
     union
@@ -188,7 +220,55 @@ typedef struct _IMAGE_ARM64EC_CODE_MAP_ENTRY
     ULONG Length;
 } IMAGE_ARM64EC_CODE_MAP_ENTRY, *PIMAGE_ARM64EC_CODE_MAP_ENTRY;
 
+/**
+ * The IMAGE_IMPORT_CONTROL_TRANSFER_ARM64_RELOCATION structure represents an ARM64 import control transfer relocation.
+ *
+ * \remarks On ARM64, optimized imported functions use this structure for import control transfer relocations.
+ * This is used with IMAGE_DYNAMIC_RELOCATION_ARM64_KERNEL_IMPORT_CALL_TRANSFER.
+ */
+//typedef struct _IMAGE_IMPORT_CONTROL_TRANSFER_ARM64_RELOCATION
+//{
+//    ULONG PageRelativeOffset : 10;
+//    ULONG IndirectCall : 1;
+//    ULONG RegisterIndex : 5;
+//    ULONG ImportType : 1;
+//    ULONG IATIndex : 15;
+//} IMAGE_IMPORT_CONTROL_TRANSFER_ARM64_RELOCATION, *PIMAGE_IMPORT_CONTROL_TRANSFER_ARM64_RELOCATION;
+//
+/**
+ * The IMAGE_PROLOGUE_DYNAMIC_RELOCATION_HEADER structure represents a prologue dynamic relocation header.
+ *
+ * \remarks This structure is followed by PrologueByteCount bytes containing the prologue code.
+ * Used with IMAGE_DYNAMIC_RELOCATION_GUARD_RF_PROLOGUE.
+ */
+//#include <pshpack1.h>
+//typedef struct _IMAGE_PROLOGUE_DYNAMIC_RELOCATION_HEADER
+//{
+//    UCHAR PrologueByteCount;
+//    // UCHAR PrologueBytes[PrologueByteCount];
+//} IMAGE_PROLOGUE_DYNAMIC_RELOCATION_HEADER, UNALIGNED *PIMAGE_PROLOGUE_DYNAMIC_RELOCATION_HEADER;
+//#include <poppack.h>
+//
+/**
+ * The IMAGE_EPILOGUE_DYNAMIC_RELOCATION_HEADER structure represents an epilogue dynamic relocation header.
+ *
+ * \remarks This structure is followed by variable-length branch descriptor data.
+ * Used with IMAGE_DYNAMIC_RELOCATION_GUARD_RF_EPILOGUE.
+ */
+//#include <pshpack1.h>
+//typedef struct _IMAGE_EPILOGUE_DYNAMIC_RELOCATION_HEADER
+//{
+//    ULONG EpilogueCount;
+//    UCHAR EpilogueByteCount;
+//    UCHAR BranchDescriptorElementSize;
+//    USHORT BranchDescriptorCount;
+//    // UCHAR BranchDescriptors[...];
+//    // UCHAR BranchDescriptorBitMap[...];
+//} IMAGE_EPILOGUE_DYNAMIC_RELOCATION_HEADER, UNALIGNED *PIMAGE_EPILOGUE_DYNAMIC_RELOCATION_HEADER;
+//#include <poppack.h>
+
 #define IMAGE_DYNAMIC_RELOCATION_ARM64X                         0x00000006
+#define IMAGE_DYNAMIC_RELOCATION_ARM64_KERNEL_IMPORT_CALL_TRANSFER 0x00000008
 #define IMAGE_DYNAMIC_RELOCATION_MM_SHARED_USER_DATA_VA         0x7FFE0000
 #define IMAGE_DYNAMIC_RELOCATION_KI_USER_SHARED_DATA64          0xFFFFF78000000000UI64
 

@@ -56,19 +56,6 @@ _STATIC_ASSERT(CONTEXT_EX_LENGTH == 0x20);
 #define RTL_CONTEXT_LENGTH(Context, Chunk) RTL_CONTEXT_EX_LENGTH((PCONTEXT_EX)((Context) + 1), Chunk)
 #define RTL_CONTEXT_CHUNK(Context, Chunk) RTL_CONTEXT_EX_CHUNK((PCONTEXT_EX)((Context) + 1), (PCONTEXT_EX)((Context) + 1), Chunk)
 
-#if defined(_M_AMD64)
-// returns constant 0xf0e0d0c0a0908070 (dmex)
-NTSYSAPI
-ULONG64
-NTAPI
-RtlInitializeContext(
-    _Reserved_ HANDLE Reserved,
-    _Out_ PCONTEXT Context,
-    _In_opt_ PVOID Parameter,
-    _In_opt_ PVOID InitialPc,
-    _In_opt_ PVOID InitialSp
-);
-#else
 // returns status of NtWriteVirtualMemory (dmex)
 NTSYSAPI
 NTSTATUS
@@ -80,7 +67,6 @@ RtlInitializeContext(
     _In_opt_ PVOID InitialPc,
     _In_opt_ PVOID InitialSp
 );
-#endif
 
 NTSYSAPI
 NTSTATUS

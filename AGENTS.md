@@ -28,6 +28,8 @@
   - avoid changing struct/union layout, packing, field order, and calling conventions unless required.
   - avoid breaking existing macro names and include contracts.
 - For declaration sync work (phnt/SDK/WDK/public symbols), keep source intent and naming consistent; avoid speculative rewrites.
+- For `phnt` sync work, sync relevant upstream comments/docblocks together with declarations when they clarify semantics or versioning.
+- For `phnt` sync work, translate upstream `PHNT_` version-control guards/macros to this repo's `NTDDI_VERSION`-based gating style.
 - Add concise technical comments only when necessary.
 
 ## Build and Validate

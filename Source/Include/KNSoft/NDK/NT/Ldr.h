@@ -449,6 +449,13 @@ LdrInitializeThunk(
     _In_ PCONTEXT ContextRecord,
     _In_ PVOID Parameter);
 
+NTSYSAPI
+NTSTATUS
+NTAPI
+LdrProcessInitializationComplete(
+    VOID
+    );
+
 // rev LdrLoadDll DllCharacteristics
 #define LDR_DONT_RESOLVE_DLL_REFERENCES       0x00000002 // IMAGE_FILE_EXECUTABLE_IMAGE maps to DONT_RESOLVE_DLL_REFERENCES
 #define LDR_PACKAGED_LIBRARY                  0x00000004 // LOAD_PACKAGED_LIBRARY

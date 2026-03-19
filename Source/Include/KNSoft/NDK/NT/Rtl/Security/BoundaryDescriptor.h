@@ -7,6 +7,7 @@ EXTERN_C_START
 
 /* phnt */
 
+#define BOUNDARY_DESCRIPTOR_FLAG_NONE 0x0
 #define BOUNDARY_DESCRIPTOR_ADD_APPCONTAINER_SID 0x0001
 
 _Ret_maybenull_
@@ -29,13 +30,13 @@ NTSTATUS
 NTAPI
 RtlAddSIDToBoundaryDescriptor(
     _Inout_ POBJECT_BOUNDARY_DESCRIPTOR *BoundaryDescriptor,
-    _In_ PSID RequiredSid);
+    _In_ PCSID RequiredSid);
 
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlAddIntegrityLabelToBoundaryDescriptor(
     _Inout_ POBJECT_BOUNDARY_DESCRIPTOR *BoundaryDescriptor,
-    _In_ PSID IntegrityLabel);
+    _In_ PCSID IntegrityLabel);
 
 EXTERN_C_END

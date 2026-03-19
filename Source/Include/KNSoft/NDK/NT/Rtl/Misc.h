@@ -640,7 +640,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlUnsubscribeWnfStateChangeNotification(
-    _In_ PWNF_USER_CALLBACK Callback
+    _In_ PWNF_USER_SUBSCRIPTION SubscriptionHandle
 );
 
 NTSYSAPI

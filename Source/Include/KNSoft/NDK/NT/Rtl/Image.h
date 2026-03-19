@@ -114,6 +114,24 @@ RtlValidateUserCallTarget(
 #define IMAGE_FILE_NATIVE_MACHINE_AMD64 0x2
 #define IMAGE_FILE_NATIVE_MACHINE_ARMNT 0x4
 #define IMAGE_FILE_NATIVE_MACHINE_ARM64 0x8
+#define IMAGE_FILE_NATIVE_MACHINE_ARM64EC 0x10
+
+#if !defined(NTDDI_WIN11_BR) || (NTDDI_VERSION < NTDDI_WIN11_BR)
+typedef struct _IMAGE_FILE_MACHINES
+{
+    union
+    {
+        ULONG Value;
+        struct
+        {
+            ULONG MachineX86 : 1;
+            ULONG MachineAmd64 : 1;
+            ULONG MachineArm : 1;
+            ULONG MachineArm64 : 1;
+            ULONG MachineArm64EC : 1;
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
+} IMAGE_FILE_MACHINES;
 
 // rev
 NTSYSAPI
@@ -121,8 +139,9 @@ NTSTATUS
 NTAPI
 RtlGetImageFileMachines(
     _In_ PCWSTR FileName,
-    _Out_ PUSHORT FileMachines
+    _Out_ IMAGE_FILE_MACHINES* MachineTypeFlags
     );
+#endif
 #endif
 
 EXTERN_C_END

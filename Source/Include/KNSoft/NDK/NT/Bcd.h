@@ -43,6 +43,9 @@ NTSYSAPI GUID PARTITION_MSFT_SNAPSHOT_GUID;
 NTSYSAPI GUID PARTITION_SPACES_GUID;
 NTSYSAPI GUID PARTITION_SYSTEM_GUID;
 
+/**
+ * The BCD_MESSAGE_TYPE enumeration represents the types of messages for BCD operations.
+ */
 typedef enum _BCD_MESSAGE_TYPE
 {
     BCD_MESSAGE_TYPE_NONE,
@@ -1523,7 +1526,7 @@ typedef enum _BcdLibraryElementTypes
     /// <remarks>0x16000045</remarks>
     BcdLibraryBoolean_BsdPreserveLog = MAKE_BCDE_DATA_TYPE(BCD_ELEMENT_DATATYPE_CLASS_LIBRARY, BCD_ELEMENT_DATATYPE_FORMAT_BOOLEAN, 69),
     /// <summary>
-    ///
+    /// Indicates whether graphics mode is disabled, requiring boot applications to use text mode display.
     /// </summary>
     /// <remarks>0x16000046 - BCDE_LIBRARY_TYPE_GRAPHICS_MODE_DISABLED</remarks>
     BcdLibraryBoolean_GraphicsModeDisabled = MAKE_BCDE_DATA_TYPE(BCD_ELEMENT_DATATYPE_CLASS_LIBRARY, BCD_ELEMENT_DATATYPE_FORMAT_BOOLEAN, 70),

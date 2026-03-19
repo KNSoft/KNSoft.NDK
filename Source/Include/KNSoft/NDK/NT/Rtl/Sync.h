@@ -556,49 +556,95 @@ RtlWakeAddressSingleNoFence(
 #pragma region RCU
 
 //
-// Read-Copy Update. 
+// Read-Copy Update.
 //
-// RCU synchronization allows concurrent access to shared data structures, 
-// such as linked lists, trees, or hash tables, without using traditional locking methods 
+// RCU synchronization allows concurrent access to shared data structures,
+// such as linked lists, trees, or hash tables, without using traditional locking methods
 // in scenarios where read operations are frequent and need to be fast.
 // @remarks RCU synchronization is not for general-purpose synchronization.
 // Teb->Rcu is used to store the RCU state.
 
+#if defined(PHNT_NATIVE_RCU)
+typedef struct _RTL_RCU_SEGMENT
+{
+    ULONG Count;
+    ULONG Reserved;
+    PVOID Slots[ANYSIZE_ARRAY];
+} RTL_RCU_SEGMENT, *PRTL_RCU_SEGMENT;
+
+#define RTL_RCU_SEGMENT_NEXT_PTR(S) ((PRTL_RCU_SEGMENT*)&((S)->Slots[(S)->Count]))
+
+typedef struct _RTL_RCU_THREAD_ENTRY
+{
+    volatile ULONGLONG ReadDepth;
+    ULONG ThreadCookie;
+    ULONG ThreadIdLike;
+    volatile ULONGLONG SeenEpoch;
+    struct _RTL_RCU_THREAD_ENTRY* Next;
+} RTL_RCU_THREAD_ENTRY, *PRTL_RCU_THREAD_ENTRY;
+
+_STATIC_ASSERT(sizeof(RTL_RCU_THREAD_ENTRY) == 0x20);
+_STATIC_ASSERT(FIELD_OFFSET(RTL_RCU_THREAD_ENTRY, SeenEpoch) == 0x10);
+
+typedef struct _RTL_RCU_STATE
+{
+    struct _RTL_RCU_STATE* GlobalNext;
+    struct _RTL_RCU_STATE* GlobalPrev;
+    volatile ULONGLONG Epoch;
+    PRTL_RCU_SEGMENT SegmentRoot;
+    PRTL_RCU_THREAD_ENTRY ThreadList;
+    PRTL_RCU_THREAD_ENTRY Cache[10];
+    RTL_SRWLOCK SlowPathLock;
+    ULONG TagOrFlags;
+    ULONG Padding;
+} RTL_RCU_STATE, *PRTL_RCU_STATE;
+
+_STATIC_ASSERT(sizeof(RTL_RCU_STATE) == 0x88);
+
+typedef struct _RTL_RCU_COOKIE
+{
+    ULONG_PTR ThreadEntryOrNull;
+} RTL_RCU_COOKIE, *PRTL_RCU_COOKIE;
+#else
+typedef struct _RTL_RCU_STATE RTL_RCU_STATE, *PRTL_RCU_STATE;
+typedef ULONG_PTR RTL_RCU_COOKIE, *PRTL_RCU_COOKIE;
+#endif
+
 NTSYSAPI
-PVOID
+PRTL_RCU_STATE
 NTAPI
 RtlRcuAllocate(
-    _In_ SIZE_T Size
+    _In_ ULONG Flags
 );
 
 NTSYSAPI
 LOGICAL
 NTAPI
 RtlRcuFree(
-    _In_ PULONG Rcu
+    _In_ PRTL_RCU_STATE State
 );
 
 NTSYSAPI
 VOID
 NTAPI
 RtlRcuReadLock(
-    _Inout_ PRTL_SRWLOCK SRWLock,
-    _Out_ PULONG Rcu
+    _Inout_ PRTL_RCU_STATE State,
+    _Out_ PRTL_RCU_COOKIE Cookie
 );
 
 NTSYSAPI
 VOID
 NTAPI
 RtlRcuReadUnlock(
-    _Inout_ PRTL_SRWLOCK SRWLock,
-    _Inout_ PULONG * Rcu
+    _Inout_ PRTL_RCU_STATE State,
+    _Inout_ PRTL_RCU_COOKIE Cookie
 );
 
 NTSYSAPI
 LONG
 NTAPI
 RtlRcuSynchronize(
-    _Inout_ PRTL_SRWLOCK SRWLock
+    _Inout_ PRTL_RCU_STATE State
 );
 
 #pragma endregion phnt
