@@ -93,6 +93,7 @@
 #define JobObjectCreateSilo MS_JobObjectCreateSilo
 #define JobObjectSiloBasicInformation MS_JobObjectSiloBasicInformation
 #define JobObjectNetworkAccountingInformation MS_JobObjectNetworkAccountingInformation
+#define JobObjectCpuPartition MS_JobObjectCpuPartition
 #define MaxJobObjectInfoClass MS_MaxJobObjectInfoClass
 #define _HEAP_INFORMATION_CLASS _MS_HEAP_INFORMATION_CLASS
 #define HEAP_INFORMATION_CLASS MS_HEAP_INFORMATION_CLASS
@@ -137,6 +138,7 @@ typedef const SID* PCSID;
 #undef JobObjectCreateSilo
 #undef JobObjectSiloBasicInformation
 #undef JobObjectNetworkAccountingInformation
+#undef JobObjectCpuPartition
 #undef MaxJobObjectInfoClass
 #undef _HEAP_INFORMATION_CLASS
 #undef HEAP_INFORMATION_CLASS

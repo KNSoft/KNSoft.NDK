@@ -16,7 +16,6 @@
 
 /* Patch undocumented NTDDI versions */
 #define NTDDI_WIN10_GE NTDDI_WIN11_ZN /* Introduced in Windows SDK 10.0.26100.1 (Win11), later than all NTDDI_WIN10_* */
-#define NTDDI_WIN11_DT NTDDI_WIN11_GE /* Introduced in Windows SDK 10.0.26100.3916, later than NTDDI_WIN11_GE */
 
 #define NT_VERSION(Major, Minor, Build) (((((Major) & 0xFF) << 24) | (((Minor) & 0xFF) << 16)) | ((Build) & 0xFFFF))
 
@@ -71,6 +70,7 @@
 #define NT_VERSION_WIN11_23H2 NT_VERSION(10, 0, 22631)
 #define NT_VERSION_WIN11_24H2 NT_VERSION(10, 0, 26100)
 #define NT_VERSION_WIN11_25H2 NT_VERSION(10, 0, 26200)
+#define NT_VERSION_WIN11_26H1 NT_VERSION(10, 0, 28000)
 
 /*  ARM support since NT10 */
 #if defined(_M_ARM64) || defined(_M_ARM64EC) || defined(_M_ARM)

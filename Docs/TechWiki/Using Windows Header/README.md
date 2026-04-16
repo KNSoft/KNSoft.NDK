@@ -145,7 +145,7 @@
         <td>Windows 8</td>
         <td rowspan="2">2</td>
         <td rowspan="2">9200</td>
-        <td rowspan="22">0</td>
+        <td rowspan="25">0</td>
         <td rowspan="2">0x0602</td>
         <td rowspan="2">_WIN32_WINNT_WIN8</td>
         <td rowspan="2">0x06020000</td>
@@ -173,10 +173,10 @@
         <td rowspan="15">Windows 10</td>
         <td>1507</td>
         <td>Threshold</td>
-        <td rowspan="20">10</td>
-        <td rowspan="20">0</td>
+        <td rowspan="21">10</td>
+        <td rowspan="21">0</td>
         <td>10240</td>
-        <td rowspan="20">0x0A00</td>
+        <td rowspan="21">0x0A00</td>
         <td rowspan="2">_WIN32_WINNT_WINTHRESHOLD</td>
         <td>0x0A000000</td>
         <td>NTDDI_WIN10<br>NTDDI_WINTHRESHOLD</td>
@@ -192,7 +192,7 @@
         <td>1607</td>
         <td>Redstone</td>
         <td>14393</td>
-        <td rowspan="19">_WIN32_WINNT_WIN10</td>
+        <td rowspan="20">_WIN32_WINNT_WIN10</td>
         <td>0x0A000002</td>
         <td>NTDDI_WIN10_RS1</td>
     </tr>
@@ -276,7 +276,7 @@
         <td>NTDDI_WIN10_CU</td>
     </tr>
     <tr>
-        <td rowspan="5">Windows 11</td>
+        <td rowspan="6">Windows 11</td>
         <td>21H2</td>
         <td>Cobalt, Sun Valley</td>
         <td>22000</td>
@@ -301,12 +301,21 @@
         <td>24H2</td>
         <td>Germanium, Hudson Valley</td>
         <td>26100</td>
-        <td rowspan="2">0x0A000010</td>
-        <td rowspan="2">NTDDI_WIN11_GE</td>
+        <td>0x0A000010</td>
+        <td>NTDDI_WIN11_GE</td>
     </tr>
     <tr>
         <td>25H2</td>
         <td></td>
         <td>26200</td>
+        <td>0x0A000011</td>
+        <td>NTDDI_WIN11_DT</td>
+    </tr>
+    <tr>
+        <td>26H1</td>
+        <td></td>
+        <td>28000</td>
+        <td>0x0A000012</td>
+        <td>NTDDI_WIN11_BR</td>
     </tr>
 </table>

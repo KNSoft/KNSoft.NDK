@@ -4302,34 +4302,7 @@ typedef struct _DRIVER_RUNTIME_REPORT
 
 #pragma endregion TODO: Remove this block when GitHub Action Update Windows SDK, this will be defined in winnt.h
 
-//
-// Code Integrity Report Definitions.
-//
-
-typedef struct _CODE_INTEGRITY_RUNTIME_REPORT
-{
-    //
-    // The Code Integrity runtime report header.
-    //
-
-    RUNTIME_REPORT_HEADER Header;
-
-    //
-    // The number of generations (updates) of policy there have been since boot.
-    // The initial generation at boot is 1.
-    //
-
-    UINT64 CurrentGeneration;
-
-    //
-    // The number of generations of policy that are in this report. This is
-    // non-zero with the current generation reported first, followed by prior
-    // generations in order of ascending age.
-    //
-
-    ULONG NumberOfGenerations;
-
-} CODE_INTEGRITY_RUNTIME_REPORT;
+#ifndef CODE_INTEGRITY_REPORT_GENERATION_VERSION_CURRENT
 
 #define CODE_INTEGRITY_REPORT_GENERATION_VERSION_CURRENT    (1)
 
@@ -4363,6 +4336,10 @@ typedef struct _CODE_INTEGRITY_REPORT_GENERATION_HEADER
 
 } CODE_INTEGRITY_REPORT_GENERATION_HEADER;
 
+#endif /* CODE_INTEGRITY_REPORT_GENERATION_VERSION_CURRENT */
+
+#ifndef CODE_INTEGRITY_REPORT_RECORD_VERSION_CURRENT
+
 #define CODE_INTEGRITY_REPORT_RECORD_VERSION_CURRENT    (1)
 
 typedef struct _CODE_INTEGRITY_REPORT_RECORD_HEADER
@@ -4395,6 +4372,8 @@ typedef struct _CODE_INTEGRITY_REPORT_RECORD_HEADER
     ULONG SipaEventCode;
 
 } CODE_INTEGRITY_REPORT_RECORD_HEADER;
+
+#endif /* CODE_INTEGRITY_REPORT_RECORD_VERSION_CURRENT */
 
 /**
  * The SYSTEM_POOLTAG2 structure describes allocation statistics for a single

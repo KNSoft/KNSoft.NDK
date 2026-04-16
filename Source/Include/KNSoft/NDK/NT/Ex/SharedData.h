@@ -711,22 +711,23 @@ typedef struct _KUSER_SHARED_DATA
 
     //
     // Extended processor state configuration (AMD64 and x86).
+    // WARNING: Size increaced 0x10 since 10.0.28000 !!!
     //
     /* +0x3D8 */ XSTATE_CONFIGURATION XState;
 
-    /* +0x720 */ KSYSTEM_TIME FeatureConfigurationChangeStamp;
-    /* +0x72C */ ULONG Spare;
+    /* +0x720 / +0x730 */ KSYSTEM_TIME FeatureConfigurationChangeStamp;
+    /* +0x72C / +0x73C */ ULONG Spare;
 
-    /* +0x730 */ ULONG64 UserPointerAuthMask;
+    /* +0x730 / +0x740 */ ULONG64 UserPointerAuthMask;
 
     //
     // Extended processor state configuration (ARM64). The reserved space for
     // other architectures is not available for reuse.
     //
 #if defined(_ARM64_)
-    /* +0x738 */ XSTATE_CONFIGURATION XStateArm64;
+    /* +0x738 / +0x738 */ XSTATE_CONFIGURATION XStateArm64;
 #else
-    /* +0x738 */ ULONG Reserved10[210];
+    /* +0x738 / +0x738 */ ULONG Reserved10[210];
 #endif
 
 } KUSER_SHARED_DATA, *PKUSER_SHARED_DATA;
@@ -837,6 +838,22 @@ _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, QpcReserved) == 0x3c7);
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, TimeZoneBiasEffectiveStart) == 0x3c8);
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, TimeZoneBiasEffectiveEnd) == 0x3d0);
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, XState) == 0x3d8);
+
+#if defined(NTDDI_WIN11_BR) && (NTDDI_VERSION >= NTDDI_WIN11_BR)
+
+_STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, FeatureConfigurationChangeStamp) == 0x730);
+_STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, UserPointerAuthMask) == 0x740);
+#if defined(_ARM64_)
+_STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, XStateArm64) == 0x748);
+#else
+_STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, Reserved10) == 0x748);
+#endif
+#if !defined(WINDOWS_IGNORE_PACKING_MISMATCH)
+_STATIC_ASSERT(sizeof(KUSER_SHARED_DATA) == 0xA90);
+#endif
+
+#else
+
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, FeatureConfigurationChangeStamp) == 0x720);
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, UserPointerAuthMask) == 0x730);
 #if defined(_ARM64_)
@@ -846,6 +863,8 @@ _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, Reserved10) == 0x738);
 #endif
 #if !defined(WINDOWS_IGNORE_PACKING_MISMATCH)
 _STATIC_ASSERT(sizeof(KUSER_SHARED_DATA) == 0xA80);
+#endif
+
 #endif
 
 /* wdm.h */
