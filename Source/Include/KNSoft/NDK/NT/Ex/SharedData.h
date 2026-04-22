@@ -725,9 +725,9 @@ typedef struct _KUSER_SHARED_DATA
     // other architectures is not available for reuse.
     //
 #if defined(_ARM64_)
-    /* +0x738 / +0x738 */ XSTATE_CONFIGURATION XStateArm64;
+    /* +0x738 / +0x748 */ XSTATE_CONFIGURATION XStateArm64;
 #else
-    /* +0x738 / +0x738 */ ULONG Reserved10[210];
+    /* +0x738 / +0x748 */ ULONG Reserved10[210];
 #endif
 
 } KUSER_SHARED_DATA, *PKUSER_SHARED_DATA;
@@ -845,11 +845,14 @@ _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, FeatureConfigurationChangeStamp) 
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, UserPointerAuthMask) == 0x740);
 #if defined(_ARM64_)
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, XStateArm64) == 0x748);
+#if !defined(WINDOWS_IGNORE_PACKING_MISMATCH)
+_STATIC_ASSERT(sizeof(KUSER_SHARED_DATA) == 0xAA0);
+#endif
 #else
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, Reserved10) == 0x748);
-#endif
 #if !defined(WINDOWS_IGNORE_PACKING_MISMATCH)
 _STATIC_ASSERT(sizeof(KUSER_SHARED_DATA) == 0xA90);
+#endif
 #endif
 
 #else
