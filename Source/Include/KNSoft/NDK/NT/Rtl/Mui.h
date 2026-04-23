@@ -33,7 +33,7 @@ NTSTATUS
 NTAPI
 RtlGetParentLocaleName(
     _In_ PCWSTR LocaleName,
-    _Inout_ PUNICODE_STRING ParentLocaleName,
+    _When_(AllocateDestinationString, _Out_) _When_(!AllocateDestinationString, _In_) PUNICODE_STRING ParentLocaleName,
     _In_ ULONG Flags,
     _In_ BOOLEAN AllocateDestinationString
 );
@@ -44,7 +44,7 @@ NTSTATUS
 NTAPI
 RtlLcidToLocaleName(
     _In_ LCID lcid, // sic
-    _Inout_ PUNICODE_STRING LocaleName,
+    _When_(AllocateDestinationString, _Out_) _When_(!AllocateDestinationString, _In_) PUNICODE_STRING LocaleName,
     _In_ ULONG Flags,
     _In_ BOOLEAN AllocateDestinationString
 );

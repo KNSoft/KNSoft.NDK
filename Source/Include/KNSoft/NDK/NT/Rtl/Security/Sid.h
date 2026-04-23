@@ -135,7 +135,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlConvertSidToUnicodeString(
-    _Inout_ PUNICODE_STRING UnicodeString,
+    _When_(AllocateDestinationString, _Out_) _When_(!AllocateDestinationString, _In_) PUNICODE_STRING UnicodeString,
     _In_ PSID Sid,
     _In_ BOOLEAN AllocateDestinationString);
 
