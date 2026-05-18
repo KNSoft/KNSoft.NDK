@@ -39,4 +39,15 @@ _Check_return_ unsigned __int64 __cdecl _byteswap_uint64(_In_ unsigned __int64);
 #define RtlInterlockedClearBitsDiscardReturn(Flags, Flag) \
     RtlInterlockedAndBitsDiscardReturn(Flags, ~(Flag))
 
+
+// RtlUdiv128
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlUdiv128(
+    _In_ ULONGLONG DividendHigh,
+    _In_ ULONGLONG DividendLow,
+    _In_ ULONGLONG Divisor,
+    _Out_opt_ PLONGLONG Remainder
+    );
 EXTERN_C_END

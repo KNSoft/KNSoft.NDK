@@ -488,4 +488,33 @@ RtlGetFeatureTogglesChangeToken(
     VOID
     );
 
+// RtlGetFeatureToggleConfiguration
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlGetFeatureToggleConfiguration(
+    _In_ ULONG FeatureId,
+    _In_ ULONGLONG ConfigurationType
+    );
+
+// RtlIsFeatureEnabledForEnterprise
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlIsFeatureEnabledForEnterprise(
+    _In_ ULONG FeatureId
+    );
+
+// RtlQueryInternalFeatureConfiguration
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryInternalFeatureConfiguration(
+    _In_ ULONGLONG FeatureId,
+    _In_ ULONG QueryFlags,
+    _Out_opt_ PULONGLONG ChangeStamp,
+    _Out_ PVOID FeatureConfiguration
+    );
+
+
 EXTERN_C_END

@@ -184,4 +184,106 @@ RtlQueryInformationActiveActivationContext(
     _Out_opt_ PSIZE_T ReturnLength
     );
 
+// RtlActivateActivationContextUnsafeFast
+NTSYSAPI
+VOID
+NTAPI
+RtlActivateActivationContextUnsafeFast(
+    _Out_writes_bytes_(0x48) PVOID CallerFrame,
+    _In_opt_ PVOID ActivationContext
+    );
+
+// RtlAllocateActivationContextStack
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlAllocateActivationContextStack(
+    _Inout_ PACTIVATION_CONTEXT_STACK* ActivationContextStack
+    );
+
+// RtlDeactivateActivationContextUnsafeFast
+//NTSYSAPI
+//ULONG
+//NTAPI
+//RtlConvertDeviceFamilyInfoToString(
+//    _Inout_ PULONG DeviceFamilyBufferSize,
+//    _Inout_ PULONG DeviceFormBufferSize,
+//    _Out_writes_bytes_opt_(*DeviceFamilyBufferSize) PWSTR DeviceFamily,
+//    _Out_writes_bytes_opt_(*DeviceFormBufferSize) PWSTR DeviceForm
+//    );
+//
+//NTSYSAPI
+//VOID
+//NTAPI
+//RtlGetDeviceFamilyInfoEnum(
+//    _Out_opt_ PULONGLONG UapInfo,
+//    _Out_opt_ PULONG DeviceFamily,
+//    _Out_opt_ PULONG DeviceForm
+//    );
+
+// rev
+NTSYSAPI
+VOID
+NTAPI
+RtlDeactivateActivationContextUnsafeFast(
+    _Inout_updates_bytes_(0x48) PVOID CallerFrame
+    );
+
+// RtlFreeActivationContextStack
+//NTSYSAPI
+//ULONG
+//NTAPI
+//RtlFillNonVolatileMemory(
+//    _In_ PVOID NvToken,
+//    _Out_writes_bytes_(Size) PVOID NvDestination,
+//    _In_ SIZE_T Size,
+//    _In_ BYTE Value,
+//    _In_ ULONG Flags
+//    );
+
+// rev
+NTSYSAPI
+VOID
+NTAPI
+RtlFreeActivationContextStack(
+    _Inout_opt_ PACTIVATION_CONTEXT_STACK ActivationContextStack
+    );
+
+// RtlFreeThreadActivationContextStack
+//NTSYSAPI
+//NTSTATUS
+//NTAPI
+//RtlFlushNonVolatileMemory(
+//    _In_ UCHAR NvToken,
+//    _In_ PVOID BaseAddress,
+//    _In_ SIZE_T Length,
+//    _In_ UCHAR Flags
+//    );
+//
+//NTSYSAPI
+//NTSTATUS
+//NTAPI
+//RtlFlushNonVolatileMemoryRanges(
+//    _In_ UCHAR NvToken,
+//    _In_reads_(PairCount) const ULONGLONG *AddressLengthPairs,
+//    _In_ SIZE_T PairCount,
+//    _In_ UCHAR Flags
+//    );
+
+// NTSYSAPI
+// NTSTATUS
+// NTAPI
+// RtlFreeNonVolatileToken(
+//     _In_ PVOID NvToken
+//     );
+
+// rev
+NTSYSAPI
+VOID
+NTAPI
+RtlFreeThreadActivationContextStack(
+    void
+    );
+
+
 EXTERN_C_END

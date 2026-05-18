@@ -9,6 +9,52 @@
 
 EXTERN_C_START
 
+#pragma region Enclave
+
+// RtlCallEnclave
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCallEnclave(
+    _In_ PVOID Routine,
+    _In_opt_ PVOID Reserved,
+    _In_ ULONG Flags,
+    _Out_ PVOID *ReturnValue
+    );
+
+// RtlCallEnclaveReturn
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCallEnclaveReturn(
+    void
+    );
+
+// RtlEnclaveCallDispatchReturn
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlEnclaveCallDispatchReturn(
+    _In_ PVOID EnclaveTarget,
+    _In_opt_ PVOID LeafRoutine,
+    _In_ ULONG LeafNumber,
+    _Inout_opt_ PVOID *DispatchContext
+    );
+
+#pragma endregion
+
+#pragma region Atom
+
+// RtlInitializeAtomPackage
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlInitializeAtomPackage(
+    _In_opt_ PVOID Callback
+    );
+
+#pragma endregion
+
 /* phnt */
 
 #pragma region Thread Profiling
@@ -935,4 +981,63 @@ NTAPI
 RtlGetReturnAddressHijackTarget(VOID);
 #endif
 
+
+// RtlCancelTimer
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCancelTimer(
+    _In_ HANDLE TimerQueueHandle,
+    _In_ HANDLE Handle
+    );
+
+// RtlAllocateWnfSerializationGroup
+NTSYSAPI
+ULONG
+NTAPI
+RtlAllocateWnfSerializationGroup(
+    void
+    );
+
+// RtlQueryWnfMetaNotification
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryWnfMetaNotification(
+    _Out_ PULONG Result,
+    _In_ WNF_STATE_NAME_INFORMATION NameInfoClass,
+    _In_ WNF_STATE_NAME StateName,
+    _In_opt_ PCSID ExplicitScope
+    );
+
+// RtlQueryWnfStateDataWithExplicitScope
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryWnfStateDataWithExplicitScope(
+    _Out_ PULONG ChangeStamp,
+    _In_ ULONGLONG StateName,
+    _In_opt_ const VOID *ExplicitScope,
+    _In_ NTSTATUS (NTAPI *TypeDecoder)(_In_ ULONGLONG, _In_ ULONGLONG, _In_ ULONGLONG, _In_ ULONGLONG, _In_reads_bytes_(BufferLength) UCHAR *, _In_ ULONG BufferLength),
+    _In_ ULONGLONG CallbackContext,
+    _In_opt_ const VOID *TypeId
+    );
+
+// RtlUnsubscribeWnfNotificationWaitForCompletion
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlUnsubscribeWnfNotificationWaitForCompletion(
+    _In_ HANDLE SubscriptionHandle
+    );
+
+// RtlUnsubscribeWnfNotificationWithCompletionCallback
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlUnsubscribeWnfNotificationWithCompletionCallback(
+    _In_ HANDLE SubscriptionHandle,
+    _In_opt_ PVOID CompletionCallback,
+    _In_opt_ PVOID CompletionContext
+    );
 EXTERN_C_END

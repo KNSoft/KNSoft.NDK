@@ -55,6 +55,9 @@ RTL_TRACE_HASH_FUNCTION(
     _In_reads_(Count) PVOID* Trace);
 typedef RTL_TRACE_HASH_FUNCTION* PRTL_TRACE_HASH_FUNCTION;
 
+#define RTL_QUERY_MODULE_INFORMATION_RECORD_SIZE_IMAGE_BASE 0x8
+#define RTL_QUERY_MODULE_INFORMATION_RECORD_SIZE_MODULE     0x110
+
 NTSYSAPI
 PRTL_DEBUG_INFORMATION
 NTAPI
@@ -123,10 +126,131 @@ RtlSetProcessDebugInformation(
     _Inout_ PRTL_DEBUG_INFORMATION Buffer
     );
 
+// RtlQueryModuleInformation
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryModuleInformation(
+    _Inout_ PULONG BufferSize,
+    _In_ ULONG UnitSize, // RTL_QUERY_MODULE_INFORMATION_RECORD_SIZE_*
+    _Out_writes_bytes_opt_(*BufferSize) PVOID ModuleInformation
+    );
+
 // rev
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlDebugPrintTimes(VOID);
 
+
+typedef struct _RTL_TRACE_DATABASE RTL_TRACE_DATABASE, *PRTL_TRACE_DATABASE;
+
+// RtlTraceDatabaseAdd
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlTraceDatabaseAdd(
+    _In_ PRTL_TRACE_DATABASE Database,
+    _In_ ULONG Count,
+    _In_opt_ PVOID Trace,
+    _Out_opt_ PVOID *TraceBlock
+    );
+
+// RtlTraceDatabaseCreate
+NTSYSAPI
+PRTL_TRACE_DATABASE
+NTAPI
+RtlTraceDatabaseCreate(
+    _In_ ULONG Buckets,
+    _In_opt_ SIZE_T MaximumSize,
+    _In_ ULONG Flags,
+    _In_ ULONG Tag,
+    _In_opt_ PRTL_TRACE_HASH_FUNCTION HashFunction
+    );
+
+// RtlTraceDatabaseDestroy
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlTraceDatabaseDestroy(
+    _In_ _Post_invalid_ PRTL_TRACE_DATABASE Database
+    );
+
+// RtlTraceDatabaseEnumerate
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlTraceDatabaseEnumerate(
+    _In_ PRTL_TRACE_DATABASE Database,
+    _Inout_ PVOID Enumerator,
+    _Out_opt_ PULONGLONG TraceBlock
+    );
+
+// RtlTraceDatabaseFind
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlTraceDatabaseFind(
+    _In_ PRTL_TRACE_DATABASE Database,
+    _In_ ULONG Count,
+    _In_opt_ PVOID Trace,
+    _Out_opt_ PVOID *TraceBlock
+    );
+
+// RtlTraceDatabaseLock
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlTraceDatabaseLock(
+    _In_ PRTL_TRACE_DATABASE Database
+    );
+
+// RtlTraceDatabaseUnlock
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlTraceDatabaseUnlock(
+    _In_ PRTL_TRACE_DATABASE Database
+    );
+
+// RtlTraceDatabaseValidate
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlTraceDatabaseValidate(
+    _In_ PRTL_TRACE_DATABASE Database
+    );
+
+// RtlApplicationVerifierStop
+NTSYSAPI
+PVOID
+NTAPI
+RtlApplicationVerifierStop(
+    _In_opt_ const VOID *Param1,
+    _In_opt_z_ const CHAR *Desc1,
+    _In_opt_ const VOID *Param2,
+    _In_opt_z_ const CHAR *Desc2,
+    _In_opt_ const VOID *Param3,
+    _In_opt_z_ const CHAR *Desc3,
+    _In_opt_ const VOID *Param4,
+    _In_opt_z_ const CHAR *Desc4,
+    _In_opt_ const VOID *Param5,
+    _In_opt_z_ const CHAR *Desc5
+    );
+
+// RtlLogUnexpectedCodepath
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlLogUnexpectedCodepath(
+    void
+    );
+
+// RtlReportSqmEscalation
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlReportSqmEscalation(
+    _In_ PVOID Callback
+    );
 EXTERN_C_END

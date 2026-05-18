@@ -333,6 +333,24 @@ RtlLocateSupervisorFeature(
 
 #endif
 
+// RtlXRestore
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlXRestore(
+    _In_ PVOID XStateContext,
+    _In_ ULONGLONG FeatureMask
+    );
+
+// RtlXSave
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlXSave(
+    _Inout_ PULONG XStateContext,
+    _In_ ULONGLONG FeatureMask
+    );
+
 #define ELEVATION_FLAG_TOKEN_CHECKS 0x00000001
 #define ELEVATION_FLAG_VIRTUALIZATION 0x00000002
 #define ELEVATION_FLAG_SHORTCUT_REDIR 0x00000004
@@ -361,4 +379,23 @@ NTAPI
 RtlQueryElevationFlags(
     _Out_ PRTL_ELEVATION_FLAGS Flags);
 
+
+typedef enum _RTL_RESOURCE_POLICY_CLASS
+{
+    RtlResourcePolicyPhysicalMemory = 0,
+    RtlResourcePolicyDiskSpace = 1,
+    RtlResourcePolicyDiskSpeed = 2,
+    RtlResourcePolicyDiskWriteConstraint = 3
+} RTL_RESOURCE_POLICY_CLASS, *PRTL_RESOURCE_POLICY_CLASS;
+
+// RtlQueryResourcePolicy
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryResourcePolicy(
+    _In_ RTL_RESOURCE_POLICY_CLASS PolicyClass,
+    _Reserved_ ULONG Reserved,
+    _Out_ PULONG PolicyValue,
+    _In_ ULONG ValueSize
+    );
 EXTERN_C_END

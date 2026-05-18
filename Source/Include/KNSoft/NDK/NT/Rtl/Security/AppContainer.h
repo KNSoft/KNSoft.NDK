@@ -118,4 +118,14 @@ RtlGetAppContainerSidType(
     _Out_ PAPPCONTAINER_SID_TYPE AppContainerSidType);
 #endif
 
+
+// RtlCapabilityCheckForSingleSessionSku
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCapabilityCheckForSingleSessionSku(
+    _In_ PVOID TokenHandle,
+    _In_ PCUNICODE_STRING CapabilityName,
+    _Out_ PBOOLEAN IsCapable
+    );
 EXTERN_C_END

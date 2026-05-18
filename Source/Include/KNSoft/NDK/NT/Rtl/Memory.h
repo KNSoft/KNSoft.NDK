@@ -310,4 +310,5 @@ RtlCopyMappedMemory(
     _In_reads_bytes_(Length) PVOID Source,
     _In_ SIZE_T Length);
 
+
 EXTERN_C_END

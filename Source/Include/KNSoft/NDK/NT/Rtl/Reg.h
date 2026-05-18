@@ -142,4 +142,175 @@ RtlDeleteRegistryValue(
     _In_ PCWSTR ValueName
 );
 
+typedef struct _RTL_RXACT_CONTEXT RTL_RXACT_CONTEXT, *PRTL_RXACT_CONTEXT;
+// RtlpCleanupRegistryKeys
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpCleanupRegistryKeys(
+    void
+    );
+
+// RtlpCreateProcessRegistryInfo
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpCreateProcessRegistryInfo(
+    _Out_opt_ PVOID *RegistryInfo
+    );
+
+// RtlpNtCreateKey
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpNtCreateKey(
+    _Out_ PHANDLE KeyHandle,
+    _In_ ACCESS_MASK DesiredAccess,
+    _Inout_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ ULONG CreateOptions,
+    _In_opt_ ULONG ValueType,
+    _Out_opt_ PULONG Disposition
+    );
+
+// RtlpNtEnumerateSubKey
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpNtEnumerateSubKey(
+    _In_ HANDLE KeyHandle,
+    _Inout_ PCUNICODE_STRING SubKeyName,
+    _In_ ULONG Index
+    );
+
+// RtlpNtMakeTemporaryKey
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpNtMakeTemporaryKey(
+    _In_ HANDLE KeyHandle
+    );
+
+// RtlpNtOpenKey
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpNtOpenKey(
+    _Out_ PHANDLE KeyHandle,
+    _In_ ACCESS_MASK DesiredAccess,
+    _Inout_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes
+    );
+
+// RtlpNtQueryValueKey
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpNtQueryValueKey(
+    _In_ HANDLE KeyHandle,
+    _Out_opt_ PULONG Type,
+    _Out_writes_bytes_opt_(*DataLength) PVOID Data,
+    _Inout_opt_ PINT DataLength
+    );
+
+// RtlpNtSetValueKey
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlpNtSetValueKey(
+    _In_ HANDLE KeyHandle,
+    _In_ ULONG Type,
+    _In_reads_bytes_opt_(DataLength) PVOID Data,
+    _In_ ULONG DataLength
+    );
+
+// RtlAbortRXact
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlAbortRXact(
+    _Inout_ PRTL_RXACT_CONTEXT RxactContext,
+    _Reserved_ PVOID Reserved1,
+    _Reserved_ PVOID Reserved2,
+    _Reserved_ PVOID Reserved3
+    );
+
+// RtlAddActionToRXact
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlAddActionToRXact(
+    _Inout_ PRTL_RXACT_CONTEXT RxactContext,
+    _In_ ULONG ActionType,
+    _In_ const UNICODE_STRING *Name,
+    _In_ ULONG Operation,
+    _In_reads_bytes_opt_(DataSize) const VOID *Data,
+    _In_ SIZE_T DataSize
+    );
+
+// RtlAddAttributeActionToRXact
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlAddAttributeActionToRXact(
+    _Inout_ PRTL_RXACT_CONTEXT RxactContext,
+    _In_ ULONG ActionType,
+    _In_ const UNICODE_STRING *KeyName,
+    _In_ LONGLONG AttributeIndex,
+    _In_ const UNICODE_STRING *ValueName,
+    _In_ ULONG ValueType,
+    _In_reads_bytes_opt_(DataSize) const VOID *Data,
+    _In_ SIZE_T DataSize
+    );
+
+// RtlApplyRXact
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlApplyRXact(
+    _Inout_ PRTL_RXACT_CONTEXT RxactContext
+    );
+
+// RtlApplyRXactNoFlush
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlApplyRXactNoFlush(
+    _Inout_ PRTL_RXACT_CONTEXT RxactContext
+    );
+
+// RtlInitializeRXact
+//NTSYSAPI
+//ULONG
+//NTAPI
+//RtlIncrementCorrelationVector(
+//    _Inout_ PVOID CorrelationVector
+//    );
+//
+//NTSYSAPI
+//ULONG
+//NTAPI
+//RtlInitializeCorrelationVector(
+//    _Inout_ PVOID CorrelationVector,
+//    _In_ ULONG Version,
+//    _In_ const GUID *Guid
+//    );
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlInitializeRXact(
+    _In_ HANDLE RootKeyHandle,
+    _In_ CHAR OpenLog,
+    _Out_ PULONGLONG RxactContext
+    );
+
+// RtlStartRXact
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlStartRXact(
+    _Inout_ PVOID RxactContext
+    );
+
+
 EXTERN_C_END

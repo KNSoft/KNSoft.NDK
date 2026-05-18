@@ -430,4 +430,52 @@ RtlAreLongPathsEnabled(
     VOID
 );
 
+
+// RtlCanonicalizeDomainName
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCanonicalizeDomainName(
+    _Out_ PUNICODE_STRING DestinationName,
+    _In_ PCUNICODE_STRING SourceName,
+    _In_ BOOLEAN AllowInvalidLabels
+    );
+
+// RtlConstructCrossVmEventPath
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlConstructCrossVmEventPath(
+    _In_ PCUNICODE_STRING ObjectPath,
+    _In_ const GUID *Guid1,
+    _In_ const GUID *Guid2
+    );
+
+// RtlConstructCrossVmMutexPath
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlConstructCrossVmMutexPath(
+    _In_ PCUNICODE_STRING ObjectPath,
+    _In_ const GUID *Guid1,
+    _In_ const GUID *Guid2
+    );
+
+// RtlCreateSystemVolumeInformationFolder
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCreateSystemVolumeInformationFolder(
+    _In_ PCUNICODE_STRING RootPath
+    );
+
+// RtlIsNameLegalDOS8Dot3
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlIsNameLegalDOS8Dot3(
+    _In_ PCUNICODE_STRING Name,
+    _Out_opt_ POEM_STRING OemName,
+    _Out_opt_ PBOOLEAN NameContainsSpaces
+    );
 EXTERN_C_END

@@ -66,4 +66,36 @@ RtlRemovePointerMapping(
 
 #endif
 
+typedef struct _RTL_AVL_TREE RTL_AVL_TREE, *PRTL_AVL_TREE;
+// RtlAvlRemoveNode
+NTSYSAPI
+void
+NTAPI
+RtlAvlRemoveNode(
+    _Inout_ PRTL_BALANCED_NODE *Root,
+    _In_ PRTL_BALANCED_NODE Node
+    );
+
+// RtlAvlInsertNodeEx
+//NTSYSAPI
+//BOOLEAN
+//NTAPI
+//RtlAreBitsClearEx(
+//    _In_ PRTL_BITMAP_EX BitMapHeader,
+//    _In_ ULONGLONG StartingIndex,
+//    _In_ ULONGLONG Length
+//    );
+
+// rev
+NTSYSAPI
+char
+NTAPI
+RtlAvlInsertNodeEx(
+    _Inout_ PRTL_BALANCED_NODE *Root,
+    _In_opt_ PRTL_BALANCED_NODE Parent,
+    _In_ BOOLEAN Right,
+    _In_ PRTL_BALANCED_NODE Node
+    );
+
+
 EXTERN_C_END

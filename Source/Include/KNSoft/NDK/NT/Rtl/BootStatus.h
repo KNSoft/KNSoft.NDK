@@ -161,4 +161,33 @@ RtlSetPortableOperatingSystem(
 
 #endif
 
+// RtlCheckSystemBootStatusIntegrity
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCheckSystemBootStatusIntegrity(
+    _In_ PVOID BootStatusContext
+    );
+
+// RtlGetSystemBootStatusEx
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlGetSystemBootStatusEx(
+    _Out_writes_bytes_(BufferLength) PVOID Buffer,
+    _In_ ULONG BufferLength,
+    _Out_opt_ PULONG ReturnLength
+    );
+
+// RtlSetSystemBootStatusEx
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlSetSystemBootStatusEx(
+    _In_ PVOID Buffer,
+    _In_ ULONG BufferLength,
+    _In_opt_ PVOID Reserved
+    );
+
+
 EXTERN_C_END

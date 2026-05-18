@@ -649,4 +649,28 @@ RtlRcuSynchronize(
 
 #pragma endregion phnt
 
+
+// RtlClearThreadWorkOnBehalfTicket
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlClearThreadWorkOnBehalfTicket(
+    VOID
+    );
+
+// RtlSetThreadWorkOnBehalfTicket
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlSetThreadWorkOnBehalfTicket(
+    _In_ PULONGLONG Ticket
+    );
+
+// RtlTryConvertSRWLockSharedToExclusiveOrRelease
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlTryConvertSRWLockSharedToExclusiveOrRelease(
+    _Inout_ volatile RTL_SRWLOCK *SRWLock
+    );
 EXTERN_C_END

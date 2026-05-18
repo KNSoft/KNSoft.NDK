@@ -117,4 +117,31 @@ RtlSetProtectedPolicy(
 
 #pragma endregion
 
+
+// RtlCreateUserFiberShadowStack
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlCreateUserFiberShadowStack(
+    _In_ PVOID ShadowStackInfo,
+    _In_ ULONGLONG ReserveSize,
+    _Out_ PVOID *ShadowStackOut
+    );
+
+// RtlFreeUserFiberShadowStack
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlFreeUserFiberShadowStack( // NtSetInformationProcess(ProcessFreeFiberShadowStackAllocation)
+    _In_ PVOID AllocationBase
+    );
+
+// RtlUmsThreadYield
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlUmsThreadYield(
+    void
+    );
+
 EXTERN_C_END

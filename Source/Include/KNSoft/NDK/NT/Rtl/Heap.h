@@ -916,4 +916,20 @@ RtlFlushHeaps(
     VOID
 );
 
+
+// RtlDisownModuleHeapAllocation
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlDisownModuleHeapAllocation(
+    void
+    );
+
+// RtlHeapTrkInitialize
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlHeapTrkInitialize(
+    _In_ HANDLE SectionHandle
+    );
 EXTERN_C_END

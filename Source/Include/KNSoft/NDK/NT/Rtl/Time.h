@@ -192,4 +192,83 @@ RtlSetTimeZoneInformation(
     _In_ PRTL_TIME_ZONE_INFORMATION TimeZoneInformation
 );
 
+// RtlQueryUnbiasedInterruptTimePrecise
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlQueryUnbiasedInterruptTimePrecise(
+    _Out_ PLARGE_INTEGER InterruptTime
+    );
+
+// RtlpCheckDynamicTimeZoneInformation
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlpCheckDynamicTimeZoneInformation(
+    _Inout_ M128A *Buf2,
+    _In_ USHORT Year
+    );
+
+// RtlpFreezeTimeBias
+NTSYSAPI
+LONGLONG
+NTAPI
+RtlpFreezeTimeBias(
+    void
+    );
+
+// RtlpTimeFieldsToTime
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlpTimeFieldsToTime(
+    _In_ PTIME_FIELDS TimeFields,
+    _Out_ PLARGE_INTEGER Time,
+    _In_opt_ PLARGE_INTEGER LeapSecondContext
+    );
+
+// RtlpTimeToTimeFields
+NTSYSAPI
+SHORT
+NTAPI
+RtlpTimeToTimeFields(
+    _In_ PLARGE_INTEGER Time,
+    _Out_ PTIME_FIELDS TimeFields,
+    _In_opt_ PLARGE_INTEGER LeapSecondContext
+    );
+
+// RtlQueryDynamicTimeZoneInformation
+// NTSYSAPI
+// ULONG
+// NTAPI
+// RtlOsDeploymentState(
+//     _In_ ULONG Flags
+//     );
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlQueryDynamicTimeZoneInformation(
+    _Out_ PVOID DynamicTimeZoneInformation
+    );
+
+// RtlSetDynamicTimeZoneInformation
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlSetDynamicTimeZoneInformation(
+    _In_ PDYNAMIC_TIME_ZONE_INFORMATION DynamicTimeZoneInformation
+    );
+
+// RtlConvertHostPerfCounterToPerfCounter
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlConvertHostPerfCounterToPerfCounter(
+    _In_ ULONGLONG HostCounter,
+    _In_ ULONGLONG MaxDelta,
+    _Out_ ULONGLONG *PerfCounterOut
+    );
+
 EXTERN_C_END
