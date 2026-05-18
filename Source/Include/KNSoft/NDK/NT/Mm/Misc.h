@@ -140,6 +140,7 @@ typedef struct _MMPFN_MEMSNAP_INFORMATION
  */
 _Must_inspect_result_
 _When_(return == 0, __drv_allocatesMem(mem))
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -167,6 +168,7 @@ NtAllocateVirtualMemory(
  */
 _Must_inspect_result_
 _When_(return == 0, __drv_allocatesMem(Mem))
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -189,6 +191,7 @@ NtAllocateVirtualMemoryEx(
  * @param FreeType The type of free operation. This parameter can be MEM_DECOMMIT or MEM_RELEASE.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -208,6 +211,7 @@ NtFreeVirtualMemory(
  * @param NumberOfBytesRead A pointer to a variable that receives the number of bytes transferred into the specified buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -230,6 +234,7 @@ NtReadVirtualMemory(
  * @param Flags Additional flags for the read operation.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -252,6 +257,7 @@ NtReadVirtualMemoryEx(
  * @param NumberOfBytesWritten A pointer to a variable that receives the number of bytes transferred into the specified buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -272,6 +278,7 @@ NtWriteVirtualMemory(
  * @param OldProtection A pointer to a variable that receives the previous access protection of the first page in the specified region of pages.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -291,6 +298,7 @@ NtProtectVirtualMemory(
  * @param IoStatus A pointer to an IO_STATUS_BLOCK structure that receives the status of the flush operation.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -318,6 +326,7 @@ NtFlushVirtualMemory(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtuallock
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -338,6 +347,7 @@ NtLockVirtualMemory(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualunlock
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -380,6 +390,7 @@ typedef enum _SECTION_INHERIT
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatesection
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -410,6 +421,7 @@ NtCreateSection(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatesection
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -434,6 +446,7 @@ NtCreateSectionEx(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwopensection
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -458,6 +471,7 @@ NtOpenSection(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwmapviewofsection
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -489,6 +503,7 @@ NtMapViewOfSection(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwmapviewofsectionex
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -512,6 +527,7 @@ NtMapViewOfSectionEx(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwunmapviewofsection
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -529,6 +545,7 @@ NtUnmapViewOfSection(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwunmapviewofsection
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -538,6 +555,7 @@ NtUnmapViewOfSectionEx(
     _In_ ULONG Flags);
 #endif
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -552,6 +570,7 @@ NtExtendSection(
  * \param File2MappedAsFile A pointer to the base address of the second file mapped as a file.
  * \return NTSTATUS Returns STATUS_SUCCESS if the files are the same; otherwise, an appropriate NTSTATUS error code.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -569,6 +588,7 @@ NtAreMappedFilesTheSame(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -578,6 +598,7 @@ NtCreatePartition(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -605,6 +626,7 @@ NtOpenPartition(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-mapuserphysicalpages
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -622,6 +644,7 @@ NtMapUserPhysicalPages(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-mapuserphysicalpagesscatter
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -639,6 +662,7 @@ NtMapUserPhysicalPagesScatter(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-allocateuserphysicalpages
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -659,6 +683,7 @@ NtAllocateUserPhysicalPages(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-allocateuserphysicalpages
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -680,6 +705,7 @@ NtAllocateUserPhysicalPagesEx(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-freeuserphysicalpages
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -709,6 +735,7 @@ NtFreeUserPhysicalPages(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-getwritewatch
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -730,6 +757,7 @@ NtGetWriteWatch(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-resetwritewatch
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -738,6 +766,7 @@ NtResetWriteWatch(
     _In_ PVOID BaseAddress,
     _In_ SIZE_T RegionSize);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -757,6 +786,7 @@ NtCreatePagingFile(
  * @remarks Applications should call NtFlushInstructionCache if they generate or modify code in memory. The CPU cannot detect the change, and may execute the old code it cached.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-flushinstructioncache
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -770,6 +800,7 @@ NtFlushInstructionCache(
  *
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -781,6 +812,7 @@ NtFlushWriteBuffer(VOID);
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-flushprocesswritebuffers
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -810,6 +842,7 @@ NtFlushProcessWriteBuffers(VOID);
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-createenclave
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -839,6 +872,7 @@ NtCreateEnclave(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-loadenclavedata
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -864,6 +898,7 @@ NtLoadEnclaveData(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-initializeenclave
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -886,6 +921,7 @@ NtInitializeEnclave(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-terminateenclave
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -909,6 +945,7 @@ NtTerminateEnclave(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-callenclave
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

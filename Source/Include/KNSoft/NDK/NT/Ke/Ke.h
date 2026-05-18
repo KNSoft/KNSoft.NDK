@@ -140,6 +140,7 @@ typedef enum _KWAIT_REASON
     MaximumWaitReason
 } KWAIT_REASON, *PKWAIT_REASON;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -148,6 +149,7 @@ NtCallbackReturn(
     _In_ ULONG OutputLength,
     _In_ NTSTATUS Status);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -166,6 +168,7 @@ NtYieldExecution(VOID);
  * based upon the system "tick" frequency and the load factor from other processes.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleepex
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

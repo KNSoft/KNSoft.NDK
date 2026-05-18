@@ -48,7 +48,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlStringFromGUID(
-    _In_ PGUID Guid,
+    _In_ PCGUID Guid,
     _Out_ _At_(GuidString->Buffer, __drv_allocatesMem(Mem)) PUNICODE_STRING GuidString);
 
 _IRQL_requires_max_(PASSIVE_LEVEL)
@@ -68,7 +68,7 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlStringFromGUIDEx(
-    _In_ PGUID Guid,
+    _In_ PCGUID Guid,
     _When_(AllocateGuidString, _Out_ _At_(GuidString->Buffer, __drv_allocatesMem(Mem))) _When_(!AllocateGuidString, _Inout_) PUNICODE_STRING GuidString,
     _In_ BOOLEAN AllocateGuidString);
 #endif

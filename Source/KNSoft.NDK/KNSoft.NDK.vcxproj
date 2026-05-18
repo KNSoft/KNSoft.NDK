@@ -181,6 +181,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Misc.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Mui.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Path.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Private.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Process\Context.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Process\EnvironmentBlock.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Process\Misc.h" />
@@ -214,6 +215,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Tm.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Misc.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Version.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\D3DKMT.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Gdi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32KApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32K.h" />

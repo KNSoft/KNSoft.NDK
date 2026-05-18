@@ -9,6 +9,7 @@ EXTERN_C_START
 #if (NTDDI_VERSION >= NTDDI_WIN11_GA)
 
 // rev
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -18,6 +19,7 @@ NtOpenCpuPartition(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes);
 
 // rev
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -27,6 +29,7 @@ NtCreateCpuPartition(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes);
 
 // rev
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -40,6 +43,7 @@ NtSetInformationCpuPartition(
     _Reserved_ ULONG);
 
 // rev
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

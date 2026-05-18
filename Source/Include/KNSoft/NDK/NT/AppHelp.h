@@ -246,6 +246,7 @@ typedef struct _AHC_SERVICE_DATA
     ULONG ParamsOutSize;                        // Parameters out size.
 } AHC_SERVICE_DATA, *PAHC_SERVICE_DATA;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -26,16 +26,36 @@ typedef struct _FILE_IO_COMPLETION_INFORMATION
 #define IO_COMPLETION_ALL_ACCESS (IO_COMPLETION_QUERY_STATE|IO_COMPLETION_MODIFY_STATE|STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE)
 #endif
 
+/**
+ * The IO_COMPLETION_INFORMATION_CLASS enumeration type specifies the type of I/O completion information to be queried.
+ */
 typedef enum _IO_COMPLETION_INFORMATION_CLASS
 {
     IoCompletionBasicInformation
 } IO_COMPLETION_INFORMATION_CLASS;
 
+/**
+ * The IO_COMPLETION_BASIC_INFORMATION structure contains the depth of an I/O completion port.
+ */
 typedef struct _IO_COMPLETION_BASIC_INFORMATION
 {
     LONG Depth;
 } IO_COMPLETION_BASIC_INFORMATION, *PIO_COMPLETION_BASIC_INFORMATION;
 
+/**
+ * The NtCreateIoCompletion routine creates an I/O completion port and associates it with a specified file handle,
+ * or creates an I/O completion port that is not yet associated with a file handle, allowing association at a later time.
+ *
+ * \param[out] IoCompletionHandle Pointer to a variable that receives a handle to the I/O completion port.
+ * \param[in] DesiredAccess The requested access to the object.
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the name to an existing I/O completion port or NULL.
+ * \param[out] NumberOfConcurrentThreads The maximum number of threads that the operating system can allow to concurrently process
+ * I/O completion packets for the I/O completion port. This parameter is ignored if the ExistingCompletionPort parameter is not NULL.
+ * If this parameter is zero, the system allows as many concurrently running threads as there are processors in the system.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/fileio/createiocompletionport
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -45,6 +65,16 @@ NtCreateIoCompletion(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ ULONG Count);
 
+/**
+ * The NtOpenIoCompletion routine opens an existing I/O completion port object.
+ *
+ * \param[out] IoCompletionHandle Pointer to a variable that receives a handle to the I/O completion port.
+ * \param[in] DesiredAccess The requested access to the object.
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that specifies the name and other attributes.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/fileio/createiocompletionport
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -53,6 +83,17 @@ NtOpenIoCompletion(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtQueryIoCompletion routine queries information about an I/O completion port.
+ *
+ * \param[in] IoCompletionHandle Handle to the I/O completion port.
+ * \param[in] IoCompletionInformationClass The type of information to query.
+ * \param[out] IoCompletionInformation Pointer to a buffer that receives the information.
+ * \param[in] IoCompletionInformationLength The size of the buffer.
+ * \param[out, optional] ReturnLength Pointer to a variable that receives the number of bytes returned.
+ * \return NTSTATUS Successful or errant status.
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -63,6 +104,18 @@ NtQueryIoCompletion(
     _In_ ULONG IoCompletionInformationLength,
     _Out_opt_ PULONG ReturnLength);
 
+/**
+ * The NtSetIoCompletion routine queues an I/O completion packet to an I/O completion port.
+ *
+ * \param[in] IoCompletionHandle Handle to the I/O completion port.
+ * \param[in, optional] KeyContext The value specified when the port was associated with a file handle.
+ * \param[in, optional] ApcContext The value specified when the I/O operation was issued.
+ * \param[in] IoStatus The completion status for the I/O operation.
+ * \param[in] IoStatusInformation The number of bytes transferred or other information.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiet-postqueuedcompletionstatus
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -73,6 +126,18 @@ NtSetIoCompletion(
     _In_ NTSTATUS IoStatus,
     _In_ ULONG_PTR IoStatusInformation);
 
+/**
+ * The NtSetIoCompletionEx routine queues an I/O completion packet to an I/O completion port using a completion packet.
+ *
+ * \param[in] IoCompletionHandle Handle to the I/O completion port.
+ * \param[in] IoCompletionPacketHandle Handle to a completion packet.
+ * \param[in, optional] KeyContext The value specified when the port was associated with a file handle.
+ * \param[in, optional] ApcContext The value specified when the I/O operation was issued.
+ * \param[in] IoStatus The completion status for the I/O operation.
+ * \param[in] IoStatusInformation The number of bytes transferred or other information.
+ * \return NTSTATUS Successful or errant status.
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -84,6 +149,18 @@ NtSetIoCompletionEx(
     _In_ NTSTATUS IoStatus,
     _In_ ULONG_PTR IoStatusInformation);
 
+/**
+ * The NtRemoveIoCompletion routine removes an entry from an I/O completion port.
+ *
+ * \param[in] IoCompletionHandle Handle to the I/O completion port.
+ * \param[out] KeyContext Pointer to a variable that receives the key context.
+ * \param[out] ApcContext Pointer to a variable that receives the APC context.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the completion status.
+ * \param[in, optional] Timeout Optional pointer to a timeout value.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/ntremoveiocompletion
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -94,6 +171,20 @@ NtRemoveIoCompletion(
     _Out_ PIO_STATUS_BLOCK IoStatusBlock,
     _In_opt_ PLARGE_INTEGER Timeout);
 
+/**
+ * The NtRemoveIoCompletionEx routine removes multiple entries from an I/O completion port.
+ *
+ * \param[in] IoCompletionHandle Handle to the I/O completion port.
+ * \param[out] IoCompletionInformation Pointer to an array of FILE_IO_COMPLETION_INFORMATION structures.
+ * \param[in] Count The number of entries to remove.
+ * \param[out] NumEntriesRemoved Pointer to a variable that receives the number of entries removed.
+ * \param[in, optional] Timeout Optional pointer to a timeout value.
+ * \param[in] Alertable Whether the wait is alertable.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks If Count > 16, allocates temp kernel buffer (ExAllocatePool2) and caps fallback behavior if allocation fails.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiet-getqueuedcompletionstatusex
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -111,6 +202,14 @@ NtRemoveIoCompletionEx(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+#ifndef WAIT_COMPLETION_PACKET_SET_STATE
+#define WAIT_COMPLETION_PACKET_SET_STATE 0x0001
+#endif
+
+#ifndef WAIT_COMPLETION_PACKET_ALL_ACCESS
+#define WAIT_COMPLETION_PACKET_ALL_ACCESS (WAIT_COMPLETION_PACKET_SET_STATE | STANDARD_RIGHTS_REQUIRED)
+#endif
+
 /**
  * The NtCreateWaitCompletionPacket routine creates a wait completion packet object.
  *
@@ -125,6 +224,7 @@ NtRemoveIoCompletionEx(
  *        supplies the object name and other attributes. May be NULL.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -162,6 +262,7 @@ NtCreateWaitCompletionPacket(
  *          completion by queuing a wait completion packet containing the
  *          supplied context and status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -187,6 +288,7 @@ NtAssociateWaitCompletionPacket(
  * \remarks After successful cancellation, the wait completion packet will no
  *          longer be delivered as a result of the previously associated target.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

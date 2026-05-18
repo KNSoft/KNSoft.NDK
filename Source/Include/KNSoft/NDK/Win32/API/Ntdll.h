@@ -1,18 +1,28 @@
-﻿#pragma once
+#pragma once
 
 #include "../../NT/MinDef.h"
 
 EXTERN_C_START
 
+#if (NTDDI_VERSION >= NTDDI_WIN11)
 NTSYSAPI
-BOOL
+NTSTATUS
+NTAPI
+ApiSetGetImplementationHost(
+    _In_ PCSTR ApiSetName,
+    _Out_ PBOOLEAN Resolved,
+    _Out_ PUNICODE_STRING HostName);
+#endif
+
+NTSYSAPI
+LOGICAL
 NTAPI
 ApiSetQueryApiSetPresence(
     _In_ PCUNICODE_STRING Namespace,
     _Out_ PBOOLEAN Present);
 
 NTSYSAPI
-BOOL
+LOGICAL
 NTAPI
 ApiSetQueryApiSetPresenceEx(
     _In_ PCUNICODE_STRING Namespace,

@@ -17,7 +17,7 @@ typedef enum _WNF_STATE_NAME_LIFETIME
 typedef enum _WNF_STATE_NAME_INFORMATION
 {
     WnfInfoStateNameExist,
-    WnfInfoSubscribersPresent,
+    WnfInfoSubscribersPresent,     // ULONG
     WnfInfoIsQuiescent
 } WNF_STATE_NAME_INFORMATION, *PWNF_STATE_NAME_INFORMATION;
 
@@ -65,6 +65,7 @@ typedef struct _WNF_DELIVERY_DESCRIPTOR
  * \param SecurityDescriptor Pointer to a security descriptor for the state name.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -83,6 +84,7 @@ NtCreateWnfStateName(
  * \param StateName Pointer to the WNF_STATE_NAME to delete.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -101,6 +103,7 @@ NtDeleteWnfStateName(
  * \param CheckStamp If TRUE, the change stamp is checked before updating.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -121,6 +124,7 @@ NtUpdateWnfStateData(
  * \param ExplicitScope Optional pointer to a security identifier (SID) for explicit scope.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -140,6 +144,7 @@ NtDeleteWnfStateData(
  * \param BufferLength On input, the size of the buffer in bytes; on output, the number of bytes written.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -162,6 +167,7 @@ NtQueryWnfStateData(
  * \param BufferLength The size, in bytes, of the buffer.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -173,6 +179,7 @@ NtQueryWnfStateNameInformation(
     _In_ ULONG BufferLength
     );
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -182,6 +189,7 @@ NtSubscribeWnfStateChange(
     _In_ ULONG EventMask,
     _Out_opt_ PULONG64 SubscriptionId);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -192,6 +200,7 @@ NtUnsubscribeWnfStateChange(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -203,6 +212,7 @@ NtGetCompleteWnfStateSubscription(
     _Out_writes_bytes_(DescriptorSize) PWNF_DELIVERY_DESCRIPTOR NewDeliveryDescriptor,
     _In_ ULONG DescriptorSize);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

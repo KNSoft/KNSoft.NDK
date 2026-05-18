@@ -40,7 +40,7 @@ EXTERN_C_START
 #define FILE_PIPE_UNLIMITED_INSTANCES   0xffffffff
 
 /**
- * The NtCreateNamedPipeFile routine deletes the specified file.
+ * The NtCreateNamedPipeFile routine creates or opens a named pipe.
  *
  * \param[out] FileHandle Pointer to a variable that receives a handle to the pipe.
  * \param[in] DesiredAccess The requested access to the object.
@@ -59,6 +59,7 @@ EXTERN_C_START
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows/win32/devnotes/nt-create-named-pipe-file
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -244,6 +245,21 @@ typedef struct _FILE_PIPE_DELETE_SYMLINK_INPUT
 
 #define MAILSLOT_SIZE_AUTO 0
 
+/**
+ * The NtCreateMailslotFile routine creates a mailslot.
+ *
+ * \param[out] FileHandle Pointer to a variable that receives a handle to the mailslot.
+ * \param[in] DesiredAccess The requested access to the mailslot.
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[in] CreateOptions Specifies the options to be applied when creating the mailslot.
+ * \param[in] MailslotQuota Specifies the amount of memory that the mailslot can use for its messages.
+ * \param[in] MaximumMessageSize Specifies the maximum size of a message that can be written to the mailslot.
+ * \param[in] ReadTimeout Specifies the maximum time a read operation can wait for a message to be written to the mailslot.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createmailslotw
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

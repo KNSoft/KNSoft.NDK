@@ -265,6 +265,7 @@ typedef struct _SYSDBG_KD_PULL_REMOTE_FILE
  * \param[out] ReturnLength Optional pointer to a variable that receives the number of bytes returned in the output buffer.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

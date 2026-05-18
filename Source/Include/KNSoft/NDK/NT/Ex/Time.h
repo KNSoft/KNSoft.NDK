@@ -13,6 +13,7 @@ EXTERN_C_START
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntquerysystemtime
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -28,6 +29,7 @@ NtQuerySystemTime(
  * @remarks The calling process must have the SE_SYSTEMTIME_NAME privilege.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-setsystemtime
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -43,6 +45,7 @@ NtSetSystemTime(
  * @param CurrentTime The current timer resolution, in 100-nanosecond units.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -59,6 +62,7 @@ NtQueryTimerResolution(
  * @param ActualTime The actual timer resolution, in 100-nanosecond units.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -77,6 +81,7 @@ NtSetTimerResolution(
  * @remarks On systems that run Windows XP or later, the function will always succeed and will thus never return zero. Use RtlQueryPerformanceCounter instead since no system calls are required.
  * @sa https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -86,12 +91,14 @@ NtQueryPerformanceCounter(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtQueryAuxiliaryCounterFrequency(
     _Out_ PULONG64 AuxiliaryCounterFrequency);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

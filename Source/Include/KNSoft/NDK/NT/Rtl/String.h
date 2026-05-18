@@ -541,6 +541,27 @@ RtlxAnsiStringToUnicodeSize(
 );
 
 NTSYSAPI
+ULONG
+NTAPI
+RtlxUnicodeStringToAnsiSize(
+    _In_ PCUNICODE_STRING UnicodeString
+);
+
+NTSYSAPI
+ULONG
+NTAPI
+RtlxUnicodeStringToOemSize(
+    _In_ PCUNICODE_STRING UnicodeString
+);
+
+NTSYSAPI
+ULONG
+NTAPI
+RtlxOemStringToUnicodeSize(
+    _In_ PCUNICODE_STRING UnicodeString
+);
+
+NTSYSAPI
 NTSTATUS
 NTAPI
 RtlUnicodeStringToAnsiString(
@@ -1136,6 +1157,17 @@ typedef struct in6_addr IN6_ADDR, *PIN6_ADDR;
 typedef IN_ADDR const *PCIN_ADDR;
 typedef IN6_ADDR const *PCIN6_ADDR;
 
+/**
+ * Converts an IPv4 address to a null-terminated ANSI string in standard
+ * dotted-decimal notation.
+ *
+ * \param Address The IPv4 address in network byte order.
+ * \param AddressString A caller-supplied buffer that receives the string form.
+ * The buffer should be able to hold at least 16 characters.
+ * \return A pointer to the terminating null character written to AddressString.
+ * \remarks This is a convenience routine that does not require Winsock to be loaded.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4addresstostringa
+ */
 NTSYSAPI
 PSTR
 NTAPI
@@ -1144,6 +1176,16 @@ RtlIpv4AddressToStringA(
     _Out_writes_(16) PSTR AddressString
 );
 
+/**
+ * Converts an IPv4 address to a null-terminated Unicode string in standard dotted-decimal notation.
+ *
+ * \param Address The IPv4 address in network byte order.
+ * \param AddressString A caller-supplied buffer that receives the string form.
+ * The buffer should be able to hold at least 16 wide characters.
+ * \return A pointer to the terminating null character written to AddressString.
+ * \remarks This is a convenience routine that does not require Winsock to be loaded.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4addresstostringw
+ */
 NTSYSAPI
 PWSTR
 NTAPI
@@ -1152,6 +1194,20 @@ RtlIpv4AddressToStringW(
     _Out_writes_(16) PWSTR AddressString
 );
 
+/**
+ * Converts an IPv4 address and port to a null-terminated ANSI string.
+ *
+ * \param Address The IPv4 address in network byte order.
+ * \param Port The port number in network byte order.
+ * \param AddressString A caller-supplied output buffer.
+ * \param AddressStringLength On input, the size of AddressString. On output,
+ * receives the required size if the buffer is too small.
+ * \return STATUS_SUCCESS on success, or an error status such as
+ * STATUS_INVALID_PARAMETER if the buffer is too small.
+ * \remarks The resulting string uses dotted-decimal notation followed by a
+ * colon and port number.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4addresstostringexa
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1172,6 +1228,16 @@ RtlIpv4AddressToStringExW(
     _Inout_ PULONG AddressStringLength
 );
 
+/**
+ * Converts an IPv6 address to a null-terminated ANSI string in standard IPv6 text format.
+ *
+ * \param Address The IPv6 address in network byte order.
+ * \param AddressString A caller-supplied buffer that receives the string form.
+ * The buffer should be able to hold at least 46 characters.
+ * \return A pointer to the terminating null character written to AddressString.
+ * \remarks This is a convenience routine that does not require Winsock to be loaded.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6addresstostringa
+ */
 NTSYSAPI
 PSTR
 NTAPI
@@ -1180,6 +1246,16 @@ RtlIpv6AddressToStringA(
     _Out_writes_(46) PSTR AddressString
 );
 
+/**
+ * Converts an IPv6 address to a null-terminated Unicode string in standard IPv6 text format.
+ *
+ * \param Address The IPv6 address in network byte order.
+ * \param AddressString A caller-supplied buffer that receives the string form.
+ * The buffer should be able to hold at least 46 wide characters.
+ * \return A pointer to the terminating null character written to AddressString.
+ * \remarks This is a convenience routine that does not require Winsock to be loaded.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6addresstostringw
+ */
 NTSYSAPI
 PWSTR
 NTAPI
@@ -1188,6 +1264,18 @@ RtlIpv6AddressToStringW(
     _Out_writes_(46) PWSTR AddressString
 );
 
+/**
+ * Converts an IPv6 address, scope ID, and port to a null-terminated ANSI string.
+ *
+ * \param Address The IPv6 address in network byte order.
+ * \param ScopeId The IPv6 scope identifier.
+ * \param Port The port number in network byte order.
+ * \param AddressString A caller-supplied output buffer.
+ * \param AddressStringLength On input, the size of AddressString. On output,
+ * receives the required size if the buffer is too small.
+ * \return STATUS_SUCCESS on success or an error status on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6addresstostringexa
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1199,6 +1287,32 @@ RtlIpv6AddressToStringExA(
     _Inout_ PULONG AddressStringLength
     );
 
+/**
+ * Converts an IPv4 address and port to a null-terminated Unicode string.
+ *
+ * \param Address The IPv4 address in network byte order.
+ * \param Port The port number in network byte order.
+ * \param AddressString A caller-supplied output buffer.
+ * \param AddressStringLength On input, the size of AddressString. On output,
+ * receives the required size if the buffer is too small.
+ * \return STATUS_SUCCESS on success, or an error status such as
+ * STATUS_INVALID_PARAMETER if the buffer is too small.
+ * \remarks The resulting string uses dotted-decimal notation followed by a
+ * colon and port number.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4addresstostringexw
+ */
+/**
+ * Converts an IPv6 address, scope ID, and port to a null-terminated Unicode string.
+ *
+ * \param Address The IPv6 address in network byte order.
+ * \param ScopeId The IPv6 scope identifier.
+ * \param Port The port number in network byte order.
+ * \param AddressString A caller-supplied output buffer.
+ * \param AddressStringLength On input, the size of AddressString. On output,
+ * receives the required size if the buffer is too small.
+ * \return STATUS_SUCCESS on success or an error status on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6addresstostringexw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1210,6 +1324,18 @@ RtlIpv6AddressToStringExW(
     _Inout_ PULONG AddressStringLength
 );
 
+/**
+ * Parses an ANSI IPv4 address string into a binary IPv4 address.
+ *
+ * \param AddressString The null-terminated IPv4 address string to parse.
+ * \param Strict If TRUE, requires strict four-part dotted-decimal notation.
+ * If FALSE, additional legacy forms are accepted.
+ * \param Terminator On success, receives a pointer to the character that
+ * terminated the parsed address.
+ * \param Address Receives the parsed IPv4 address in network byte order.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER if parsing fails.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4stringtoaddressa
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1220,6 +1346,18 @@ RtlIpv4StringToAddressA(
     _Out_ PIN_ADDR Address
 );
 
+/**
+ * Parses a Unicode IPv4 address string into a binary IPv4 address.
+ *
+ * \param AddressString The null-terminated IPv4 address string to parse.
+ * \param Strict If TRUE, requires strict four-part dotted-decimal notation.
+ * If FALSE, additional legacy forms are accepted.
+ * \param Terminator On success, receives a pointer to the character that
+ * terminated the parsed address.
+ * \param Address Receives the parsed IPv4 address in network byte order.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER if parsing fails.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4stringtoaddressw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1230,6 +1368,18 @@ RtlIpv4StringToAddressW(
     _Out_ PIN_ADDR Address
 );
 
+/**
+ * Parses an ANSI IPv4 address string and optional port into binary values.
+ *
+ * \param AddressString The null-terminated IPv4 address string, optionally
+ * followed by a colon and port number.
+ * \param Strict If TRUE, requires strict four-part dotted-decimal notation.
+ * If FALSE, additional legacy forms are accepted.
+ * \param Address Receives the parsed IPv4 address in network byte order.
+ * \param Port Receives the parsed port in network byte order, or zero if not present.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4stringtoaddressexa
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1240,6 +1390,18 @@ RtlIpv4StringToAddressExA(
     _Out_ PUSHORT Port
 );
 
+/**
+ * Parses a Unicode IPv4 address string and optional port into binary values.
+ *
+ * \param AddressString The null-terminated IPv4 address string, optionally
+ * followed by a colon and port number.
+ * \param Strict If TRUE, requires strict four-part dotted-decimal notation.
+ * If FALSE, additional legacy forms are accepted.
+ * \param Address Receives the parsed IPv4 address in network byte order.
+ * \param Port Receives the parsed port in network byte order, or zero if not present.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv4stringtoaddressexw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1250,6 +1412,16 @@ RtlIpv4StringToAddressExW(
     _Out_ PUSHORT Port
 );
 
+/**
+ * Parses an ANSI IPv6 address string into a binary IPv6 address.
+ *
+ * \param AddressString The null-terminated IPv6 address string to parse.
+ * \param Terminator On success, receives a pointer to the character that
+ * terminated the parsed address.
+ * \param Address Receives the parsed IPv6 address in network byte order.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6stringtoaddressa
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1259,6 +1431,16 @@ RtlIpv6StringToAddressA(
     _Out_ PIN6_ADDR Address
 );
 
+/**
+ * Parses a Unicode IPv6 address string into a binary IPv6 address.
+ *
+ * \param AddressString The null-terminated IPv6 address string to parse.
+ * \param Terminator On success, receives a pointer to the character that
+ * terminated the parsed address.
+ * \param Address Receives the parsed IPv6 address in network byte order.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6stringtoaddressw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1268,6 +1450,16 @@ RtlIpv6StringToAddressW(
     _Out_ PIN6_ADDR Address
 );
 
+/**
+ * Parses an ANSI IPv6 address string with optional scope ID and port.
+ *
+ * \param AddressString The null-terminated IPv6 address string to parse.
+ * \param Address Receives the parsed IPv6 address in network byte order.
+ * \param ScopeId Receives the parsed scope identifier.
+ * \param Port Receives the parsed port in network byte order.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6stringtoaddressexa
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1278,6 +1470,16 @@ RtlIpv6StringToAddressExA(
     _Out_ PUSHORT Port
 );
 
+/**
+ * Parses a Unicode IPv6 address string with optional scope ID and port.
+ *
+ * \param AddressString The null-terminated IPv6 address string to parse.
+ * \param Address Receives the parsed IPv6 address in network byte order.
+ * \param ScopeId Receives the parsed scope identifier.
+ * \param Port Receives the parsed port in network byte order.
+ * \return STATUS_SUCCESS on success or STATUS_INVALID_PARAMETER on failure.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6stringtoaddressexw
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

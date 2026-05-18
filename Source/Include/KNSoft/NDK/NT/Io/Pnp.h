@@ -149,6 +149,7 @@ typedef enum _DEVICE_USAGE_NOTIFICATION_TYPE
 } DEVICE_USAGE_NOTIFICATION_TYPE, *PDEVICE_USAGE_NOTIFICATION_TYPE;
 
 #if (NTDDI_VERSION < NTDDI_WIN8)
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -159,6 +160,7 @@ NtGetPlugPlayEvent(
     _In_ ULONG EventBufferSize);
 #endif
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -167,21 +169,25 @@ NtPlugPlayControl(
     _Inout_updates_bytes_(PnPControlDataLength) PVOID PnPControlData,
     _In_ ULONG PnPControlDataLength);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtSerializeBoot(VOID);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtEnableLastKnownGood(VOID);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtDisableLastKnownGood(VOID);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -172,6 +172,7 @@ typedef struct _MANAGE_HOT_PATCH_CREATE_PATCH_SECTION
  * \param[out] ReturnLength Optional pointer to a variable that receives the number of bytes written to the HotPatchInformation buffer.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

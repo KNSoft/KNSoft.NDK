@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "../../NT/MinDef.h"
 
@@ -17,7 +17,7 @@ typedef struct _PACKAGE_CONTEXT_REFERENCE
 } *PACKAGE_CONTEXT_REFERENCE;
 
 // private
-typedef enum PackageProperty
+typedef enum _PackageProperty
 {
     PackageProperty_Name = 1,                  // q: WCHAR[]
     PackageProperty_Version = 2,               // q: WCHAR[]
@@ -43,7 +43,7 @@ typedef struct _PACKAGE_APPLICATION_CONTEXT_REFERENCE
 } *PACKAGE_APPLICATION_CONTEXT_REFERENCE;
 
 // private
-typedef enum PackageApplicationProperty
+typedef enum _PackageApplicationProperty
 {
     PackageApplicationProperty_Aumid = 1,                        // q: WCHAR[]
     PackageApplicationProperty_Praid = 2,                        // q: WCHAR[]
@@ -70,7 +70,7 @@ typedef struct _PACKAGE_RESOURCES_CONTEXT_REFERENCE
 } *PACKAGE_RESOURCES_CONTEXT_REFERENCE;
 
 // private
-typedef enum PackageResourcesProperty
+typedef enum _PackageResourcesProperty
 {
     PackageResourcesProperty_DisplayName = 1,
     PackageResourcesProperty_PublisherDisplayName = 2,
@@ -87,7 +87,7 @@ typedef struct _PACKAGE_SECURITY_CONTEXT_REFERENCE
 } *PACKAGE_SECURITY_CONTEXT_REFERENCE;
 
 // private
-typedef enum PackageSecurityProperty
+typedef enum _PackageSecurityProperty
 {
     PackageSecurityProperty_SecurityFlags = 1,     // q: ULONG
     PackageSecurityProperty_AppContainerSID = 2,   // q: Sid
@@ -102,7 +102,7 @@ typedef struct _TARGET_PLATFORM_CONTEXT_REFERENCE
 } *TARGET_PLATFORM_CONTEXT_REFERENCE;
 
 // private
-typedef enum TargetPlatformProperty
+typedef enum _TargetPlatformProperty
 {
     TargetPlatformProperty_Platform = 1,   // q: ULONG
     TargetPlatformProperty_MinVersion = 2, // q: PACKAGE_VERSION
@@ -116,7 +116,7 @@ typedef struct _PACKAGE_GLOBALIZATION_CONTEXT_REFERENCE
 } *PACKAGE_GLOBALIZATION_CONTEXT_REFERENCE;
 
 // private
-typedef enum PackageGlobalizationProperty
+typedef enum _PackageGlobalizationProperty
 {
     PackageGlobalizationProperty_ForceUtf8 = 1,                // q: ULONG
     PackageGlobalizationProperty_UseWindowsDisplayLanguage = 2 // q: ULONG

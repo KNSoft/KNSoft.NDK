@@ -12,6 +12,7 @@ EXTERN_C_START
  * @param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to load.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -24,6 +25,7 @@ NtLoadDriver(
  * @param DriverServiceName A pointer to a UNICODE_STRING structure that specifies the name of the driver service to unload.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -59,6 +61,7 @@ typedef enum _IO_SESSION_STATE
     IoSessionStateMax
 } IO_SESSION_STATE;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -67,6 +70,7 @@ NtOpenSession(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -86,6 +90,18 @@ NtNotifyChangeSession(
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
+/**
+ * The NtCreateIoRing routine creates an I/O ring.
+ *
+ * \param[out] IoRingHandle Pointer to a variable that receives a handle to the I/O ring.
+ * \param[in] CreateParametersLength The size of the create parameters buffer.
+ * \param[in] CreateParameters Pointer to a caller-allocated buffer containing the create parameters.
+ * \param[in] OutputParametersLength The size of the output parameters buffer.
+ * \param[out] OutputParameters Pointer to a buffer that receives the output parameters.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioringapi/nf-ioringapi-createioring
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -96,6 +112,17 @@ NtCreateIoRing(
     _In_ ULONG OutputParametersLength,
     _Out_ PVOID OutputParameters);
 
+/**
+ * The NtSubmitIoRing routine submits entries to an I/O ring.
+ *
+ * \param[in] IoRingHandle Handle to the I/O ring.
+ * \param[in] Flags Specifies the flags for the submission.
+ * \param[in, optional] WaitOperations The number of operations to wait for.
+ * \param[in, optional] Timeout Optional pointer to a timeout value.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioringapi/nf-ioringapi-submitioring
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -105,6 +132,15 @@ NtSubmitIoRing(
     _In_opt_ ULONG WaitOperations,
     _In_opt_ PLARGE_INTEGER Timeout);
 
+/**
+ * The NtQueryIoRingCapabilities routine queries the capabilities of I/O rings on the system.
+ *
+ * \param[in] IoRingCapabilitiesLength The size of the capabilities buffer.
+ * \param[out] IoRingCapabilities Pointer to a buffer that receives the capabilities.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioringapi/nf-ioringapi-queryioringcapabilities
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -112,6 +148,17 @@ NtQueryIoRingCapabilities(
     _In_ SIZE_T IoRingCapabilitiesLength,
     _Out_ PVOID IoRingCapabilities);
 
+/**
+ * The NtSetInformationIoRing routine sets information for an I/O ring.
+ *
+ * \param[in] IoRingHandle Handle to the I/O ring.
+ * \param[in] IoRingInformationClass The type of information to set.
+ * \param[in] IoRingInformationLength The size of the information buffer.
+ * \param[in] IoRingInformation Pointer to a buffer that contains the information to set.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioringapi/nf-ioringapi-setioringcompletionevent
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -136,6 +183,10 @@ NtSetInformationIoRing(
 #define SYMLINK_FILE 0x40000000 // If set then this is a file symlink
 #endif
 
+/**
+ * The REPARSE_DATA_BUFFER structure contains reparse point data for a Microsoft reparse point.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer
+ */
 typedef struct _REPARSE_DATA_BUFFER
 {
     ULONG ReparseTag;
@@ -179,6 +230,9 @@ typedef struct _REPARSE_DATA_BUFFER
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 // Reparse structure for FSCTL_SET_REPARSE_POINT_EX
 
+/**
+ * The REPARSE_DATA_BUFFER_EX structure contains reparse point data.
+ */
 typedef struct _REPARSE_DATA_BUFFER_EX
 {
     ULONG Flags;

@@ -4,6 +4,10 @@
 
 EXTERN_C_START
 
+/**
+ * The FILE_INFORMATION_CLASS enumeration type specifies the type of file information to be queried or set.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ne-wdm-_file_information_class
+ */
 typedef enum _FILE_INFORMATION_CLASS
 {
     FileDirectoryInformation = 1,                   // q: FILE_DIRECTORY_INFORMATION (requires FILE_LIST_DIRECTORY) (NtQueryDirectoryFile[Ex])
@@ -128,8 +132,8 @@ typedef struct _FILE_STANDARD_INFORMATION
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 /**
- * The FILE_STANDARD_INFORMATION_EX structure is used as an argument to routines that query or set file information
- * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_standard_information_ex
+ * The FILE_STANDARD_INFORMATION_EX structure is used as an argument to routines that query or set file information.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_standard_information_ex
  */
 typedef struct _FILE_STANDARD_INFORMATION_EX
 {
@@ -505,7 +509,15 @@ typedef struct _FILE_MAILSLOT_SET_INFORMATION
  */
 typedef struct _FILE_REPARSE_POINT_INFORMATION
 {
-    LONGLONG FileReference;
+    union
+    {
+        ULARGE_INTEGER FileReference;
+        struct
+        {
+            ULONGLONG MftRecordIndex : 48; // rev
+            ULONGLONG SequenceNumber : 16; // rev
+        };
+    };
     ULONG Tag;
 } FILE_REPARSE_POINT_INFORMATION, *PFILE_REPARSE_POINT_INFORMATION;
 
@@ -819,6 +831,9 @@ typedef struct _FILE_LINK_ENTRY_FULL_ID_INFORMATION
     _Field_size_bytes_(FileNameLength) WCHAR FileName[1];
 } FILE_LINK_ENTRY_FULL_ID_INFORMATION, *PFILE_LINK_ENTRY_FULL_ID_INFORMATION;
 
+/**
+ * The FILE_LINKS_FULL_ID_INFORMATION structure contains information about file links.
+ */
 typedef struct _FILE_LINKS_FULL_ID_INFORMATION
 {
     ULONG BytesNeeded;
@@ -965,6 +980,10 @@ typedef struct _FILE_ID_ALL_EXTD_BOTH_DIR_INFORMATION
 }
 
 #if !defined(NTDDI_WIN11_GE) || (NTDDI_VERSION < NTDDI_WIN11_GE)
+/**
+ * The FILE_STAT_INFORMATION structure is used to query file statistics.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_stat_information
+ */
 typedef struct _FILE_STAT_INFORMATION
 {
     LARGE_INTEGER FileId;
@@ -980,6 +999,10 @@ typedef struct _FILE_STAT_INFORMATION
     ACCESS_MASK EffectiveAccess;
 } FILE_STAT_INFORMATION, *PFILE_STAT_INFORMATION;
 
+/**
+ * The FILE_STAT_BASIC_INFORMATION structure is used to query file statistics.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_stat_basic_information
+ */
 typedef struct _FILE_STAT_BASIC_INFORMATION
 {
     LARGE_INTEGER FileId;
@@ -1026,6 +1049,9 @@ typedef struct _FILE_MEMORY_PARTITION_INFORMATION
 #define LX_FILE_CASE_SENSITIVE_DIR 0x10
 
 #if !defined(NTDDI_WIN11_GE) || (NTDDI_VERSION < NTDDI_WIN11_GE)
+/**
+ * The FILE_STAT_LX_INFORMATION structure is used to query file statistics for Linux compatibility.
+ */
 typedef struct _FILE_STAT_LX_INFORMATION
 {
     LARGE_INTEGER FileId;
@@ -1279,7 +1305,15 @@ typedef struct _FILE_ID_GLOBAL_TX_DIR_INFORMATION
 
 typedef struct _FILE_OBJECTID_INFORMATION
 {
-    ULONGLONG FileReference;
+    union
+    {
+        ULARGE_INTEGER FileReference;
+        struct
+        {
+            ULONGLONG MftRecordIndex : 48; // rev
+            ULONGLONG SequenceNumber : 16; // rev
+        };
+    };
     UCHAR ObjectId[16]; // GUID
     union
     {
@@ -1396,6 +1430,10 @@ typedef struct _FILE_QUOTA_INFORMATION
 #endif /*(NTDDI_VERSION >= NTDDI_WIN10_RS2) */
 #endif /*_WIN32_WINNT >= _WIN32_WINNT_WIN8 */
 
+/**
+ * The FS_INFORMATION_CLASS enumeration type is used to specify the type of volume information to be queried or set.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ne-wdm-_fsinfoclass
+ */
 typedef enum _FSINFOCLASS
 {
     FileFsVolumeInformation = 1,            // q: FILE_FS_VOLUME_INFORMATION
@@ -1419,6 +1457,10 @@ typedef enum _FSINFOCLASS FS_INFORMATION_CLASS;
 
 // NtQueryVolumeInformation/NtSetVolumeInformation types
 
+/**
+ * The FILE_FS_VOLUME_INFORMATION structure is used to query information about a volume where a file resides.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_volume_information
+ */
 typedef struct _FILE_FS_VOLUME_INFORMATION
 {
     LARGE_INTEGER VolumeCreationTime;
@@ -1428,12 +1470,20 @@ typedef struct _FILE_FS_VOLUME_INFORMATION
     _Field_size_bytes_(VolumeLabelLength) WCHAR VolumeLabel[1];
 } FILE_FS_VOLUME_INFORMATION, *PFILE_FS_VOLUME_INFORMATION;
 
+/**
+ * The FILE_FS_LABEL_INFORMATION structure is used to set the label for a file system volume.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_label_information
+ */
 typedef struct _FILE_FS_LABEL_INFORMATION
 {
     ULONG VolumeLabelLength;
     _Field_size_bytes_(VolumeLabelLength) WCHAR VolumeLabel[1];
 } FILE_FS_LABEL_INFORMATION, *PFILE_FS_LABEL_INFORMATION;
 
+/**
+ * The FILE_FS_SIZE_INFORMATION structure is used to query sector size information for a file system volume.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_size_information
+ */
 typedef struct _FILE_FS_SIZE_INFORMATION
 {
     LARGE_INTEGER TotalAllocationUnits;
@@ -1456,6 +1506,10 @@ typedef struct _FILE_FS_SIZE_INFORMATION
 #define FILE_VC_QUOTAS_REBUILDING 0x00000200
 #define FILE_VC_VALID_MASK 0x000003ff
 
+/**
+ * The FILE_FS_CONTROL_INFORMATION structure is used to query or set information about a file system volume.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_control_information
+ */
 typedef struct _FILE_FS_CONTROL_INFORMATION
 {
     LARGE_INTEGER FreeSpaceStartFiltering;
@@ -1466,6 +1520,10 @@ typedef struct _FILE_FS_CONTROL_INFORMATION
     ULONG FileSystemControlFlags; // FILE_VC_*
 } FILE_FS_CONTROL_INFORMATION, *PFILE_FS_CONTROL_INFORMATION;
 
+/**
+ * The FILE_FS_FULL_SIZE_INFORMATION structure is used to query sector size information for a file system volume.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_full_size_information
+ */
 typedef struct _FILE_FS_FULL_SIZE_INFORMATION
 {
     LARGE_INTEGER TotalAllocationUnits;
@@ -1475,6 +1533,10 @@ typedef struct _FILE_FS_FULL_SIZE_INFORMATION
     ULONG BytesPerSector;
 } FILE_FS_FULL_SIZE_INFORMATION, *PFILE_FS_FULL_SIZE_INFORMATION;
 
+/**
+ * The FILE_FS_OBJECTID_INFORMATION structure is used to query or set the object ID for a file system volume.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_objectid_information
+ */
 typedef struct _FILE_FS_OBJECTID_INFORMATION
 {
     UCHAR ObjectId[16];
@@ -1490,12 +1552,20 @@ typedef struct _FILE_FS_OBJECTID_INFORMATION
     };
 } FILE_FS_OBJECTID_INFORMATION, *PFILE_FS_OBJECTID_INFORMATION;
 
+/**
+ * The FILE_FS_DEVICE_INFORMATION structure provides file system device information about the type of device object associated with a file object.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_fs_device_information
+ */
 typedef struct _FILE_FS_DEVICE_INFORMATION
 {
     DEVICE_TYPE DeviceType;
     ULONG Characteristics;
 } FILE_FS_DEVICE_INFORMATION, *PFILE_FS_DEVICE_INFORMATION;
 
+/**
+ * The FILE_FS_ATTRIBUTE_INFORMATION structure is used to query attribute information for a file system.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_attribute_information
+ */
 typedef struct _FILE_FS_ATTRIBUTE_INFORMATION
 {
     ULONG FileSystemAttributes;
@@ -1504,6 +1574,10 @@ typedef struct _FILE_FS_ATTRIBUTE_INFORMATION
     _Field_size_bytes_(FileSystemNameLength) WCHAR FileSystemName[1];
 } FILE_FS_ATTRIBUTE_INFORMATION, *PFILE_FS_ATTRIBUTE_INFORMATION;
 
+/**
+ * The FILE_FS_DRIVER_PATH_INFORMATION structure is used to query whether a given driver is in the I/O path for a file system volume.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_driver_path_information
+ */
 typedef struct _FILE_FS_DRIVER_PATH_INFORMATION
 {
     BOOLEAN DriverInPath;
@@ -1511,6 +1585,9 @@ typedef struct _FILE_FS_DRIVER_PATH_INFORMATION
     _Field_size_bytes_(DriverNameLength) WCHAR DriverName[1];
 } FILE_FS_DRIVER_PATH_INFORMATION, *PFILE_FS_DRIVER_PATH_INFORMATION;
 
+/**
+ * The FILE_FS_VOLUME_FLAGS_INFORMATION structure is used to query or set file system volume flags.
+ */
 typedef struct _FILE_FS_VOLUME_FLAGS_INFORMATION
 {
     ULONG Flags;
@@ -1525,6 +1602,10 @@ typedef struct _FILE_FS_VOLUME_FLAGS_INFORMATION
 // If set for Sector and Partition fields, alignment is not known.
 #define SSINFO_OFFSET_UNKNOWN 0xffffffff
 
+/**
+ * The FILE_FS_SECTOR_SIZE_INFORMATION structure is used to query sector size information for a file system volume.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/ns-ntddk-_file_fs_sector_size_information
+ */
 typedef struct _FILE_FS_SECTOR_SIZE_INFORMATION
 {
     ULONG LogicalBytesPerSector;
@@ -1536,11 +1617,17 @@ typedef struct _FILE_FS_SECTOR_SIZE_INFORMATION
     ULONG ByteOffsetForPartitionAlignment;
 } FILE_FS_SECTOR_SIZE_INFORMATION, *PFILE_FS_SECTOR_SIZE_INFORMATION;
 
+/**
+ * The FILE_FS_DATA_COPY_INFORMATION structure is used to query the number of copies of data for a file system volume.
+ */
 typedef struct _FILE_FS_DATA_COPY_INFORMATION
 {
     ULONG NumberOfCopies;
 } FILE_FS_DATA_COPY_INFORMATION, *PFILE_FS_DATA_COPY_INFORMATION;
 
+/**
+ * The FILE_FS_METADATA_SIZE_INFORMATION structure is used to query the size of metadata for a file system volume.
+ */
 typedef struct _FILE_FS_METADATA_SIZE_INFORMATION
 {
     LARGE_INTEGER TotalMetadataAllocationUnits;
@@ -1548,6 +1635,9 @@ typedef struct _FILE_FS_METADATA_SIZE_INFORMATION
     ULONG BytesPerSector;
 } FILE_FS_METADATA_SIZE_INFORMATION, *PFILE_FS_METADATA_SIZE_INFORMATION;
 
+/**
+ * The FILE_FS_FULL_SIZE_INFORMATION_EX structure is used to query sector size information for a file system volume.
+ */
 typedef struct _FILE_FS_FULL_SIZE_INFORMATION_EX
 {
     ULONGLONG ActualTotalAllocationUnits;
@@ -1565,6 +1655,9 @@ typedef struct _FILE_FS_FULL_SIZE_INFORMATION_EX
     ULONG BytesPerSector;
 } FILE_FS_FULL_SIZE_INFORMATION_EX, *PFILE_FS_FULL_SIZE_INFORMATION_EX;
 
+/**
+ * The FILE_FS_GUID_INFORMATION structure is used to query the GUID for a file system volume.
+ */
 typedef struct _FILE_FS_GUID_INFORMATION
 {
     GUID FsGuid;
@@ -1581,6 +1674,7 @@ typedef struct _FILE_FS_GUID_INFORMATION
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryinformationfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1605,6 +1699,7 @@ NtQueryInformationFile(
  * \remarks NtQueryInformationByName queries and returns the requested information without opening the actual file,
  * making it more efficient than NtQueryInformationFile, which requires a file open and subsequent file close.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1627,6 +1722,7 @@ NtQueryInformationByName(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntsetinformationfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1645,6 +1741,7 @@ NtSetInformationFile(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows/win32/devnotes/ntqueryattributesfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1660,6 +1757,7 @@ NtQueryAttributesFile(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwqueryfullattributesfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1684,6 +1782,7 @@ NtQueryFullAttributesFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntquerydirectoryfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1753,6 +1852,7 @@ NtQueryDirectoryFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntquerydirectoryfileex
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1770,6 +1870,22 @@ NtQueryDirectoryFileEx(
 
 #endif /* (NTDDI_VERSION >= NTDDI_WIN10_RS3) */
 
+/**
+ * The NtQueryEaFile routine returns extended attributes (EA) for a file.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[out] Buffer Pointer to a caller-allocated output buffer where extended attributes are to be returned.
+ * \param[in] Length Size, in bytes, of the buffer.
+ * \param[in] ReturnSingleEntry Set to TRUE if only a single entry should be returned.
+ * \param[in, optional] EaList Pointer to a caller-allocated input buffer containing a FILE_GET_EA_INFORMATION structure.
+ * \param[in] EaListLength Length of the EaList buffer.
+ * \param[in, optional] EaIndex The index of the entry at which to begin scanning the extended-attribute list.
+ * \param[in] RestartScan Set to TRUE if the scan is to start at the first entry in the extended-attribute list.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwqueryeafile
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1784,6 +1900,17 @@ NtQueryEaFile(
     _In_opt_ PULONG EaIndex,
     _In_ BOOLEAN RestartScan);
 
+/**
+ * The NtSetEaFile routine sets extended attributes (EA) for a file.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[in] Buffer Pointer to a caller-allocated input buffer containing the extended attributes to be set.
+ * \param[in] Length Size, in bytes, of the buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwseteafile
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1793,6 +1920,22 @@ NtSetEaFile(
     _In_reads_bytes_(Length) PVOID Buffer,
     _In_ ULONG Length);
 
+/**
+ * The NtQueryQuotaInformationFile routine retrieves quota information for a volume.
+ *
+ * \param[in] FileHandle Handle to the file or volume.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[out] Buffer Pointer to a caller-allocated output buffer where quota information is to be returned.
+ * \param[in] Length Size, in bytes, of the buffer.
+ * \param[in] ReturnSingleEntry Set to TRUE if only a single entry should be returned.
+ * \param[in, optional] SidList Pointer to a caller-allocated input buffer containing a SID list.
+ * \param[in] SidListLength Length of the SidList buffer.
+ * \param[in, optional] StartSid Pointer to a SID identifying the entry at which to begin scanning the quota information.
+ * \param[in] RestartScan Set to TRUE if the scan is to start at the first entry in the quota information list.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwqueryquotainformationfile
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1807,6 +1950,17 @@ NtQueryQuotaInformationFile(
     _In_opt_ PSID StartSid,
     _In_ BOOLEAN RestartScan);
 
+/**
+ * The NtSetQuotaInformationFile routine sets quota information for a volume.
+ *
+ * \param[in] FileHandle Handle to the file or volume.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[in] Buffer Pointer to a caller-allocated input buffer containing the quota information to be set.
+ * \param[in] Length Size, in bytes, of the buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwsetquotainformationfile
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1827,6 +1981,7 @@ NtSetQuotaInformationFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryvolumeinformationfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1848,6 +2003,7 @@ NtQueryVolumeInformationFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwsetvolumeinformationfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1887,6 +2043,22 @@ NtSetVolumeInformationFile(
 #define FILE_ACTION_ID_NOT_TUNNELLED        0x0000000A
 #define FILE_ACTION_TUNNELLED_ID_COLLISION  0x0000000B
 
+/**
+ * The NtNotifyChangeDirectoryFile routine creates a change notification request for a directory.
+ *
+ * \param[in] FileHandle Handle to the directory.
+ * \param[in, optional] Event Handle to an event.
+ * \param[in, optional] ApcRoutine Pointer to an APC routine.
+ * \param[in, optional] ApcContext Pointer to an APC context.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[out] Buffer Pointer to a buffer that receives change information.
+ * \param[in] Length Size, in bytes, of the buffer.
+ * \param[in] CompletionFilter Specifies the type of changes to notify.
+ * \param[in] WatchTree If TRUE, the routine monitors the directory tree.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readdirectorychangesw
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1982,6 +2154,23 @@ typedef struct _FILE_NOTIFY_FULL_INFORMATION
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
+/**
+ * The NtNotifyChangeDirectoryFileEx routine creates a change notification request for a directory.
+ *
+ * \param[in] FileHandle Handle to the directory.
+ * \param[in, optional] Event Handle to an event.
+ * \param[in, optional] ApcRoutine Pointer to an APC routine.
+ * \param[in, optional] ApcContext Pointer to an APC context.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[out] Buffer Pointer to a buffer that receives change information.
+ * \param[in] Length Size, in bytes, of the buffer.
+ * \param[in] CompletionFilter Specifies the type of changes to notify.
+ * \param[in] WatchTree If TRUE, the routine monitors the directory tree.
+ * \param[in, optional] DirectoryNotifyInformationClass The type of information to return.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readdirectorychangesexw
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

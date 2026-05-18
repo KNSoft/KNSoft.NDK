@@ -353,12 +353,17 @@ RtlGetConsoleSessionForegroundProcessId(VOID);
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+typedef struct _RTL_SESSION_PROPERTIES
+{
+    ULONG IsCurrentSessionId;
+} RTL_SESSION_PROPERTIES, *PRTL_SESSION_PROPERTIES;
+
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlGetSessionProperties(
     _In_ ULONG SessionId,
-    _Out_ PULONG SharedUserSessionId);
+    _Out_ PRTL_SESSION_PROPERTIES SessionProperties);
 #endif
 
 #pragma endregion

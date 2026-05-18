@@ -102,14 +102,14 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 RtlQueryProtectedPolicy(
-    _In_ PGUID PolicyGuid,
+    _In_ PCGUID PolicyGuid,
     _Out_ PULONG_PTR PolicyValue);
 
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlSetProtectedPolicy(
-    _In_ PGUID PolicyGuid,
+    _In_ PCGUID PolicyGuid,
     _In_ ULONG_PTR PolicyValue,
     _Out_ PULONG_PTR OldPolicyValue);
 

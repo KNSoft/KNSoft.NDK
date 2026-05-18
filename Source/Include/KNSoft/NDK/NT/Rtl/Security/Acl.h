@@ -170,8 +170,8 @@ RtlAddAccessAllowedObjectAce(
     _In_ ULONG AceRevision,
     _In_ ULONG AceFlags,
     _In_ ACCESS_MASK AccessMask,
-    _In_opt_ PGUID ObjectTypeGuid,
-    _In_opt_ PGUID InheritedObjectTypeGuid,
+    _In_opt_ PCGUID ObjectTypeGuid,
+    _In_opt_ PCGUID InheritedObjectTypeGuid,
     _In_ PSID Sid);
 
 NTSYSAPI
@@ -182,8 +182,8 @@ RtlAddAccessDeniedObjectAce(
     _In_ ULONG AceRevision,
     _In_ ULONG AceFlags,
     _In_ ACCESS_MASK AccessMask,
-    _In_opt_ PGUID ObjectTypeGuid,
-    _In_opt_ PGUID InheritedObjectTypeGuid,
+    _In_opt_ PCGUID ObjectTypeGuid,
+    _In_opt_ PCGUID InheritedObjectTypeGuid,
     _In_ PSID Sid);
 
 NTSYSAPI
@@ -194,8 +194,8 @@ RtlAddAuditAccessObjectAce(
     _In_ ULONG AceRevision,
     _In_ ULONG AceFlags,
     _In_ ACCESS_MASK AccessMask,
-    _In_opt_ PGUID ObjectTypeGuid,
-    _In_opt_ PGUID InheritedObjectTypeGuid,
+    _In_opt_ PCGUID ObjectTypeGuid,
+    _In_opt_ PCGUID InheritedObjectTypeGuid,
     _In_ PSID Sid,
     _In_ BOOLEAN AuditSuccess,
     _In_ BOOLEAN AuditFailure);

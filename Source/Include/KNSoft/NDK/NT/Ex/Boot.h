@@ -34,6 +34,7 @@ EXTERN_C_START
  * @param ReturnLength If the function succeeds, the return length is the number of bytes stored in the \c VariableValue buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -54,6 +55,7 @@ NtQuerySystemEnvironmentValue(
  * @param Attributes Bitmask identifying UEFI variable attributes associated with the variable.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -74,6 +76,7 @@ NtQuerySystemEnvironmentValueEx(
  * If this parameter is zero, the firmware environment variable is deleted.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -95,6 +98,7 @@ NtSetSystemEnvironmentValue(
  * @param Attributes Bitmask to set UEFI variable attributes associated with the variable.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -141,6 +145,7 @@ typedef struct _VARIABLE_NAME_AND_VALUE
  * \param BufferLength Pointer to a ULONG variable that specifies the size of the Buffer on input.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -215,6 +220,7 @@ typedef struct _EFI_DRIVER_ENTRY_LIST
  * @param Id A pointer to a variable that receives the identifier of the new boot entry.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -228,6 +234,7 @@ NtAddBootEntry(
  * @param Id The identifier of the boot entry to be deleted.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -240,6 +247,7 @@ NtDeleteBootEntry(
  * @param BootEntry A pointer to a BOOT_ENTRY structure that specifies the new boot entry information.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -253,6 +261,7 @@ NtModifyBootEntry(
  * @param BufferLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -267,6 +276,7 @@ NtEnumerateBootEntries(
  * @param Count A pointer to a variable that specifies the number of entries in the buffer. On return, it contains the number of entries returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -281,6 +291,7 @@ NtQueryBootEntryOrder(
  * @param Count The number of entries in the buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -295,6 +306,7 @@ NtSetBootEntryOrder(
  * @param BootOptionsLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -309,6 +321,7 @@ NtQueryBootOptions(
  * @param FieldsToChange A bitmask that specifies which fields in the BOOT_OPTIONS structure are to be changed.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -325,6 +338,7 @@ NtSetBootOptions(
  * @param OutputFilePathLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -341,6 +355,7 @@ NtTranslateFilePath(
  * @param Id A pointer to a variable that receives the identifier of the new driver entry.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -354,6 +369,7 @@ NtAddDriverEntry(
  * @param Id The identifier of the driver entry to be deleted.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -366,6 +382,7 @@ NtDeleteDriverEntry(
  * @param DriverEntry A pointer to an EFI_DRIVER_ENTRY structure that specifies the new driver entry information.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -379,6 +396,7 @@ NtModifyDriverEntry(
  * @param BufferLength A pointer to a variable that specifies the size of the buffer. On return, it contains the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -393,6 +411,7 @@ NtEnumerateDriverEntries(
  * @param Count A pointer to a variable that specifies the number of entries in the buffer. On return, it contains the number of entries returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -407,6 +426,7 @@ NtQueryDriverEntryOrder(
  * @param Count The number of entries in the buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -433,6 +453,7 @@ typedef enum _FILTER_BOOT_OPTION_OPERATION
  * @param DataSize The size, in bytes, of the data buffer pointed to by the Data parameter.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -464,6 +485,7 @@ typedef enum _SHUTDOWN_ACTION
  * \return NTSTATUS Successful or errant status.
  * \remarks The calling process must have the SE_SHUTDOWN_NAME privilege.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -479,6 +501,7 @@ NtShutdownSystem(
  * \param String A pointer to a UNICODE_STRING structure that contains the text to display.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -492,6 +515,7 @@ NtDisplayString(
  * \param Text A pointer to a UNICODE_STRING structure that contains the text to draw on the screen.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

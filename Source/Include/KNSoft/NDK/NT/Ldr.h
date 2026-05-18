@@ -88,6 +88,9 @@ typedef struct _LDR_DDAG_NODE32
     ULONG PreorderNumber;
 } LDR_DDAG_NODE32, *PLDR_DDAG_NODE32;
 
+/**
+ * A record for a service tag associated with a loader module.
+ */
 typedef struct _LDR_SERVICE_TAG_RECORD LDR_SERVICE_TAG_RECORD, *PLDR_SERVICE_TAG_RECORD;
 struct _LDR_SERVICE_TAG_RECORD
 {
@@ -95,11 +98,17 @@ struct _LDR_SERVICE_TAG_RECORD
     ULONG ServiceTag;
 };
 
+/**
+ * A circular singly linked list used by the loader.
+ */
 typedef struct _LDRP_CSLIST
 {
     PSINGLE_LIST_ENTRY Tail;
 } LDRP_CSLIST, *PLDRP_CSLIST;
 
+/**
+ * A node in the Directed Dependency Acyclic Graph (DDAG) used by the loader to manage module dependencies.
+ */
 typedef struct _LDR_DDAG_NODE
 {
     LIST_ENTRY Modules;
@@ -123,7 +132,9 @@ typedef struct _LDR_DDAG_NODE
     ULONG PreorderNumber;
 } LDR_DDAG_NODE, *PLDR_DDAG_NODE;
 
-// private
+/**
+ * A structure representing a dependency between loader modules.
+ */
 typedef struct _LDRP_DEPENDENCY
 {
     SINGLE_LIST_ENTRY Link;
@@ -140,6 +151,9 @@ typedef struct _LDRP_DEPENDENCY
     };
 } LDRP_DEPENDENCY, *PLDRP_DEPENDENCY;
 
+/**
+ * The reason a DLL was loaded.
+ */
 typedef enum _LDR_DLL_LOAD_REASON
 {
     LoadReasonUnknown = -1,
@@ -155,6 +169,17 @@ typedef enum _LDR_DLL_LOAD_REASON
     LoadReasonPatchImage = 9, // since WIN11
 } LDR_DLL_LOAD_REASON, *PLDR_DLL_LOAD_REASON;
 
+// private
+typedef struct _LDR_PATCH_TABLE
+{
+    ULONG_PTR Version;
+    PVOID LdrLoadDll;
+    PVOID LdrGetProcedureAddress;
+} LDR_PATCH_TABLE, *PLDR_PATCH_TABLE;
+
+/**
+ * The hot-patching state of a loader module.
+ */
 typedef enum _LDR_HOT_PATCH_STATE
 {
     LdrHotPatchBaseImage,
@@ -199,6 +224,38 @@ typedef struct _LDRP_LOAD_CONTEXT *PLDRP_LOAD_CONTEXT;
 #define LDRP_REDIRECTED                 0x10000000
 #define LDRP_COMPAT_DATABASE_PROCESSED  0x80000000
 
+// LDR_DATA_TABLE_ENTRY->ImplicitPathOptions
+#define LDR_PATH_IS_FLAGS                              0x00000001  // Indicates the path string is actually a set of flags.
+#define LDR_PATH_WITH_ALTERED_SEARCH_PATH              0x00000008  // Corresponds to LOAD_WITH_ALTERED_SEARCH_PATH.
+#define LDR_PATH_SEARCH_DLL_LOAD_DIR                   0x00000100  // Corresponds to LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR.
+#define LDR_PATH_SEARCH_APPLICATION_DIR                0x00000200  // Corresponds to LOAD_LIBRARY_SEARCH_APPLICATION_DIR.
+#define LDR_PATH_SEARCH_USER_DIRS                      0x00000400  // Corresponds to LOAD_LIBRARY_SEARCH_USER_DIRS.
+#define LDR_PATH_SEARCH_SYSTEM32                       0x00000800  // Corresponds to LOAD_LIBRARY_SEARCH_SYSTEM32.
+#define LDR_PATH_SEARCH_DEFAULT_DIRS                   0x00001000  // Corresponds to LOAD_LIBRARY_SEARCH_DEFAULT_DIRS.
+#define LDR_PATH_SAFE_CURRENT_DIRS                     0x00002000  // Corresponds to LOAD_LIBRARY_SAFE_CURRENT_DIRS.
+#define LDR_PATH_SEARCH_SYSTEM32_NO_FORWARDER          0x00004000  // Corresponds to LOAD_LIBRARY_SEARCH_SYSTEM32_NO_FORWARDER.
+
+// LDR_DATA_TABLE_ENTRY->DependentLoadFlags
+#define LDR_LOAD_DONT_RESOLVE_DLL_REFERENCES           0x00000001 // Do not resolve dependencies. (LDR_DONT_RESOLVE_DLL_REFERENCES)
+#define LDR_LOAD_LIBRARY_AS_DATAFILE                   0x00000002 // Load as a data file.
+#define LDR_LOAD_PACKAGED_LIBRARY                      0x00000004 // Load from a Windows Store package.
+#define LDR_LOAD_WITH_ALTERED_SEARCH_PATH              0x00000008 // Use altered search path logic.
+#define LDR_LOAD_IGNORE_CODE_AUTHZ_LEVEL               0x00000010 // Ignore code authorization levels.
+#define LDR_LOAD_LIBRARY_AS_IMAGE_RESOURCE             0x00000020 // Load as an image resource.
+#define LDR_LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE         0x00000040 // Exclusive data file access.
+#define LDR_LOAD_LIBRARY_REQUIRE_SIGNED_TARGET         0x00000080 // Require a signed target.
+#define LDR_LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR           0x00000100 // Search the DLL's load directory.
+#define LDR_LOAD_LIBRARY_SEARCH_APPLICATION_DIR        0x00000200 // Search the application directory.
+#define LDR_LOAD_LIBRARY_SEARCH_USER_DIRS              0x00000400 // Search user-specified directories.
+#define LDR_LOAD_LIBRARY_SEARCH_SYSTEM32               0x00000800 // Search the System32 directory.
+#define LDR_LOAD_LIBRARY_SEARCH_DEFAULT_DIRS           0x00001000 // Search all default directories.
+#define LDR_LOAD_LIBRARY_SAFE_CURRENT_DIRS             0x00002000 // Use safe current directory search logic.
+#define LDR_LOAD_LIBRARY_SEARCH_SYSTEM32_NO_FORWARDER  0x00004000 // Search System32 without following forwarders.
+#define LDR_LOAD_LIBRARY_OS_INTEGRITY_CONTINUITY       0x00008000 // Enforce OS integrity continuity.
+
+/**
+ * The LDR_DATA_TABLE_ENTRY structure contains information about a loaded module.
+ */
 typedef struct _LDR_DATA_TABLE_ENTRY
 {
     LIST_ENTRY InLoadOrderLinks;
@@ -459,6 +516,7 @@ LdrProcessInitializationComplete(
 // rev LdrLoadDll DllCharacteristics
 #define LDR_DONT_RESOLVE_DLL_REFERENCES       0x00000002 // IMAGE_FILE_EXECUTABLE_IMAGE maps to DONT_RESOLVE_DLL_REFERENCES
 #define LDR_PACKAGED_LIBRARY                  0x00000004 // LOAD_PACKAGED_LIBRARY
+#define LDR_SEARCH_DEFAULT_DIRS               0x00001000 // LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
 #define LDR_REQUIRE_SIGNED_TARGET             0x00800000 // maps to LOAD_LIBRARY_REQUIRE_SIGNED_TARGET
 #define LDR_OS_INTEGRITY_CONTINUITY           0x80000000 // maps to LOAD_LIBRARY_OS_INTEGRITY_CONTINUITY // since REDSTONE2
 
@@ -473,6 +531,27 @@ LdrProcessInitializationComplete(
 #define LDR_PATH_SEARCH_DEFAULT_DIRS          0x00001000 // LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
 #define LDR_PATH_SAFE_CURRENT_DIRS            0x00002000 // LOAD_LIBRARY_SAFE_CURRENT_DIRS // since REDSTONE1
 #define LDR_PATH_SEARCH_SYSTEM32_NO_FORWARDER 0x00004000 // LOAD_LIBRARY_SEARCH_SYSTEM32_NO_FORWARDER // since REDSTONE1
+
+typedef union _LDR_DLL_PATH
+{
+    PCWSTR SearchPath;
+    ULONG_PTR Flags;
+    struct
+    {
+        ULONG_PTR IsFlags : 1;
+        ULONG_PTR Reserved1 : 2;
+        ULONG_PTR WithAlteredSearchPath : 1;
+        ULONG_PTR Reserved2 : 4;
+        ULONG_PTR SearchDllLoadDir : 1;
+        ULONG_PTR SearchApplicationDir : 1;
+        ULONG_PTR SearchUserDirs : 1;
+        ULONG_PTR SearchSystem32 : 1;
+        ULONG_PTR SearchDefaultDirs : 1;
+        ULONG_PTR SafeCurrentDirs : 1;
+        ULONG_PTR SearchSystem32NoForwarder : 1;
+        ULONG_PTR Reserved3 : sizeof(ULONG_PTR) * 8 - 15;
+    };
+} LDR_DLL_PATH, *PLDR_DLL_PATH;
 
 /**
  * The LdrLoadDll routine loads the specified DLL into the address space of the calling process.
@@ -1439,7 +1518,7 @@ typedef struct _LDR_ENUM_RESOURCE_ENTRY
 } LDR_ENUM_RESOURCE_ENTRY, *PLDR_ENUM_RESOURCE_ENTRY;
 
 #define NAME_FROM_RESOURCE_ENTRY(RootDirectory, Entry) \
-    ((Entry)->NameIsString ? (ULONG_PTR)((ULONG_PTR)(RootDirectory) + (ULONG_PTR)((Entry)->NameOffset)) : (Entry)->Id)
+    ((Entry)->NameIsString ? (ULONG_PTR)((PUCHAR)(RootDirectory) + (ULONG_PTR)((Entry)->NameOffset)) : (Entry)->Id)
 
 /**
  * The LdrEnumResources routine enumerates resources of a specified DLL module.

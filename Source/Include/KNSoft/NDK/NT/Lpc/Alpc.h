@@ -59,10 +59,13 @@ typedef struct _ALPC_PORT_ATTRIBUTES
 } ALPC_PORT_ATTRIBUTES, *PALPC_PORT_ATTRIBUTES;
 
 // begin_rev
-#define ALPC_MESSAGE_HANDLE_ATTRIBUTE 0x10000000
-#define ALPC_MESSAGE_CONTEXT_ATTRIBUTE 0x20000000
-#define ALPC_MESSAGE_VIEW_ATTRIBUTE 0x40000000
 #define ALPC_MESSAGE_SECURITY_ATTRIBUTE 0x80000000
+#define ALPC_MESSAGE_VIEW_ATTRIBUTE 0x40000000
+#define ALPC_MESSAGE_CONTEXT_ATTRIBUTE 0x20000000
+#define ALPC_MESSAGE_HANDLE_ATTRIBUTE 0x10000000
+#define ALPC_MESSAGE_RESERVED_ATTRIBUTE 0x08000000
+#define ALPC_MESSAGE_DIRECT_ATTRIBUTE 0x04000000
+#define ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE 0x02000000
 
 // Convenience macro for all message attributes
 #define ALPC_MESSAGE_ATTRIBUTES_ALL \
@@ -164,6 +167,7 @@ typedef struct _ALPC_HANDLE_ATTR
     ACCESS_MASK GrantedAccess;
 } ALPC_HANDLE_ATTR, *PALPC_HANDLE_ATTR;
 
+#define ALPC_SECFLG_DELETE_EXISTING 0x10000
 #define ALPC_SECFLG_CREATE_HANDLE 0x20000 // dbg
 #define ALPC_SECFLG_NOSECTIONHANDLE 0x40000
 
@@ -185,6 +189,21 @@ typedef struct _ALPC_DATA_VIEW_ATTR
     PVOID ViewBase; // must be zero on input
     SIZE_T ViewSize;
 } ALPC_DATA_VIEW_ATTR, *PALPC_DATA_VIEW_ATTR;
+
+typedef struct _ALPC_DIRECT_ATTR
+{
+    HANDLE EventHandle;
+} ALPC_DIRECT_ATTR, *PALPC_DIRECT_ATTR;
+
+typedef struct _ALPC_DIRECT_ATTR32
+{
+    ULONG EventHandle;
+} ALPC_DIRECT_ATTR32, *PALPC_DIRECT_ATTR32;
+
+typedef struct _ALPC_WORK_ON_BEHALF_ATTR
+{
+    ULONGLONG Ticket;
+} ALPC_WORK_ON_BEHALF_ATTR;
 
 typedef enum _ALPC_PORT_INFORMATION_CLASS
 {
@@ -277,6 +296,7 @@ typedef struct _ALPC_MESSAGE_HANDLE_INFORMATION
     ACCESS_MASK GrantedAccess;
 } ALPC_MESSAGE_HANDLE_INFORMATION, *PALPC_MESSAGE_HANDLE_INFORMATION;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -285,13 +305,21 @@ NtAlpcCreatePort(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes);
 
+typedef enum _ALPC_DISCONNECT_PORT_FLAGS
+{
+    ALPC_DISCONNECT_PORT_FLG_DEFAULT = 0x00000000,
+    ALPC_DISCONNECT_PORT_FLG_SKIP_PENDING_FLUSH = 0x00000001
+} ALPC_DISCONNECT_PORT_FLAGS;
+
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtAlpcDisconnectPort(
     _In_ HANDLE PortHandle,
-    _In_ ULONG Flags);
+    _In_ ALPC_DISCONNECT_PORT_FLAGS Flags);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -302,6 +330,7 @@ NtAlpcQueryInformation(
     _In_ ULONG Length,
     _Out_opt_ PULONG ReturnLength);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -313,6 +342,7 @@ NtAlpcSetInformation(
 
 #define ALPC_CREATEPORTSECTIONFLG_SECURE 0x40000 // rev
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -324,6 +354,7 @@ NtAlpcCreatePortSection(
     _Out_ PALPC_HANDLE AlpcSectionHandle,
     _Out_ PSIZE_T ActualSectionSize);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -332,6 +363,7 @@ NtAlpcDeletePortSection(
     _Reserved_ ULONG Flags,
     _In_ ALPC_HANDLE SectionHandle);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -341,6 +373,7 @@ NtAlpcCreateResourceReserve(
     _In_ SIZE_T MessageSize,
     _Out_ PULONG ResourceId);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -349,6 +382,7 @@ NtAlpcDeleteResourceReserve(
     _Reserved_ ULONG Flags,
     _In_ PULONG ResourceId);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -357,6 +391,7 @@ NtAlpcCreateSectionView(
     _Reserved_ ULONG Flags,
     _Inout_ PALPC_DATA_VIEW_ATTR ViewAttributes);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -365,6 +400,7 @@ NtAlpcDeleteSectionView(
     _Reserved_ ULONG Flags,
     _In_ PVOID ViewBase);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -373,6 +409,7 @@ NtAlpcCreateSecurityContext(
     _Reserved_ ULONG Flags,
     _Inout_ PALPC_SECURITY_ATTR SecurityAttribute);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -381,6 +418,7 @@ NtAlpcDeleteSecurityContext(
     _Reserved_ ULONG Flags,
     _In_ ALPC_HANDLE ContextHandle);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -389,6 +427,7 @@ NtAlpcRevokeSecurityContext(
     _Reserved_ ULONG Flags,
     _In_ ALPC_HANDLE ContextHandle);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -400,15 +439,21 @@ NtAlpcQueryInformationMessage(
     _In_ ULONG Length,
     _Out_opt_ PULONG ReturnLength);
 
-#define ALPC_MSGFLG_REPLY_MESSAGE 0x1
-#define ALPC_MSGFLG_LPC_MODE 0x2
-#define ALPC_MSGFLG_RELEASE_MESSAGE 0x10000 // dbg
-#define ALPC_MSGFLG_SYNC_REQUEST 0x20000 // dbg
-#define ALPC_MSGFLG_TRACK_PORT_REFERENCES 0x40000
-#define ALPC_MSGFLG_WAIT_USER_MODE 0x100000
-#define ALPC_MSGFLG_WAIT_ALERTABLE 0x200000
-#define ALPC_MSGFLG_WOW64_CALL 0x80000000 // dbg
+typedef enum _ALPC_MESSAGE_FLAGS
+{
+    ALPC_MSGFLG_REPLY_MESSAGE = 0x00000001,
+    ALPC_MSGFLG_LPC_MODE = 0x00000002,
+    ALPC_MSGFLG_RELEASE_MESSAGE = 0x00010000,
+    ALPC_MSGFLG_SYNC_REQUEST = 0x00020000,
+    ALPC_MSGFLG_TRACK_PORT_REFERENCES = 0x00040000,
+    ALPC_MSGFLG_WAIT_USER_MODE = 0x00100000,
+    ALPC_MSGFLG_WAIT_ALERTABLE = 0x00200000,
+    ALPC_MSGFLG_SIGNAL_ALERTABLE = 0x00400000,
+    ALPC_MSGFLG_INTERNAL_REJECT = 0x01000000,
+    ALPC_MSGFLG_WOW64_CALL = 0x80000000,
+} ALPC_MESSAGE_FLAGS;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -417,7 +462,7 @@ NtAlpcConnectPort(
     _In_ PUNICODE_STRING PortName,
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
-    _In_ ULONG Flags,
+    _In_ ALPC_MESSAGE_FLAGS Flags,
     _In_opt_ PSID RequiredServerSid,
     _Inout_updates_bytes_to_opt_(*BufferLength, *BufferLength) PPORT_MESSAGE ConnectionMessage,
     _Inout_opt_ PSIZE_T BufferLength,
@@ -426,6 +471,7 @@ NtAlpcConnectPort(
     _In_opt_ PLARGE_INTEGER Timeout);
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -434,7 +480,7 @@ NtAlpcConnectPortEx(
     _In_ POBJECT_ATTRIBUTES ConnectionPortObjectAttributes,
     _In_opt_ POBJECT_ATTRIBUTES ClientPortObjectAttributes,
     _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
-    _In_ ULONG Flags,
+    _In_ ALPC_MESSAGE_FLAGS Flags,
     _In_opt_ PSECURITY_DESCRIPTOR ServerSecurityRequirements,
     _Inout_updates_bytes_to_opt_(*BufferLength, *BufferLength) PPORT_MESSAGE ConnectionMessage,
     _Inout_opt_ PSIZE_T BufferLength,
@@ -443,13 +489,21 @@ NtAlpcConnectPortEx(
     _In_opt_ PLARGE_INTEGER Timeout);
 #endif
 
+typedef enum _ALPC_PORT_FLAGS
+{
+    ALPC_PORTFLG_NONE = 0x00000000,
+    ALPC_PORTFLG_WOW64_STYLE_HEADER = 0x80000000,
+    ALPC_PORTFLG_TOP_MASK = 0xC0000000,
+} ALPC_PORT_FLAGS;
+
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtAlpcAcceptConnectPort(
     _Out_ PHANDLE PortHandle,
     _In_ HANDLE ConnectionPortHandle,
-    _In_ ULONG Flags,
+    _In_ ALPC_PORT_FLAGS Flags,
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
     _In_opt_ PVOID PortContext,
@@ -457,12 +511,13 @@ NtAlpcAcceptConnectPort(
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ConnectionMessageAttributes,
     _In_ BOOLEAN AcceptConnection);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtAlpcSendWaitReceivePort(
     _In_ HANDLE PortHandle,
-    _In_ ULONG Flags,
+    _In_ ALPC_MESSAGE_FLAGS Flags,
     _In_reads_bytes_opt_(SendMessage->u1.s1.TotalLength) PPORT_MESSAGE SendMessage,
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES SendMessageAttributes,
     _Out_writes_bytes_to_opt_(*BufferLength, *BufferLength) PPORT_MESSAGE ReceiveMessage,
@@ -470,10 +525,16 @@ NtAlpcSendWaitReceivePort(
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ReceiveMessageAttributes,
     _In_opt_ PLARGE_INTEGER Timeout);
 
-#define ALPC_CANCELFLG_TRY_CANCEL 0x1 // dbg
-#define ALPC_CANCELFLG_NO_CONTEXT_CHECK 0x8
-#define ALPC_CANCELFLGP_FLUSH 0x10000 // dbg
+typedef enum _ALPC_CANCEL_FLAGS
+{
+    ALPC_CANCELFLG_NONE = 0x00000000,
+    ALPC_CANCELFLG_TRY_CANCEL = 0x00000001,
+    ALPC_CANCELFLG_RESERVED_CAPTURE32 = 0x00000004,
+    ALPC_CANCELFLG_NO_CONTEXT_CHECK = 0x00000008,
+    ALPC_CANCELFLG_FLUSH = 0x00010000,
+} ALPC_CANCEL_FLAGS;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -482,19 +543,27 @@ NtAlpcCancelMessage(
     _In_ ULONG Flags,
     _In_ PALPC_CONTEXT_ATTR MessageContext);
 
-#define ALPC_IMPERSONATEFLG_ANONYMOUS 0x1
-#define ALPC_IMPERSONATEFLG_REQUIRE_IMPERSONATE 0x2
-//ALPC_IMPERSONATEFLG 0x3-0x10 (SECURITY_IMPERSONATION_LEVEL)
+typedef enum _ALPC_IMPERSONATE_FLAGS
+{
+    ALPC_IMPERSONATEFLG_ANONYMOUS = 0x00000001,
+    ALPC_IMPERSONATEFLG_REQUIRE_IMPERSONATE = 0x00000002,
+    ALPC_IMPERSONATEFLG_LEVEL_ANONYMOUS = (0u << 2),
+    ALPC_IMPERSONATEFLG_LEVEL_IDENTIFICATION = (1u << 2),
+    ALPC_IMPERSONATEFLG_LEVEL_IMPERSONATION = (2u << 2),
+    ALPC_IMPERSONATEFLG_LEVEL_DELEGATION = (3u << 2),
+} ALPC_IMPERSONATE_FLAGS;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtAlpcImpersonateClientOfPort(
     _In_ HANDLE PortHandle,
     _In_ PPORT_MESSAGE Message,
-    _In_ PVOID Flags);
+    _In_ ALPC_IMPERSONATE_FLAGS Flags);
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -504,6 +573,7 @@ NtAlpcImpersonateClientContainerOfPort(
     _Reserved_ ULONG Flags);
 #endif
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -511,10 +581,11 @@ NtAlpcOpenSenderProcess(
     _Out_ PHANDLE ProcessHandle,
     _In_ HANDLE PortHandle,
     _In_ PPORT_MESSAGE PortMessage,
-    _Reserved_ ULONG Flags,
+    _In_ ALPC_PORT_FLAGS Flags,
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -114,7 +114,7 @@ NTSTATUS
 NTAPI
 RtlFindActivationContextSectionString(
     _In_ ULONG Flags,
-    _In_opt_ PGUID ExtensionGuid,
+    _In_opt_ PCGUID ExtensionGuid,
     _In_ ULONG SectionId, // ACTIVATION_CONTEXT_SECTION_*
     _In_ PUNICODE_STRING StringToFind,
     _Inout_ PACTCTX_SECTION_KEYED_DATA ReturnedData
@@ -126,9 +126,9 @@ NTSTATUS
 NTAPI
 RtlFindActivationContextSectionGuid(
     _In_ ULONG Flags,
-    _In_opt_ PGUID ExtensionGuid,
+    _In_opt_ PCGUID ExtensionGuid,
     _In_ ULONG SectionId, // ACTIVATION_CONTEXT_SECTION_*
-    _In_ PGUID GuidToFind,
+    _In_ PCGUID GuidToFind,
     _Inout_ PACTCTX_SECTION_KEYED_DATA ReturnedData
     );
 

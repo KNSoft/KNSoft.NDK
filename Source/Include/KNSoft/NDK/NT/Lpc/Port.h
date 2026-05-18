@@ -32,7 +32,11 @@ typedef struct _PORT_DATA_INFORMATION
 #define LPC_DEBUG_EVENT 8
 #define LPC_ERROR_EVENT 9
 #define LPC_CONNECTION_REQUEST 10
+#define LPC_INTERNAL_CONNECTION_REPLY 11
+#define LPC_CANCEL_MESSAGE 12
+#define LPC_LEGACY_CONNECTION_REPLY 13
 
+#define LPC_RESERVED_MESSAGE            0x1000
 #define LPC_CONTINUATION_REQUIRED       0x2000
 #define LPC_NO_IMPERSONATE              0x4000
 #define LPC_KERNELMODE_MESSAGE          0x8000
@@ -148,6 +152,7 @@ typedef struct _REMOTE_PORT_VIEW64
 
 #pragma region Create
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -158,6 +163,7 @@ NtCreatePort(
     _In_ ULONG MaxMessageLength,
     _In_opt_ ULONG MaxPoolUsage);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -172,6 +178,7 @@ NtCreateWaitablePort(
 
 #pragma region Connect (Client)
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -185,6 +192,7 @@ NtConnectPort(
     _Inout_updates_bytes_to_opt_(*ConnectionInformationLength, *ConnectionInformationLength) PVOID ConnectionInformation,
     _Inout_opt_ PULONG ConnectionInformationLength);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -203,6 +211,7 @@ NtSecureConnectPort(
 
 #pragma region Connect (Server)
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -210,6 +219,7 @@ NtListenPort(
     _In_ HANDLE PortHandle,
     _Out_ PPORT_MESSAGE ConnectionRequest);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -221,6 +231,7 @@ NtAcceptConnectPort(
     _Inout_opt_ PPORT_VIEW ServerView,
     _Out_opt_ PREMOTE_PORT_VIEW ClientView);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -229,6 +240,7 @@ NtCompleteConnectPort(
 
 #pragma endregion
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -236,6 +248,7 @@ NtRequestPort(
     _In_ HANDLE PortHandle,
     _In_reads_bytes_(RequestMessage->u1.s1.TotalLength) PPORT_MESSAGE RequestMessage);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -244,6 +257,7 @@ NtRequestWaitReplyPort(
     _In_reads_bytes_(RequestMessage->u1.s1.TotalLength) PPORT_MESSAGE RequestMessage,
     _Out_ PPORT_MESSAGE ReplyMessage);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -251,6 +265,7 @@ NtReplyPort(
     _In_ HANDLE PortHandle,
     _In_reads_bytes_(ReplyMessage->u1.s1.TotalLength) PPORT_MESSAGE ReplyMessage);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -258,6 +273,7 @@ NtReplyWaitReplyPort(
     _In_ HANDLE PortHandle,
     _Inout_ PPORT_MESSAGE ReplyMessage);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -267,6 +283,7 @@ NtReplyWaitReceivePort(
     _In_reads_bytes_opt_(ReplyMessage->u1.s1.TotalLength) PPORT_MESSAGE ReplyMessage,
     _Out_ PPORT_MESSAGE ReceiveMessage);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -277,6 +294,7 @@ NtReplyWaitReceivePortEx(
     _Out_ PPORT_MESSAGE ReceiveMessage,
     _In_opt_ PLARGE_INTEGER Timeout);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -284,6 +302,7 @@ NtImpersonateClientOfPort(
     _In_ HANDLE PortHandle,
     _In_ PPORT_MESSAGE Message);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -295,6 +314,7 @@ NtReadRequestData(
     _In_ SIZE_T BufferSize,
     _Out_opt_ PSIZE_T NumberOfBytesRead);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -312,6 +332,7 @@ typedef enum _PORT_INFORMATION_CLASS
     PortDumpInformation
 } PORT_INFORMATION_CLASS;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

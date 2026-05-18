@@ -27,22 +27,22 @@ EXTERN_C_START
 
 typedef enum _WORKERFACTORYINFOCLASS
 {
-    WorkerFactoryTimeout, // LARGE_INTEGER
-    WorkerFactoryRetryTimeout, // LARGE_INTEGER
-    WorkerFactoryIdleTimeout, // s: LARGE_INTEGER
-    WorkerFactoryBindingCount, // s: ULONG
-    WorkerFactoryThreadMinimum, // s: ULONG
-    WorkerFactoryThreadMaximum, // s: ULONG
-    WorkerFactoryPaused, // ULONG or BOOLEAN
-    WorkerFactoryBasicInformation, // q: WORKER_FACTORY_BASIC_INFORMATION
-    WorkerFactoryAdjustThreadGoal,
-    WorkerFactoryCallbackType,
-    WorkerFactoryStackInformation, // 10
-    WorkerFactoryThreadBasePriority, // s: ULONG
-    WorkerFactoryTimeoutWaiters, // s: ULONG, since THRESHOLD
-    WorkerFactoryFlags, // s: ULONG
-    WorkerFactoryThreadSoftMaximum, // s: ULONG
-    WorkerFactoryThreadCpuSets, // since REDSTONE5
+    WorkerFactoryTimeout,               // qs: LARGE_INTEGER
+    WorkerFactoryRetryTimeout,          // qs: LARGE_INTEGER
+    WorkerFactoryIdleTimeout,           // qs: LARGE_INTEGER
+    WorkerFactoryBindingCount,          // qs: ULONG
+    WorkerFactoryThreadMinimum,         // qs: ULONG
+    WorkerFactoryThreadMaximum,         // qs: ULONG
+    WorkerFactoryPaused,                // qs: ULONG or BOOLEAN
+    WorkerFactoryBasicInformation,      // q: WORKER_FACTORY_BASIC_INFORMATION
+    WorkerFactoryAdjustThreadGoal,      // s: ULONG
+    WorkerFactoryCallbackType,          // qs: ULONG
+    WorkerFactoryStackInformation,      // qs: ULONG/ULONG_PTR // 10
+    WorkerFactoryThreadBasePriority,    // qs: ULONG
+    WorkerFactoryTimeoutWaiters,        // qs: ULONG // since THRESHOLD
+    WorkerFactoryFlags,                 // qs: ULONG
+    WorkerFactoryThreadSoftMaximum,     // qs: ULONG
+    WorkerFactoryThreadCpuSets,         // qs: ULONG[] // since REDSTONE5
     MaxWorkerFactoryInfoClass
 } WORKERFACTORYINFOCLASS, *PWORKERFACTORYINFOCLASS;
 
@@ -74,6 +74,7 @@ typedef struct _WORKER_FACTORY_BASIC_INFORMATION
     NTSTATUS LastThreadCreationStatus;
 } WORKER_FACTORY_BASIC_INFORMATION, *PWORKER_FACTORY_BASIC_INFORMATION;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -89,6 +90,7 @@ NtCreateWorkerFactory(
     _In_opt_ SIZE_T StackReserve,
     _In_opt_ SIZE_T StackCommit);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -99,6 +101,7 @@ NtQueryInformationWorkerFactory(
     _In_ ULONG WorkerFactoryInformationLength,
     _Out_opt_ PULONG ReturnLength);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -108,6 +111,7 @@ NtSetInformationWorkerFactory(
     _In_reads_bytes_(WorkerFactoryInformationLength) PVOID WorkerFactoryInformation,
     _In_ ULONG WorkerFactoryInformationLength);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -115,12 +119,14 @@ NtShutdownWorkerFactory(
     _In_ HANDLE WorkerFactoryHandle,
     _Inout_ volatile LONG *PendingWorkerCount);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtReleaseWorkerFactoryWorker(
     _In_ HANDLE WorkerFactoryHandle);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -137,6 +143,7 @@ typedef struct _WORKER_FACTORY_DEFERRED_WORK
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

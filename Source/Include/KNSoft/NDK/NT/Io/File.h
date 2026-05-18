@@ -10,6 +10,7 @@ EXTERN_C_START
 // Define the create disposition values
 //
 
+#define FILE_DISPOSITION_NONE           0x00000000
 #define FILE_SUPERSEDE                  0x00000000
 #define FILE_OPEN                       0x00000001
 #define FILE_CREATE                     0x00000002
@@ -101,6 +102,9 @@ EXTERN_C_START
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
+/**
+ * The EXTENDED_CREATE_DUAL_OPLOCK_KEYS structure contains the parent and target oplock keys for an extended create operation.
+ */
 typedef struct _EXTENDED_CREATE_DUAL_OPLOCK_KEYS {
 
     //
@@ -125,6 +129,10 @@ typedef struct _EXTENDED_CREATE_DUAL_OPLOCK_KEYS {
 // This struct can be extended and new fields may be added to the end
 // of the struct in the future.
 //
+/**
+ * The EXTENDED_CREATE_INFORMATION structure contains extended information for a create operation.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_extended_create_information
+ */
 typedef struct _EXTENDED_CREATE_INFORMATION {
     LONGLONG ExtendedCreateFlags;   // extended create flags
     PVOID EaBuffer;                 // EA buffer
@@ -137,6 +145,9 @@ typedef struct _EXTENDED_CREATE_INFORMATION {
 //
 // 32-bit version of EXTENDED_CREATE_INFORMATION struct
 //
+/**
+ * The EXTENDED_CREATE_INFORMATION_32 structure contains extended information for a 32-bit create operation.
+ */
 typedef struct _EXTENDED_CREATE_INFORMATION_32 {
     LONGLONG ExtendedCreateFlags;   // extended create flags
     void* POINTER_32 EaBuffer;      // EA buffer
@@ -172,6 +183,13 @@ typedef struct _EXTENDED_CREATE_INFORMATION_32 {
 
 #define FILE_WRITE_TO_END_OF_FILE       0xffffffff
 #define FILE_USE_FILE_POINTER_POSITION  0xfffffffe
+
+//
+// Special Timestamp values
+//
+
+#define FILE_TIMESTAMP_UPDATE_DISABLE   ((LONGLONG)-1LL)
+#define FILE_TIMESTAMP_UPDATE_ENABLE    ((LONGLONG)-2LL)
 
 //
 // Define alignment requirement values
@@ -246,20 +264,21 @@ typedef struct _EXTENDED_CREATE_INFORMATION_32 {
 /**
  * The NtCreateFile routine creates a new file or directory, or opens an existing file, device, directory, or volume.
  *
- * \param[out] FileHandle Pointer to a variable that receives a handle to the pipe.
+ * \param[out] FileHandle Pointer to a variable that receives a handle to the file.
  * \param[in] DesiredAccess The requested access to the object.
- * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the object attributes, including pipe name.
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that contains the file's attributes, including file name.
  * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure that receives the final completion status and information about the operation.
- * \param[in] AllocationSize The initial allocation size in bytes for the file. Specify a non-zero value to eliminate disk fragmentation, since the file system pre-allocates the file using a contiguous block.
- * \param[in] FileAttributes The file attributes. Explicitly specified attributes are applied only when the file is created, superseded, or, in some cases, overwritten.
- * \param[in] ShareAccess The type of share access that the caller would like to use in the file.
+ * \param[in, optional] AllocationSize Initial allocation size in bytes for the file.
+ * \param[in] FileAttributes Specifies one or more FILE_ATTRIBUTE_XXX flags.
+ * \param[in] ShareAccess Specifies the type of share access for the file.
  * \param[in] CreateDisposition Specifies how the file should be handled when the file already exists.
  * \param[in] CreateOptions Specifies the options to be applied when creating or opening the file.
- * \param[in] EaBuffer Pointer to an EA buffer used to pass extended attributes.
- * \param[in] EaLength Length of the EA buffer.
+ * \param[in, optional] EaBuffer Pointer to a caller-allocated input buffer containing extended attributes.
+ * \param[in] EaLength Length of the EaBuffer.
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/Winternl/nf-winternl-ntcreatefile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -288,6 +307,7 @@ NtCreateFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntopenfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -306,6 +326,7 @@ NtOpenFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwdeletefile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -320,6 +341,7 @@ NtDeleteFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwflushbuffersfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -393,6 +415,7 @@ NtFlushBuffersFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntflushbuffersfileex
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -404,6 +427,15 @@ NtFlushBuffersFileEx(
     _Out_ PIO_STATUS_BLOCK IoStatusBlock);
 #endif
 
+/**
+ * The NtCancelIoFile routine cancels all pending input/output (I/O) operations that are issued by the calling thread for the specified file.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiet-cancelio
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -411,6 +443,16 @@ NtCancelIoFile(
     _In_ HANDLE FileHandle,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock);
 
+/**
+ * The NtCancelIoFileEx routine marks any outstanding I/O operations for the specified file handle.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[in, optional] IoRequestToCancel Pointer to an IO_STATUS_BLOCK structure that identifies the I/O request to cancel.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiet-cancelioex
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -419,6 +461,16 @@ NtCancelIoFileEx(
     _In_opt_ PIO_STATUS_BLOCK IoRequestToCancel,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock);
 
+/**
+ * The NtCancelSynchronousIoFile routine marks pending synchronous I/O operations that are issued by the specified thread as canceled.
+ *
+ * \param[in] ThreadHandle Handle to the thread.
+ * \param[in, optional] IoRequestToCancel Pointer to an IO_STATUS_BLOCK structure that identifies the I/O request to cancel.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiet-cancelsynchronousio
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -443,6 +495,7 @@ NtCancelSynchronousIoFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwdeviceiocontrolfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -474,6 +527,7 @@ NtDeviceIoControlFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwfscontrolfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -504,6 +558,7 @@ NtFsControlFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwreadfile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -533,6 +588,7 @@ NtReadFile(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwwritefile
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -547,6 +603,22 @@ NtWriteFile(
     _In_opt_ PLARGE_INTEGER ByteOffset,
     _In_opt_ PULONG Key);
 
+/**
+ * The NtReadFileScatter routine reads data from a file and scatters it into a set of buffers.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[in, optional] Event Handle to an event.
+ * \param[in, optional] ApcRoutine Pointer to an APC routine.
+ * \param[in, optional] ApcContext Pointer to an APC context.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[in] SegmentArray Pointer to an array of FILE_SEGMENT_ELEMENT structures that specify the buffers.
+ * \param[in] Length The number of bytes to be read from the file.
+ * \param[in, optional] ByteOffset Pointer to a variable that specifies the starting byte offset in the file.
+ * \param[in, optional] Key Device and intermediate drivers should set this pointer to NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-readfilescatter
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -561,6 +633,22 @@ NtReadFileScatter(
     _In_opt_ PLARGE_INTEGER ByteOffset,
     _In_opt_ PULONG Key);
 
+/**
+ * The NtWriteFileGather routine gathers data from a set of buffers and writes it to a file.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[in, optional] Event Handle to an event.
+ * \param[in, optional] ApcRoutine Pointer to an APC routine.
+ * \param[in, optional] ApcContext Pointer to an APC context.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[in] SegmentArray Pointer to an array of FILE_SEGMENT_ELEMENT structures that specify the buffers.
+ * \param[in] Length The number of bytes to be written to the file.
+ * \param[in, optional] ByteOffset Pointer to a variable that specifies the starting byte offset in the file.
+ * \param[in, optional] Key Device and intermediate drivers should set this pointer to NULL.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-writefilegather
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -603,6 +691,7 @@ NtWriteFileGather(
  *          depend on the Windows version and file system. Consumers should
  *          verify handle access rights and the platform's support for this call.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -631,6 +720,23 @@ NtCopyFileChunk(
 
 #endif // (NTDDI_VERSION >= NTDDI_WIN10_VB)
 
+/**
+ * The NtLockFile routine locks a specified range of bytes in a file.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[in, optional] Event Handle to an event.
+ * \param[in, optional] ApcRoutine Pointer to an APC routine.
+ * \param[in, optional] ApcContext Pointer to an APC context.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[in] ByteOffset Pointer to a variable that specifies the starting byte offset of the range to be locked.
+ * \param[in] Length Pointer to a variable that specifies the length of the range to be locked.
+ * \param[in] Key The value specified for the lock.
+ * \param[in] FailImmediately If TRUE, the routine fails if the range is already locked.
+ * \param[in] ExclusiveLock If TRUE, the routine requests an exclusive lock.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-lockfile
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -646,6 +752,18 @@ NtLockFile(
     _In_ BOOLEAN FailImmediately,
     _In_ BOOLEAN ExclusiveLock);
 
+/**
+ * The NtUnlockFile routine unlocks a specified range of bytes in a file.
+ *
+ * \param[in] FileHandle Handle to the file.
+ * \param[out] IoStatusBlock Pointer to an IO_STATUS_BLOCK structure.
+ * \param[in] ByteOffset Pointer to a variable that specifies the starting byte offset of the range to be unlocked.
+ * \param[in] Length Pointer to a variable that specifies the length of the range to be unlocked.
+ * \param[in] Key The value specified for the lock.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-unlockfile
+ */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

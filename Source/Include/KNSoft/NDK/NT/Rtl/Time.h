@@ -68,8 +68,8 @@ RtlTimeFieldsToTime(
     _Out_ PLARGE_INTEGER Time
 );
 
-#define SecondsToStartOf1980 11960006400
-#define SecondsToStartOf1970 11644473600
+#define SecondsToStartOf1980 LONGLONG_C(11960006400)
+#define SecondsToStartOf1970 LONGLONG_C(11644473600)
 
 NTSYSAPI
 BOOLEAN
@@ -114,10 +114,10 @@ RtlGetSystemTimePrecise(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_NI)
 NTSYSAPI
-KSYSTEM_TIME
+ULONGLONG
 NTAPI
 RtlGetSystemTimeAndBias(
-    _Out_ KSYSTEM_TIME TimeZoneBias,
+    _Out_ PLARGE_INTEGER TimeZoneBias,
     _Out_opt_ PLARGE_INTEGER TimeZoneBiasEffectiveStart,
     _Out_opt_ PLARGE_INTEGER TimeZoneBiasEffectiveEnd
 );
@@ -134,7 +134,7 @@ RtlGetInterruptTimePrecise(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 NTSYSAPI
-ULONGLONG
+BOOLEAN
 NTAPI
 RtlQueryUnbiasedInterruptTime(
     _Out_ PLARGE_INTEGER InterruptTime
@@ -142,12 +142,26 @@ RtlQueryUnbiasedInterruptTime(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_GE)
-// rev
+// RtlGetMultiTimePrecise RequestedMask/ProvidedMask bits
+#define RTL_GET_MULTI_TIME_PRECISE_PERF_COUNTER        0x00000001UL
+#define RTL_GET_MULTI_TIME_PRECISE_HV_CORRELATED_TIME  0x00000002UL
+#define RTL_GET_MULTI_TIME_PRECISE_SHAREDUSER_TIME     0x00000004UL
+#define RTL_GET_MULTI_TIME_PRECISE_SUPPORTED_MASK      0x00000007UL
+
+typedef struct _RTL_MULTI_TIME_PRECISE
+{
+    ULONGLONG PerformanceCounter;
+    ULONGLONG HypervisorCorrelatedTime;
+    ULONGLONG SharedUserTime;
+} RTL_MULTI_TIME_PRECISE, *PRTL_MULTI_TIME_PRECISE;
+
 NTSYSAPI
-ULONGLONG
+NTSTATUS
 NTAPI
-RtlQueryUnbiasedInterruptTimePrecise(
-    _Out_ PLARGE_INTEGER InterruptTime
+RtlGetMultiTimePrecise(
+    _Out_ PRTL_MULTI_TIME_PRECISE TimesOut,
+    _In_ ULONG RequestedMask,
+    _Out_ PULONG ProvidedMask
 );
 #endif
 

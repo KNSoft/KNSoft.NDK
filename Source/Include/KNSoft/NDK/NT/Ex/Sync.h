@@ -51,13 +51,14 @@ typedef struct _EVENT_BASIC_INFORMATION
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-zwcreateevent
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtCreateEvent(
     _Out_ PHANDLE EventHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ EVENT_TYPE EventType,
     _In_ BOOLEAN InitialState
 );
@@ -70,13 +71,14 @@ NtCreateEvent(
  * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtOpenEvent(
     _Out_ PHANDLE EventHandle,
     _In_ ACCESS_MASK DesiredAccess,
-    _In_ POBJECT_ATTRIBUTES ObjectAttributes
+    _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
 );
 
 /**
@@ -86,6 +88,7 @@ NtOpenEvent(
  * @param PreviousState A pointer to a variable that receives the previous state of the event object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -102,6 +105,7 @@ NtSetEvent(
  * @param Lock A pointer to an RTL_SRWLOCK structure that specifies the lock to acquire.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -117,6 +121,7 @@ NtSetEventEx(
  * @param EventHandle A handle to the event object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -130,6 +135,7 @@ NtSetEventBoostPriority(
  * @param EventHandle A handle to the event object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -145,6 +151,7 @@ NtClearEvent(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-resetevent
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -161,6 +168,7 @@ NtResetEvent(
  * @return NTSTATUS Successful or errant status.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-pulseevent
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -179,6 +187,7 @@ NtPulseEvent(
  * @param ReturnLength A pointer to a variable that receives the size of the data returned in the buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -205,6 +214,7 @@ NtQueryEvent(
  * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -221,6 +231,7 @@ NtCreateEventPair(
  * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -235,6 +246,7 @@ NtOpenEventPair(
  * @param EventPairHandle A handle to the event pair object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -247,6 +259,7 @@ NtSetLowEventPair(
  * @param EventPairHandle A handle to the event pair object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -259,6 +272,7 @@ NtSetHighEventPair(
  * @param EventPairHandle A handle to the event pair object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -271,6 +285,7 @@ NtWaitLowEventPair(
  * @param EventPairHandle A handle to the event pair object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -283,6 +298,7 @@ NtWaitHighEventPair(
  * @param EventPairHandle A handle to the event pair object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -295,6 +311,7 @@ NtSetLowWaitHighEventPair(
  * @param EventPairHandle A handle to the event pair object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -347,6 +364,7 @@ typedef struct _MUTANT_OWNER_INFORMATION
  * @param InitialOwner If TRUE, the calling thread is the initial owner of the mutant object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -364,6 +382,7 @@ NtCreateMutant(
  * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -379,6 +398,7 @@ NtOpenMutant(
  * @param PreviousCount A pointer to a variable that receives the previous count of the mutant object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -396,6 +416,7 @@ NtReleaseMutant(
  * @param ReturnLength A pointer to a variable that receives the size of the data returned in the buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -447,6 +468,7 @@ typedef struct _SEMAPHORE_BASIC_INFORMATION
  * @param MaximumCount The maximum count of the semaphore object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -465,6 +487,7 @@ NtCreateSemaphore(
  * @param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -481,6 +504,7 @@ NtOpenSemaphore(
  * @param PreviousCount A pointer to a variable that receives the previous count of the semaphore object.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -499,6 +523,7 @@ NtReleaseSemaphore(
  * @param ReturnLength A pointer to a variable that receives the size of the data returned in the buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -575,6 +600,7 @@ typedef struct _TIMER_SET_COALESCABLE_TIMER_INFO
  * \param TimerType The type of the timer object.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -593,6 +619,7 @@ NtCreateTimer(
  * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -614,6 +641,7 @@ NtOpenTimer(
  * \param PreviousState A pointer to a variable that receives the previous state of the timer.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -636,6 +664,7 @@ NtSetTimer(
  * \param TimerSetInformationLength The size of the buffer, in bytes.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -653,6 +682,7 @@ NtSetTimerEx(
  * \param CurrentState A pointer to a variable that receives the current state of the timer object.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -671,6 +701,7 @@ NtCancelTimer(
  * \param ReturnLength A pointer to a variable that receives the size of the data returned.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -733,11 +764,11 @@ typedef enum _IR_TIMER_PROVIDER_INDEX
 //};
 
 // rev
-#define IR_TIMERID_PROVIDER(TimerId) ((USHORT)HIWORD((ULONG)(TimerId)))
-#define IR_TIMERID_ID(TimerId) ((USHORT)LOWORD((ULONG)(TimerId)))
-#define IR_TIMERID_IS_NONZERO(TimerId) (IR_TIMERID_ID(TimerId) != 0)
+#define IR_TIMERID_PROVIDER(TimerId) ((USHORT)LOWORD((ULONG)(TimerId)))
+#define IR_TIMERID_ID(TimerId) ((USHORT)HIWORD((ULONG)(TimerId)))
+#define IR_TIMERID_IS_NONZERO(TimerId) (IR_TIMERID_PROVIDER(TimerId) != 0)
 #define IR_TIMERID_ATTRIBUTES(ProviderIndex, ProviderId) \
-    ((ULONG)MAKELONG((USHORT)(ProviderId), (USHORT)(ProviderIndex)))
+    ((ULONG)MAKELONG((USHORT)(ProviderIndex), (USHORT)(ProviderId)))
 
 /**
  * The NtCreateIRTimer routine creates an IR timer object.
@@ -749,6 +780,7 @@ typedef enum _IR_TIMER_PROVIDER_INDEX
  * \return NTSTATUS Successful or errant status.
  * \remarks The TimerId must be non-NULL and point to a valid timer identifier.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -766,6 +798,7 @@ NtCreateIRTimer(
  * the time at which the timer is to be set to the signaled state.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -783,9 +816,10 @@ NtSetIRTimer(
 //
 #define TIMER2_ATTRIBUTE_IR_TIMER        0x00000002UL
 #define TIMER2_ATTRIBUTE_HIGH_RESOLUTION 0x00000004UL
+#define TIMER2_ATTRIBUTE_NO_WAKE         0x00000008UL
 #define TIMER2_ATTRIBUTE_NOTIFICATION    0x80000000UL
 // rev
-#define TIMER2_ATTRIBUTE_KNOWN_MASK (TIMER2_ATTRIBUTE_IR_TIMER | TIMER2_ATTRIBUTE_HIGH_RESOLUTION | TIMER2_ATTRIBUTE_NOTIFICATION)
+#define TIMER2_ATTRIBUTE_KNOWN_MASK (TIMER2_ATTRIBUTE_IR_TIMER | TIMER2_ATTRIBUTE_HIGH_RESOLUTION | TIMER2_ATTRIBUTE_NO_WAKE | TIMER2_ATTRIBUTE_NOTIFICATION)
 #define TIMER2_ATTRIBUTE_RESERVED_MASK (~TIMER2_ATTRIBUTE_KNOWN_MASK)
 
 #define TIMER2_ATTRIBUTE_FOR_TYPE(T) \
@@ -813,7 +847,8 @@ typedef union _TIMER2_ATTRIBUTES
         ULONG Reserved0 : 1;      // bit 0 (reserved)
         ULONG IrTimer : 1;        // bit 1 == TIMER2_ATTRIBUTE_IR_TIMER
         ULONG HighResolution : 1; // bit 2 == TIMER2_ATTRIBUTE_HIGH_RESOLUTION
-        ULONG Reserved1 : 28;     // bits [3..30] (reserved)
+        ULONG NoWake : 1;         // bit 3 == TIMER2_ATTRIBUTE_NO_WAKE
+        ULONG Reserved1 : 27;     // bits [4..30] (reserved)
         TIMER_TYPE NotificationType : 1; // bit 31 == TIMER2_ATTRIBUTE_NOTIFICATION
     };
 } TIMER2_ATTRIBUTES;
@@ -829,6 +864,7 @@ typedef union _TIMER2_ATTRIBUTES
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-createwaitabletimerexw
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -890,6 +926,7 @@ typedef PVOID PT2_CANCEL_PARAMETERS;
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-setwaitabletimer
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -908,6 +945,7 @@ NtSetTimer2(
  * \return NTSTATUS Successful or errant status.
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-cancelwaitabletimer
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -939,6 +977,7 @@ NtCancelTimer2(
  * \param Affinity The processor affinity mask indicating which processors to profile.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -969,6 +1008,7 @@ NtCreateProfile(
  * \param GroupAffinity A pointer to an array of GROUP_AFFINITY structures specifying processor groups to profile.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -991,6 +1031,7 @@ NtCreateProfileEx(
  * \param ProfileHandle A handle to the profile object.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1004,6 +1045,7 @@ NtStartProfile(
  * \param ProfileHandle A handle to the profile object.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1018,6 +1060,7 @@ NtStopProfile(
  * \param Interval A pointer to a variable that receives the interval, in 100-nanosecond units.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1033,6 +1076,7 @@ NtQueryIntervalProfile(
  * \param Source The profile source (KPROFILE_SOURCE) to set the interval for.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1059,6 +1103,7 @@ NtSetIntervalProfile(
  * \param Flags Reserved. Must be zero.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1077,6 +1122,7 @@ NtCreateKeyedEvent(
  * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1095,6 +1141,7 @@ NtOpenKeyedEvent(
  * \param Timeout Optional pointer to a timeout value (in 100-nanosecond intervals). If NULL, waits indefinitely.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1114,6 +1161,7 @@ NtReleaseKeyedEvent(
  * \param Timeout Optional pointer to a timeout value (in 100-nanosecond intervals). If NULL, waits indefinitely.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1131,6 +1179,7 @@ NtWaitForKeyedEvent(
 #if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 
 // rev
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1144,6 +1193,7 @@ NtCreateCrossVmEvent(
 );
 
 // rev
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1157,6 +1207,7 @@ NtCreateCrossVmMutant(
 );
 
 // rev
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

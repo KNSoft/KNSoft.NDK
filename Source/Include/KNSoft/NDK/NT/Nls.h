@@ -64,6 +64,7 @@ NTSYSAPI BOOLEAN NlsMbCodePageTag;
 NTSYSAPI BOOLEAN NlsMbOemCodePageTag;
 #endif
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -73,6 +74,7 @@ NtInitializeNlsFiles(
     _Out_ PLARGE_INTEGER DefaultCasingTableSize,
     _Out_opt_ PULONG CurrentNLSVersion);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -165,6 +167,7 @@ DEFINE_ENUM_FLAG_OPERATORS(CMF_WHAT_FLAGS);
  * \param BaseAddress Optional pointer that receives the base address of the mapped module.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -207,6 +210,7 @@ DEFINE_ENUM_FLAG_OPERATORS(MUI_REGISTRY_INFO_FLAGS);
  * \return NTSTATUS Successful or errant status.
  * \remarks This routine is private and subject to change.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -228,6 +232,7 @@ NtGetMUIRegistryInfo(
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlocale
  * \sa https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlocale
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -244,6 +249,7 @@ NtQueryDefaultLocale(
  * \return NTSTATUS Successful or errant status.
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-setthreadlocale
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -258,6 +264,7 @@ NtSetDefaultLocale(
  * \return NTSTATUS Successful or errant status.
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultuilanguage
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -272,6 +279,7 @@ NtQueryInstallUILanguage(
  * \param SetComittedFlag If nonzero, commits the language change.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -286,6 +294,7 @@ NtFlushInstallUILanguage(
  * \return NTSTATUS Successful or errant status.
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultuilanguage
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -298,6 +307,7 @@ NtQueryDefaultUILanguage(
  * \param DefaultUILanguageId The UI language identifier (LANGID) to set.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -308,6 +318,7 @@ NtSetDefaultUILanguage(
  * The NtIsUILanguageComitted routine determines whether the system UI language has been committed.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

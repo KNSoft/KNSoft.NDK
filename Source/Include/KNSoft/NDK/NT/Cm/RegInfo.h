@@ -242,7 +242,7 @@ typedef enum _KEY_SET_INFORMATION_CLASS
     KeyWow64FlagsInformation, // KEY_WOW64_FLAGS_INFORMATION
     KeyControlFlagsInformation, // KEY_CONTROL_FLAGS_INFORMATION
     KeySetVirtualizationInformation, // KEY_SET_VIRTUALIZATION_INFORMATION
-    KeySetDebugInformation,
+    KeySetDebugInformation, // KEY_SET_DEBUG_INFORMATION
     KeySetHandleTagsInformation, // KEY_HANDLE_TAGS_INFORMATION
     KeySetLayerInformation, // KEY_SET_LAYER_INFORMATION
     MaxKeySetInfoClass
@@ -268,6 +268,17 @@ typedef struct _KEY_WOW64_FLAGS_INFORMATION
 {
     ULONG UserFlags;
 } KEY_WOW64_FLAGS_INFORMATION, *PKEY_WOW64_FLAGS_INFORMATION;
+
+/**
+ * The KEY_SET_DEBUG_INFORMATION structure contains debug flags for a key.
+ *
+ * The fields include:
+ * - Flags: A set of debug flags associated with the key.
+ */
+typedef struct _KEY_SET_DEBUG_INFORMATION
+{
+    ULONG Flags;
+} KEY_SET_DEBUG_INFORMATION, *PKEY_SET_DEBUG_INFORMATION;
 
 /**
  * The KEY_HANDLE_TAGS_INFORMATION structure contains information about the handle tags for a key.
@@ -451,6 +462,7 @@ typedef struct _REG_NOTIFY_INFORMATION
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -471,6 +483,7 @@ NtQueryKey(
  * @param[in] KeySetInformationLength The size of the buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -492,6 +505,7 @@ NtSetInformationKey(
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -515,6 +529,7 @@ NtQueryValueKey(
  * @param[in] DataSize The size of the buffer.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -538,6 +553,7 @@ NtSetValueKey(
  * @param[out, optional] RequiredBufferLength A pointer to a variable that receives the size of the buffer required to hold the data.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -561,6 +577,7 @@ NtQueryMultipleValueKey(
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -584,6 +601,7 @@ NtEnumerateKey(
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

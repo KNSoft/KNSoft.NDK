@@ -172,7 +172,7 @@ typedef struct _RTL_SEGMENT_HEAP_MEMORY_SOURCE
     {
         HANDLE PartitionHandle;
         RTL_SEGMENT_HEAP_VA_CALLBACKS *Callbacks;
-    };
+    } DUMMYUNIONNAME;
     SIZE_T Reserved[2];
 } RTL_SEGMENT_HEAP_MEMORY_SOURCE, *PRTL_SEGMENT_HEAP_MEMORY_SOURCE;
 
@@ -570,8 +570,8 @@ typedef enum _HEAP_INFORMATION_CLASS
     HeapOptimizeResources = 3, // q; s: HEAP_OPTIMIZE_RESOURCES_INFORMATION
     HeapTaggingInformation = 4, // q: RTLP_HEAP_TAGGING_INFO
     HeapStackDatabase = 5, // q: RTL_HEAP_STACK_QUERY; s: RTL_HEAP_STACK_CONTROL
-    HeapMemoryLimit = 6, // since 19H2
-    HeapTag = 7, // since 20H1
+    HeapMemoryLimit = 6, // q: since 19H2
+    HeapTag = 7, // q: since 20H1
     HeapDetailedFailureInformation = 0x80000001,
     HeapSetDebuggingInformation = 0x80000002 // q; s: HEAP_DEBUGGING_INFORMATION
 } HEAP_INFORMATION_CLASS;
@@ -724,13 +724,16 @@ typedef struct _HEAP_EXTENDED_INFORMATION
 } HEAP_EXTENDED_INFORMATION, *PHEAP_EXTENDED_INFORMATION;
 
 // rev
+// Information points to one of: RTLP_HEAP_STACK_TRACE_SERIALIZATION_INIT,
+// RTLP_HEAP_STACK_TRACE_SERIALIZATION_HEADER, RTLP_HEAP_STACK_TRACE_SERIALIZATION_ALLOCATION.
+// A null Information/Size signals end-of-stream.
 typedef NTSTATUS(NTAPI *RTL_HEAP_STACK_WRITE_ROUTINE)(
-    _In_ PVOID Information, // TODO: 3 missing structures (dmex)
+    _In_ PVOID Information,
     _In_ ULONG Size,
     _In_opt_ PVOID Context
     );
 
-// rev
+// rev - written first; Flags == 0x80001
 typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_INIT
 {
     ULONG Count;
@@ -738,7 +741,7 @@ typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_INIT
     ULONG Flags;
 } RTLP_HEAP_STACK_TRACE_SERIALIZATION_INIT, *PRTLP_HEAP_STACK_TRACE_SERIALIZATION_INIT;
 
-// rev
+// rev - written per-heap; Version == 2, Flags/Version field == 0x80002
 typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_HEADER
 {
     USHORT Version;
@@ -748,7 +751,7 @@ typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_HEADER
     SIZE_T TotalReserve;
 } RTLP_HEAP_STACK_TRACE_SERIALIZATION_HEADER, *PRTLP_HEAP_STACK_TRACE_SERIALIZATION_HEADER;
 
-// rev
+// rev - written per live allocation
 typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_ALLOCATION
 {
     PVOID Address;
@@ -756,10 +759,19 @@ typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_ALLOCATION
     SIZE_T DataSize;
 } RTLP_HEAP_STACK_TRACE_SERIALIZATION_ALLOCATION, *PRTLP_HEAP_STACK_TRACE_SERIALIZATION_ALLOCATION;
 
-// rev
+// rev - written as end-of-heap sentinel; Address == 0x1234CDEF, DataSize == -1
+typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_TERMINATOR
+{
+    PVOID Address; // 0x1234CDEF
+    ULONG Flags;
+    SIZE_T DataSize; // -1
+} RTLP_HEAP_STACK_TRACE_SERIALIZATION_TERMINATOR, *PRTLP_HEAP_STACK_TRACE_SERIALIZATION_TERMINATOR;
+
+// rev - variable-length block; Max depth is 0xC0 (192).
+// Determine frame count from Size / sizeof(PVOID).
 typedef struct _RTLP_HEAP_STACK_TRACE_SERIALIZATION_STACKFRAME
 {
-    PVOID StackFrame[8];
+    PVOID StackFrame[ANYSIZE_ARRAY]; // actual count: Size / sizeof(PVOID)
 } RTLP_HEAP_STACK_TRACE_SERIALIZATION_STACKFRAME, *PRTLP_HEAP_STACK_TRACE_SERIALIZATION_STACKFRAME;
 
 #define HEAP_STACK_QUERY_VERSION 0x2
@@ -784,6 +796,22 @@ typedef struct _RTL_HEAP_STACK_CONTROL
     USHORT Flags;
     HANDLE ProcessHandle;
 } RTL_HEAP_STACK_CONTROL, *PRTL_HEAP_STACK_CONTROL;
+
+//#define HEAP_MEMORY_USAGE_INFO_CURRENT_VERSION 0x1
+//
+//typedef struct _HEAP_MEMORY_USAGE_ENTRY
+//{
+//    PVOID HeapHandle;
+//    SIZE_T TotalCommittedBytes;
+//    SIZE_T TotalReservedBytes;
+//} HEAP_MEMORY_USAGE_ENTRY, *PHEAP_MEMORY_USAGE_ENTRY;
+//
+//typedef struct _HEAP_MEMORY_USAGE_INFORMATION
+//{
+//    USHORT Version;
+//    SIZE_T EntryCount;
+//    HEAP_MEMORY_USAGE_ENTRY Entries[ANYSIZE_ARRAY];
+//} HEAP_MEMORY_USAGE_INFORMATION, *PHEAP_MEMORY_USAGE_INFORMATION;
 
 // rev
 typedef
@@ -813,12 +841,19 @@ RTL_HEAP_LEAK_ENUMERATION_ROUTINE(
     );
 typedef RTL_HEAP_LEAK_ENUMERATION_ROUTINE* PRTL_HEAP_LEAK_ENUMERATION_ROUTINE;
 
+// rev
+// ExtendedOptions valid values are 0..3 (low 2 bits).
+#define HEAP_DEBUG_EXTENDED_OPTION_NONE                                0x0
+#define HEAP_DEBUG_EXTENDED_OPTION_LFH_SUBSEGMENT_COMMIT               0x1
+#define HEAP_DEBUG_EXTENDED_OPTION_PAD_ALLOCATIONS_WITH_HEADER_BLOCK   0x2
+#define HEAP_DEBUG_EXTENDED_OPTION_VALID_MASK                          0x3
+
 // symbols
 typedef struct _HEAP_DEBUGGING_INFORMATION
 {
     PRTL_HEAP_DEBUGGING_INTERCEPTOR_ROUTINE InterceptorFunction;
     USHORT InterceptorValue;
-    ULONG ExtendedOptions;
+    ULONG ExtendedOptions; // HEAP_DEBUG_EXTENDED_OPTION_*
     ULONG StackTraceDepth;
     SIZE_T MinTotalBlockSize;
     SIZE_T MaxTotalBlockSize;

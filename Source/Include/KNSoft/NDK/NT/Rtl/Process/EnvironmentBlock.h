@@ -5,11 +5,14 @@
 #include "../DataStructures/Bitmap.h"
 #include "Process.h"
 #include "../../Ps/JobInfo.h"
+#include "../../Ps/PsInfo.h"
 #include "../../Nls.h"
 #include "../../Win32K/Gdi.h"
 
 /* Win32k types */
 typedef struct _KERNEL_CALLBACK_TABLE KERNEL_CALLBACK_TABLE, *PKERNEL_CALLBACK_TABLE;
+typedef struct _SHIM_PROCESS_CONTEXT SHIM_PROCESS_CONTEXT, *PSHIM_PROCESS_CONTEXT;
+typedef struct _HEAP HEAP, *PHEAP;
 
 EXTERN_C_START
 
@@ -72,6 +75,7 @@ typedef struct _PEB_LDR_DATA32
 #define KACF_VERSIONLIE_NOT_USED                      0x00000002
 #define KACF_GETTEMPPATH_NOT_USED                     0x00000004
 #define KACF_GETDISKFREESPACE                         0x00000008
+#define KACF_APPCOMPATFLAG_BIT4                       0x00000010
 #define KACF_FTMFROMCURRENTAPT                        0x00000020
 #define KACF_DISALLOWORBINDINGCHANGES                 0x00000040
 #define KACF_OLE32VALIDATEPTRS                        0x00000080
@@ -86,6 +90,7 @@ typedef struct _PEB_LDR_DATA32
 #define KACF_OLE32DOCFILEUSELEGACYNTFSFLAGS           0x00010000
 #define KACF_RPCDISABLENDRCONSTIIDCHECK               0x00020000
 #define KACF_USERDISABLEFORWARDERPATCH                0x00040000
+#define KACF_APPCOMPATFLAG_BIT19                      0x00080000
 #define KACF_OLE32DISABLENEW_WMPAINT_DISPATCH         0x00100000
 #define KACF_ADDRESTRICTEDSIDINCOINITIALIZESECURITY   0x00200000
 #define KACF_ALLOCDEBUGINFOFORCRITSECTIONS            0x00400000
@@ -310,6 +315,14 @@ typedef struct _WER_RUNTIME_DLL
     WCHAR CallbackDllPath[MAX_PATH];
 } WER_RUNTIME_DLL, *PWER_RUNTIME_DLL;
 
+typedef struct _WER_REGISTRATION_DATA
+{
+    PVOID Context;
+    PVOID CallbackContext;
+    PVOID Callback;
+    WCHAR Name[MAX_PATH];
+} WER_REGISTRATION_DATA, *PWER_REGISTRATION_DATA;
+
 typedef struct _WER_DUMP_COLLECTION
 {
     PVOID Next;
@@ -354,6 +367,12 @@ VOID NTAPI PS_POST_PROCESS_INIT_ROUTINE(
     VOID
     );
 typedef PS_POST_PROCESS_INIT_ROUTINE* PPS_POST_PROCESS_INIT_ROUTINE;
+
+typedef _Function_class_(PS_PROCESS_START_ROUTINE)
+VOID NTAPI PS_PROCESS_START_ROUTINE(
+    _In_ PVOID Parameter
+    );
+typedef PS_PROCESS_START_ROUTINE* PPS_PROCESS_START_ROUTINE;
 
 typedef struct _SDBQUERYRESULT
 {
@@ -518,7 +537,7 @@ typedef struct _PEB
     PPEB_LDR_DATA Ldr;                              // Pointer to the process loader data.
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters; // Pointer to the process parameters.
     PVOID SubSystemData;                            // Reserved.
-    PVOID ProcessHeap;                              // Pointer to the process default heap.
+    PHEAP ProcessHeap;                              // Pointer to the process default heap.
     PRTL_CRITICAL_SECTION FastPebLock;              // Pointer to a critical section used to synchronize access to the PEB.
     PSLIST_HEADER AtlThunkSListPtr;                 // Pointer to a singly linked list used by ATL.
     HANDLE IFEOKey;                                 // Handle to the Image File Execution Options key.
@@ -577,19 +596,19 @@ typedef struct _PEB
     //
     PVOID* ProcessHeaps;
 
-    PGDI_HANDLE_ENTRY GdiSharedHandleTable; // Pointer to the system GDI shared handle table.
-    PVOID ProcessStarterHelper;             // Pointer to the process starter helper.
-    ULONG GdiDCAttributeList;               // The maximum number of GDI function calls during batch operations (GdiSetBatchLimit)
-    PRTL_CRITICAL_SECTION LoaderLock;       // Pointer to the loader lock critical section.
-    ULONG OSMajorVersion;                   // Major version of the operating system.
-    ULONG OSMinorVersion;                   // Minor version of the operating system.
-    USHORT OSBuildNumber;                   // Build number of the operating system.
-    USHORT OSCSDVersion;                    // CSD version of the operating system.
-    ULONG OSPlatformId;                     // Platform ID of the operating system.
-    ULONG ImageSubsystem;                   // Subsystem version of the current process image (PE Headers).
-    ULONG ImageSubsystemMajorVersion;       // Major version of the current process image subsystem (PE Headers).
-    ULONG ImageSubsystemMinorVersion;       // Minor version of the current process image subsystem (PE Headers).
-    KAFFINITY ActiveProcessAffinityMask;    // Affinity mask for the current process.
+    PGDI_HANDLE_ENTRY GdiSharedHandleTable;         // Pointer to the system GDI shared handle table.
+    PPS_PROCESS_START_ROUTINE ProcessStarterHelper; // Pointer to the process starter helper.
+    ULONG GdiDCAttributeList;                       // The maximum number of GDI function calls during batch operations (GdiSetBatchLimit)
+    PRTL_CRITICAL_SECTION LoaderLock;               // Pointer to the loader lock critical section.
+    ULONG OSMajorVersion;                           // Major version of the operating system.
+    ULONG OSMinorVersion;                           // Minor version of the operating system.
+    USHORT OSBuildNumber;                           // Build number of the operating system.
+    USHORT OSCSDVersion;                            // CSD version of the operating system.
+    ULONG OSPlatformId;                             // Platform ID of the operating system.
+    ULONG ImageSubsystem;                           // Subsystem version of the current process image (PE Headers).
+    ULONG ImageSubsystemMajorVersion;               // Major version of the current process image subsystem (PE Headers).
+    ULONG ImageSubsystemMinorVersion;               // Minor version of the current process image subsystem (PE Headers).
+    KAFFINITY ActiveProcessAffinityMask;            // Affinity mask for the current process.
 
     // Temporary buffer for GDI handles accumulated in the current batch.
 #ifdef _WIN64
@@ -604,7 +623,7 @@ typedef struct _PEB
     ULONG SessionId;                                                // Session ID of the current process.
     ULARGE_INTEGER AppCompatFlags;                                  // Application compatibility flags. KACF_*
     ULARGE_INTEGER AppCompatFlagsUser;                              // Application compatibility flags. KACF_*
-    PVOID pShimData;                                                // Pointer to the Application SwitchBack Compatibility Engine.
+    PSHIM_PROCESS_CONTEXT pShimData;                                // Pointer to the Application SwitchBack Compatibility Engine.
     PAPPCOMPAT_EXE_DATA AppCompatInfo;                              // Pointer to the Application Compatibility Engine.
     UNICODE_STRING CSDVersion;                                      // CSD version string of the operating system.
     PACTIVATION_CONTEXT_DATA ActivationContextData;                 // Pointer to the process activation context.
@@ -613,7 +632,7 @@ typedef struct _PEB
     PASSEMBLY_STORAGE_MAP SystemAssemblyStorageMap;                 // Pointer to the system assembly storage map.
     SIZE_T MinimumStackCommit;                                      // Minimum stack commit size.
     PVOID SparePointers[2];                                         // since 19H1 (previously FlsCallback to FlsHighIndex)
-    PVOID PatchLoaderData;                                          // Pointer to the patch loader data.
+    PLDR_PATCH_TABLE PatchLoaderData;                               // Pointer to the patch loader data.
     PVOID ChpeV2ProcessInfo;                                        // Pointer to the CHPE V2 process information. CHPEV2_PROCESS_INFO
     ULONG AppModelFeatureState;                                     // Packaged process feature state.
     ULONG SpareUlongs[2];
@@ -622,7 +641,7 @@ typedef struct _PEB
     USHORT UseCaseMapping;                                          // Code page case mapping.
     USHORT UnusedNlsField;                                          // Unused NLS field.
     PWER_PEB_HEADER_BLOCK WerRegistrationData;                      // Pointer to the application WER registration data.
-    PVOID WerShipAssertPtr;                                         // Pointer to the application WER assert pointer.
+    PWER_REGISTRATION_DATA WerShipAssertPtr;                        // Pointer to the application WER assert pointer.
 
     // Pointer to the EC bitmap on ARM64. (Windows 11 and above)
     union
@@ -646,8 +665,8 @@ typedef struct _PEB
     };
 
     ULONGLONG CsrServerReadOnlySharedMemoryBase;        // Reserved for CSRSS.
-    PRTL_CRITICAL_SECTION TppWorkerpListLock;           // Pointer to the thread pool worker list lock.
-    LIST_ENTRY TppWorkerpList;                          // Pointer to the thread pool worker list.
+    RTL_SRWLOCK TppWorkerpListLock;                     // Thread pool worker list lock.
+    LIST_ENTRY TppWorkerpList;                          // Thread pool worker list.
     PVOID WaitOnAddressHashTable[128];                  // Wait on address hash table. (RtlWaitOnAddress)
     PTELEMETRY_COVERAGE_HEADER TelemetryCoverageHeader; // Pointer to the telemetry coverage header. // since RS3
     ULONG CloudFileFlags;                               // Cloud file flags. (ProjFs and Cloud Files) // since RS4
@@ -978,7 +997,8 @@ typedef struct _GDI_TEB_BATCH
 {
     struct
     {
-        ULONG Offset : 31;
+        ULONG Offset : 30;
+        ULONG InProcessing : 1;
         ULONG HasRenderingCommand : 1;
     };
     ULONG_PTR HDC;
@@ -1080,6 +1100,53 @@ struct _TEB_ACTIVE_FRAME32
     TEB_ACTIVE_FRAME32* POINTER_32 Previous;
     TEB_ACTIVE_FRAME_CONTEXT32* POINTER_32 Context;
 };
+
+//
+// TEB->ThreadLocalStoragePointer macro layout helpers
+//
+// LdrpGetNewTlsVector allocates (8 * SlotCount + 16) bytes and returns a pointer
+// 16 bytes into the block. The allocation layout is:
+//
+// ULONG SlotCount          (LDR_TLS_VECTOR_HEADER.SlotCount)
+// ULONG Reserved[3]
+// PVOID Slots[SlotCount]   <- Teb->ThreadLocalStoragePointer points here
+//
+// Each Slots[i] entry points into a per-TLS-index sub-allocation where
+// the real address is stored one PVOID-width before the aligned data pointer:
+//
+//   sub_alloc_base  ...
+//   aligned_ptr-8   PVOID  RealBase       (LdrpFreeTls: *((_QWORD *)*Slot - 1))
+//   aligned_ptr     BYTE   TlsData[Size]  <- what Slots[i] contains
+//
+
+// private
+typedef struct _LDR_TLS_VECTOR_HEADER
+{
+    ULONG SlotCount;    // number of PVOID slots in the vector
+    ULONG Reserved[3];
+} LDR_TLS_VECTOR_HEADER, *PLDR_TLS_VECTOR_HEADER;
+
+// Get the LDR_TLS_VECTOR_HEADER that precedes a TLS vector (TEB->ThreadLocalStoragePointer).
+#define LDR_TLS_VECTOR_HEADER(Vector) \
+    ((PLDR_TLS_VECTOR_HEADER)((PUCHAR)(Vector) - sizeof(LDR_TLS_VECTOR_HEADER)))
+
+// Get the slot count from a TLS vector pointer.
+#define LDR_TLS_VECTOR_SLOT_COUNT(Vector) \
+    (LDR_TLS_VECTOR_HEADER(Vector)->SlotCount)
+
+// Get a pointer to the PVOID slot at Index within a TLS vector.
+#define LDR_TLS_VECTOR_SLOT(Vector, Index) \
+    (((PVOID *)(Vector))[(Index)])
+
+// Given an aligned TLS data pointer (a Slots[i] value), retrieve the real heap
+// base stored one pointer-width before it (set by LdrpAllocateTls).
+#define LDR_TLS_DATA_HEAP_BASE(SlotData) \
+    (*((PVOID *)((PUCHAR)(SlotData) - sizeof(PVOID))))
+
+// True when TEB->ThreadLocalStoragePointer is the self-pointer sentinel set by
+// LdrpAllocateTls when no DLL has __declspec(thread) data (LdrpTlsBitmap == 0).
+#define LDR_TLS_IS_SELF_POINTER(Teb) \
+    ((Teb)->ThreadLocalStoragePointer == (PVOID *)&(Teb)->ThreadLocalStoragePointer)
 
 #define OLETLSF_LOCALTID 0x01 // This TID is in the current process.
 #define OLETLSF_UUIDINITIALIZED 0x02 // This Logical thread is init'd.
@@ -1203,51 +1270,82 @@ typedef struct _RTL_PERTHREAD_CURDIR32
 // private
 typedef struct _CALLBACKWND
 {
-    HWND hwnd;
-    ULONG_PTR pwnd;
+    HWND WindowHandle;
+    ULONG_PTR WindowContext;
     PACTIVATION_CONTEXT ActCtx;
 } CALLBACKWND, *PCALLBACKWND;
 
 // private
 typedef struct tagDPICONTEXTINFO
 {
-    ULONG dpiContext;
+    ULONG DpiContext;
     LOGICAL Dirty;
 } DPICONTEXTINFO, *PDPICONTEXTINFO;
 
 // private + rev
 typedef struct tagCLIENTINFO
 {
-    ULONG_PTR CI_flags;
-    ULONG_PTR Spins;
-    ULONG ExpWinVer;
-    ULONG CompatFlags;
-    ULONG CompatFlags2;
-    ULONG TIFlags;
-    struct tagDESKTOPINFO* DeskInfo;
-    PVOID DesktopBase; // ClientDelta before RS2
-    HHOOK hkCurrent;
-    ULONG Hooks;
-    CALLBACKWND CallbackWnd;
-    ULONG HookCurrent;
-    LONG InDDEMLCallback;
-    struct tagCLIENTTHREADINFO* ClientThreadInfo;
-    ULONG_PTR HookData;
-    ULONG KeyCache;
-    UCHAR KeyState[8];
-    ULONG AsyncKeyCache;
-    UCHAR AsyncKeyState[8];
-    UCHAR AsyncKeyStateRecentDown[8];
-    HKL hKL;
-    USHORT CodePage;
-    UCHAR DbcsCFOld[2];
-    UCHAR DbcsCFNew[2];
-    MSG msgDbcsCB;
-    PULONG RegisteredClasses;
-    HANDLE mmcssHandle;
-    ULONG_PTR CI_exflags;
-    DPICONTEXTINFO dci;
+    ULONG_PTR Flags;                                // Flags for client information.
+    ULONG_PTR SpinCount;                            // Spin count or related synchronization value.
+    ULONG ExpectedWindowsVersion;                   // Expected Windows version for compatibility.
+    ULONG CompatibilityFlags;                       // Compatibility flags for the thread.
+    ULONG CompatibilityFlags2;                      // Additional compatibility flags for the thread.
+    ULONG ThreadFlags;                              // Thread information flags.
+    struct tagDESKTOPINFO* DesktopInfo;             // Pointer to desktop information for the thread.
+    PVOID DesktopBaseAddress;                       // Base address for the desktop heap (called ClientDelta before Windows 10 RS2).
+    HHOOK CurrentHook;                              // Handle to the currently active Windows hook.
+    ULONG InstalledHooks;                           // Bitmask of installed hooks.
+    CALLBACKWND CallbackWindow;                     // Structure holding information about a callback window.
+    ULONG CurrentHookIndex;                         // Index or identifier for the current hook.
+    LONG InDdeCallback;                             // Indicates if the thread is in a DDEML (Dynamic Data Exchange Management Library) callback.
+    struct tagCLIENTTHREADINFO* ClientThreadInfo;   // Pointer to thread-specific client information.
+    ULONG_PTR HookData;                             // Data associated with hooks.
+    ULONG KeyStateCache;                            // Cached key state.
+    UCHAR KeyState[8];                              // Array holding the current key state.
+    ULONG AsyncKeyCache;                            // Cached asynchronous key state.
+    UCHAR AsyncKeyState[8];                         // Array holding asynchronous key state.
+    UCHAR AsyncKeyStateRecentDown[8];               // Array tracking recently pressed keys asynchronously.
+    HKL KeyboardLayout;                             // Handle to the current keyboard layout.
+    USHORT CodePage;                                // Code page used for character encoding.
+    UCHAR DbcsCFOld[2];                             // Old DBCS (Double-Byte Character Set) conversion flags.
+    UCHAR DbcsCFNew[2];                             // New DBCS conversion flags.
+    MSG DbcsCallbackMessage;                        // Message structure for DBCS callbacks.
+    PULONG RegisteredWindowClasses;                 // Pointer to registered window classes.
+    HANDLE MmcssHandle;                             // Handle for Multimedia Class Scheduler Service (MMCSS).
+    ULONG_PTR ExtendedFlags;                        // Extended client information flags.
+    DPICONTEXTINFO DpiContextInfo;                  // Per-thread DPI awareness.
 } CLIENTINFO, *PCLIENTINFO;
+
+// rev
+typedef struct _TPP_CALLBACK_RECORD
+{
+    PVOID Callback;         // Function pointer recorded at callback entry
+    PVOID Parameter;        // First argument passed to Callback
+    PVOID SubProcessTag;    // TEB SubProcessTag active at callback entry
+    ULONGLONG Timestamp;    // InterruptTime snapshot at callback entry
+} TPP_CALLBACK_RECORD, *PTPP_CALLBACK_RECORD;
+
+// rev
+typedef struct _TPP_CALLER_RECORD
+{
+    PVOID ReturnAddress;    // Return address captured by TpCaptureCaller
+    ULONG Type;             // Capture type (1 or 2, caller-supplied)
+    ULONG Reserved;
+} TPP_CALLER_RECORD, *PTPP_CALLER_RECORD;
+
+// rev // Per-thread state for the NT thread pool (TEB->ThreadPoolData)
+typedef struct _TPP_THREAD_DATA
+{
+    PVOID ActiveCallbackObject;             // Pointer to the TP object (TP_WORK/TP_TIMER/TP_IO/TP_WAIT) currently executing on this thread; NULL between callbacks
+    ULONG Flags;                            // Lifecycle flags: 0x3 = allocated, 0x4 = freeing
+    ULONG CallbackRecordIndex;              // Ring index (0 or 1) selecting which CallbackRecords slot to write next
+    ULONGLONG CallbackCount;                // Total callbacks dispatched on this thread
+    ULONGLONG ThreadStartTimestamp;         // InterruptTime at TppAllocThreadData
+    TPP_CALLBACK_RECORD CallbackRecords[2]; // Last two callback invocations (ring buffer keyed by CallbackRecordIndex)
+    TPP_CALLER_RECORD CallerRecords[2];     // Last two TpCaptureCaller snapshots (ring buffer keyed by CallerRecordIndex)
+    ULONG CallerRecordIndex;                // Ring index (0 or 1) selecting which CallerRecords slot to write next
+    ULONG Reserved;
+} TPP_THREAD_DATA, *PTPP_THREAD_DATA;
 
 /**
  * Thread Environment Block (TEB) structure.
@@ -1260,7 +1358,7 @@ typedef struct _TEB
     PVOID EnvironmentPointer;                       // Reserved.
     CLIENT_ID ClientId;                             // Client ID for this thread.
     PVOID ActiveRpcHandle;                          // A handle to an active Remote Procedure Call (RPC) if the thread is currently involved in an RPC operation.
-    PVOID ThreadLocalStoragePointer;                // A pointer to the __declspec(thread) local storage array.
+    PVOID* ThreadLocalStoragePointer;               // Pointer to the per-thread TLS data vector (PVOID[LdrpTlsBitmap] heap block, or self-pointer when no TLS is active).
     PPEB ProcessEnvironmentBlock;                   // A pointer to the Process Environment Block (PEB), which contains information about the process.
     ULONG LastErrorValue;                           // The previous Win32 error value for this thread.
     ULONG CountOfOwnedCriticalSections;             // The number of critical sections currently owned by this thread.
@@ -1286,7 +1384,7 @@ typedef struct _TEB
     CHAR PlaceholderReserved[10];                               // ProjFs and Cloud Files (reparse point) file virtualization.
     ULONG ProxiedProcessId;                                     // The process ID (PID) that the current COM server thread is acting on behalf of.
     ACTIVATION_CONTEXT_STACK ActivationStack;
-    UCHAR WorkingOnBehalfTicket[8];                             // Opaque operation on behalf of another user or process.
+    PALPC_WORK_ON_BEHALF_TICKET WorkingOnBehalfTicket;          // Scheduler ticket attributing this thread's CPU usage to another thread. Set/cleared via NtSetInformationThread(ThreadWorkOnBehalfTicket).
     NTSTATUS ExceptionCode;                                     // The last exception status for the current thread.
     PACTIVATION_CONTEXT_STACK ActivationContextStackPointer;    // Pointer to the activation context stack for the current thread.
     ULONG_PTR InstrumentationCallbackSp;                        // The stack pointer (SP) of the current system call or exception during instrumentation.
@@ -1371,7 +1469,7 @@ typedef struct _TEB
     ULONG WaitingOnLoaderLock;          // Indicates whether the thread is waiting on the loader lock.
     PVOID SavedPriorityState;           // The saved priority state for the thread.
     ULONG_PTR ReservedForCodeCoverage;
-    PVOID ThreadPoolData;
+    PTPP_THREAD_DATA ThreadPoolData;    // Per-thread state for the NT thread pool.
     PVOID* TlsExpansionSlots;           // Pointer to the TLS (Thread Local Storage) expansion slots for the thread.
 
 #ifdef _WIN64

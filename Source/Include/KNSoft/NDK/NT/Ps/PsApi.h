@@ -134,6 +134,7 @@ typedef struct _THREAD_INDEX_INFORMATION
  * @param TokenHandle Optional. A handle to an access token to be used for the new process.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -186,6 +187,7 @@ NtCreateProcess(
  * @param Reserved Reserved for future use. Must be zero.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -211,6 +213,7 @@ NtCreateProcessEx(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-ntopenprocess
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -229,6 +232,7 @@ NtOpenProcess(
  * @return NTSTATUS Successful or errant status.
  * @sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-zwterminateprocess
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -244,6 +248,7 @@ NtTerminateProcess(
  * @return NTSTATUS Successful or errant status.
  * @remarks Use NtCreateProcessStateChange instead.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -258,6 +263,7 @@ NtSuspendProcess(
  * @return NTSTATUS Successful or errant status.
  * @remarks Use NtCreateProcessStateChange instead.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -275,6 +281,7 @@ NtResumeProcess(
  * @param ReturnLength An optional pointer to a variable that receives the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -310,6 +317,7 @@ NtQueryInformationProcess(
  * @param NewProcessHandle A pointer to a variable that receives the handle to the next process.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -334,6 +342,7 @@ NtGetNextProcess(
  * @param NewThreadHandle A pointer to a variable that receives the handle to the next thread.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -356,6 +365,7 @@ NtGetNextThread(
  * @param ProcessInformationLength The size of the buffer pointed to by the ProcessInformation parameter.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -389,6 +399,7 @@ typedef enum _PROCESS_STATE_CHANGE_TYPE
  * @param Reserved Reserved for future use.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -411,6 +422,7 @@ NtCreateProcessStateChange(
  * @param Reserved Reserved for future use.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -444,6 +456,7 @@ typedef enum _THREAD_STATE_CHANGE_TYPE
  * @param Reserved Reserved for future use.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -466,6 +479,7 @@ NtCreateThreadStateChange(
  * @param Reserved Reserved for future use.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -497,6 +511,7 @@ NtChangeThreadState(
  * @param CreateSuspended If TRUE, the thread is created in a suspended state.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -520,6 +535,7 @@ NtCreateThread(
  * @param ClientId Optional. A pointer to a CLIENT_ID structure that specifies the client ID of the thread to be opened.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -537,6 +553,7 @@ NtOpenThread(
  * @param ExitStatus The exit status to be used by the thread and the thread's termination status.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -552,6 +569,7 @@ NtTerminateThread(
  * @param PreviousSuspendCount Optional. A pointer to a variable that receives the thread's previous suspend count.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -567,6 +585,7 @@ NtSuspendThread(
  * @param PreviousSuspendCount Optional. A pointer to a variable that receives the thread's previous suspend count.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -581,6 +600,7 @@ NtResumeThread(
  * \return ULONG The number of the current processor.
  * \sa https://learn.microsoft.com/en-us/windows/win32/procthread/ntgetcurrentprocessornumber
  */
+_Kernel_entry_
 NTSYSCALLAPI
 ULONG
 NTAPI
@@ -595,6 +615,7 @@ NtGetCurrentProcessorNumber(
  * \return ULONG The number of the current processor.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-kegetcurrentprocessornumberex
  */
+_Kernel_entry_
 NTSYSCALLAPI
 ULONG
 NTAPI
@@ -609,6 +630,7 @@ NtGetCurrentProcessorNumberEx(
  * @param ThreadContext A pointer to a CONTEXT structure that receives the thread context.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -624,6 +646,7 @@ NtGetContextThread(
  * @param ThreadContext A pointer to a CONTEXT structure that specifies the thread context.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -642,6 +665,7 @@ NtSetContextThread(
  * @param ReturnLength An optional pointer to a variable that receives the size of the data returned.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -662,6 +686,7 @@ NtQueryInformationThread(
  * @param ThreadInformationLength The size of the buffer pointed to by the ThreadInformation parameter.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -678,6 +703,7 @@ NtSetInformationThread(
  * \param[in] ThreadHandle A handle to the thread to be alerted.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -692,6 +718,7 @@ NtAlertThread(
  * \param[out, optional] PreviousSuspendCount An optional pointer to a variable that receives the thread's previous suspend count.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -706,6 +733,7 @@ NtAlertResumeThread(
  *
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -721,6 +749,7 @@ NtTestAlert(
  * \param ThreadId The thread ID of the thread to be alerted.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -738,6 +767,7 @@ NtAlertThreadByThreadId(
  * \param Lock An optional pointer to an SRW lock to be used during the alert.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -817,6 +847,7 @@ typedef struct _PS_ALERT_THREAD_EXTENDED_PARAMETER
  * - If multiple extended parameters are provided, the implementation consumes them in order and
  *   the *last* parameter's payload is the one forwarded to the internal alert logic.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -844,6 +875,7 @@ NtAlertMultipleThreadByThreadId(
  * \return STATUS_TIMEOUT if the timeout expired before being alerted.
  * \return STATUS_ALERTED if woken by NtAlertThreadByThreadId.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -861,6 +893,7 @@ NtWaitForAlertByThreadId(
  * @param SecurityQos A pointer to a SECURITY_QUALITY_OF_SERVICE structure that specifies the impersonation level and context tracking mode.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -876,6 +909,7 @@ NtImpersonateThread(
  * @param PortHandle A handle to the port to be registered.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -894,6 +928,7 @@ NtRegisterThreadTerminatePort(
  * @param Entry1Hi The high part of the second entry.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -965,6 +1000,7 @@ typedef VOID (NTAPI* PPS_APC_ROUTINE)(
  * @remarks The APC will be executed in the context of the specified thread when the thread enters an alertable wait state or when any
  * process calls the NtTestAlert, NtAlertThread, NtAlertResumeThread or NtAlertThreadByThreadId functions.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -994,6 +1030,7 @@ NtQueueApcThread(
  * @remarks The APC will be executed in the context of the specified thread after the thread enters an alertable wait state or immediately
  * when QUEUE_USER_APC_SPECIAL_USER_APC is used or NtTestAlert, NtAlertThread, NtAlertResumeThread or NtAlertThreadByThreadId are called.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1033,6 +1070,7 @@ typedef struct _APC_CALLBACK_DATA_CONTEXT
  * when QUEUE_USER_APC_SPECIAL_USER_APC is used or any process calls the NtTestAlert, NtAlertThread,
  * NtAlertResumeThread or NtAlertThreadByThreadId functions.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1317,6 +1355,10 @@ typedef enum _PS_ATTRIBUTE_NUM
     PsAttributeValue(PsAttributeComponentFilter, FALSE, TRUE, FALSE)
 #define PS_ATTRIBUTE_ENABLE_OPTIONAL_XSTATE_FEATURES \
     PsAttributeValue(PsAttributeEnableOptionalXStateFeatures, TRUE, TRUE, FALSE)
+#define PS_ATTRIBUTE_SUPPORTED_MACHINES \
+    PsAttributeValue(PsAttributeSupportedMachines, FALSE, TRUE, FALSE)
+#define PS_ATTRIBUTE_SVE_VECTOR_LENGTH \
+    PsAttributeValue(PsAttributeSveVectorLength, FALSE, TRUE, FALSE)
 
 // end_rev
 
@@ -1585,6 +1627,7 @@ typedef struct _PS_CREATE_INFO
  * @param AttributeList Optional. A pointer to a list of attributes for the process and thread.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1628,6 +1671,7 @@ NtCreateUserProcess(
  * @param AttributeList Optional. A pointer to a list of attributes for the thread.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1659,6 +1703,7 @@ NtCreateThreadEx(
  * @param ObjectAttributes Optional. A pointer to an OBJECT_ATTRIBUTES structure that specifies the attributes of the new thread.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1676,6 +1721,7 @@ NtCreateJobObject(
  * @param ObjectAttributes Optional. A pointer to an OBJECT_ATTRIBUTES structure that specifies the attributes of the new thread.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1692,6 +1738,7 @@ NtOpenJobObject(
  * @param ProcessHandle A handle to the process to associate with the job object. The handle must have the PROCESS_SET_QUOTA and PROCESS_TERMINATE access rights.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1707,6 +1754,7 @@ NtAssignProcessToJobObject(
  * @param ExitStatus The exit status to be used by all processes and threads in the job object. 
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1723,6 +1771,7 @@ NtTerminateJobObject(
  * @return NTSTATUS Successful or errant status.
  * @remarks This function can be used to determine if a process is running within a job object, which can be useful for managing process resources and constraints.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1742,6 +1791,7 @@ NtIsProcessInJob(
  * @return NTSTATUS Successful or errant status.
  * @remarks This function can be used to query various types of information about a job object, such as accounting information, limit information, and process ID list.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1763,6 +1813,7 @@ NtQueryInformationJobObject(
  * @return NTSTATUS Successful or errant status.
  * @remarks This function can be used to set various types of information for a job object, such as limit information, UI restrictions, and security limit information.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1782,6 +1833,7 @@ NtSetInformationJobObject(
  * @return NTSTATUS Successful or errant status.
  * @remarks This function can be used to create a set of job objects, which can be useful for managing groups of related processes.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1792,6 +1844,7 @@ NtCreateJobSet(
     );
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1822,6 +1875,7 @@ typedef enum _MEMORY_RESERVE_TYPE
  * @param Type The type of memory reserve.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -2012,16 +2066,18 @@ NTSTATUS
 NTAPI
 PssNtValidateDescriptor(
     _In_ HANDLE SnapshotHandle,
-    _In_opt_ PVOID ExceptionAddress
+    _In_opt_ PVOID ExceptionAddress // _ReturnAddress()
     );
 
 #endif /* (NTDDI_VERSION >= NTDDI_WINBLUE) */
 
 // rev
 /**
- * Flag indicating the type of bulk information to query.
+ * Flags indicating the types of bulk information to query.
  */
 #define MEMORY_BULK_INFORMATION_FLAG_BASIC 0x00000001
+#define MEMORY_BULK_INFORMATION_FLAG_RESERVED 0x00000002
+#define MEMORY_BULK_INFORMATION_FLAG_VALID_MASK 0x00000003
 
 // rev
 /**
@@ -2046,6 +2102,7 @@ typedef struct _NTPSS_MEMORY_BULK_INFORMATION
  * @param ReturnLength Optional pointer to a variable that receives the length of the captured information.
  * @return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

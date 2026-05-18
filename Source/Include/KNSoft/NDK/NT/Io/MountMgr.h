@@ -34,6 +34,10 @@ EXTERN_C_START
 #define IOCTL_MOUNTDEV_QUERY_DEVICE_NAME            CTL_CODE(MOUNTDEVCONTROLTYPE, 2, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 // Input structure for IOCTL_MOUNTMGR_CREATE_POINT.
+/**
+ * The MOUNTMGR_CREATE_POINT_INPUT structure is used by a mount manager client to send a symbolic link name and a device name to the mount manager.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/mountmgr/ns-mountmgr-_mountmgr_create_point_input
+ */
 typedef struct _MOUNTMGR_CREATE_POINT_INPUT
 {
     USHORT SymbolicLinkNameOffset;
@@ -43,6 +47,10 @@ typedef struct _MOUNTMGR_CREATE_POINT_INPUT
 } MOUNTMGR_CREATE_POINT_INPUT, *PMOUNTMGR_CREATE_POINT_INPUT;
 
 // Input structure for IOCTL_MOUNTMGR_DELETE_POINTS, IOCTL_MOUNTMGR_QUERY_POINTS, and IOCTL_MOUNTMGR_DELETE_POINTS_DBONLY.
+/**
+ * The MOUNTMGR_MOUNT_POINT structure is used by mount manager clients to store information about a mount point.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/mountmgr/ns-mountmgr-_mountmgr_mount_point
+ */
 typedef struct _MOUNTMGR_MOUNT_POINT
 {
     ULONG SymbolicLinkNameOffset;
@@ -66,6 +74,10 @@ typedef struct _MOUNTMGR_MOUNT_POINTS
 } MOUNTMGR_MOUNT_POINTS, *PMOUNTMGR_MOUNT_POINTS;
 
 // Input structure for IOCTL_MOUNTMGR_NEXT_DRIVE_LETTER.
+/**
+ * The MOUNTMGR_DRIVE_LETTER_TARGET structure is used by a mount manager client to send a non-persistent device name to the mount manager.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/mountmgr/ns-mountmgr-_mountmgr_drive_letter_target
+ */
 typedef struct _MOUNTMGR_DRIVE_LETTER_TARGET
 {
     USHORT DeviceNameLength;
@@ -73,6 +85,10 @@ typedef struct _MOUNTMGR_DRIVE_LETTER_TARGET
 } MOUNTMGR_DRIVE_LETTER_TARGET, *PMOUNTMGR_DRIVE_LETTER_TARGET;
 
 // Output structure for IOCTL_MOUNTMGR_NEXT_DRIVE_LETTER.
+/**
+ * The MOUNTMGR_DRIVE_LETTER_INFORMATION structure is used by the mount manager to provide a drive letter to a client.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/mountmgr/ns-mountmgr-_mountmgr_drive_letter_information
+ */
 typedef struct _MOUNTMGR_DRIVE_LETTER_INFORMATION
 {
     BOOLEAN DriveLetterWasAssigned;
@@ -81,6 +97,10 @@ typedef struct _MOUNTMGR_DRIVE_LETTER_INFORMATION
 
 // Input structure for IOCTL_MOUNTMGR_VOLUME_MOUNT_POINT_CREATED and
 // IOCTL_MOUNTMGR_VOLUME_MOUNT_POINT_DELETED.
+/**
+ * The MOUNTMGR_VOLUME_MOUNT_POINT structure is used by a mount manager client to send a volume mount point to the mount manager.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/mountmgr/ns-mountmgr-_mountmgr_volume_mount_point
+ */
 typedef struct _MOUNTMGR_VOLUME_MOUNT_POINT
 {
     USHORT SourceVolumeNameOffset;
@@ -91,6 +111,10 @@ typedef struct _MOUNTMGR_VOLUME_MOUNT_POINT
 
 // Input structure for IOCTL_MOUNTMGR_CHANGE_NOTIFY.
 // Output structure for IOCTL_MOUNTMGR_CHANGE_NOTIFY.
+/**
+ * The MOUNTMGR_CHANGE_NOTIFY_INFO structure is used by the mount manager to provide information about a change in the mount manager's mount point database.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/mountmgr/ns-mountmgr-_mountmgr_change_notify_info
+ */
 typedef struct _MOUNTMGR_CHANGE_NOTIFY_INFO
 {
     ULONG EpicNumber;
@@ -102,6 +126,10 @@ typedef struct _MOUNTMGR_CHANGE_NOTIFY_INFO
 // IOCTL_MOUNTMGR_QUERY_DOS_VOLUME_PATHS.
 // IOCTL_MOUNTMGR_PREPARE_VOLUME_DELETE
 // IOCTL_MOUNTMGR_CANCEL_VOLUME_DELETE
+/**
+ * The MOUNTMGR_TARGET_NAME structure is used by mount manager clients to send a target name to the mount manager.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/mountmgr/ns-mountmgr-_mountmgr_target_name
+ */
 typedef struct _MOUNTMGR_TARGET_NAME
 {
     USHORT DeviceNameLength;
@@ -109,6 +137,9 @@ typedef struct _MOUNTMGR_TARGET_NAME
 } MOUNTMGR_TARGET_NAME, *PMOUNTMGR_TARGET_NAME;
 
 // Input / Output structure for querying / setting the auto-mount setting
+/**
+ * The MOUNTMGR_AUTO_MOUNT_STATE enumeration type specifies whether auto-mount is enabled or disabled.
+ */
 typedef enum _MOUNTMGR_AUTO_MOUNT_STATE
 {
     Disabled = 0,
@@ -116,18 +147,27 @@ typedef enum _MOUNTMGR_AUTO_MOUNT_STATE
 } MOUNTMGR_AUTO_MOUNT_STATE;
 
 // IOCTL_MOUNTMGR_QUERY_AUTO_MOUNT
+/**
+ * The MOUNTMGR_QUERY_AUTO_MOUNT structure is used to query the current auto-mount setting.
+ */
 typedef struct _MOUNTMGR_QUERY_AUTO_MOUNT
 {
     MOUNTMGR_AUTO_MOUNT_STATE CurrentState;
 } MOUNTMGR_QUERY_AUTO_MOUNT, *PMOUNTMGR_QUERY_AUTO_MOUNT;
 
 // IOCTL_MOUNTMGR_SET_AUTO_MOUNT
+/**
+ * The MOUNTMGR_SET_AUTO_MOUNT structure is used to set the auto-mount setting.
+ */
 typedef struct _MOUNTMGR_SET_AUTO_MOUNT
 {
     MOUNTMGR_AUTO_MOUNT_STATE NewState;
 } MOUNTMGR_SET_AUTO_MOUNT, *PMOUNTMGR_SET_AUTO_MOUNT;
 
 // Input structure for IOCTL_MOUNTMGR_SILO_ARRIVAL.
+/**
+ * The MOUNTMGR_SILO_ARRIVAL_INPUT structure is used to notify the mount manager about a silo arrival.
+ */
 typedef struct _MOUNTMGR_SILO_ARRIVAL_INPUT
 {
     HANDLE JobHandle;

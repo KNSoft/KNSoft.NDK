@@ -162,6 +162,7 @@ DbgSetDebugFilterState(
     _In_ ULONG Level,
     _In_ BOOLEAN State);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -169,6 +170,7 @@ NtQueryDebugFilterState(
     _In_ ULONG ComponentId,
     _In_ ULONG Level);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -327,6 +329,7 @@ typedef enum _DEBUGOBJECTINFOCLASS
 /**
  * Creates a debug object.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -339,6 +342,7 @@ NtCreateDebugObject(
 /**
  * Attaches a debugger to an active process.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -349,6 +353,7 @@ NtDebugActiveProcess(
 /**
  * Continues a thread that was stopped by a debug event.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -360,6 +365,7 @@ NtDebugContinue(
 /**
  * Stops debugging a process.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -370,6 +376,7 @@ NtRemoveProcessDebug(
 /**
  * Sets information for a debug object.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -383,6 +390,7 @@ NtSetInformationDebugObject(
 /**
  * Waits for a debug event to occur.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

@@ -82,6 +82,23 @@ RtlWow64ChangeThreadState(
     _In_ THREAD_STATE_CHANGE_TYPE StateChangeType
 );
 
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64SuspendProcess(
+    _In_ HANDLE ProcessHandle
+);
+
+// rev
+NTSYSAPI
+NTSTATUS
+NTAPI
+RtlWow64SuspendThread(
+    _In_ HANDLE ThreadHandle,
+    _Out_opt_ PULONG SuspendCount
+);
+
 #endif
 
 // WOW64

@@ -36,6 +36,7 @@
 #include "Misc.h"
 #include "Mui.h"
 #include "Path.h"
+#include "Private.h"
 #include "Random.h"
 #include "Reg.h"
 #include "Stack.h"

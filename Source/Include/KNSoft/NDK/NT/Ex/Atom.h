@@ -20,6 +20,7 @@ typedef USHORT RTL_ATOM, *PRTL_ATOM;
  * the existing atom identifier is returned.
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-addatomw
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -57,6 +58,7 @@ NtAddAtom(
  * Any other flag value results in STATUS_INVALID_PARAMETER.
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-addatomw
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -78,6 +80,7 @@ NtAddAtomEx(
  * \return NTSTATUS Successful or errant status.
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-findatomw
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -96,6 +99,7 @@ NtFindAtom(
  * its reference count reaches zero.
  * \see https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-deleteatom
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -142,6 +146,7 @@ typedef struct _ATOM_TABLE_INFORMATION
  * \param ReturnLength Optional pointer to a variable that receives the number of bytes written to the AtomInformation buffer.
  * \return NTSTATUS Successful or errant status.
  */
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

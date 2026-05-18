@@ -20,11 +20,15 @@ typedef struct _RTL_BITMAP
 } RTL_BITMAP;
 typedef RTL_BITMAP *PRTL_BITMAP;
 
-//
-//  The following routine initializes a new bitmap.  It does not alter the
-//  data currently in the bitmap.  This routine must be called before
-//  any other bitmap routine/macro.
-//
+/**
+ * The RtlInitializeBitMap routine initializes the header of a bitmap variable.
+ *
+ * \param BitMapHeader Pointer to an empty RTL_BITMAP structure.
+ * \param BitMapBuffer Pointer to caller-allocated memory for the bitmap itself. The base address of this buffer must be ULONG-aligned. The size of the allocated buffer must be an integer multiple of sizeof(ULONG) bytes.
+ * \param SizeOfBitMap Specifies the number of bits in the bitmap. This value can be any number of bits that will fit in the buffer allocated for the bitmap.
+ * emarks RtlInitializeBitMap must be called before any other RtlXxx routine that operates on a bitmap variable. The caller is responsible for synchronizing access to the bitmap variable.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlinitializebitmap
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -33,11 +37,13 @@ RtlInitializeBitMap(
     _In_opt_ __drv_aliasesMem PULONG BitMapBuffer,
     _In_opt_ ULONG SizeOfBitMap);
 
-//
-//  The following three routines clear, set, and test the state of a
-//  single bit in a bitmap.
-//
-
+/**
+ * The RtlClearBit routine sets the specified bit in a bitmap to zero.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param BitNumber Specifies the zero-based index of the bit within the bitmap. The routine sets this bit to zero.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlclearbit
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -45,6 +51,13 @@ RtlClearBit(
     _In_ PRTL_BITMAP BitMapHeader,
     _In_range_(<, BitMapHeader->SizeOfBitMap) ULONG BitNumber);
 
+/**
+ * The RtlSetBit routine sets the specified bit in a bitmap to one.
+ *
+ * \param BitMapHeader Pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param BitNumber Specifies the zero-based index of the bit within the bitmap. The routine sets this bit to one.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlsetbit
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -52,6 +65,14 @@ RtlSetBit(
     _In_ PRTL_BITMAP BitMapHeader,
     _In_range_(<, BitMapHeader->SizeOfBitMap) ULONG BitNumber);
 
+/**
+ * The RtlTestBit routine returns the value of a bit in a bitmap.
+ *
+ * \param BitMapHeader Pointer to the RTL_BITMAP structure that describes the bitmap.
+ * \param BitNumber Specifies the zero-based index of the bit within the bitmap.
+ * eturn The value of the requested bit.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtltestbit
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -60,10 +81,12 @@ RtlTestBit(
     _In_ PRTL_BITMAP BitMapHeader,
     _In_range_(<, BitMapHeader->SizeOfBitMap) ULONG BitNumber);
 
-//
-//  The following two routines either clear or set all of the bits
-//  in a bitmap.
-//
+/**
+ * The RtlClearAllBits routine sets all bits in a given bitmap variable to zero.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlclearallbits
+ */
 
 NTSYSAPI
 VOID
@@ -71,21 +94,28 @@ NTAPI
 RtlClearAllBits(
     _In_ PRTL_BITMAP BitMapHeader);
 
+/**
+ * The RtlSetAllBits routine sets all bits in a given bitmap variable to one.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlsetallbits
+ */
+
 NTSYSAPI
 VOID
 NTAPI
 RtlSetAllBits(
     _In_ PRTL_BITMAP BitMapHeader);
 
-//
-//  The following two routines locate a contiguous region of either
-//  clear or set bits within the bitmap.  The region will be at least
-//  as large as the number specified, and the search of the bitmap will
-//  begin at the specified hint index (which is a bit index within the
-//  bitmap, zero based).  The return value is the bit index of the located
-//  region (zero based) or -1 (i.e., 0xffffffff) if such a region cannot
-//  be located
-//
+/**
+ * The RtlFindClearBits routine searches for a range of clear bits of a requested size within a bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param NumberToFind Specifies how many contiguous clear bits will satisfy this request.
+ * \param HintIndex Specifies a zero-based bit position from which to start looking for a clear bit range of the given size.
+ * \return RtlFindClearBits either returns the zero-based starting bit index for a clear bit range of at least the requested size, or it returns 0xFFFFFFFF if it cannot find such a range within the given bitmap.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindclearbits
+ */
 
 _Success_(return != -1)
 _Ret_range_(<=, BitMapHeader->SizeOfBitMap - NumberToFind)
@@ -98,6 +128,16 @@ RtlFindClearBits(
     _In_ ULONG NumberToFind,
     _In_ ULONG HintIndex);
 
+/**
+ * The RtlFindSetBits routine searches for a range of set bits of a requested size within a bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param NumberToFind Specifies how many contiguous set bits will satisfy this request.
+ * \param HintIndex Specifies a zero-based bit position around which to start looking for a set bit range of the given size.
+ * \return RtlFindSetBits either returns the zero-based starting bit index for a set bit range of the requested size, or it returns 0xFFFFFFFF if it cannot find such a range within the given bitmap variable.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindsetbits
+ */
+
 _Success_(return != -1)
 _Ret_range_(<=, BitMapHeader->SizeOfBitMap - NumberToFind)
 _Must_inspect_result_
@@ -109,16 +149,15 @@ RtlFindSetBits(
     _In_ ULONG NumberToFind,
     _In_ ULONG HintIndex);
 
-//
-//  The following two routines locate a contiguous region of either
-//  clear or set bits within the bitmap and either set or clear the bits
-//  within the located region.  The region will be as large as the number
-//  specified, and the search for the region will begin at the specified
-//  hint index (which is a bit index within the bitmap, zero based).  The
-//  return value is the bit index of the located region (zero based) or
-//  -1 (i.e., 0xffffffff) if such a region cannot be located.  If a region
-//  cannot be located then the setting/clearing of the bitmap is not performed.
-//
+/**
+ * The RtlFindClearBitsAndSet routine searches for a range of clear bits of a requested size within a bitmap and sets all bits in the range when it has been located.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param NumberToFind Specifies how many contiguous clear bits will satisfy this request.
+ * \param HintIndex Specifies a zero-based bit position from which to start looking for a clear bit range of the given size.
+ * \return RtlFindClearBitsAndSet either returns the zero-based starting bit index for a clear bit range of the requested size that it set, or it returns 0xFFFFFFFF if it cannot find such a range within the given bitmap variable.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindclearbitsandset
+ */
 
 _Success_(return != -1)
 _Ret_range_(<=, BitMapHeader->SizeOfBitMap - NumberToFind)
@@ -130,6 +169,16 @@ RtlFindClearBitsAndSet(
     _In_ ULONG NumberToFind,
     _In_ ULONG HintIndex);
 
+/**
+ * The RtlFindSetBitsAndClear routine searches for a range of set bits of a requested size within a bitmap and clears all bits in the range when it has been located.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param NumberToFind Specifies how many contiguous set bits will satisfy this request.
+ * \param HintIndex Specifies a zero-based bit position around which to start looking for a set bit range of the given size.
+ * \return RtlFindSetBitsAndClear either returns the zero-based starting bit index for a set bit range of the requested size that it cleared, or it returns 0xFFFFFFFF if it cannot find such a range within the given bitmap variable.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindsetbitsandclear
+ */
+
 _Success_(return != -1)
 _Ret_range_(<=, BitMapHeader->SizeOfBitMap - NumberToFind)
 NTSYSAPI
@@ -140,10 +189,15 @@ RtlFindSetBitsAndClear(
     _In_ ULONG NumberToFind,
     _In_ ULONG HintIndex);
 
-//
-//  The following two routines clear or set bits within a specified region
-//  of the bitmap.  The starting index is zero based.
-//
+/**
+ * The RtlClearBits routine sets all bits in the specified range of bits in the bitmap to zero.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param StartingIndex The index of the first bit in the bit range that is to be cleared. If the bitmap contains N bits, the bits are numbered from 0 to N-1.
+ * \param NumberToClear Specifies how many bits to clear. If the bitmap contains N bits, this parameter can be a value in the range 1 to (N - StartingIndex).
+ * \remarks If the NumberToClear parameter is zero, RtlClearBits simply returns control without clearing any bits. The sum (StartingIndex + NumberToClear) must not exceed the SizeOfBitMap parameter value specified in the RtlInitializeBitMap call that initialized the bitmap.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlclearbits
+ */
 
 NTSYSAPI
 VOID
@@ -152,6 +206,16 @@ RtlClearBits(
     _In_ PRTL_BITMAP BitMapHeader,
     _In_range_(0, BitMapHeader->SizeOfBitMap - NumberToClear) ULONG StartingIndex,
     _In_range_(0, BitMapHeader->SizeOfBitMap - StartingIndex) ULONG NumberToClear);
+
+/**
+ * The RtlSetBits routine sets all bits in a given range of a given bitmap variable.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param StartingIndex Specifies the start of the bit range to be set. This is a zero-based value indicating the position of the first bit in the range.
+ * \param NumberToSet Specifies how many bits to set.
+ * \remarks RtlSetBits simply returns control if the input NumberToSet is zero. StartingIndex plus NumberToSet must be less than or equal to BitMapHeader->SizeOfBitMap.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlsetbits
+ */
 
 NTSYSAPI
 VOID
@@ -176,6 +240,18 @@ typedef struct _RTL_BITMAP_RUN
     ULONG NumberOfBits;
 } RTL_BITMAP_RUN, *PRTL_BITMAP_RUN;
 
+/**
+ * The RtlFindClearRuns routine finds the specified number of runs of clear bits within a given bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param RunArray Pointer to the first element in a caller-allocated array for the bit position and length of each clear run found in the given bitmap variable.
+ * \param SizeOfRunArray Specifies the maximum number of clear runs to satisfy this request.
+ * \param LocateLongestRuns If TRUE, specifies that the routine is to search the entire bitmap for the longest clear runs it can find. Otherwise, the routine stops searching when it has found the number of clear runs specified by SizeOfRunArray.
+ * \return RtlFindClearRuns returns the number of clear runs found.
+ * \remarks If LocateLongestRuns is TRUE, the clear runs indicated at RunArray are sorted from longest to shortest. A clear run can consist of a single bit.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindclearruns
+ */
+
 NTSYSAPI
 ULONG
 NTAPI
@@ -185,12 +261,15 @@ RtlFindClearRuns(
     _In_range_(>, 0) ULONG SizeOfRunArray,
     _In_ BOOLEAN LocateLongestRuns);
 
-//
-//  The following routine locates the longest contiguous region of
-//  clear bits within the bitmap.  The returned starting index value
-//  denotes the first contiguous region located satisfying our requirements
-//  The return value is the length (in bits) of the longest region found.
-//
+/**
+ * The RtlFindLongestRunClear routine searches for the largest contiguous range of clear bits within a given bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param StartingIndex Pointer to a variable in which the starting index of the longest clear run in the bitmap is returned. This is a zero-based value indicating the bit position of the first clear bit in the returned range.
+ * \return RtlFindLongestRunClear returns either the number of bits in the run beginning at StartingIndex, or zero if it cannot find a run of clear bits within the bitmap.
+ * \remarks A returned run can have a single clear bit.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindlongestrunclear
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -198,12 +277,14 @@ RtlFindLongestRunClear(
     _In_ PRTL_BITMAP BitMapHeader,
     _Out_ PULONG StartingIndex);
 
-//
-//  The following routine locates the first contiguous region of
-//  clear bits within the bitmap.  The returned starting index value
-//  denotes the first contiguous region located satisfying our requirements
-//  The return value is the length (in bits) of the region found.
-//
+/**
+ * The RtlFindFirstRunClear routine searches for the initial contiguous range of clear bits within a given bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param StartingIndex Pointer to a variable in which the starting index of the first clear run in the bitmap is returned. This is a zero-based value indicating the bit position of the first clear bit in the returned range.
+ * \return RtlFindFirstRunClear returns either the number of bits in the run beginning at StartingIndex, or zero if it cannot find a run of clear bits within the bitmap.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindfirstrunclear
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -211,22 +292,14 @@ RtlFindFirstRunClear(
     _In_ PRTL_BITMAP BitMapHeader,
     _Out_ PULONG StartingIndex);
 
-//
-//  The following macro returns the value of the bit stored within the
-//  bitmap at the specified location.  If the bit is set a value of 1 is
-//  returned otherwise a value of 0 is returned.
-//
-//      ULONG
-//      RtlCheckBit (
-//          PRTL_BITMAP BitMapHeader,
-//          ULONG BitPosition
-//          );
-//
-//
-//  To implement CheckBit the macro retrieves the longword containing the
-//  bit in question, shifts the longword to get the bit in question into the
-//  low order bit position and masks out all other bits.
-//
+/**
+ * The RtlCheckBit routine determines whether a particular bit in a given bitmap variable is clear or set.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param BitPosition Specifies which bit to check. This is a zero-based value indicating the position of the bit to be tested.
+ * \return RtlCheckBit returns zero if the given bit is clear, or one if the given bit is set.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcheckbit
+ */
 
 #if defined(_M_AMD64)
 
@@ -246,10 +319,14 @@ RtlCheckBit(
 
 #endif
 
-//
-//  The following two procedures return to the caller the total number of
-//  clear or set bits within the specified bitmap.
-//
+/**
+ * The RtlNumberOfClearBits routine returns a count of the clear bits in a given bitmap variable.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \return RtlNumberOfClearBits returns the number of bits that are currently clear.
+ * \remarks Callers of RtlNumberOfClearBits must be running at IRQL <= APC_LEVEL if the memory that contains the bitmap variable is pageable or the memory at BitMapHeader is pageable. Otherwise, RtlNumberOfClearBits can be called at any IRQL.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlnumberofclearbits
+ */
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
@@ -277,16 +354,31 @@ NTAPI
 RtlNumberOfClearBits(
     _In_ PRTL_BITMAP BitMapHeader);
 
+/**
+ * The RtlNumberOfSetBits routine returns a count of the set bits in a given bitmap variable.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \return RtlNumberOfSetBits returns a count of the bits that are currently set.
+ * \remarks Callers of RtlNumberOfSetBits must be running at IRQL <= APC_LEVEL if the memory that contains the bitmap variable is pageable or the memory at BitMapHeader is pageable. Otherwise, RtlNumberOfSetBits can be called at any IRQL.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlnumberofsetbits
+ */
+
 NTSYSAPI
 ULONG
 NTAPI
 RtlNumberOfSetBits(
     _In_ PRTL_BITMAP BitMapHeader);
 
-//
-//  The following two procedures return to the caller a boolean value
-//  indicating if the specified range of bits are all clear or set.
-//
+/**
+ * The RtlAreBitsClear routine determines whether a given range of bits within a bitmap variable is clear.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param StartingIndex Specifies the start of the bit range to be examined. This is a zero-based value indicating the position of the first bit in the range.
+ * \param Length Specifies how many bits to check.
+ * \return RtlAreBitsClear returns TRUE if Length contiguous bits starting at StartingIndex are clear (that is, all the bits from StartingIndex to (StartingIndex + Length) -1). It returns FALSE if any bit in the given range is set, if the given range is not a proper subset of the bitmap, or if Length is zero.
+ * \remarks Callers of RtlAreBitsClear must be running at IRQL <= APC_LEVEL if the memory that contains the bitmap variable is pageable or the memory at BitMapHeader is pageable. Otherwise, RtlAreBitsClear can be called at any IRQL.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlarebitsclear
+ */
 
 _Must_inspect_result_
 NTSYSAPI
@@ -297,6 +389,17 @@ RtlAreBitsClear(
     _In_ ULONG StartingIndex,
     _In_ ULONG Length);
 
+/**
+ * The RtlAreBitsSet routine determines whether a given range of bits within a bitmap variable is set.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param StartingIndex Specifies the start of the bit range to be tested. This is a zero-based value indicating the position of the first bit in the range.
+ * \param Length Specifies how many bits to test.
+ * \return RtlAreBitsSet returns TRUE if Length consecutive bits beginning at StartingIndex are set (that is, all the bits from StartingIndex to (StartingIndex + Length)). It returns FALSE if any bit in the given range is clear, if the given range is not a proper subset of the bitmap, or if the given Length is zero.
+ * \remarks Callers of RtlAreBitsSet must be running at IRQL <= APC_LEVEL if the memory that contains the bitmap variable is pageable or the memory at BitMapHeader is pageable. Otherwise, RtlAreBitsSet can be called at any IRQL.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlarebitsset
+ */
+
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -306,6 +409,16 @@ RtlAreBitsSet(
     _In_ ULONG StartingIndex,
     _In_ ULONG Length);
 
+/**
+ * The RtlFindNextForwardRunClear routine searches a given bitmap variable for the next clear run of bits, starting from the specified index position.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param FromIndex Specifies a zero-based bit position at which to start looking for a clear run of bits.
+ * \param StartingRunIndex Pointer to a variable in which the starting index of the clear run found in the bitmap is returned. This is a zero-based value indicating the bit position of the first clear bit in the run. Its value is meaningless if RtlFindNextForwardRunClear cannot find a run of clear bits.
+ * \return RtlFindNextForwardRunClear returns either the number of bits in the run beginning at StartingRunIndex, or zero if it cannot find a run of clear bits following FromIndex in the bitmap.
+ * \remarks Callers of RtlFindNextForwardRunClear must be running at IRQL <= APC_LEVEL if the memory that contains the bitmap variable is pageable or the memory at BitMapHeader is pageable. Otherwise, RtlFindNextForwardRunClear can be called at any IRQL.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindnextforwardrunclear
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -314,6 +427,16 @@ RtlFindNextForwardRunClear(
     _In_ ULONG FromIndex,
     _Out_ PULONG StartingRunIndex);
 
+/**
+ * The RtlFindLastBackwardRunClear routine searches a given bitmap for the preceding clear run of bits, starting from the specified index position.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP structure that describes the bitmap. This structure must have been initialized by the RtlInitializeBitMap routine.
+ * \param FromIndex Specifies a zero-based bit position at which to start looking for a clear run of bits.
+ * \param StartingRunIndex Pointer to a variable in which the starting index of the clear run found in the bitmap is returned. This is a zero-based value indicating the bit position of the first clear bit in the run preceding the given FromIndex. Its value is meaningless if RtlFindLastBackwardRunClear cannot find a run of clear bits.
+ * \return RtlFindLastBackwardRunClear returns the number of bits in the run beginning at StartingRunIndex, or zero if it cannot find a run of clear bits preceding FromIndex in the bitmap.
+ * \remarks Callers of RtlFindLastBackwardRunClear must be running at IRQL <= APC_LEVEL if the memory that contains the bitmap variable is pageable or the memory at BitMapHeader is pageable. Otherwise, RtlFindLastBackwardRunClear can be called at any IRQL.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindlastbackwardrunclear
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -328,6 +451,14 @@ RtlFindLastBackwardRunClear(
 //  bit.  A value of zero results in a return value of -1.
 //
 
+/**
+ * The RtlFindLeastSignificantBit routine returns the zero-based position of the least significant nonzero bit in its parameter.
+ *
+ * \param Set The 64-bit value to be searched for its least significant nonzero bit.
+ * \return The zero-based bit position of the least significant nonzero bit, or -1 if every bit is zero.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindleastsignificantbit
+ */
+
 _Success_(return != -1)
 _Must_inspect_result_
 NTSYSAPI
@@ -335,6 +466,14 @@ CCHAR
 NTAPI
 RtlFindLeastSignificantBit(
     _In_ ULONGLONG Set);
+
+/**
+ * The RtlFindMostSignificantBit routine returns the zero-based position of the most significant nonzero bit in its parameter.
+ *
+ * \param Set The 64-bit value to be searched for its most significant nonzero bit.
+ * \return The zero-based bit position of the most significant nonzero bit, or -1 if every bit is zero.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindmostsignificantbit
+ */
 
 _Success_(return != -1)
 _Must_inspect_result_
@@ -425,6 +564,20 @@ RtlSetBitEx(
     _In_range_(<, BitMapHeader->SizeOfBitMap) ULONG64 BitNumber);
 
 NTSYSAPI
+VOID
+NTAPI
+RtlSetBitsEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_ ULONGLONG StartingIndex,
+    _In_ ULONGLONG NumberToSet);
+
+NTSYSAPI
+VOID
+NTAPI
+RtlSetAllBitsEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader);
+
+NTSYSAPI
 ULONG64
 NTAPI
 RtlFindSetBitsEx(
@@ -439,6 +592,42 @@ RtlFindSetBitsAndClearEx(
     _In_ PRTL_BITMAP_EX BitMapHeader,
     _In_ ULONG64 NumberToFind,
     _In_ ULONG64 HintIndex);
+
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlNumberOfClearBitsEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader);
+
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlFindClearBitsAndSetEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_ ULONGLONG NumberToFind,
+    _In_ ULONGLONG HintIndex);
+
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlFindClearBitsEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_ ULONGLONG NumberToFind,
+    _In_ ULONGLONG HintIndex);
+
+NTSYSAPI
+VOID
+NTAPI
+RtlClearBitsEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_ ULONGLONG StartingIndex,
+    _In_ ULONGLONG NumberToClear);
+
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlNumberOfSetBitsEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader);
 
 #endif
 

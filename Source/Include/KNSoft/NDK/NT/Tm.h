@@ -7,6 +7,7 @@ EXTERN_C_START
 /* wdm.h */
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -19,6 +20,7 @@ NtCreateTransactionManager(
     _In_opt_ ULONG CommitStrength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -31,6 +33,7 @@ NtOpenTransactionManager(
     _In_opt_ ULONG OpenOptions);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -39,6 +42,7 @@ NtRenameTransactionManager(
     _In_ LPGUID ExistingTransactionManagerGuid);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -47,6 +51,7 @@ NtRollforwardTransactionManager(
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -54,6 +59,7 @@ NtRecoverTransactionManager(
     _In_ HANDLE TransactionManagerHandle);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -65,6 +71,7 @@ NtQueryInformationTransactionManager(
     _Out_ PULONG ReturnLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -75,6 +82,7 @@ NtSetInformationTransactionManager(
     _In_ ULONG TransactionManagerInformationLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -86,6 +94,7 @@ NtEnumerateTransactionObject(
     _Out_ PULONG ReturnLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -102,6 +111,7 @@ NtCreateTransaction(
     _In_opt_ PUNICODE_STRING Description);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -113,6 +123,7 @@ NtOpenTransaction(
     _In_opt_ HANDLE TmHandle);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -124,6 +135,7 @@ NtQueryInformationTransaction(
     _Out_opt_ PULONG ReturnLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -133,6 +145,7 @@ NtSetInformationTransaction(
     _In_reads_bytes_(TransactionInformationLength) PVOID TransactionInformation,
     _In_ ULONG TransactionInformationLength);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -140,6 +153,7 @@ NtCommitTransaction(
     _In_ HANDLE TransactionHandle,
     _In_ BOOLEAN Wait);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -148,6 +162,7 @@ NtRollbackTransaction(
     _In_ BOOLEAN Wait);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -162,6 +177,7 @@ NtCreateEnlistment(
     _In_opt_ PVOID EnlistmentKey);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -173,6 +189,7 @@ NtOpenEnlistment(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -184,6 +201,7 @@ NtQueryInformationEnlistment(
     _Out_ PULONG ReturnLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -194,6 +212,7 @@ NtSetInformationEnlistment(
     _In_ ULONG EnlistmentInformationLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -202,6 +221,7 @@ NtRecoverEnlistment(
     _In_opt_ PVOID EnlistmentKey);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -210,6 +230,7 @@ NtPrePrepareEnlistment(
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -218,6 +239,7 @@ NtPrepareEnlistment(
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -225,6 +247,7 @@ NtCommitEnlistment(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -232,6 +255,7 @@ NtRollbackEnlistment(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -239,6 +263,7 @@ NtPrePrepareComplete(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -246,6 +271,7 @@ NtPrepareComplete(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -253,6 +279,7 @@ NtCommitComplete(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -260,6 +287,7 @@ NtReadOnlyEnlistment(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -267,6 +295,7 @@ NtRollbackComplete(
     _In_ HANDLE EnlistmentHandle,
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -275,6 +304,7 @@ NtSinglePhaseReject(
     _In_opt_ PLARGE_INTEGER TmVirtualClock);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -288,6 +318,7 @@ NtCreateResourceManager(
     _In_opt_ PUNICODE_STRING Description);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -299,6 +330,7 @@ NtOpenResourceManager(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -306,6 +338,7 @@ NtRecoverResourceManager(
     _In_ HANDLE ResourceManagerHandle);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -319,6 +352,7 @@ NtGetNotificationResourceManager(
     _In_opt_ ULONG_PTR AsynchronousContext);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -330,6 +364,7 @@ NtQueryInformationResourceManager(
     _Out_opt_ PULONG ReturnLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -340,6 +375,7 @@ NtSetInformationResourceManager(
     _In_ ULONG ResourceManagerInformationLength);
 
 _Must_inspect_result_
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -350,6 +386,7 @@ NtRegisterProtocolAddressInformation(
     _In_ PVOID ProtocolInformation,
     _In_opt_ ULONG CreateOptions);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -359,6 +396,7 @@ NtPropagationComplete(
     _In_ ULONG BufferLength,
     _In_ PVOID Buffer);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -369,6 +407,7 @@ NtPropagationFailed(
 
 /* phnt */
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -376,6 +415,7 @@ NtFreezeTransactions(
     _In_ PLARGE_INTEGER FreezeTimeout,
     _In_ PLARGE_INTEGER ThawTimeout);
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

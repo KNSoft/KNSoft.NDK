@@ -6,6 +6,7 @@ EXTERN_C_START
 
 #pragma region Exception
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -34,6 +35,7 @@ typedef struct _KCONTINUE_ARGUMENT
     ULONGLONG Reserved[2];
 } KCONTINUE_ARGUMENT, *PKCONTINUE_ARGUMENT;
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -54,6 +56,7 @@ NtContinueEx(
 
 #endif
 
+_Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
 NTAPI

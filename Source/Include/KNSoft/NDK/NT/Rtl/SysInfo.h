@@ -25,22 +25,64 @@ typedef struct _RTL_OSVERSIONINFOEX2
 } RTL_OSVERSIONINFOEX2, *PRTL_OSVERSIONINFOEX2;
 
 // rev
+//
+// Input:
+// - OSVersionInfoSize must be set to sizeof(RTL_OSVERSIONINFOEX3).
+// - Input.LayerNumber selects which build layer to query.
+// - Input.AttribSelector selects which attribute to return for that layer.
+//
+// Output:
+// - MajorVersion/MinorVersion/BuildNumber identify the selected layer.
+// - LayerAttrib contains the string for the selected attribute.
+// - LayerCount returns the number of available build layers.
+// - LayerFlags contains per-layer flags; bit 0 is top-level and bit 1 is checked.
+
+#define RTL_OSVERSIONINFO_ATTRIB_LAYER_NAME    0
+#define RTL_OSVERSIONINFO_ATTRIB_BUILD_STAMP   1
+#define RTL_OSVERSIONINFO_ATTRIB_BUILD_BRANCH  2 // HKLM\Software\Microsoft\Windows NT\CurrentVersion\BuildBranch
+#define RTL_OSVERSIONINFO_ATTRIB_BUILD_ARCH    3
+#define RTL_OSVERSIONINFO_ATTRIB_BUILD_LAB     4 // HKLM\Software\Microsoft\Windows NT\CurrentVersion\BuildLab
+#define RTL_OSVERSIONINFO_ATTRIB_BUILD_LAB_EX  5 // HKLM\Software\Microsoft\Windows NT\CurrentVersion\BuildLabEx
+
+/**
+ * Further-extended operating system version information used by newer
+ * Windows builds.
+ */
 typedef struct _RTL_OSVERSIONINFOEX3
 {
+    //
+    // Input: Set to sizeof(RTL_OSVERSIONINFOEX3) before calling RtlGetVersion.
+    //
     ULONG OSVersionInfoSize;
+
+    //
+    // Output: Version numbers for the selected build layer.
+    //
     ULONG MajorVersion;
     ULONG MinorVersion;
     ULONG BuildNumber;
+
+    //
+    // Output: A QFE/build-layer numeric field.
+    //
     union
     {
         ULONG PlatformId;
         ULONG QfeNumber;
     };
+
+    //
+    // Output: Contains the string for the selected attribute.
+    //
     union
     {
         WCHAR CSDVersion[128];
         WCHAR LayerAttrib[128];
     };
+
+    //
+    // Output: Operating system version information
+    //
     USHORT ServicePackMajor;
     USHORT ServicePackMinor;
     USHORT SuiteMask;
@@ -48,14 +90,48 @@ typedef struct _RTL_OSVERSIONINFOEX3
     UCHAR Reserved;
     ULONG SuiteMaskEx;
     ULONG Reserved2;
+
+    //
+    // Input LayerNumber:
+    //   Which build layer to query, in the range [0, LayerCount).
+    //
+    // Input AttribSelector:
+    //   Which value to retrieve for that layer:
+    //     0 = layer display name
+    //     1 = BuildStamp
+    //     2 = BuildBranch
+    //     3 = BuildArch
+    //     4 = BuildLab
+    //     5 = BuildLabEx
+    //
     union
     {
         USHORT RawInput16;
-        USHORT LayerNumber : 12;
-        USHORT AttribSelector : 4;
+        struct
+        {
+            USHORT LayerNumber : 12;
+            USHORT AttribSelector : 4;
+        };
     } Input;
+
+    //
+    // Output: total number of available build layers.
+    //
     USHORT LayerCount;
-    ULONG LayerFlags;
+
+    //
+    // Output: flags for the selected layer.
+    //
+    union
+    {
+        ULONG LayerFlags;
+        struct
+        {
+            ULONG IsTopLevel : 1;
+            ULONG IsChecked : 1;
+            ULONG Spare : 30;
+        };
+    };
 } RTL_OSVERSIONINFOEX3, *PRTL_OSVERSIONINFOEX3;
 
 /* wdm.h */
@@ -70,6 +146,28 @@ RtlGetVersion(
            _At_((PRTL_OSVERSIONINFOEXW)lpVersionInformation, _Out_))
         PRTL_OSVERSIONINFOW lpVersionInformation);
 
+/**
+ * Compares specified operating system version requirements against the
+ * currently running operating system.
+ *
+ * \param VersionInformation A pointer to an RTL_OSVERSIONINFOEX-compatible
+ * structure that describes the required operating system attributes.
+ * \param TypeMask A bitwise OR of VER_* flags that selects which members of
+ * VersionInformation participate in the comparison.
+ * \param ConditionMask A comparison mask built with VER_SET_CONDITION that
+ * specifies how each selected member is compared.
+ * \return STATUS_SUCCESS if the current operating system satisfies the
+ * specified requirements, STATUS_INVALID_PARAMETER for invalid input, or
+ * STATUS_REVISION_MISMATCH if the version check fails.
+ * \remarks This routine is the native equivalent of VerifyVersionInfo. It is
+ * intended for version and feature gating, and is more reliable than comparing
+ * major/minor version numbers alone. Version comparisons for major version,
+ * minor version, and service pack fields are evaluated sequentially, so a
+ * higher major version satisfies the check without testing lower-order fields.
+ * To verify a version range, call RtlVerifyVersionInfo separately for the lower
+ * and upper bounds.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlverifyversioninfo
+ */
 _Must_inspect_result_
 NTSYSAPI
 NTSTATUS

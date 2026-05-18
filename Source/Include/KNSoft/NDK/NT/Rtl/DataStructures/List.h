@@ -362,6 +362,15 @@ AppendTailList(
 
 #endif // NO_KERNEL_LIST_ENTRY_CHECKS
 
+_Must_inspect_result_
+FORCEINLINE
+BOOLEAN
+IsSingleListEmpty(
+    _Inout_ PSINGLE_LIST_ENTRY ListHead)
+{
+    return ListHead->Next == NULL;
+}
+
 FORCEINLINE
 PSINGLE_LIST_ENTRY
 PopEntryList(
@@ -388,5 +397,215 @@ PushEntryList(
     ListHead->Next = Entry;
     return;
 }
+
+//
+// Single list volatile accessors
+//
+
+_Must_inspect_result_
+FORCEINLINE
+BOOLEAN
+IsSingleListEmptyNoFence(
+    _Inout_ PSINGLE_LIST_ENTRY ListHead)
+{
+    return ReadPointerNoFence((PVOID*)&ListHead->Next) == NULL;
+}
+
+FORCEINLINE
+PSINGLE_LIST_ENTRY
+PopEntryListNoFence(
+    _Inout_ PSINGLE_LIST_ENTRY ListHead)
+{
+    PSINGLE_LIST_ENTRY FirstEntry;
+
+    FirstEntry = ListHead->Next;
+    if (FirstEntry != NULL)
+    {
+        WritePointerNoFence((PVOID*)&ListHead->Next, FirstEntry->Next);
+    }
+
+    return FirstEntry;
+}
+
+FORCEINLINE
+VOID
+PushEntryListNoFence(
+    _Inout_ PSINGLE_LIST_ENTRY ListHead,
+    _Inout_ __drv_aliasesMem PSINGLE_LIST_ENTRY Entry)
+{
+    Entry->Next = ListHead->Next;
+    WritePointerNoFence((PVOID*)&ListHead->Next, Entry);
+    return;
+}
+
+//
+// List volatile accessors
+//
+
+FORCEINLINE
+BOOLEAN
+RemoveEntryListNoFence(
+    _In_ PLIST_ENTRY Entry)
+{
+    PLIST_ENTRY PrevEntry;
+    PLIST_ENTRY NextEntry;
+
+    NextEntry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&Entry->Flink);
+    PrevEntry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&Entry->Blink);
+
+    if ((ReadPointerNoFence((volatile const PVOID*)&NextEntry->Blink) != Entry) ||
+        (ReadPointerNoFence((volatile const PVOID*)&PrevEntry->Flink) != Entry))
+    {
+        FatalListEntryError((PVOID)PrevEntry,
+                            (PVOID)Entry,
+                            (PVOID)NextEntry);
+    }
+
+    WritePointerNoFence((volatile PVOID*)&PrevEntry->Flink, NextEntry);
+    WritePointerNoFence((volatile PVOID*)&NextEntry->Blink, PrevEntry);
+    return (BOOLEAN)(PrevEntry == NextEntry);
+}
+
+FORCEINLINE
+PLIST_ENTRY
+RemoveHeadListNoFence(
+    _Inout_ PLIST_ENTRY ListHead)
+{
+    PLIST_ENTRY Entry;
+    PLIST_ENTRY NextEntry;
+
+    Entry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&ListHead->Flink);
+
+#if DBG
+    RtlpCheckListEntry(ListHead);
+#endif
+
+    NextEntry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&Entry->Flink);
+    if ((ReadPointerNoFence((volatile const PVOID*)&Entry->Blink) != ListHead) ||
+        (ReadPointerNoFence((volatile const PVOID*)&NextEntry->Blink) != Entry))
+    {
+        FatalListEntryError((PVOID)ListHead,
+                            (PVOID)Entry,
+                            (PVOID)NextEntry);
+    }
+
+    WritePointerNoFence((volatile PVOID*)&ListHead->Flink, NextEntry);
+    WritePointerNoFence((volatile PVOID*)&NextEntry->Blink, ListHead);
+    return Entry;
+}
+
+FORCEINLINE
+PLIST_ENTRY
+RemoveTailListNoFence(
+    _Inout_ PLIST_ENTRY ListHead)
+{
+    PLIST_ENTRY Entry;
+    PLIST_ENTRY PrevEntry;
+
+    Entry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&ListHead->Blink);
+
+#if DBG
+    RtlpCheckListEntry(ListHead);
+#endif
+
+    PrevEntry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&Entry->Blink);
+    if ((ReadPointerNoFence((volatile const PVOID*)&Entry->Flink) != ListHead) ||
+        (ReadPointerNoFence((volatile const PVOID*)&PrevEntry->Flink) != Entry))
+    {
+        FatalListEntryError((PVOID)PrevEntry,
+                            (PVOID)Entry,
+                            (PVOID)ListHead);
+    }
+
+    WritePointerNoFence((volatile PVOID*)&ListHead->Blink, PrevEntry);
+    WritePointerNoFence((volatile PVOID*)&PrevEntry->Flink, ListHead);
+    return Entry;
+}
+
+FORCEINLINE
+VOID
+InsertTailListNoFence(
+    _Inout_ PLIST_ENTRY ListHead,
+    _Inout_ __drv_aliasesMem PLIST_ENTRY Entry)
+{
+    PLIST_ENTRY PrevEntry;
+
+#if DBG
+    RtlpCheckListEntry(ListHead);
+#endif
+
+    PrevEntry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&ListHead->Blink);
+    if (ReadPointerNoFence((volatile const PVOID*)&PrevEntry->Flink) != ListHead)
+    {
+        FatalListEntryError((PVOID)PrevEntry,
+                            (PVOID)ListHead,
+                            (PVOID)PrevEntry->Flink);
+    }
+
+    WritePointerNoFence((volatile PVOID*)&Entry->Flink, ListHead);
+    WritePointerNoFence((volatile PVOID*)&Entry->Blink, PrevEntry);
+    WritePointerNoFence((volatile PVOID*)&PrevEntry->Flink, Entry);
+    WritePointerNoFence((volatile PVOID*)&ListHead->Blink, Entry);
+    return;
+}
+
+FORCEINLINE
+VOID
+InsertHeadListNoFence(
+    _Inout_ PLIST_ENTRY ListHead,
+    _Inout_ __drv_aliasesMem PLIST_ENTRY Entry)
+{
+    PLIST_ENTRY NextEntry;
+
+#if DBG
+    RtlpCheckListEntry(ListHead);
+#endif
+
+    NextEntry = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&ListHead->Flink);
+    if (ReadPointerNoFence((volatile const PVOID*)&NextEntry->Blink) != ListHead)
+    {
+        FatalListEntryError((PVOID)ListHead,
+                            (PVOID)NextEntry,
+                            (PVOID)NextEntry->Blink);
+    }
+
+    WritePointerNoFence((volatile PVOID*)&Entry->Flink, NextEntry);
+    WritePointerNoFence((volatile PVOID*)&Entry->Blink, ListHead);
+    WritePointerNoFence((volatile PVOID*)&NextEntry->Blink, Entry);
+    WritePointerNoFence((volatile PVOID*)&ListHead->Flink, Entry);
+    return;
+}
+
+FORCEINLINE
+VOID
+AppendTailListNoFence(
+    _Inout_ PLIST_ENTRY ListHead,
+    _Inout_ PLIST_ENTRY ListToAppend)
+{
+    PLIST_ENTRY ListEnd = (PLIST_ENTRY)ReadPointerNoFence((volatile const PVOID*)&ListHead->Blink);
+
+    RtlpCheckListEntry(ListHead);
+    RtlpCheckListEntry(ListToAppend);
+
+    WritePointerNoFence((volatile PVOID*)&ListHead->Blink->Flink, ListToAppend);
+    WritePointerNoFence((volatile PVOID*)&ListHead->Blink, ListToAppend->Blink);
+    WritePointerNoFence((volatile PVOID*)&ListToAppend->Blink->Flink, ListHead);
+    WritePointerNoFence((volatile PVOID*)&ListToAppend->Blink, ListEnd);
+    return;
+}
+
+// Rtl-prefixed aliases for list helpers.
+#define RtlInitializeListHead InitializeListHead
+#define RtlInitializeListHead32 InitializeListHead32
+#define RtlIsListEmpty IsListEmpty
+#define RtlRemoveEntryListUnsafe RemoveEntryListUnsafe
+#define RtlRemoveEntryList RemoveEntryList
+#define RtlRemoveHeadList RemoveHeadList
+#define RtlRemoveTailList RemoveTailList
+#define RtlInsertTailList InsertTailList
+#define RtlInsertHeadList InsertHeadList
+#define RtlAppendTailList AppendTailList
+#define RtlPopEntryList PopEntryList
+#define RtlPushEntryList PushEntryList
 
 EXTERN_C_END

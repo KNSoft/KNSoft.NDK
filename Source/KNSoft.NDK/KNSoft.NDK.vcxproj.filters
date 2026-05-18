@@ -277,6 +277,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Heap.h">
       <Filter>NT\Rtl</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Private.h">
+      <Filter>NT\Rtl</Filter>
+    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Time.h">
       <Filter>NT\Rtl</Filter>
     </ClInclude>
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Image.h">
       <Filter>NT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\D3DKMT.h">
+      <Filter>NT\Win32K</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Gdi.h">
       <Filter>NT\Win32K</Filter>
