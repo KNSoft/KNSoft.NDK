@@ -665,7 +665,7 @@ typedef struct _PEB
     };
 
     ULONGLONG CsrServerReadOnlySharedMemoryBase;        // Reserved for CSRSS.
-    RTL_SRWLOCK TppWorkerpListLock;                     // Thread pool worker list lock.
+    PRTL_SRWLOCK TppWorkerpListLock;                    // Thread pool worker list lock.
     LIST_ENTRY TppWorkerpList;                          // Thread pool worker list.
     PVOID WaitOnAddressHashTable[128];                  // Wait on address hash table. (RtlWaitOnAddress)
     PTELEMETRY_COVERAGE_HEADER TelemetryCoverageHeader; // Pointer to the telemetry coverage header. // since RS3
@@ -815,7 +815,7 @@ typedef struct _PEB64
         };
     };
     /* +0x380 */ ULONGLONG CsrServerReadOnlySharedMemoryBase;
-    /* +0x388 */ RTL_CRITICAL_SECTION64* POINTER_64 TppWorkerpListLock;
+    /* +0x388 */ RTL_SRWLOCK64* POINTER_64 TppWorkerpListLock;
     /* +0x390 */ LIST_ENTRY64 TppWorkerpList;
     /* +0x3A0 */ VOID* POINTER_64 WaitOnAddressHashTable[128];
     /* +0x7A0 */ TELEMETRY_COVERAGE_HEADER* POINTER_64 TelemetryCoverageHeader;
@@ -962,7 +962,7 @@ typedef struct _PEB32
         };
     };
     /* +0x248 */ ULONGLONG CsrServerReadOnlySharedMemoryBase;
-    /* +0x250 */ RTL_CRITICAL_SECTION32* POINTER_32 TppWorkerpListLock;
+    /* +0x250 */ RTL_SRWLOCK32* POINTER_32 TppWorkerpListLock;
     /* +0x254 */ LIST_ENTRY32 TppWorkerpList;
     /* +0x25c */ VOID* POINTER_32 WaitOnAddressHashTable[128];
     /* +0x45c */ TELEMETRY_COVERAGE_HEADER* POINTER_32 TelemetryCoverageHeader;
@@ -1384,7 +1384,7 @@ typedef struct _TEB
     CHAR PlaceholderReserved[10];                               // ProjFs and Cloud Files (reparse point) file virtualization.
     ULONG ProxiedProcessId;                                     // The process ID (PID) that the current COM server thread is acting on behalf of.
     ACTIVATION_CONTEXT_STACK ActivationStack;
-    PALPC_WORK_ON_BEHALF_TICKET WorkingOnBehalfTicket;          // Scheduler ticket attributing this thread's CPU usage to another thread. Set/cleared via NtSetInformationThread(ThreadWorkOnBehalfTicket).
+    ALPC_WORK_ON_BEHALF_TICKET WorkingOnBehalfTicket;           // Scheduler ticket attributing this thread's CPU usage to another thread. Set/cleared via NtSetInformationThread(ThreadWorkOnBehalfTicket).
     NTSTATUS ExceptionCode;                                     // The last exception status for the current thread.
     PACTIVATION_CONTEXT_STACK ActivationContextStackPointer;    // Pointer to the activation context stack for the current thread.
     ULONG_PTR InstrumentationCallbackSp;                        // The stack pointer (SP) of the current system call or exception during instrumentation.
@@ -1568,7 +1568,7 @@ typedef struct _TEB64
     /* +0x0282 */ CHAR PlaceholderReserved[10];
     /* +0x028C */ ULONG ProxiedProcessId;
     /* +0x0290 */ ACTIVATION_CONTEXT_STACK64 _ActivationStack;
-    /* +0x02B8 */ UCHAR WorkingOnBehalfTicket[8];
+    /* +0x02B8 */ ALPC_WORK_ON_BEHALF_TICKET WorkingOnBehalfTicket;
     /* +0x02C0 */ NTSTATUS ExceptionCode;
     /* +0x02C8 */ ACTIVATION_CONTEXT_STACK64* POINTER_64 ActivationContextStackPointer;
     /* +0x02D0 */ ULONGLONG InstrumentationCallbackSp;
@@ -1729,7 +1729,7 @@ typedef struct _TEB32
     /* +0x0176 */ CHAR PlaceholderReserved[10];
     /* +0x0180 */ ULONG ProxiedProcessId;
     /* +0x0184 */ ACTIVATION_CONTEXT_STACK32 _ActivationStack;
-    /* +0x019C */ UCHAR WorkingOnBehalfTicket[8];
+    /* +0x019C */ ALPC_WORK_ON_BEHALF_TICKET WorkingOnBehalfTicket;
     /* +0x01A4 */ NTSTATUS ExceptionCode;
     /* +0x01A8 */ ACTIVATION_CONTEXT_STACK32* POINTER_32 ActivationContextStackPointer;
     /* +0x01AC */ ULONG InstrumentationCallbackSp;

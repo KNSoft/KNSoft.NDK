@@ -330,6 +330,16 @@ RtlDumpResource(
 
 #pragma region SRW Lock
 
+typedef struct _RTL_SRWLOCK64
+{
+    VOID* POINTER_64 Ptr;
+} RTL_SRWLOCK64, *PRTL_SRWLOCK64;
+
+typedef struct _RTL_SRWLOCK32
+{
+    VOID* POINTER_32 Ptr;
+} RTL_SRWLOCK32, *PRTL_SRWLOCK32;
+
 // winbase:InitializeSRWLock
 /**
  * The RtlInitializeSRWLock routine initializes a slim reader/writer (SRW) lock.
@@ -649,7 +659,6 @@ RtlRcuSynchronize(
 
 #pragma endregion phnt
 
-
 // RtlClearThreadWorkOnBehalfTicket
 NTSYSAPI
 NTSTATUS
@@ -673,4 +682,5 @@ NTAPI
 RtlTryConvertSRWLockSharedToExclusiveOrRelease(
     _Inout_ volatile RTL_SRWLOCK *SRWLock
     );
+
 EXTERN_C_END
