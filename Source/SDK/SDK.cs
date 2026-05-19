@@ -68,7 +68,6 @@ public class SyscallResolver
             foreach (String Header in Headers)
             {
                 if (Header.StartsWith(NtDir + @"\Rtl\") ||
-                    Header.StartsWith(NtDir + @"\Win32K\") ||
                     Header.StartsWith(NtDir + @"\Extension\") ||
                     Header == NtDir + @"\Win32K\Win32KApi.h" ||
                     Header == NtDir + @"\ZwApi.h" ||
