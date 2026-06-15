@@ -342,6 +342,119 @@ ENDIF
 ENDM
 
 ;=====================================================================================
+; brief: Return the import symbol name of a function.
+;=====================================================================================
+
+$API_IMPORT_NAME MACRO Name:REQ, ArgSize:REQ
+    EXITM @CatStr(<__imp_>, $SYMBOLNAME(Name, ArgSize))
+ENDM
+
+;=====================================================================================
+; brief: Call an imported Windows API using integer and pointer arguments.
+; remarks: Floating-point arguments are unsupported because their types cannot be inferred.
+;          On x86, APIs must use stdcall and each argument must occupy one DWORD stack slot.
+;          On x64, callers must provide the ABI-required 16-byte stack alignment.
+;=====================================================================================
+
+$API_INTERNAL_LOAD_REG MACRO Reg:REQ, Arg:REQ
+    IF @SizeStr(<Arg>) GT 5
+        IFIDNI @SubStr(<Arg>, 1, 5), <addr >
+            lea Reg, @SubStr(<Arg>, 6)
+            EXITM
+        ENDIF
+    ENDIF
+    IF (OPATTR(Arg) AND 4)
+        IF Arg EQ 0
+            xor Reg, Reg
+        ELSE
+            mov Reg, Arg
+        ENDIF
+    ELSE
+        mov Reg, Arg
+    ENDIF
+ENDM
+
+$API_INTERNAL_PUSH_X86_ARG MACRO Arg:REQ
+    IF @SizeStr(<Arg>) GT 5
+        IFIDNI @SubStr(<Arg>, 1, 5), <addr >
+            ; Preserve eax because earlier arguments have not been evaluated yet.
+            push eax
+            lea eax, @SubStr(<Arg>, 6)
+            xchg eax, dword ptr [esp]
+            EXITM
+        ENDIF
+    ENDIF
+    push Arg
+ENDM
+
+$API_INTERNAL_PUSH_X86_ARGS MACRO Arg:REQ, Args:VARARG
+    IFNB <Args>
+        $API_INTERNAL_PUSH_X86_ARGS Args
+    ENDIF
+    $API_INTERNAL_PUSH_X86_ARG Arg
+ENDM
+
+$API MACRO Func:REQ, Args:VARARG
+    LOCAL ArgCount, ArgIndex, RegisterArgCount, ShadowSize, StackAlignment, StackSize, StackSlotSize
+    ArgCount = 0
+    FOR Arg, <Args>
+        ArgCount = ArgCount + 1
+    ENDM
+
+IFDEF _M_X64
+
+    RegisterArgCount = 4
+    StackAlignment = 16
+    StackSlotSize = 8
+    ShadowSize = RegisterArgCount * StackSlotSize
+
+    ; The x64 ABI requires shadow space for four register arguments.
+    ; Additional stack arguments follow it.
+    ; The caller must align rsp to 16 bytes; this allocation preserves that alignment.
+    StackSize = ShadowSize
+    IF ArgCount GT RegisterArgCount
+        StackSize = StackSize + (ArgCount - RegisterArgCount) * StackSlotSize
+    ENDIF
+    IF (StackSize MOD StackAlignment) NE 0
+        StackSize = StackSize + StackSlotSize
+    ENDIF
+    sub rsp, StackSize
+
+    ArgIndex = 0
+    FOR Arg, <Args>
+        ArgIndex = ArgIndex + 1
+        IF ArgIndex EQ 1
+            $API_INTERNAL_LOAD_REG rcx, Arg
+        ELSEIF ArgIndex EQ 2
+            $API_INTERNAL_LOAD_REG rdx, Arg
+        ELSEIF ArgIndex EQ 3
+            $API_INTERNAL_LOAD_REG r8, Arg
+        ELSEIF ArgIndex EQ 4
+            $API_INTERNAL_LOAD_REG r9, Arg
+        ELSE
+            $API_INTERNAL_LOAD_REG rax, Arg
+            mov qword ptr [rsp + ShadowSize + (ArgIndex - RegisterArgCount - 1) * StackSlotSize], rax
+        ENDIF
+    ENDM
+
+    call qword ptr $API_IMPORT_NAME(Func, 0)
+    add rsp, StackSize
+
+ELSEIFDEF _M_IX86
+
+    StackSlotSize = 4
+    IFNB <Args>
+        $API_INTERNAL_PUSH_X86_ARGS Args
+    ENDIF
+    call dword ptr $API_IMPORT_NAME(Func, ArgCount * StackSlotSize)
+
+ELSE
+    .ERR <$API: Unsupported architecture>
+ENDIF
+
+ENDM
+
+;=====================================================================================
 ; brief: Define a public label with or without type.
 ;=====================================================================================
 
