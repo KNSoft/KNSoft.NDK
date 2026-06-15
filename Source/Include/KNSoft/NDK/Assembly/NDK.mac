@@ -352,11 +352,14 @@ ENDM
 ;=====================================================================================
 ; brief: Call an imported Windows API using integer and pointer arguments.
 ; remarks: Floating-point arguments are unsupported because their types cannot be inferred.
+;          Arguments narrower than the native stack slot are zero-extended.
 ;          On x86, APIs must use stdcall and each argument must occupy one DWORD stack slot.
+;          On x86, addr and narrow argument widening use eax as scratch.
 ;          On x64, callers must provide the ABI-required 16-byte stack alignment.
+;          On x64, rax is used as scratch when storing stack arguments.
 ;=====================================================================================
 
-$API_INTERNAL_LOAD_REG MACRO Reg:REQ, Arg:REQ
+$API_INTERNAL_LOAD_REG MACRO Reg:REQ, Reg32:REQ, Arg:REQ
     IF @SizeStr(<Arg>) GT 5
         IFIDNI @SubStr(<Arg>, 1, 5), <addr >
             lea Reg, @SubStr(<Arg>, 6)
@@ -365,10 +368,14 @@ $API_INTERNAL_LOAD_REG MACRO Reg:REQ, Arg:REQ
     ENDIF
     IF (OPATTR(Arg) AND 4)
         IF Arg EQ 0
-            xor Reg, Reg
+            xor Reg32, Reg32
         ELSE
             mov Reg, Arg
         ENDIF
+    ELSEIF (TYPE Arg EQ 1) OR (TYPE Arg EQ 2)
+        movzx Reg32, Arg
+    ELSEIF TYPE Arg EQ 4
+        mov Reg32, Arg
     ELSE
         mov Reg, Arg
     ENDIF
@@ -377,12 +384,15 @@ ENDM
 $API_INTERNAL_PUSH_X86_ARG MACRO Arg:REQ
     IF @SizeStr(<Arg>) GT 5
         IFIDNI @SubStr(<Arg>, 1, 5), <addr >
-            ; Preserve eax because earlier arguments have not been evaluated yet.
-            push eax
             lea eax, @SubStr(<Arg>, 6)
-            xchg eax, dword ptr [esp]
+            push eax
             EXITM
         ENDIF
+    ENDIF
+    IF (TYPE Arg EQ 1) OR (TYPE Arg EQ 2)
+        movzx eax, Arg
+        push eax
+        EXITM
     ENDIF
     push Arg
 ENDM
@@ -424,15 +434,15 @@ IFDEF _M_X64
     FOR Arg, <Args>
         ArgIndex = ArgIndex + 1
         IF ArgIndex EQ 1
-            $API_INTERNAL_LOAD_REG rcx, Arg
+            $API_INTERNAL_LOAD_REG rcx, ecx, Arg
         ELSEIF ArgIndex EQ 2
-            $API_INTERNAL_LOAD_REG rdx, Arg
+            $API_INTERNAL_LOAD_REG rdx, edx, Arg
         ELSEIF ArgIndex EQ 3
-            $API_INTERNAL_LOAD_REG r8, Arg
+            $API_INTERNAL_LOAD_REG r8, r8d, Arg
         ELSEIF ArgIndex EQ 4
-            $API_INTERNAL_LOAD_REG r9, Arg
+            $API_INTERNAL_LOAD_REG r9, r9d, Arg
         ELSE
-            $API_INTERNAL_LOAD_REG rax, Arg
+            $API_INTERNAL_LOAD_REG rax, eax, Arg
             mov qword ptr [rsp + ShadowSize + (ArgIndex - RegisterArgCount - 1) * StackSlotSize], rax
         ENDIF
     ENDM
