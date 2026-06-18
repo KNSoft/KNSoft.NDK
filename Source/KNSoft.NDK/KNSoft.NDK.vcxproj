@@ -217,6 +217,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Version.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\D3DKMT.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Gdi.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\NtGdi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32KApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32K.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Wow\Vdm.h" />
