@@ -25,11 +25,11 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectGroupInformationEx = 14,                   // qs: GROUP_AFFINITY (ARRAY)
     JobObjectCpuRateControlInformation = 15,            // qs: JOBOBJECT_CPU_RATE_CONTROL_INFORMATION
     JobObjectCompletionFilter = 16,                     // qs: ULONG
-    JobObjectCompletionCounter = 17,                    // qs: ULONG
+    JobObjectCompletionCounter = 17,                    // qs: ULONG64
     JobObjectFreezeInformation = 18,                    // qs: JOBOBJECT_FREEZE_INFORMATION
     JobObjectExtendedAccountingInformation = 19,        // qs: JOBOBJECT_EXTENDED_ACCOUNTING_INFORMATION
     JobObjectWakeInformation = 20,                      // qs: JOBOBJECT_WAKE_INFORMATION
-    JobObjectBackgroundInformation = 21,                // s: BOOLEAN
+    JobObjectBackgroundInformation = 21,                // qs: BOOLEAN
     JobObjectSchedulingRankBiasInformation = 22,        // s: JOBOBJECT_SCHEDULING_RANK_BIAS_INFORMATION
     JobObjectTimerVirtualizationInformation = 23,       // s: JOBOBJECT_TIMER_VIRTUALIZATION_INFORMATION
     JobObjectCycleTimeNotification = 24,                // s: JOBOBJECT_CYCLE_TIME_NOTIFICATION
@@ -49,10 +49,10 @@ typedef enum _JOBOBJECTINFOCLASS
     JobObjectServerSiloBasicInformation = 38,           // q: SERVERSILO_BASIC_INFORMATION
     JobObjectServerSiloUserSharedData = 39,             // q: SILO_USER_SHARED_DATA, // NtQueryInformationJobObject(NULL, 39, Buffer, sizeof(SILO_USER_SHARED_DATA), 0);
     JobObjectServerSiloInitialize = 40,                 // qs: SERVERSILO_INIT_INFORMATION
-    JobObjectServerSiloRunningState = 41,               // s: BOOLEAN
+    JobObjectServerSiloRunningState = 41,               // s: ULONG
     JobObjectIoAttribution = 42,                        // q: JOBOBJECT_IO_ATTRIBUTION_INFORMATION
-    JobObjectMemoryPartitionInformation = 43,           // qs: JOBOBJECT_MEMORY_PARTITION_INFORMATION
-    JobObjectContainerTelemetryId = 44,                 // s: GUID // NtSetInformationJobObject(_In_ PGUID, 44, _In_ PGUID, sizeof(GUID)); // daxexec
+    JobObjectMemoryPartitionInformation = 43,           // s: JOBOBJECT_MEMORY_PARTITION_INFORMATION // q: BOOLEAN (TRUE if a partition is assigned)
+    JobObjectContainerTelemetryId = 44,                 // qs: GUID // NtSetInformationJobObject(_In_ PGUID, 44, _In_ PGUID, sizeof(GUID)); // daxexec
     JobObjectSiloSystemRoot = 45,                       // s: UNICODE_STRING
     JobObjectEnergyTrackingState = 46,                  // q: JOBOBJECT_ENERGY_TRACKING_STATE
     JobObjectThreadImpersonationInformation = 47,       // qs: BOOLEAN
@@ -85,19 +85,18 @@ typedef struct _JOBOBJECT_EXTENDED_LIMIT_INFORMATION_V2
 // private
 typedef struct _JOBOBJECT_SCHEDULING_RANK_BIAS_INFORMATION
 {
-    ULONG SchedulingRankBias;
+    BOOLEAN SchedulingRankBias;
 } JOBOBJECT_SCHEDULING_RANK_BIAS_INFORMATION, *PJOBOBJECT_SCHEDULING_RANK_BIAS_INFORMATION;
 
 // private
 typedef struct _JOBOBJECT_TIMER_VIRTUALIZATION_INFORMATION
 {
-    ULONG TimerVirtualizationEnabled;
+    BOOLEAN TimerVirtualizationEnabled;
 } JOBOBJECT_TIMER_VIRTUALIZATION_INFORMATION, *PJOBOBJECT_TIMER_VIRTUALIZATION_INFORMATION;
 
 // private
 typedef struct _JOBOBJECT_CYCLE_TIME_NOTIFICATION
 {
-    HANDLE NotificationChannel;
     ULONG64 CycleTime;
 } JOBOBJECT_CYCLE_TIME_NOTIFICATION, *PJOBOBJECT_CYCLE_TIME_NOTIFICATION;
 
