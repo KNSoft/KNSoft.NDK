@@ -18,7 +18,7 @@ ELSE
 SIZE_T equ <DWORD>
 ENDIF
 
-EXTERN __ImageBase:PTR
+EXTERN __ImageBase:WORD
 
 MAXBYTE  equ 0FFh
 MAXWORD  equ 0FFFFh
