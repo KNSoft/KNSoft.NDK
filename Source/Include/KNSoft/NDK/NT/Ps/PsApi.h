@@ -1107,7 +1107,7 @@ typedef enum _PROC_THREAD_ATTRIBUTE_NUM
     ProcThreadAttributeMitigationPolicy = 7,                // in ULONG, ULONG64, or ULONG64[2]
     ProcThreadAttributePackageFullName = 8,                 // in WCHAR[] // since WIN8
     ProcThreadAttributeSecurityCapabilities = 9,            // in SECURITY_CAPABILITIES
-    ProcThreadAttributeConsoleReference = 10,               // BaseGetConsoleReference (kernelbase.dll)
+    ProcThreadAttributeConsoleReference = 10,               // in BaseGetConsoleReference (kernelbase.dll)
     ProcThreadAttributeProtectionLevel = 11,                // in ULONG (PROTECTION_LEVEL_*) // since WINBLUE
     ProcThreadAttributeOsMaxVersionTested = 12,             // in MAXVERSIONTESTED_INFO // since THRESHOLD // (from exe.manifest)
     ProcThreadAttributeJobList = 13,                        // in HANDLE[]
@@ -1121,9 +1121,9 @@ typedef enum _PROC_THREAD_ATTRIBUTE_NUM
     ProcThreadAttributeIsolationManifest = 23,              // in ISOLATION_MANIFEST_PROPERTIES // rev (diversenok) // since 19H2+
     ProcThreadAttributeMitigationAuditPolicy = 24,          // in ULONG, ULONG64, or ULONG64[2] // since 21H1
     ProcThreadAttributeMachineType = 25,                    // in USHORT // since 21H2
-    ProcThreadAttributeComponentFilter = 26,                // in ULONG
+    ProcThreadAttributeComponentFilter = 26,                // in ULONG (bit 0 only)
     ProcThreadAttributeEnableOptionalXStateFeatures = 27,   // in ULONG64 // since WIN11
-    ProcThreadAttributeCreateStore = 28,                    // ULONG // rev (diversenok)
+    ProcThreadAttributeCreateStore = 28,                    // in ULONG // rev (diversenok)
     ProcThreadAttributeTrustedApp = 29,
     ProcThreadAttributeSveVectorLength = 30,
     ProcThreadAttributeSmeVectorLength = 31                 // since 25H2
