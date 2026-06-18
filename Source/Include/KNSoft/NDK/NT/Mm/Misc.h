@@ -555,6 +555,13 @@ NtUnmapViewOfSectionEx(
     _In_ ULONG Flags);
 #endif
 
+/**
+ * The NtExtendSection routine extends the size of an existing section object.
+ *
+ * \param SectionHandle A handle to the section object to extend.
+ * \param NewSectionSize A pointer to a LARGE_INTEGER that specifies the new section size, in bytes.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -588,6 +595,15 @@ NtAreMappedFilesTheSame(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+/**
+ * The NtCreatePartition routine creates a memory partition object.
+ *
+ * \param ParentPartitionHandle An optional handle to the parent partition. If NULL, the implementation uses the default parent context.
+ * \param PartitionHandle A pointer to a variable that receives a handle to the created partition object.
+ * \param DesiredAccess The access mask that specifies the requested access to the partition object.
+ * \param ObjectAttributes An optional pointer to an OBJECT_ATTRIBUTES structure that specifies the object name and attributes.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -598,6 +614,14 @@ NtCreatePartition(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtOpenPartition routine opens a handle to an existing memory partition object.
+ *
+ * \param PartitionHandle A pointer to a variable that receives a handle to the opened partition object.
+ * \param DesiredAccess The access mask that specifies the requested access to the partition object.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object name and attributes.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
