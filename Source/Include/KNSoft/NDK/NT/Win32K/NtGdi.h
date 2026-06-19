@@ -1,4 +1,8 @@
-﻿#pragma once
+﻿// Include ntgdi.h when the WDK is available.
+
+#pragma once
+
+#if defined(__has_include) && __has_include(<ntgdi.h>)
 
 #include "../MinDef.h"
 
@@ -56,7 +60,6 @@ typedef ULONG HLSURF_INFORMATION_CLASS;
 typedef UNIVERSAL_FONT_ID* PUNIVERSAL_FONT_ID;
 
 /* FIXME: Unknow types, do not use */
-
 typedef struct
 {
     ULONG Unknown;
@@ -65,3 +68,5 @@ typedef struct
 #include <ntgdi.h>
 
 EXTERN_C_END
+
+#endif
