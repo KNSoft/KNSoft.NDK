@@ -88,6 +88,22 @@ typedef struct _LDR_DDAG_NODE32
     ULONG PreorderNumber;
 } LDR_DDAG_NODE32, *PLDR_DDAG_NODE32;
 
+typedef struct _LDRP_DEPENDENCY32
+{
+    SINGLE_LIST_ENTRY32 Link;
+    LDR_DDAG_NODE32* POINTER_32 ChildNode;
+    SINGLE_LIST_ENTRY32 BackLink;
+    union
+    {
+        LDR_DDAG_NODE32* POINTER_32 ParentNode;
+        struct
+        {
+            ULONG ForwarderLink : 1;
+            ULONG SpareFlags : 2;
+        };
+    };
+} LDRP_DEPENDENCY32, *PLDR_DEPENDENCY32;
+
 /**
  * A record for a service tag associated with a loader module.
  */
