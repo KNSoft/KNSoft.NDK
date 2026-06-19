@@ -102,16 +102,16 @@ typedef struct _GDI_HANDLE_ENTRY
     {
         PVOID Object;
         PVOID NextFree;
-    };
+    } DUMMYUNIONNAME;
     union
     {
+        ULONG Value;
         struct
         {
             USHORT ProcessId;
             USHORT Lock : 1;
             USHORT Count : 15;
-        };
-        ULONG Value;
+        } DUMMYSTRUCTNAME;
     } Owner;
     USHORT Unique;
     UCHAR Type;
