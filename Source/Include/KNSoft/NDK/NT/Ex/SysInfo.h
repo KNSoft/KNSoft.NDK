@@ -280,7 +280,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS
 typedef struct _SYSTEM_BASIC_INFORMATION
 {
     ULONG Reserved;                         // Reserved
-    ULONG TimerResolution;                  // The resolution of the timer, in milliseconds. // NtQueryTimerResolution
+    ULONG TimerResolution;                  // The resolution of the system clock, in 100-nanosecond units. // NtQueryTimerResolution
     ULONG PageSize;                         // The page size and the granularity of page protection and commitment.
     ULONG NumberOfPhysicalPages;            // The number of physical pages in the system. // KUSER_SHARED_DATA->NumberOfPhysicalPages
     ULONG LowestPhysicalPageNumber;         // The lowest memory page accessible to applications and dynamic-link libraries (DLLs).
