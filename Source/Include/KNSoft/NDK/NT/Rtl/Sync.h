@@ -584,75 +584,64 @@ RtlWakeAddressSingleNoFence(
 // RCU synchronization allows concurrent access to shared data structures,
 // such as linked lists, trees, or hash tables, without using traditional locking methods
 // in scenarios where read operations are frequent and need to be fast.
+// It is particularly useful in multi-threaded environments where multiple threads
+// may read from the same data structure while one or more threads may modify it.
 // @remarks RCU synchronization is not for general-purpose synchronization.
 // Teb->Rcu is used to store the RCU state.
 
-#if defined(PHNT_NATIVE_RCU)
-typedef struct _RTL_RCU_SEGMENT
-{
-    ULONG Count;
-    ULONG Reserved;
-    PVOID Slots[ANYSIZE_ARRAY];
-} RTL_RCU_SEGMENT, *PRTL_RCU_SEGMENT;
-
-#define RTL_RCU_SEGMENT_NEXT_PTR(S) ((PRTL_RCU_SEGMENT*)&((S)->Slots[(S)->Count]))
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
 typedef struct _RTL_RCU_THREAD_ENTRY
 {
-    volatile ULONGLONG ReadDepth;
-    ULONG ThreadCookie;
-    ULONG ThreadIdLike;
-    volatile ULONGLONG SeenEpoch;
+    volatile long long RefCount;
+    ULONG SessionId;
+    ULONG ThreadId;
+    volatile long long ObservedEpoch;
     struct _RTL_RCU_THREAD_ENTRY* Next;
 } RTL_RCU_THREAD_ENTRY, *PRTL_RCU_THREAD_ENTRY;
 
-_STATIC_ASSERT(sizeof(RTL_RCU_THREAD_ENTRY) == 0x20);
-_STATIC_ASSERT(FIELD_OFFSET(RTL_RCU_THREAD_ENTRY, SeenEpoch) == 0x10);
+typedef struct _RTL_RCU_BUCKET_ARRAY
+{
+    ULONG Count;
+    ULONG Reserved;
+    PRTL_RCU_THREAD_ENTRY Slots[ANYSIZE_ARRAY];
+    //struct _RTL_RCU_BUCKET_ARRAY* Next; // after Slots
+} RTL_RCU_BUCKET_ARRAY, *PRTL_RCU_BUCKET_ARRAY;
 
 typedef struct _RTL_RCU_STATE
 {
-    struct _RTL_RCU_STATE* GlobalNext;
-    struct _RTL_RCU_STATE* GlobalPrev;
-    volatile ULONGLONG Epoch;
-    PRTL_RCU_SEGMENT SegmentRoot;
-    PRTL_RCU_THREAD_ENTRY ThreadList;
-    PRTL_RCU_THREAD_ENTRY Cache[10];
-    RTL_SRWLOCK SlowPathLock;
-    ULONG TagOrFlags;
-    ULONG Padding;
+    struct _RTL_RCU_STATE* Flink;
+    struct _RTL_RCU_STATE* Blink;
+    volatile long long Epoch;
+    RTL_RCU_BUCKET_ARRAY* Buckets;
+    PRTL_RCU_THREAD_ENTRY ThreadListHead;
+    PRTL_RCU_THREAD_ENTRY BucketCache[10];
+    RTL_SRWLOCK Lock;
+    ULONG Options;
+    ULONG ReservedTail;
 } RTL_RCU_STATE, *PRTL_RCU_STATE;
-
-_STATIC_ASSERT(sizeof(RTL_RCU_STATE) == 0x88);
-
-typedef struct _RTL_RCU_COOKIE
-{
-    ULONG_PTR ThreadEntryOrNull;
-} RTL_RCU_COOKIE, *PRTL_RCU_COOKIE;
-#else
-typedef struct _RTL_RCU_STATE RTL_RCU_STATE, *PRTL_RCU_STATE;
-typedef ULONG_PTR RTL_RCU_COOKIE, *PRTL_RCU_COOKIE;
-#endif
 
 NTSYSAPI
 PRTL_RCU_STATE
 NTAPI
 RtlRcuAllocate(
-    _In_ ULONG Flags
-);
-
-NTSYSAPI
-LOGICAL
-NTAPI
-RtlRcuFree(
-    _In_ PRTL_RCU_STATE State
+    _In_ ULONG Options
 );
 
 NTSYSAPI
 VOID
 NTAPI
+RtlRcuFree(
+    _In_ PRTL_RCU_STATE State
+);
+
+// Note: ThreadData can be NULL when it falls back to SRW share-lock.
+NTSYSAPI
+VOID
+NTAPI
 RtlRcuReadLock(
     _Inout_ PRTL_RCU_STATE State,
-    _Out_ PRTL_RCU_COOKIE Cookie
+    _Outptr_result_maybenull_ PRTL_RCU_THREAD_ENTRY* ThreadData
 );
 
 NTSYSAPI
@@ -660,15 +649,17 @@ VOID
 NTAPI
 RtlRcuReadUnlock(
     _Inout_ PRTL_RCU_STATE State,
-    _Inout_ PRTL_RCU_COOKIE Cookie
+    _In_ PRTL_RCU_THREAD_ENTRY* ThreadData
 );
 
 NTSYSAPI
-LONG
+VOID
 NTAPI
 RtlRcuSynchronize(
     _Inout_ PRTL_RCU_STATE State
 );
+
+#endif // NTDDI_VERSION >= NTDDI_WIN11_ZN
 
 #pragma endregion phnt
 
