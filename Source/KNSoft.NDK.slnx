@@ -1,0 +1,17 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM64" />
+    <Platform Name="ARM64EC" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="KNSoft.NDK/KNSoft.NDK.vcxproj" Id="1a6001a4-2e81-4cfb-86f3-e1fe1b4a5991">
+    <BuildType Project="Release" />
+    <Platform Solution="*|ARM64EC" Project="x64" />
+  </Project>
+  <Project Path="SDK/SDK.csproj" />
+  <Project Path="UnitTest/UnitTest.vcxproj" Id="e4bbf3a5-9277-48a9-94e6-3f15f740655d">
+    <BuildDependency Project="KNSoft.NDK/KNSoft.NDK.vcxproj" />
+  </Project>
+</Solution>
