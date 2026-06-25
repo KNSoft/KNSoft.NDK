@@ -360,15 +360,31 @@ ENDM
 ;=====================================================================================
 
 $API_INTERNAL_LOAD_REG MACRO Reg:REQ, Reg32:REQ, Arg:REQ
+    LOCAL Prefix
+    IFIDNI <Reg>, <Arg>
+        EXITM
+    ELSEIFIDNI <Reg32>, <Arg>
+        EXITM
+    ENDIF
     IF @SizeStr(<Arg>) GT 5
-        IFIDNI @SubStr(<Arg>, 1, 5), <addr >
+        Prefix SUBSTR <Arg>, 1, 5
+        IFIDNI Prefix, <addr >
             lea Reg, @SubStr(<Arg>, 6)
+            EXITM
+        ENDIF
+    ENDIF
+    IF @SizeStr(<Arg>) GT 7
+        Prefix SUBSTR <Arg>, 1, 7
+        IFIDNI Prefix, <offset >
+            mov Reg, Arg
             EXITM
         ENDIF
     ENDIF
     IF (OPATTR(Arg) AND 4)
         IF Arg EQ 0
             xor Reg32, Reg32
+        ELSEIF Arg GE 0 AND Arg LE MAXDWORD
+            mov Reg32, Arg
         ELSE
             mov Reg, Arg
         ENDIF
@@ -404,8 +420,28 @@ $API_INTERNAL_PUSH_X86_ARGS MACRO Arg:REQ, Args:VARARG
     $API_INTERNAL_PUSH_X86_ARG Arg
 ENDM
 
+$API_INTERNAL_LOAD_X64_ARGS MACRO ArgIndex:REQ, Arg:REQ, Args:VARARG
+    LOCAL NextArgIndex
+    NextArgIndex = ArgIndex + 1
+    IFNB <Args>
+        $API_INTERNAL_LOAD_X64_ARGS %NextArgIndex, Args
+    ENDIF
+    IF ArgIndex EQ 1
+        $API_INTERNAL_LOAD_REG rcx, ecx, Arg
+    ELSEIF ArgIndex EQ 2
+        $API_INTERNAL_LOAD_REG rdx, edx, Arg
+    ELSEIF ArgIndex EQ 3
+        $API_INTERNAL_LOAD_REG r8, r8d, Arg
+    ELSEIF ArgIndex EQ 4
+        $API_INTERNAL_LOAD_REG r9, r9d, Arg
+    ELSE
+        $API_INTERNAL_LOAD_REG rax, eax, Arg
+        mov qword ptr [rsp + 20h + (ArgIndex - 5) * 8], rax
+    ENDIF
+ENDM
+
 $API MACRO Func:REQ, Args:VARARG
-    LOCAL ArgCount, ArgIndex, RegisterArgCount, ShadowSize, StackAlignment, StackSize, StackSlotSize
+    LOCAL ArgCount, RegisterArgCount, ShadowSize, StackAlignment, StackSize, StackSlotSize
     ArgCount = 0
     FOR Arg, <Args>
         ArgCount = ArgCount + 1
@@ -430,22 +466,9 @@ IFDEF _M_X64
     ENDIF
     sub rsp, StackSize
 
-    ArgIndex = 0
-    FOR Arg, <Args>
-        ArgIndex = ArgIndex + 1
-        IF ArgIndex EQ 1
-            $API_INTERNAL_LOAD_REG rcx, ecx, Arg
-        ELSEIF ArgIndex EQ 2
-            $API_INTERNAL_LOAD_REG rdx, edx, Arg
-        ELSEIF ArgIndex EQ 3
-            $API_INTERNAL_LOAD_REG r8, r8d, Arg
-        ELSEIF ArgIndex EQ 4
-            $API_INTERNAL_LOAD_REG r9, r9d, Arg
-        ELSE
-            $API_INTERNAL_LOAD_REG rax, eax, Arg
-            mov qword ptr [rsp + ShadowSize + (ArgIndex - RegisterArgCount - 1) * StackSlotSize], rax
-        ENDIF
-    ENDM
+    IFNB <Args>
+        $API_INTERNAL_LOAD_X64_ARGS 1, Args
+    ENDIF
 
     call qword ptr $API_IMPORT_NAME(Func, 0)
     add rsp, StackSize
