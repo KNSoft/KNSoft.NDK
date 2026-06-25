@@ -194,4 +194,12 @@
     <Export Name="GetIdleMinutes" Ordinal="8" CallConv="__stdcall" Arg="int" />
     <Export Name="GetIdleSeconds" Ordinal="9" CallConv="__stdcall" Arg="int" />
   </Dll>
+  <Dll Name="msftedit.dll">
+    <Export Name="DisableOleinitCheck" CallConv="__stdcall" />
+    <Export Name="MathBuildDown" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="MathBuildUp" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="MathTranslate" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="GetMathAlphanumeric" CallConv="__stdcall" Arg="int int" />
+    <Export Name="GetMathAlphanumericCode" CallConv="__stdcall" Arg="int ptr" />
+  </Dll>
 </LibCreate>

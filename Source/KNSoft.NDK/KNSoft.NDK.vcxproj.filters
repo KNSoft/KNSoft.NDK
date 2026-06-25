@@ -521,6 +521,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\NtGdi.h">
       <Filter>NT\Win32K</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msftedit.h">
+      <Filter>Win32\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl">

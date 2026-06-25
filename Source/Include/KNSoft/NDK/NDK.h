@@ -35,6 +35,7 @@
 #include "Win32/API/ComBase.h"
 #include "Win32/API/ShObjIdl/ShObjIdl_core.h"
 #include "Win32/API/msidle.h"
+#include "Win32/API/msftedit.h"
 
 /* Enable extensions */
 
