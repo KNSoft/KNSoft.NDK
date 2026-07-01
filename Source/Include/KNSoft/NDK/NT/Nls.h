@@ -55,6 +55,172 @@ typedef struct _RTL_NLS_STATE
     PUSHORT UnicodeLowercaseTable844;
 } RTL_NLS_STATE, *PRTL_NLS_STATE;
 
+/* Private locale.nls layouts observed from Windows. */
+
+#define NLS_LOCALE_HEADER_MAGIC 0x5344534E // 'NSDS'
+#define NLS_LOCALE_DATA_SIZE_V7 0x148
+
+typedef struct _NLS_LOCALE_FILE_HEADER
+{
+    ULONG CTypeTableOffset;
+    ULONG Reserved0[3];
+    ULONG LocaleTableOffset;
+    ULONG CharMapTableOffset;
+    ULONG GeoIdTableOffset;
+    ULONG ScriptTableOffset;
+} NLS_LOCALE_FILE_HEADER, *PNLS_LOCALE_FILE_HEADER;
+
+typedef struct _NLS_CTYPE_HEADER
+{
+    USHORT DataSize;
+    // Offset from the IndexTableOffset field to the character-type index table.
+    USHORT IndexTableOffset;
+    WORD TypeTable[ANYSIZE_ARRAY];
+} NLS_CTYPE_HEADER, *PNLS_CTYPE_HEADER;
+
+typedef struct _NLS_CTYPE_TABLE
+{
+    const WORD* TypeTable; // CT_CTYPE1, CT_CTYPE2, CT_CTYPE3 values.
+    const BYTE* IndexTable; // Index mapping Unicode code points to TypeTable entries.
+} NLS_CTYPE_TABLE, *PNLS_CTYPE_TABLE;
+
+typedef struct _NLS_LOCALE_DATA
+{
+    ULONG SNameOffset;                          // LOCALE_SNAME
+    ULONG SOpenTypeLanguageTagOffset;           // LOCALE_SOPENTYPELANGUAGETAG
+    USHORT ILanguage;                           // LOCALE_ILANGUAGE
+    USHORT Reserved0;
+    USHORT IDigits;                             // LOCALE_IDIGITS
+    USHORT INegNumber;                          // LOCALE_INEGNUMBER
+    USHORT ICurrDigits;                         // LOCALE_ICURRDIGITS
+    USHORT ICurrency;                           // LOCALE_ICURRENCY
+    USHORT INegCurr;                            // LOCALE_INEGCURR
+    USHORT ILZero;                              // LOCALE_ILZERO
+    USHORT INeutral;                            // LOCALE_INEUTRAL
+    USHORT IFirstDayOfWeek;                     // LOCALE_IFIRSTDAYOFWEEK
+    USHORT IFirstWeekOfYear;                    // LOCALE_IFIRSTWEEKOFYEAR
+    USHORT ICountry;                            // LOCALE_ICOUNTRY
+    USHORT IMeasure;                            // LOCALE_IMEASURE
+    USHORT IDigitSubstitution;                  // LOCALE_IDIGITSUBSTITUTION
+    ULONG SGroupingOffset;                      // LOCALE_SGROUPING
+    ULONG SMonGroupingOffset;                   // LOCALE_SMONGROUPING
+    ULONG SListOffset;                          // LOCALE_SLIST
+    ULONG SDecimalOffset;                       // LOCALE_SDECIMAL
+    ULONG SThousandOffset;                      // LOCALE_STHOUSAND
+    ULONG SCurrencyOffset;                      // LOCALE_SCURRENCY
+    ULONG SMonDecimalSepOffset;                 // LOCALE_SMONDECIMALSEP
+    ULONG SMonThousandSepOffset;                // LOCALE_SMONTHOUSANDSEP
+    ULONG SPositiveSignOffset;                  // LOCALE_SPOSITIVESIGN
+    ULONG SNegativeSignOffset;                  // LOCALE_SNEGATIVESIGN
+    ULONG S1159Offset;                          // LOCALE_S1159
+    ULONG S2359Offset;                          // LOCALE_S2359
+    ULONG SNativeDigitsOffset;                  // LOCALE_SNATIVEDIGITS
+    ULONG STimeFormatOffset;                    // LOCALE_STIMEFORMAT
+    ULONG SShortDateOffset;                     // LOCALE_SSHORTDATE
+    ULONG SLongDateOffset;                      // LOCALE_SLONGDATE
+    ULONG SYearMonthOffset;                     // LOCALE_SYEARMONTH
+    ULONG SDurationOffset;                      // LOCALE_SDURATION
+    USHORT IDefaultLanguage;                    // LOCALE_IDEFAULTLANGUAGE
+    USHORT IDefaultAnsiCodePage;                // LOCALE_IDEFAULTANSICODEPAGE
+    USHORT IDefaultCodePage;                    // LOCALE_IDEFAULTCODEPAGE
+    USHORT IDefaultMacCodePage;                 // LOCALE_IDEFAULTMACCODEPAGE
+    USHORT IDefaultEbcdicCodePage;              // LOCALE_IDEFAULTEBCDICCODEPAGE
+    USHORT Reserved1;
+    USHORT IPaperSize;                          // LOCALE_IPAPERSIZE
+    UCHAR Reserved2[2];
+    ULONG SCalendarTypeOffset;                  // LOCALE_ICALENDARTYPE
+    ULONG SAbbrevLangNameOffset;                // LOCALE_SABBREVLANGNAME
+    ULONG SIso639LangNameOffset;                // LOCALE_SISO639LANGNAME
+    ULONG SEnglishLanguageOffset;               // LOCALE_SENGLANGUAGE
+    ULONG SNativeLangNameOffset;                // LOCALE_SNATIVELANGNAME
+    ULONG SEnglishCountryOffset;                // LOCALE_SENGCOUNTRY
+    ULONG SNativeCtryNameOffset;                // LOCALE_SNATIVECTRYNAME
+    ULONG SAbbrevCtryNameOffset;                // LOCALE_SABBREVCTRYNAME
+    ULONG SIso3166CtryNameOffset;               // LOCALE_SISO3166CTRYNAME
+    ULONG SIntlSymbolOffset;                    // LOCALE_SINTLSYMBOL
+    ULONG SEnglishCurrNameOffset;               // LOCALE_SENGCURRNAME
+    ULONG SNativeCurrNameOffset;                // LOCALE_SNATIVECURRNAME
+    ULONG FontSignatureOffset;                  // LOCALE_FONTSIGNATURE
+    ULONG SIso639LangName2Offset;               // LOCALE_SISO639LANGNAME2
+    ULONG SIso3166CtryName2Offset;              // LOCALE_SISO3166CTRYNAME2
+    ULONG SParentOffset;                        // LOCALE_SPARENT
+    ULONG SDayNameOffset;                       // LOCALE_SDAYNAME1
+    ULONG SAbbrevDayNameOffset;                 // LOCALE_SABBREVDAYNAME1
+    ULONG SMonthNameOffset;                     // LOCALE_SMONTHNAME1
+    ULONG SAbbrevMonthNameOffset;               // LOCALE_SABBREVMONTHNAME1
+    ULONG SGenitiveMonthOffset;                 // LOCALE_SMONTHNAME1 genitive form
+    ULONG SAbbrevGenitiveMonthOffset;           // LOCALE_SABBREVMONTHNAME1 genitive form
+    ULONG CalendarNamesOffset;
+    ULONG CustomSortsOffset;
+    USHORT INegativePercent;                    // LOCALE_INEGATIVEPERCENT
+    USHORT IPositivePercent;                    // LOCALE_IPOSITIVEPERCENT
+    USHORT Reserved3;
+    USHORT IReadingLayout;                      // LOCALE_IREADINGLAYOUT
+    USHORT Reserved4[2];
+    ULONG Reserved5;
+    ULONG SEnglishDisplayNameOffset;            // LOCALE_SENGLISHDISPLAYNAME
+    ULONG SNativeDisplayNameOffset;             // LOCALE_SNATIVEDISPLAYNAME
+    ULONG SPercentOffset;                       // LOCALE_SPERCENT
+    ULONG SNanOffset;                           // LOCALE_SNAN
+    ULONG SPositiveInfinityOffset;              // LOCALE_SPOSINFINITY
+    ULONG SNegativeInfinityOffset;              // LOCALE_SNEGINFINITY
+    ULONG Reserved6;
+    ULONG SEraStringOffset;                     // CAL_SERASTRING
+    ULONG SAbbrevEraStringOffset;               // CAL_SABBREVERASTRING
+    ULONG Reserved7;
+    ULONG SConsoleFallbackNameOffset;           // LOCALE_SCONSOLEFALLBACKNAME
+    ULONG SShortTimeOffset;                     // LOCALE_SSHORTTIME
+    ULONG SShortestDayNameOffset;               // LOCALE_SSHORTESTDAYNAME1
+    ULONG Reserved8;
+    ULONG SSortLocaleOffset;                    // LOCALE_SSORTLOCALE
+    ULONG SKeyboardsToInstallOffset;            // LOCALE_SKEYBOARDSTOINSTALL
+    ULONG SScriptsOffset;                       // LOCALE_SSCRIPTS
+    ULONG SRelativeLongDateOffset;              // LOCALE_SRELATIVELONGDATE
+    ULONG IGeoId;                               // LOCALE_IGEOID
+    ULONG SShortestAmOffset;                    // LOCALE_SSHORTESTAM
+    ULONG SShortestPmOffset;                    // LOCALE_SSHORTESTPM
+    ULONG SMonthDayOffset;                      // LOCALE_SMONTHDAY
+    ULONG KeyboardLayout;
+} NLS_LOCALE_DATA, *PNLS_LOCALE_DATA;
+
+typedef struct _NLS_LOCALE_LCID_INDEX
+{
+    ULONG LocaleId;
+    USHORT LocaleIndex;
+    USHORT LocaleNameOffset;
+} NLS_LOCALE_LCID_INDEX, *PNLS_LOCALE_LCID_INDEX;
+
+typedef struct _NLS_LOCALE_NAME_INDEX
+{
+    USHORT LocaleNameOffset;
+    USHORT LocaleIndex;
+    ULONG LocaleId;
+} NLS_LOCALE_NAME_INDEX, *PNLS_LOCALE_NAME_INDEX;
+
+typedef struct _NLS_LOCALE_HEADER
+{
+    ULONG VersionOffset;
+    ULONG Reserved0;
+    ULONG Version;
+    ULONG Magic;
+    ULONG Reserved1[3];
+    USHORT HeaderSize;
+    USHORT LocaleIdCount;
+    USHORT LocaleCount;
+    USHORT LocaleDataSize;
+    ULONG LocaleDataOffset;
+    USHORT LocaleNameCount;
+    USHORT Reserved2;
+    ULONG LocaleIdIndexOffset;
+    ULONG LocaleNameIndexOffset;
+    ULONG Reserved3;
+    USHORT CalendarCount;
+    USHORT CalendarDataSize;
+    ULONG CalendarDataOffset;
+    ULONG StringTableOffset;
+    USHORT Reserved4[4];
+} NLS_LOCALE_HEADER, *PNLS_LOCALE_HEADER;
+
 /* phnt */
 
 /* Data exports (ntdll.lib/ntdllp.lib) */
