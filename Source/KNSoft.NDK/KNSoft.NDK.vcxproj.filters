@@ -76,9 +76,6 @@
     <Filter Include="Win32\API\ShObjIdl\VirtualDesktop">
       <UniqueIdentifier>{e91c8aa7-9871-40c8-bf32-37113cbf9397}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NT\Console">
-      <UniqueIdentifier>{247cc8a2-ec3a-4b4f-82f6-91e7fcf5dfe8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
@@ -524,8 +521,11 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msftedit.h">
       <Filter>Win32\API</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\Console\Console.h">
-      <Filter>NT\Console</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Console.h">
+      <Filter>NT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Subsystem.h">
+      <Filter>NT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -50,17 +50,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <OutDir>$(SolutionDir)OutDir\$(KnsoftArch)\</OutDir>
     <IntDir>IntDir\$(KnsoftArch)\</IntDir>
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)OutDir\$(KnsoftArch)\</OutDir>
     <IntDir>IntDir\$(KnsoftArch)\</IntDir>
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)OutDir\$(KnsoftArch)\</OutDir>
     <IntDir>IntDir\$(KnsoftArch)\</IntDir>
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -107,7 +107,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\Reg.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\RegInfo.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\VReg.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\Console\Console.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Console.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Dbg.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Etw.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Extension\Misc.h" />
@@ -211,6 +211,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Sam.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Se\Se.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Se\Misc.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Subsystem.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Sxs.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Tm.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Misc.h" />

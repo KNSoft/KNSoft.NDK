@@ -207,6 +207,16 @@ RtlSendMsgToSm(
 #pragma region CSRSS
 
 /* KNSoft.NDK */
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+CsrClientCallServer(
+    PCSR_API_MSG m,
+    PCSR_CAPTURE_HEADER CaptureBuffer OPTIONAL,
+    ULONG ApiNumber,
+    ULONG ArgLength);
+
 NTSYSAPI
 HANDLE
 NTAPI

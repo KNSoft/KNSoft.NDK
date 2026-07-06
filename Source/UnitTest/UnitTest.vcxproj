@@ -103,35 +103,35 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64EC'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64EC'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\KNSoft\NDK\3rdParty\terminal\dep\Console;$(SolutionDir)Include\KNSoft\NDK\Stub;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir)..\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
