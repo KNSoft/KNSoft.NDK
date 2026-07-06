@@ -69,6 +69,7 @@ typedef struct _NLS_LOCALE_FILE_HEADER
     ULONG GeoIdTableOffset;
     ULONG ScriptTableOffset;
 } NLS_LOCALE_FILE_HEADER, *PNLS_LOCALE_FILE_HEADER;
+typedef const NLS_LOCALE_FILE_HEADER* PCNLS_LOCALE_FILE_HEADER;
 
 typedef struct _NLS_CTYPE_HEADER
 {
@@ -77,12 +78,14 @@ typedef struct _NLS_CTYPE_HEADER
     USHORT IndexTableOffset;
     WORD TypeTable[ANYSIZE_ARRAY];
 } NLS_CTYPE_HEADER, *PNLS_CTYPE_HEADER;
+typedef const NLS_CTYPE_HEADER* PCNLS_CTYPE_HEADER;
 
 typedef struct _NLS_CTYPE_TABLE
 {
     const WORD* TypeTable; // CT_CTYPE1, CT_CTYPE2, CT_CTYPE3 values.
-    const BYTE* IndexTable; // Index mapping Unicode code points to TypeTable entries.
+    PCUCHAR IndexTable; // Index mapping Unicode code points to TypeTable entries.
 } NLS_CTYPE_TABLE, *PNLS_CTYPE_TABLE;
+typedef const NLS_CTYPE_TABLE* PCNLS_CTYPE_TABLE;
 
 typedef struct _NLS_LOCALE_DATA
 {
@@ -182,6 +185,7 @@ typedef struct _NLS_LOCALE_DATA
     ULONG SMonthDayOffset;                      // LOCALE_SMONTHDAY
     ULONG KeyboardLayout;
 } NLS_LOCALE_DATA, *PNLS_LOCALE_DATA;
+typedef const NLS_LOCALE_DATA* PCNLS_LOCALE_DATA;
 
 typedef struct _NLS_LOCALE_LCID_INDEX
 {
@@ -189,6 +193,7 @@ typedef struct _NLS_LOCALE_LCID_INDEX
     USHORT LocaleIndex;
     USHORT LocaleNameOffset;
 } NLS_LOCALE_LCID_INDEX, *PNLS_LOCALE_LCID_INDEX;
+typedef const NLS_LOCALE_LCID_INDEX* PCNLS_LOCALE_LCID_INDEX;
 
 typedef struct _NLS_LOCALE_NAME_INDEX
 {
@@ -196,6 +201,7 @@ typedef struct _NLS_LOCALE_NAME_INDEX
     USHORT LocaleIndex;
     ULONG LocaleId;
 } NLS_LOCALE_NAME_INDEX, *PNLS_LOCALE_NAME_INDEX;
+typedef const NLS_LOCALE_NAME_INDEX* PCNLS_LOCALE_NAME_INDEX;
 
 typedef struct _NLS_LOCALE_HEADER
 {
@@ -220,6 +226,7 @@ typedef struct _NLS_LOCALE_HEADER
     ULONG StringTableOffset;
     USHORT Reserved4[4];
 } NLS_LOCALE_HEADER, *PNLS_LOCALE_HEADER;
+typedef const NLS_LOCALE_HEADER* PCNLS_LOCALE_HEADER;
 
 /* phnt */
 
