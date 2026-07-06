@@ -83,5 +83,6 @@ And public sources were lawfully used:
 - Microsoft Windows Protocols
 - Windows Internals
 - [Microsoft.Windows.SDK.CRTSource](https://www.nuget.org/packages/Microsoft.Windows.SDK.CRTSource)
+- [Microsoft Terminal](https://github.com/microsoft/terminal)
 
 And [KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C) to generate DLL import libraries.

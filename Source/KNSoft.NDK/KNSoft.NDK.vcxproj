@@ -107,6 +107,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\Reg.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\RegInfo.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Cm\VReg.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Console\Console.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Dbg.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Etw.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Extension\Misc.h" />
@@ -201,7 +202,6 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Token.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Stack.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\String.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\SubSystem.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\ActCtx.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Sync.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\SysInfo.h" />

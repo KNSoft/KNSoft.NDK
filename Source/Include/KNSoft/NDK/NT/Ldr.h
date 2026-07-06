@@ -2153,52 +2153,99 @@ LdrAppxHandleIntegrityFailure(
     _In_ NTSTATUS Status
     );
 
-// LdrHotPatchNotify
-NTSYSAPI
-NTSTATUS
-NTAPI
-LdrHotPatchNotify(
-    _In_ PVOID ImageBase,
-    _In_ PVOID Unknown1,
-    _In_ PVOID Unknown2,
-    _In_ ULONGLONG Flags
-    );
-
-// LdrInitShimEngineDynamic
-NTSYSAPI
-NTSTATUS
-NTAPI
-LdrInitShimEngineDynamic(
-    _In_ ULONGLONG ImageBase,
-    _In_ PVOID ShimData
-    );
-
-// LdrRscIsTypeExist
-NTSYSAPI
-NTSTATUS
-NTAPI
-LdrRscIsTypeExist(
-    _Inout_ PULONG RscContext,
-    _In_z_ PCWSTR Type,
-    _Reserved_ PVOID Reserved,
-    _Inout_ PULONG Flags
-    );
-
-// LdrSetAppCompatDllRedirectionCallback
-NTSYSAPI
-NTSTATUS
-NTAPI
-LdrSetAppCompatDllRedirectionCallback(
-    _In_ PVOID Callback
-    );
-
-// LdrSetMUICacheType
-NTSYSAPI
-NTSTATUS
-NTAPI
-LdrSetMUICacheType(
-    _In_ ULONG MuiCacheType
-    );
-
+// LdrHotPatchNotify
+
+NTSYSAPI
+
+NTSTATUS
+
+NTAPI
+
+LdrHotPatchNotify(
+
+    _In_ PVOID ImageBase,
+
+    _In_ PVOID Unknown1,
+
+    _In_ PVOID Unknown2,
+
+    _In_ ULONGLONG Flags
+
+    );
+
+
+
+// LdrInitShimEngineDynamic
+
+NTSYSAPI
+
+NTSTATUS
+
+NTAPI
+
+LdrInitShimEngineDynamic(
+
+    _In_ ULONGLONG ImageBase,
+
+    _In_ PVOID ShimData
+
+    );
+
+
+
+// LdrRscIsTypeExist
+
+NTSYSAPI
+
+NTSTATUS
+
+NTAPI
+
+LdrRscIsTypeExist(
+
+    _Inout_ PULONG RscContext,
+
+    _In_z_ PCWSTR Type,
+
+    _Reserved_ PVOID Reserved,
+
+    _Inout_ PULONG Flags
+
+    );
+
+
+
+// LdrSetAppCompatDllRedirectionCallback
+
+NTSYSAPI
+
+NTSTATUS
+
+NTAPI
+
+LdrSetAppCompatDllRedirectionCallback(
+
+    _In_ PVOID Callback
+
+    );
+
+
+
+// LdrSetMUICacheType
+
+NTSYSAPI
+
+NTSTATUS
+
+NTAPI
+
+LdrSetMUICacheType(
+
+    _In_ ULONG MuiCacheType
+
+    );
+
+
+
 
 EXTERN_C_END

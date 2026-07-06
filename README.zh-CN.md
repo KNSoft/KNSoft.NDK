@@ -83,5 +83,6 @@ NuGet包[KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK)包含所有头�
 - Microsoft Windows Protocols
 - Windows Internals
 - [Microsoft.Windows.SDK.CRTSource](https://www.nuget.org/packages/Microsoft.Windows.SDK.CRTSource)
+- [Microsoft Terminal](https://github.com/microsoft/terminal)
 
 以及[KNSoft/Precomp4C](https://github.com/KNSoft/Precomp4C)用于生成DLL导入库。
