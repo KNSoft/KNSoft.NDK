@@ -3,6 +3,7 @@
 #include "../../NT/MinDef.h"
 #include "../../NT/Rtl/Process/Process.h"
 #include "../../NT/Lpc/Base.h"
+#include "../../NT/Subsystem.h"
 
 EXTERN_C_START
 
@@ -212,10 +213,10 @@ NTSYSAPI
 NTSTATUS
 NTAPI
 CsrClientCallServer(
-    PCSR_API_MSG m,
-    PCSR_CAPTURE_HEADER CaptureBuffer OPTIONAL,
-    ULONG ApiNumber,
-    ULONG ArgLength);
+    _Inout_ PCSR_API_MSG m,
+    _In_opt_ PCSR_CAPTURE_HEADER CaptureBuffer,
+    _In_ ULONG ApiNumber,
+    _In_ ULONG ArgLength);
 
 NTSYSAPI
 HANDLE
