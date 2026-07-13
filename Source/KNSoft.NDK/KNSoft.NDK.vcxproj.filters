@@ -545,6 +545,9 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\ErrorHandling.inl">
       <Filter>NT\Rtl</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\Memory.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Misc.inl">
       <Filter>NT\Rtl</Filter>
     </None>

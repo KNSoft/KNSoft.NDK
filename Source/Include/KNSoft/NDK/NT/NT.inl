@@ -10,6 +10,7 @@
 #include "Rtl/Security/Luid.inl"
 #include "Rtl/Security/Sid.inl"
 #include "Rtl/ErrorHandling.inl"
+#include "Rtl/Memory.inl"
 #include "Rtl/Misc.inl"
 #include "Rtl/Path.inl"
 #include "Rtl/Stack.inl"
