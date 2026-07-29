@@ -682,11 +682,45 @@ typedef struct _PEB
         {
             ULONG SixtySecondEnabled : 1;   // Leap seconds enabled.
             ULONG Reserved : 31;
-        };
+        } LeapSecondFlag;
     };
 
-    ULONG NtGlobalFlag2;                    // Global flags for the process.
-    ULONGLONG ExtendedFeatureDisableMask;   // Extended feature disable mask (AVX). // since WIN11
+    union
+    {
+        ULONG NtGlobalFlags2;                // Global flags for the process.
+        struct
+        {
+            ULONG EnableLeapSecond : 1;      // GlobalFlag2 bit 0.
+            ULONG Reserved : 31;
+        } NtGlobalFlag2;
+    };
+
+    // Extended feature disable mask (AVX). // since WIN11
+    union
+    {
+        ULONGLONG ExtendedFeatureDisableMask;
+        struct
+        {
+            ULONGLONG LegacyFloatingPointDisabled : 1;
+            ULONGLONG LegacySseDisabled : 1;
+            ULONGLONG AvxDisabled : 1;
+            ULONGLONG MpxBndregsDisabled : 1;
+            ULONGLONG MpxBndcsrDisabled : 1;
+            ULONGLONG Avx512OpmaskDisabled : 1;
+            ULONGLONG Avx512ZmmHi256Disabled : 1;
+            ULONGLONG Avx512Zmm16HiDisabled : 1;
+            ULONGLONG IptDisabled : 1;
+            ULONGLONG PkruDisabled : 1;
+            ULONGLONG Reserved0 : 1;
+            ULONGLONG CetUserDisabled : 1;
+            ULONGLONG CetSupervisorDisabled : 1;
+            ULONGLONG Reserved1 : 4;
+            ULONGLONG AmxTileDisabled : 1;
+            ULONGLONG AmxBf16Disabled : 1;
+            ULONGLONG AmxInt8Disabled : 1;
+            ULONGLONG Reserved2 : 44;
+        };
+    };
 } PEB, *PPEB;
 
 typedef struct _PEB64
@@ -831,10 +865,42 @@ typedef struct _PEB64
         {
             /* +0x7C0 */ ULONG SixtySecondEnabled : 1;
             /* +0x7C0 */ ULONG Reserved : 31;
+        } LeapSecondFlag;
+    };
+    union
+    {
+        /* +0x7C4 */ ULONG NtGlobalFlags2;
+        struct
+        {
+            /* +0x7C4 */ ULONG EnableLeapSecond : 1;
+            /* +0x7C4 */ ULONG Reserved : 31;
+        } NtGlobalFlag2;
+    };
+    union
+    {
+        /* +0x7C8 */ ULONGLONG ExtendedFeatureDisableMask;
+        struct
+        {
+            /* +0x7C8 */ ULONGLONG LegacyFloatingPointDisabled : 1;
+            /* +0x7C8 */ ULONGLONG LegacySseDisabled : 1;
+            /* +0x7C8 */ ULONGLONG AvxDisabled : 1;
+            /* +0x7C8 */ ULONGLONG MpxBndregsDisabled : 1;
+            /* +0x7C8 */ ULONGLONG MpxBndcsrDisabled : 1;
+            /* +0x7C8 */ ULONGLONG Avx512OpmaskDisabled : 1;
+            /* +0x7C8 */ ULONGLONG Avx512ZmmHi256Disabled : 1;
+            /* +0x7C8 */ ULONGLONG Avx512Zmm16HiDisabled : 1;
+            /* +0x7C8 */ ULONGLONG IptDisabled : 1;
+            /* +0x7C8 */ ULONGLONG PkruDisabled : 1;
+            /* +0x7C8 */ ULONGLONG Reserved0 : 1;
+            /* +0x7C8 */ ULONGLONG CetUserDisabled : 1;
+            /* +0x7C8 */ ULONGLONG CetSupervisorDisabled : 1;
+            /* +0x7C8 */ ULONGLONG Reserved1 : 4;
+            /* +0x7C8 */ ULONGLONG AmxTileDisabled : 1;
+            /* +0x7C8 */ ULONGLONG AmxBf16Disabled : 1;
+            /* +0x7C8 */ ULONGLONG AmxInt8Disabled : 1;
+            /* +0x7C8 */ ULONGLONG Reserved2 : 44;
         };
     };
-    /* +0x7C4 */ ULONG NtGlobalFlag2;
-    /* +0x7C8 */ ULONGLONG ExtendedFeatureDisableMask;
 } PEB64, *PPEB64;
 
 typedef struct _PEB32
@@ -978,10 +1044,42 @@ typedef struct _PEB32
         {
             /* +0x474 */ ULONG SixtySecondEnabled : 1;
             /* +0x474 */ ULONG Reserved : 31;
+        } LeapSecondFlag;
+    };
+    union
+    {
+        /* +0x478 */ ULONG NtGlobalFlags2;
+        struct
+        {
+            /* +0x478 */ ULONG EnableLeapSecond : 1;
+            /* +0x478 */ ULONG Reserved : 31;
+        } NtGlobalFlag2;
+    };
+    union
+    {
+        /* +0x480 */ ULONGLONG ExtendedFeatureDisableMask;
+        struct
+        {
+            /* +0x480 */ ULONGLONG LegacyFloatingPointDisabled : 1;
+            /* +0x480 */ ULONGLONG LegacySseDisabled : 1;
+            /* +0x480 */ ULONGLONG AvxDisabled : 1;
+            /* +0x480 */ ULONGLONG MpxBndregsDisabled : 1;
+            /* +0x480 */ ULONGLONG MpxBndcsrDisabled : 1;
+            /* +0x480 */ ULONGLONG Avx512OpmaskDisabled : 1;
+            /* +0x480 */ ULONGLONG Avx512ZmmHi256Disabled : 1;
+            /* +0x480 */ ULONGLONG Avx512Zmm16HiDisabled : 1;
+            /* +0x480 */ ULONGLONG IptDisabled : 1;
+            /* +0x480 */ ULONGLONG PkruDisabled : 1;
+            /* +0x480 */ ULONGLONG Reserved0 : 1;
+            /* +0x480 */ ULONGLONG CetUserDisabled : 1;
+            /* +0x480 */ ULONGLONG CetSupervisorDisabled : 1;
+            /* +0x480 */ ULONGLONG Reserved1 : 4;
+            /* +0x480 */ ULONGLONG AmxTileDisabled : 1;
+            /* +0x480 */ ULONGLONG AmxBf16Disabled : 1;
+            /* +0x480 */ ULONGLONG AmxInt8Disabled : 1;
+            /* +0x480 */ ULONGLONG Reserved2 : 44;
         };
     };
-    /* +0x478 */ ULONG NtGlobalFlag2;
-    /* +0x480 */ ULONGLONG ExtendedFeatureDisableMask;
 } PEB32, *PPEB32;
 
 #if defined(_WIN64)
@@ -1535,7 +1633,32 @@ typedef struct _TEB
     ULONGLONG LastSleepCounter; // since Win11
     ULONG SpinCallCount;
 
-    ULONGLONG ExtendedFeatureDisableMask;   // Extended feature disable mask (AVX).
+    // Extended feature disable mask (AVX).
+    union
+    {
+        ULONGLONG ExtendedFeatureDisableMask;
+        struct
+        {
+            ULONGLONG LegacyFloatingPointDisabled : 1;
+            ULONGLONG LegacySseDisabled : 1;
+            ULONGLONG AvxDisabled : 1;
+            ULONGLONG MpxBndregsDisabled : 1;
+            ULONGLONG MpxBndcsrDisabled : 1;
+            ULONGLONG Avx512OpmaskDisabled : 1;
+            ULONGLONG Avx512ZmmHi256Disabled : 1;
+            ULONGLONG Avx512Zmm16HiDisabled : 1;
+            ULONGLONG IptDisabled : 1;
+            ULONGLONG PkruDisabled : 1;
+            ULONGLONG Reserved0 : 1;
+            ULONGLONG CetUserDisabled : 1;
+            ULONGLONG CetSupervisorDisabled : 1;
+            ULONGLONG Reserved1 : 4;
+            ULONGLONG AmxTileDisabled : 1;
+            ULONGLONG AmxBf16Disabled : 1;
+            ULONGLONG AmxInt8Disabled : 1;
+            ULONGLONG Reserved2 : 44;
+        };
+    };
     PVOID SchedulerSharedDataSlot;          // since 24H2
     PVOID HeapWalkContext;
     GROUP_AFFINITY PrimaryGroupAffinity;    // The primary processor group affinity of the thread.
@@ -1696,7 +1819,31 @@ typedef struct _TEB64
     /* +0x1828 */ GUID EffectiveContainerId;
     /* +0x1838 */ ULONGLONG LastSleepCounter;
     /* +0x1840 */ ULONG SpinCallCount;
-    /* +0x1848 */ ULONGLONG ExtendedFeatureDisableMask;
+    union
+    {
+        /* +0x1848 */ ULONGLONG ExtendedFeatureDisableMask;
+        struct
+        {
+            /* +0x1848 */ ULONGLONG LegacyFloatingPointDisabled : 1;
+            /* +0x1848 */ ULONGLONG LegacySseDisabled : 1;
+            /* +0x1848 */ ULONGLONG AvxDisabled : 1;
+            /* +0x1848 */ ULONGLONG MpxBndregsDisabled : 1;
+            /* +0x1848 */ ULONGLONG MpxBndcsrDisabled : 1;
+            /* +0x1848 */ ULONGLONG Avx512OpmaskDisabled : 1;
+            /* +0x1848 */ ULONGLONG Avx512ZmmHi256Disabled : 1;
+            /* +0x1848 */ ULONGLONG Avx512Zmm16HiDisabled : 1;
+            /* +0x1848 */ ULONGLONG IptDisabled : 1;
+            /* +0x1848 */ ULONGLONG PkruDisabled : 1;
+            /* +0x1848 */ ULONGLONG Reserved0 : 1;
+            /* +0x1848 */ ULONGLONG CetUserDisabled : 1;
+            /* +0x1848 */ ULONGLONG CetSupervisorDisabled : 1;
+            /* +0x1848 */ ULONGLONG Reserved1 : 4;
+            /* +0x1848 */ ULONGLONG AmxTileDisabled : 1;
+            /* +0x1848 */ ULONGLONG AmxBf16Disabled : 1;
+            /* +0x1848 */ ULONGLONG AmxInt8Disabled : 1;
+            /* +0x1848 */ ULONGLONG Reserved2 : 44;
+        };
+    };
     /* +0x1850 */ VOID* POINTER_64 SchedulerSharedDataSlot;
     /* +0x1858 */ VOID* POINTER_64 HeapWalkContext;
     /* +0x1860 */ GROUP_AFFINITY PrimaryGroupAffinity;
@@ -1853,7 +2000,31 @@ typedef struct _TEB32
     /* +0x0FF0 */ GUID EffectiveContainerId;
     /* +0x1000 */ ULONGLONG LastSleepCounter;
     /* +0x1008 */ ULONG SpinCallCount;
-    /* +0x1010 */ ULONGLONG ExtendedFeatureDisableMask;
+    union
+    {
+        /* +0x1010 */ ULONGLONG ExtendedFeatureDisableMask;
+        struct
+        {
+            /* +0x1010 */ ULONGLONG LegacyFloatingPointDisabled : 1;
+            /* +0x1010 */ ULONGLONG LegacySseDisabled : 1;
+            /* +0x1010 */ ULONGLONG AvxDisabled : 1;
+            /* +0x1010 */ ULONGLONG MpxBndregsDisabled : 1;
+            /* +0x1010 */ ULONGLONG MpxBndcsrDisabled : 1;
+            /* +0x1010 */ ULONGLONG Avx512OpmaskDisabled : 1;
+            /* +0x1010 */ ULONGLONG Avx512ZmmHi256Disabled : 1;
+            /* +0x1010 */ ULONGLONG Avx512Zmm16HiDisabled : 1;
+            /* +0x1010 */ ULONGLONG IptDisabled : 1;
+            /* +0x1010 */ ULONGLONG PkruDisabled : 1;
+            /* +0x1010 */ ULONGLONG Reserved0 : 1;
+            /* +0x1010 */ ULONGLONG CetUserDisabled : 1;
+            /* +0x1010 */ ULONGLONG CetSupervisorDisabled : 1;
+            /* +0x1010 */ ULONGLONG Reserved1 : 4;
+            /* +0x1010 */ ULONGLONG AmxTileDisabled : 1;
+            /* +0x1010 */ ULONGLONG AmxBf16Disabled : 1;
+            /* +0x1010 */ ULONGLONG AmxInt8Disabled : 1;
+            /* +0x1010 */ ULONGLONG Reserved2 : 44;
+        };
+    };
     /* +0x1018 */ VOID* POINTER_32 SchedulerSharedDataSlot;
     /* +0x101C */ VOID* POINTER_32 HeapWalkContext;
     /* +0x1020 */ GROUP_AFFINITY PrimaryGroupAffinity;
