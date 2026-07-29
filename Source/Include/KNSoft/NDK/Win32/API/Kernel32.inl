@@ -1248,6 +1248,7 @@ _Inline_FlushFileBuffers(
  * The original SAL annotation in Windows SDK has no _Success_ expression.
  */
 #pragma warning(disable: 6101)
+
 __inline
 BOOL
 WINAPI
@@ -1319,6 +1320,29 @@ _Inline_SetFilePointerEx(
 
     return TRUE;
 }
+
+__inline
+BOOL
+WINAPI
+_Inline_GetFileSizeEx(
+    _In_ HANDLE hFile,
+    _Out_ PLARGE_INTEGER lpFileSize)
+{
+    IO_STATUS_BLOCK IoStatusBlock;
+    FILE_STANDARD_INFORMATION Info;
+    NTSTATUS Status;
+
+    Status = NtQueryInformationFile(hFile, &IoStatusBlock, &Info, sizeof(Info), FileStandardInformation);
+    if (!NT_SUCCESS(Status))
+    {
+        _Inline_BaseSetLastNTError(Status);
+        return FALSE;
+    }
+
+    lpFileSize->QuadPart = Info.EndOfFile.QuadPart;
+    return TRUE;
+}
+
 #pragma warning(default: 6101)
 
 __inline
