@@ -1535,6 +1535,38 @@ _Inline_RaiseException(
     RtlRaiseException(&ExceptionRecord);
 }
 
+__inline
+UINT
+WINAPI
+_Inline_SetErrorMode(
+    _In_ UINT uMode)
+{
+    NTSTATUS Status;
+    ULONG OldMode;
+
+    Status = NtQueryInformationProcess(NtCurrentProcess(),
+                                       ProcessDefaultHardErrorMode,
+                                       &OldMode,
+                                       sizeof(OldMode),
+                                       NULL);
+    if (NT_SUCCESS(Status))
+    {
+        OldMode ^= SEM_FAILCRITICALERRORS;
+    } else
+    {
+        OldMode = 0;
+        _Inline_BaseSetLastNTError(Status);
+    }
+
+    uMode ^= SEM_FAILCRITICALERRORS;
+    uMode |= OldMode & SEM_NOALIGNMENTFAULTEXCEPT;
+    NtSetInformationProcess(NtCurrentProcess(),
+                            ProcessDefaultHardErrorMode,
+                            &uMode,
+                            sizeof(uMode));
+    return OldMode;
+}
+
 /* SList */
 
 __inline
