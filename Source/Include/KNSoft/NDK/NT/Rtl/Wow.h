@@ -5,6 +5,18 @@
 
 EXTERN_C_START
 
+#if defined(_M_X64) && !defined(_M_ARM64EC)
+
+// RtlIsEcCode is exported by x64 ntdll.dll on Windows on ARM64 but not declared by recent SDKs for x64.
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlIsEcCode(
+    _In_ DWORD64 CodePointer
+);
+
+#endif
+
 // RtlOpenCrossProcessEmulatorWorkConnection
 NTSYSAPI
 NTSTATUS
