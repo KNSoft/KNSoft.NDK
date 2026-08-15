@@ -116,6 +116,26 @@
     <Export Name="StartServiceCtrlDispatcherW" CallConv="__stdcall" Arg="ptr" />
     <Export Name="StartServiceW" CallConv="__stdcall" Arg="ptr int ptr" />
   </Dll>
+  <Dll Name="usermgrcli.dll">
+    <Export Name="UMgrFreeSessionUsers" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrEnumerateSessionUsers" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="UMgrQueryUserContext" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="UMgrQueryUserContextFromSid" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="UMgrQueryUserContextFromName" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="UMgrQueryDefaultAccountToken" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrQuerySessionUserToken" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="UMgrQueryUserToken" CallConv="__stdcall" Arg="int64 ptr" />
+    <Export Name="UMgrQueryUserTokenFromSid" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="UMgrQueryUserTokenFromName" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="UMgrGetConstrainedUserToken" CallConv="__stdcall" Arg="ptr int64 ptr ptr" />
+    <Export Name="UMgrChangeSessionUserToken" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrGetImpersonationTokenForContext" CallConv="__stdcall" Arg="ptr int64 ptr" />
+    <Export Name="UMgrGetSessionActiveShellUserToken" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="UMgrOpenProcessTokenForQuery" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="UMgrOpenProcessHandleForAccess" CallConv="__stdcall" Arg="int int ptr" />
+    <Export Name="UMgrFreeUserCredentials" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrGetCachedCredentials" CallConv="__stdcall" Arg="ptr ptr" />
+  </Dll>
   <Dll Name="bcd.dll">
     <Export Name="BcdCloseObject" CallConv="__stdcall" Arg="ptr" />
     <Export Name="BcdCloseStore" CallConv="__stdcall" Arg="ptr" />
