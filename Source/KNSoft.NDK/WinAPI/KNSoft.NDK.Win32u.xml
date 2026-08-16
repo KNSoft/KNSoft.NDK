@@ -1,0 +1,300 @@
+<LibCreate>
+  <Dll Name="win32u.dll">
+    <Export Name="NtUserAcquireIAMKey" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserAllowForegroundActivation" CallConv="__stdcall" />
+    <Export Name="NtUserAllowSetForegroundWindow" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserAlterWindowStyle" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="NtUserApplyWindowAction" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserArrangeIconicWindows" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserAttachThreadInput" CallConv="__stdcall" Arg="int int int" />
+    <Export Name="NtUserBeginDeferWindowPos" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserBeginPaint" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserBlockInput" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserBroadcastImeShowStatusChange" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserBuildHimcList" CallConv="__stdcall" Arg="int int ptr ptr" />
+    <Export Name="NtUserBuildHwndList" CallConv="__stdcall" Arg="ptr ptr int int int int ptr ptr" />
+    <Export Name="NtUserBuildNameList" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+    <Export Name="NtUserBuildPropList" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+    <Export Name="NtUserCalculatePopupWindowPosition" CallConv="__stdcall" Arg="ptr ptr int ptr ptr" />
+    <Export Name="NtUserCallHwnd" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserCallHwndLock" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserCallHwndLockSafe" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserCallHwndOpt" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserCallHwndParam" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserCallHwndParamLock" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserCallHwndParamLockSafe" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserCallHwndSafe" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserCallNoParam" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserCallOneParam" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserCallTwoParam" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserCancelQueueEventCompletionPacket" CallConv="__stdcall" />
+    <Export Name="NtUserCanCurrentThreadChangeForeground" CallConv="__stdcall" />
+    <Export Name="NtUserChangeWindowMessageFilter" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="NtUserCheckAccessForIntegrityLevel" CallConv="__stdcall" Arg="int int ptr" />
+    <Export Name="NtUserCheckImeShowStatusInThread" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserCheckProcessForClipboardAccess" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="NtUserChildWindowFromPointEx" CallConv="__stdcall" Arg="ptr int64 int" />
+    <Export Name="NtUserCitSetInfo" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserClearWakeMask" CallConv="__stdcall" />
+    <Export Name="NtUserClearWindowState" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserClipCursor" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserCloseDesktop" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserCloseWindowStation" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserConsoleControl" CallConv="__stdcall" Arg="int ptr int" />
+    <Export Name="NtUserCopyAcceleratorTable" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserCreateAcceleratorTable" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserCreateMenu" CallConv="__stdcall" />
+    <Export Name="NtUserCreatePopupMenu" CallConv="__stdcall" />
+    <Export Name="NtUserCreateSystemThreads" CallConv="__stdcall" />
+    <Export Name="NtUserCreateWindowStation" CallConv="__stdcall" Arg="ptr int ptr ptr ptr ptr ptr int" />
+    <Export Name="NtUserCsDdeUninitialize" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserDeferredDesktopRotation" CallConv="__stdcall" />
+    <Export Name="NtUserDeleteMenu" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="NtUserDeregisterShellHookWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserDestroyCaret" CallConv="__stdcall" />
+    <Export Name="NtUserDestroyMenu" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserDestroyWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserDisableProcessWindowFiltering" CallConv="__stdcall" />
+    <Export Name="NtUserDisableProcessWindowsGhosting" CallConv="__stdcall" />
+    <Export Name="NtUserDoInitMessagePumpHook" CallConv="__stdcall" />
+    <Export Name="NtUserDoUninitMessagePumpHook" CallConv="__stdcall" />
+    <Export Name="NtUserDragDetect" CallConv="__stdcall" Arg="ptr int64" />
+    <Export Name="NtUserDragObject" CallConv="__stdcall" Arg="ptr ptr int ptr ptr" />
+    <Export Name="NtUserDrainThreadCoreMessagingCompletions" CallConv="__stdcall" />
+    <Export Name="NtUserDrawAnimatedRects" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+    <Export Name="NtUserDrawMenuBar" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserDwmLockScreenUpdates" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserDWP_GetEnabledPopupOffset" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserEnableIAMAccess" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserEnableModernAppWindowKeyboardIntercept" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserEnableMouseInPointerForThread" CallConv="__stdcall" />
+    <Export Name="NtUserEnablePerMonitorMenuScaling" CallConv="__stdcall" />
+    <Export Name="NtUserEnableSessionForMMCSS" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserEnableShellWindowManagementBehavior" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserEnableWindow" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserEndMenu" CallConv="__stdcall" />
+    <Export Name="NtUserEndPaint" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserEnsureDpiDepSysMetCacheForPlateau" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserEnumClipboardFormats" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserEnumDisplayMonitors" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="NtUserExcludeUpdateRgn" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserFindWindowEx" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr" />
+    <Export Name="NtUserFlashWindowEx" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserForceEnableNumpadTranslation" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserGetAncestor" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserGetCaretBlinkTime" CallConv="__stdcall" />
+    <Export Name="NtUserGetCaretPos" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetClassIcoCur" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserGetClassName" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="NtUserGetClipCursor" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetComboBoxInfo" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserGetCurrentInputMessageSource" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetCursor" CallConv="__stdcall" />
+    <Export Name="NtUserGetCursorInfo" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetCursorPos" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserGetDCEx" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserGetDeviceChangeInfo" CallConv="__stdcall" />
+    <Export Name="NtUserGetDisplayAutoRotationPreferences" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetDoubleClickTime" CallConv="__stdcall" />
+    <Export Name="NtUserGetForegroundWindow" CallConv="__stdcall" />
+    <Export Name="NtUserGetGuiResources" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserGetGUIThreadInfo" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="NtUserGetIconInfo" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr int" />
+    <Export Name="NtUserGetIconSize" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+    <Export Name="NtUserGetIMEShowStatus" CallConv="__stdcall" />
+    <Export Name="NtUserGetInputDesktop" CallConv="__stdcall" />
+    <Export Name="NtUserGetInputEvent" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetKeyboardType" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetLayeredWindowAttributes" CallConv="__stdcall" Arg="ptr ptr ptr int" />
+    <Export Name="NtUserGetListBoxInfo" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetMenuBarInfo" CallConv="__stdcall" Arg="ptr int int ptr" />
+    <Export Name="NtUserGetMenuItemRect" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="NtUserGetMessagePos" CallConv="__stdcall" />
+    <Export Name="NtUserGetModernAppWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetMouseMovePointsEx" CallConv="__stdcall" Arg="int ptr ptr int int" />
+    <Export Name="NtUserGetObjectInformation" CallConv="__stdcall" Arg="ptr int ptr int ptr" />
+    <Export Name="NtUserGetProcessDefaultLayout" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetProcessUIContextInformation" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserGetProcessWindowStation" CallConv="__stdcall" />
+    <Export Name="NtUserGetProp" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserGetProp2" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserGetQueueIocp" CallConv="__stdcall" />
+    <Export Name="NtUserGetRawInputData" CallConv="__stdcall" Arg="ptr int ptr ptr int" />
+    <Export Name="NtUserGetRawInputDeviceList" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserGetRegisteredRawInputDevices" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserGetSendMessageReceiver" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserGetSysMenuOffset" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetSystemMenu" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserGetThreadDesktop" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserGetThreadState" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserGetTitleBarInfo" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserGetUnpredictedMessagePos" CallConv="__stdcall" />
+    <Export Name="NtUserGetWindowCompositionAttribute" CallConv="__stdcall" Arg="ptr int ptr int" />
+    <Export Name="NtUserGetWindowContextHelpId" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetWindowDC" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetWindowPlacement" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserGetWindowProcessHandle" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserGetWindowTrackInfoAsync" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGetWinStationInfo" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGhostWindowFromHungWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserGrantJobUIRestrictionException" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserHandleSystemThreadCreationFailure" CallConv="__stdcall" />
+    <Export Name="NtUserHideCursorNoCapture" CallConv="__stdcall" />
+    <Export Name="NtUserHiliteMenuItem" CallConv="__stdcall" Arg="ptr ptr int int" />
+    <Export Name="NtUserHungWindowFromGhostWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserInitAnsiOem" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserInitThreadCoreMessagingIocp" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserInternalGetWindowIcon" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserInternalGetWindowText" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserInvalidateRect" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserInvalidateRgn" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserIsInterceptWindow" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserIsQueueAttached" CallConv="__stdcall" />
+    <Export Name="NtUserIsTouchWindow" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserKillSystemTimer" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserKillTimer" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserLayoutCompleted" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserLoadCursorsAndIcons" CallConv="__stdcall" />
+    <Export Name="NtUserLoadUserApiHook" CallConv="__stdcall" />
+    <Export Name="NtUserLockSetForegroundWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserLockWorkStation" CallConv="__stdcall" />
+    <Export Name="NtUserLogicalToPhysicalPoint" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserLW_LoadFonts" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserMapDesktopObject" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserMenuItemFromPoint" CallConv="__stdcall" Arg="ptr ptr int64" />
+    <Export Name="NtUserMessageBeep" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserModifyUserStartupInfoFlags" CallConv="__stdcall" Arg="int int" />
+    <Export Name="NtUserMoveWindow" CallConv="__stdcall" Arg="ptr int int int int int" />
+    <Export Name="NtUserNlsKbdSendIMENotification" CallConv="__stdcall" Arg="int int" />
+    <Export Name="NtUserNotifyOverlayWindow" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserOpenDesktop" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="NtUserOpenInputDesktop" CallConv="__stdcall" Arg="int int int" />
+    <Export Name="NtUserOpenWindowStation" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserPhysicalToLogicalPoint" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserPlayEventSound" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserPostQuitMessage" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserPrepareForLogoff" CallConv="__stdcall" />
+    <Export Name="NtUserPrintWindow" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserQueryInformationThread" CallConv="__stdcall" Arg="ptr int ptr int" />
+    <Export Name="NtUserQueryWindow" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserRaiseLowerShellWindow" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserRealChildWindowFromPoint" CallConv="__stdcall" Arg="ptr int64" />
+    <Export Name="NtUserRealizePalette" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserReassociateQueueEventCompletionPacket" CallConv="__stdcall" />
+    <Export Name="NtUserRedrawFrame" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRedrawFrameAndHook" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRedrawTitle" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserRedrawWindow" CallConv="__stdcall" Arg="ptr ptr ptr int" />
+    <Export Name="NtUserRegisterCloakedNotification" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserRegisterGhostWindow" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserRegisterHotKey" CallConv="__stdcall" Arg="ptr int int int" />
+    <Export Name="NtUserRegisterLogonProcess" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="NtUserRegisterLPK" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRegisterShellHookWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRegisterSiblingFrostWindow" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserRegisterSystemThread" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRegisterUserHungAppHandlers" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserRegisterWindowArrangementCallout" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserReleaseCapture" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteConnect" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRemoteConnectState" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteConsoleShadowStop" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteDisconnect" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteNotify" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRemotePassthruDisable" CallConv="__stdcall" />
+    <Export Name="NtUserRemotePassthruEnable" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteReconnect" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRemoteRedrawRectangle" CallConv="__stdcall" Arg="int int int int" />
+    <Export Name="NtUserRemoteRedrawScreen" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteShadowCleanup" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserRemoteShadowSetup" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteShadowStart" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserRemoteShadowStop" CallConv="__stdcall" />
+    <Export Name="NtUserRemoteThinwireStats" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserRemoveMenu" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="NtUserRemoveQueueCompletion" CallConv="__stdcall" />
+    <Export Name="NtUserReplyMessage" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserResetDblClk" CallConv="__stdcall" />
+    <Export Name="NtUserScaleSystemMetricForDPIWithoutCache" CallConv="__stdcall" Arg="int int" />
+    <Export Name="NtUserScheduleDispatchNotification" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSendInput" CallConv="__stdcall" Arg="int ptr int" />
+    <Export Name="NtUserSetActiveWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetAdditionalForegroundBoostProcesses" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetAdditionalPowerThrottlingProcess" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="NtUserSetCancelRotationDelayHintWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetCapture" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetCaretBlinkTime" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserSetCaretPos" CallConv="__stdcall" Arg="int int" />
+    <Export Name="NtUserSetChildWindowNoActivate" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetClassWord" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="NtUserSetCursorPos" CallConv="__stdcall" Arg="int int" />
+    <Export Name="NtUserSetDialogPointer" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserSetDialogSystemMenu" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetDoubleClickTime" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserSetFocus" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetForegroundWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetForegroundWindowForApplication" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetInformationThread" CallConv="__stdcall" Arg="ptr int ptr int" />
+    <Export Name="NtUserSetLayeredWindowAttributes" CallConv="__stdcall" Arg="ptr int int int" />
+    <Export Name="NtUserSetMessageExtraInfo" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetModernAppWindow" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserSetMsgBox" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetProcessDefaultLayout" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetProcessInteractionFlags" CallConv="__stdcall" Arg="int int int" />
+    <Export Name="NtUserSetProcessRestrictionExemption" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserSetProcessUIAccessZorder" CallConv="__stdcall" />
+    <Export Name="NtUserSetProcessWin32Capabilities" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserSetProcessWindowStation" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetProgmanWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetShellChangeNotifyHWND" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetSysMenu" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetTaskmanWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetThreadDesktop" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetThreadInputBlocked" CallConv="__stdcall" Arg="int int" />
+    <Export Name="NtUserSetThreadQueueMergeSetting" CallConv="__stdcall" Arg="int int" />
+    <Export Name="NtUserSetTimer" CallConv="__stdcall" Arg="ptr ptr int ptr int" />
+    <Export Name="NtUserSetTSFEventState" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserSetUserObjectCapability" CallConv="__stdcall" Arg="ptr int ptr int" />
+    <Export Name="NtUserSetVisible" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserSetWaitForQueueAttach" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserSetWatermarkStrings" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSetWindowContextHelpId" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserSetWindowPlacement" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserSetWindowPos" CallConv="__stdcall" Arg="ptr ptr int int int int int" />
+    <Export Name="NtUserSetWindowState" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserSetWindowStationUser" CallConv="__stdcall" Arg="ptr ptr ptr int" />
+    <Export Name="NtUserSetWindowWord" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="NtUserShellForegroundBoostProcess" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserShowCursor" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserShowOwnedPopups" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserShowStartGlass" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserShowWindow" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserShowWindowAsync" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserShutdownBlockReasonQuery" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="NtUserShutdownReasonDestroy" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserSwapMouseButton" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserSwitchDesktop" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="NtUserSwitchToThisWindow" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserTestForInteractiveUser" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserThreadMessageQueueAttached" CallConv="__stdcall" Arg="int" />
+    <Export Name="NtUserTrackMouseEvent" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserTrackPopupMenuEx" CallConv="__stdcall" Arg="ptr int int int ptr ptr" />
+    <Export Name="NtUserUnhookWindowsHook" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="NtUserUnhookWinEvent" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserUnregisterHotKey" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="NtUserUpdateClientRect" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserUpdatePerUserImmEnabling" CallConv="__stdcall" />
+    <Export Name="NtUserUpdateWindow" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserUpdateWindows" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserUserHandleGrantAccess" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NtUserUserPowerCalloutWorker" CallConv="__stdcall" />
+    <Export Name="NtUserValidateRect" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserValidateRgn" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NtUserWakeRITForShutdown" CallConv="__stdcall" />
+    <Export Name="NtUserWindowFromDC" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserWindowFromPhysicalPoint" CallConv="__stdcall" Arg="int64" />
+    <Export Name="NtUserWindowFromPoint" CallConv="__stdcall" Arg="int64" />
+    <Export Name="NtUserWOWModuleUnload" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NtUserZapActiveAndFocus" CallConv="__stdcall" />
+  </Dll>
+</LibCreate>

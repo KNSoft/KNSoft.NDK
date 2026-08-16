@@ -292,6 +292,9 @@
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.WinAPI.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Win32u.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.CRT.xml" />
   </ItemGroup>
   <ItemGroup>

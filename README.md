@@ -40,6 +40,8 @@ The following features **are NOT enabled by default**, reference corresponding h
   - KNSoft.NDK.Ntdll.CRT.lib (Generated from [KNSoft.NDK.Ntdll.CRT.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.CRT.xml))
 - Windows API import library addendum
   - KNSoft.NDK.WinAPI.lib (Generated from [KNSoft.NDK.WinAPI.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.WinAPI.xml))
+- Win32u native system calls
+  - KNSoft.NDK.Win32u.lib (Generated from [KNSoft.NDK.Win32u.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Win32u.xml))
 - Unit Test Framework
   - [UnitTest.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.h)
   - [UnitTest.inl](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Package/UnitTest.inl)

@@ -20,6 +20,7 @@
     <file src="Include\**" target="build\Include\" />
     <file src="SDK\SDK.cs" target="build\SDK\" />
     <file src="OutDir\**\KNSoft.NDK.WinAPI.lib" target="build\Lib\" />
+    <file src="OutDir\**\KNSoft.NDK.Win32u.lib" target="build\Lib\" />
     <file src="OutDir\**\KNSoft.NDK.Ntdll.CRT.lib" target="build\Lib\" />
     <file src="OutDir\**\KNSoft.NDK.Ntdll.Hash.lib" target="build\Lib\" />
   </files>
