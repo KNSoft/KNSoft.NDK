@@ -64,6 +64,30 @@
     <Export Name="WindowsTrimStringEnd" CallConv="__stdcall" Arg="ptr ptr ptr" />
     <Export Name="WindowsTrimStringStart" CallConv="__stdcall" Arg="ptr ptr ptr" />
   </Dll>
+  <Dll Name="CbsCore.dll">
+    <Export Name="CbsCoreEnsureNoStartupProcessing" CallConv="__stdcall" Arg="int" />
+    <Export Name="CbsCoreFinalizeShutdownProcessing" CallConv="__stdcall" />
+    <Export Name="CbsCorePrepareShutdownProcessing" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="CbsCoreServiceIdleProcessing" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="CbsCoreShutdownProcessing" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="CbsCreateSessionNotify" CallConv="__stdcall" Arg="ptr int ptr ptr" />
+    <Export Name="CbsCreateSessionNotifyFinalize" CallConv="__stdcall" />
+    <Export Name="CbsCreateSessionNotifyInitialize" CallConv="__stdcall" />
+    <Export Name="CbsCoreFinalize" CallConv="__stdcall" />
+    <Export Name="CbsCoreGetActiveOfflineSession" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="CbsCoreInitialize" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr ptr ptr ptr" />
+    <Export Name="CbsCoreIsExecutionEngineIdle" CallConv="__stdcall" />
+    <Export Name="CbsCoreLoadComponentStore" CallConv="__stdcall" />
+    <Export Name="CbsCoreNotifyAllowingUserLogin" CallConv="__stdcall" />
+    <Export Name="CbsCoreSetCustomLogging" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="CbsCoreSetState" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="CbsCoreStartupProcessing" CallConv="__stdcall" Arg="int" />
+    <Export Name="CbsCoreStartupProcessingEx" CallConv="__stdcall" Arg="int" />
+    <Export Name="CbsCoreStopIdleProcessing" CallConv="__stdcall" />
+    <Export Name="CreateCbsRegBackupHelper" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="SetRebootInProgressFlag" CallConv="__stdcall" />
+    <Export Name="SetTestMode" CallConv="__stdcall" Arg="int" />
+  </Dll>
   <Dll Name="SECHOST.dll">
     <Export Name="ChangeServiceConfig2A" CallConv="__stdcall" Arg="ptr int ptr" />
     <Export Name="ChangeServiceConfig2W" CallConv="__stdcall" Arg="ptr int ptr" />

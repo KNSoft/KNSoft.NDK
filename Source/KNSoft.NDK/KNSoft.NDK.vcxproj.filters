@@ -13,6 +13,9 @@
     <Filter Include="Win32\API">
       <UniqueIdentifier>{b8cf96b3-56aa-4366-920a-77b5f9d68ee9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Win32\API\CBS">
+      <UniqueIdentifier>{a2fdcbec-d55c-4ccc-9b2f-d358d1e4eaf0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="NT\Rtl">
       <UniqueIdentifier>{a68ed197-518e-4f67-a03c-8742d02e2142}</UniqueIdentifier>
     </Filter>
@@ -484,8 +487,11 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ComBase.h">
       <Filter>Win32\API</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CbsApi.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsApi.h">
+      <Filter>Win32\API\CBS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsCore.h">
+      <Filter>Win32\API\CBS</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FveApi.h">
       <Filter>Win32\API</Filter>
@@ -626,6 +632,9 @@
     </None>
     <None Include="..\Include\KNSoft\NDK\Win32\API\ComBase.inl">
       <Filter>Win32\API</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\API\CBS\Analysis.md">
+      <Filter>Win32\API\CBS</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
