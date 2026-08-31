@@ -229,6 +229,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.inl" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\AdvAPI32.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CbsApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ComBase.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FveApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h" />
