@@ -205,6 +205,170 @@
     <Export Name="PARTITION_SPACES_GUID" Type="Const" />
     <Export Name="PARTITION_SYSTEM_GUID" Type="Const" />
   </Dll>
+  <Dll Name="fveapi.dll">
+    <Export Name="InternalFveIsVolumeEncrypted" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NgscbCheckDmaSecurity" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="NgscbCheckDmaSecurityEx" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="NgscbCheckHSTIPrerequisitesVerified" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="NgscbCheckIsAOACDevice" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NgscbCheckIsHSTIVerified" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="NgscbCheckPreventDeviceEncryption" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NgscbCheckPreventDeviceEncryptionForAad" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="NgscbGetWinReConfiguration" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="NgscbIsHostOsOnRoamableDrive" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveAddAuthMethodInformation" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveAddAuthMethodSid" CallConv="__stdcall" Arg="ptr ptr ptr int ptr" />
+    <Export Name="FveAddPredictiveTpmProtector" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveApplyGroupPolicy" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveApplyNkpCertChanges" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveAttemptAutoUnlock" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveAuthElementFromPassPhraseW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveAuthElementFromPinW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveAuthElementFromRecoveryPasswordW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveAuthElementGetKeyFileNameW" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="FveAuthElementReadExternalKeyW" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="FveAuthElementToRecoveryPasswordW" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="FveAuthElementWriteExternalKeyExW" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveAuthElementWriteExternalKeyW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveBackupRecoveryInformationToAAD" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="FveBackupRecoveryInformationToAD" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveBackupRecoveryInformationToADEx" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="FveBindDataVolume" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveCanPinExceptionPolicyBeApplied" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveCanStandardUsersChangePassphraseByProxy" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveCanStandardUsersChangePin" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveCheckADRecoveryInfoBackupPolicy" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveCheckADRecoveryInfoBackupPolicyEx" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveCheckPassphrasePolicy" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveCheckTpmCapability" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveClearRecoveryPasswordBackupInformation" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="FveClearUserFlags" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveCloseHandle" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveCloseVolume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveCommitChanges" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveCommitChangesEx" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveControl" CallConv="__stdcall" Arg="int ptr int ptr ptr" />
+    <Export Name="FveConversionDecrypt" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveConversionDecryptEx" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveConversionEncrypt" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveConversionEncryptEx" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveConversionEncryptPendingReboot" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveConversionEncryptPendingRebootEx" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveConversionPause" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveConversionResume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveConversionStop" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveConversionStopEx" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveDecrementClearKeyCounter" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveDeleteAuthMethod" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveDeleteDeviceEncryptionOptOutForVolumeW" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveDisableDeviceLockoutState" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveDiscardChanges" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveDraCertPresentInRegistry" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveEnableRawAccess" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveEnableRawAccessEx" CallConv="__stdcall" Arg="ptr int int" />
+    <Export Name="FveEnableRawAccessW" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveEraseDrive" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveEscrowEncryptedRecoveryKeyForRetailUnlock" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveExternalDataCreateEntry" CallConv="__stdcall" Arg="ptr int ptr int ptr" />
+    <Export Name="FveExternalDataDeleteEntries" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveExternalDataGetEntryInfo" CallConv="__stdcall" Arg="ptr ptr int int ptr ptr ptr" />
+    <Export Name="FveExternalDataGetEntryRawData" CallConv="__stdcall" Arg="ptr ptr int ptr ptr" />
+    <Export Name="FveFindFirstVolume" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveFindNextVolume" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveFlagsToProtectorType" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="FveGenerateNbp" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="FveGenerateNkpSessionKeys" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveGetAllowKeyExport" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveGetAuthMethodGuids" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="FveGetAuthMethodInformation" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="FveGetAuthMethodSid" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="FveGetAuthMethodSidInformation" CallConv="__stdcall" Arg="ptr ptr ptr ptr ptr" />
+    <Export Name="FveGetClearKeyCounter" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveGetDataSet" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="FveGetDataSetEx" CallConv="__stdcall" Arg="ptr int ptr int ptr" />
+    <Export Name="FveGetDescriptionW" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="FveGetDeviceLockoutData" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveGetExternalKeyBlob" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveGetFipsAllowDisabled" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveGetFveMethod" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveGetFveMethodEDrv" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveGetFveMethodEx" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="FveGetIdentificationFieldW" CallConv="__stdcall" Arg="ptr ptr int ptr" />
+    <Export Name="FveGetIdentity" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveGetKeyPackage" CallConv="__stdcall" Arg="ptr ptr ptr int ptr" />
+    <Export Name="FveGetRecoveryPasswordBackupAccountInformation" CallConv="__stdcall" Arg="ptr ptr int int ptr ptr" />
+    <Export Name="FveGetRecoveryPasswordBackupInformation" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveGetSecureBootBindingState" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveGetStatus" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveGetStatusW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveGetUserFlags" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveGetVolumeNameW" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveInitVolume" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveInitVolumeEx" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="FveInitializeDeviceEncryption" CallConv="__stdcall" />
+    <Export Name="FveInitializeDeviceEncryption2" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveIsAnyDataVolumeBoundToOSVolume" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveIsBoundDataVolume" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveIsBoundDataVolumeToOSVolume" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveIsDeviceLockable" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveIsDeviceLockedOut" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveIsHardwareReadyForConversion" CallConv="__stdcall" />
+    <Export Name="FveIsHybridVolume" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveIsHybridVolumeW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveIsPassphraseCompatibleW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveIsRecoveryPasswordGroupValidW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveIsRecoveryPasswordValidW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveIsSchemaExtInstalled" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveIsVolumeEncryptable" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveKeyManagement" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="FveLockDevice" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveLockVolume" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveLogRecoveryReason" CallConv="__stdcall" Arg="ptr int ptr int" />
+    <Export Name="FveNeedsDiscoveryVolumeUpdate" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveNotifyVolumeAfterFormat" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveOpenVolumeByHandle" CallConv="__stdcall" Arg="ptr int int int int ptr" />
+    <Export Name="FveOpenVolumeExW" CallConv="__stdcall" Arg="ptr int int int int ptr" />
+    <Export Name="FveOpenVolumeW" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="FvePpfPredictionsUpdated" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveProtectorTypeToFlags" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="FveQuery" CallConv="__stdcall" Arg="int ptr int ptr ptr" />
+    <Export Name="FveQueryDeviceEncryptionSupport" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveRecalculateOffsetsAndMoveMetadata" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveRegenerateNbpSessionKey" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveResetTpmDictionaryAttackParameters" CallConv="__stdcall" />
+    <Export Name="FveRevertVolume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveSaveRecoveryPasswordBackupFlag" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveSelectBestRecoveryPasswordByBackupInformation" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveServiceDiscoveryVolume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveSetAllowKeyExport" CallConv="__stdcall" Arg="int" />
+    <Export Name="FveSetDescriptionW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveSetFipsAllowDisabled" CallConv="__stdcall" Arg="int" />
+    <Export Name="FveSetFveMethod" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveSetFveMethodEx" CallConv="__stdcall" Arg="ptr int int int" />
+    <Export Name="FveSetIdentificationFieldW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveSetRecoveryPasswordBackupAccountInformation" CallConv="__stdcall" Arg="ptr ptr int ptr ptr" />
+    <Export Name="FveSetRecoveryPasswordBackupInformation" CallConv="__stdcall" Arg="ptr ptr int int int ptr" />
+    <Export Name="FveSetUserFlags" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveSetupTpmCallback" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveSysClearUserFlags" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveSysCloseVolume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveSysGetUserFlags" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveSysOpenVolumeW" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveSysSetUserFlags" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="FveUnbindAllDataVolumeFromOSVolume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveUnbindDataVolume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveUnlockVolume" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveUnlockVolumeAuthMethodSid" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="FveUnlockVolumeWithAccessMode" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveUpdateBandIdBcd" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveUpdateDeviceLockoutState" CallConv="__stdcall" Arg="ptr ptr int" />
+    <Export Name="FveUpdateDeviceLockoutStateEx" CallConv="__stdcall" Arg="ptr ptr int int" />
+    <Export Name="FveUpdatePinW" CallConv="__stdcall" Arg="ptr ptr ptr" />
+    <Export Name="FveUpgradeVolume" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveValidateDeviceLockoutState" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="FveValidateExistingPassphraseW" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="FveValidateExistingPinW" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+  </Dll>
   <Dll Name="msidle.dll">
     <Export Name="BeginIdleDetection" Ordinal="3" CallConv="__stdcall" Arg="ptr int int" />
     <Export Name="EndIdleDetection" Ordinal="4" CallConv="__stdcall" Arg="int" />
