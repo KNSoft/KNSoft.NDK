@@ -230,9 +230,9 @@ provided and initializes online OneSettings state otherwise. A special lazy DISM
 remove the one-active-offline-session restriction.
 
 `Finalize` forwards to `FinalizeEx(0)`. `FinalizeEx` requires a `CBS_REQUIRED_ACTION` output and rejects a read-only
-observer session. Option `0x800` requests cancellation of pending work only when every queued operation is
-cancellable. Finalization plans tasks, persists required store operations, invokes shutdown-related callbacks, and
-returns the required reboot action.
+observer session. `CBS_SESSION_FINALIZE_OPTION_CANCEL_PENDING` requests cancellation of pending work only when every
+queued operation is cancellable. Finalization plans tasks, persists required store operations, invokes
+shutdown-related callbacks, and returns the required reboot action.
 
 ### Package construction
 
@@ -369,7 +369,8 @@ stable public meaning.
 - `RemoveSource` removes and persists the source list.
 - `EnumerateSources` returns deep-copied strings.
 - `EnumerateUpdates` rejects read-only package wrappers, resolves parent-package relationships, and reports missing
-  or duplicate update declarations as CBS errors.
+  or duplicate update declarations as CBS errors. Applicability and selectability are bitmask filters; zero selects
+  all values.
 - `GetUpdate` resolves one named update from the package.
 
 ### Applicability and change initiation
@@ -432,7 +433,7 @@ servicing error separately.
   conversion rejects them; they remain unknown. No value 8 is exposed.
 - localized display text is obtained under the captured caller context and copied with the task allocator.
 - `GetPackage` returns the owning package.
-- `GetParentUpdate` enumerates parent update/set relationships.
+- `GetParentUpdate` enumerates parent update/set relationships. The parent-set string is optional.
 - `GetCapability` returns applicability and selectability.
 - `GetDeclaredSet` returns `E_NOTIMPL` in the examined build.
 - `GetInstallState` returns current, intended, and requested states. A type-5 deployment without an intended state

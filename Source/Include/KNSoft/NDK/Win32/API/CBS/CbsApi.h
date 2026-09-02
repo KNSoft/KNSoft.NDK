@@ -11,10 +11,14 @@
 
 EXTERN_C_START
 
+#define CBS_E_ARRAY_MISSING_INDEX _HRESULT_TYPEDEF_(0x800F0809L)
+#define CBS_E_UNKNOWN_UPDATE _HRESULT_TYPEDEF_(0x800F080CL)
+
 typedef enum _CBS_APPLICABILITY
 {
     CbsApplicabilityInvalid = -1,
-    CbsApplicabilityNotApplicable = 0,
+    CbsApplicabilityAll = 0,
+    CbsApplicabilityNotApplicable = 1,
     CbsApplicabilityNeedsParent = 2,
     CbsApplicabilityApplicable = 4
 } CBS_APPLICABILITY, *PCBS_APPLICABILITY;
@@ -189,6 +193,8 @@ typedef enum _CBS_PACKAGE_ENCRYPTION
 #define CBS_PACKAGE_CHANGE_OPTION_INSTALL_NON_BASELINE_FOD_OR_LANGUAGE_PACK 0x100000
 #define CBS_PACKAGE_CHANGE_OPTION_PUBLIC_VALID_MASK 0x1DC17F
 #define CBS_CAPABILITY_CHANGE_OPTION_PUBLIC_VALID_MASK 0x1007F
+
+#define CBS_SESSION_FINALIZE_OPTION_CANCEL_PENDING 0x800
 
 #define CBS_SERVICING_PROCESSOR_OPTION_UNKNOWN1 0x1
 #define CBS_SERVICING_PROCESSOR_OPTION_UNKNOWN2 0x2
@@ -703,7 +709,7 @@ typedef struct ICbsUpdateVtbl
         _In_ ICbsUpdate* This,
         _In_ UINT Index,
         _Outptr_ PWSTR* ParentName,
-        _Outptr_ PWSTR* ParentSet);
+        _Outptr_result_maybenull_ PWSTR* ParentSet);
     HRESULT (STDMETHODCALLTYPE* GetCapability)(
         _In_ ICbsUpdate* This,
         _Out_ CBS_APPLICABILITY* Applicability,

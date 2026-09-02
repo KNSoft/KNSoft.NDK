@@ -636,6 +636,9 @@
     <None Include="..\Include\KNSoft\NDK\Win32\API\CBS\Analysis.md">
       <Filter>Win32\API\CBS</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\API\FVE\Analysis.md">
+      <Filter>Win32\API</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">
