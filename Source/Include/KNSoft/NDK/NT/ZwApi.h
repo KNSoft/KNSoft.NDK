@@ -2264,9 +2264,9 @@ NTAPI
 ZwGetNlsSectionPtr(
     _In_ ULONG SectionType,
     _In_ ULONG SectionData,
-    _In_ PVOID ContextData,
-    _Out_ PVOID* SectionPointer,
-    _Out_ PULONG SectionSize
+    _Out_opt_ PVOID* ContextData, // Must be NULL for user-mode callers.
+    _When_(ContextData == NULL, _Out_) _When_(ContextData != NULL, _Out_opt_) PVOID* SectionPointer,
+    _Out_opt_ PSIZE_T SectionSize
     );
 
 _Must_inspect_result_
@@ -3980,8 +3980,6 @@ ZwRaiseException(
     _In_ BOOLEAN FirstChance
     );
 
-_Analysis_noreturn_
-DECLSPEC_NORETURN
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
