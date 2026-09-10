@@ -25,6 +25,7 @@
     <ClCompile Include="Assembly.c" />
     <ClCompile Include="RandGen.c" />
     <ClCompile Include="CppCompile.cpp" />
+    <ClCompile Include="HString.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NT">

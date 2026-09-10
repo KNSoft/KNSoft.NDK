@@ -7,6 +7,8 @@ TEST_DECL_FUNC(MSVC);
 TEST_DECL_FUNC(Assembly);
 TEST_DECL_FUNC(Alpc);
 TEST_DECL_FUNC(Bcd);
+TEST_DECL_FUNC(HString);
+TEST_DECL_FUNC(HStringCpp);
 TEST_DECL_FUNC(KUSDStruct);
 TEST_DECL_FUNC(PebLdrStruct);
 TEST_DECL_FUNC(PebStruct);
@@ -22,6 +24,8 @@ CONST UNITTEST_ENTRY UnitTestList[] = {
     TEST_DECL_ENTRY(Assembly),
     TEST_DECL_ENTRY(Alpc),
     TEST_DECL_ENTRY(Bcd),
+    TEST_DECL_ENTRY(HString),
+    TEST_DECL_ENTRY(HStringCpp),
     TEST_DECL_ENTRY(KUSDStruct),
     TEST_DECL_ENTRY(PebLdrStruct),
     TEST_DECL_ENTRY(PebStruct),

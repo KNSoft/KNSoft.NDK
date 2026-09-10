@@ -218,6 +218,7 @@
     <ClCompile Include="Assembly.c" />
     <ClCompile Include="CppCompile.cpp" />
     <ClCompile Include="Extension\MSVC.c" />
+    <ClCompile Include="HString.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="NT\Alpc.c" />
     <ClCompile Include="NT\Bcd.c" />

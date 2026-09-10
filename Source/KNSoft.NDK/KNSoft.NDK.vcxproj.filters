@@ -94,6 +94,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\CommCtrl.h">
       <Filter>Win32\Def</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\HString.h">
+      <Filter>Win32\Def</Filter>
+    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinUser.h">
       <Filter>Win32\Def</Filter>
     </ClInclude>
