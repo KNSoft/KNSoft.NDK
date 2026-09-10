@@ -293,7 +293,7 @@ RtlAllocateHeap(
     _In_ SIZE_T Size
 );
 
-#if (NTDDI_VERSION >= NTDDI_WIN8)
+#if (NT_VERSION_MIN >= NT_VERSION_WIN8)
 _Success_(return != 0)
 NTSYSAPI
 LOGICAL

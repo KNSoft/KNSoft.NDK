@@ -1560,7 +1560,8 @@ _Inline_GetEnabledXStateFeatures(VOID)
 #endif
 }
 
-#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+/* TEB.ExtendedFeatureDisableMask is available since Server 2022 / Windows 11. */
+#if (NT_VERSION_MIN >= NT_VERSION_WS2K22)
 __inline
 DWORD64
 WINAPI

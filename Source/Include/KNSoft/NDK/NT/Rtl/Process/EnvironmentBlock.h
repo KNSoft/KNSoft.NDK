@@ -573,7 +573,7 @@ typedef struct _PEB
     PRTL_BITMAP TlsBitmap;                  // Pointer to the TLS bitmap.
     ULONG TlsBitmapBits[2];                 // Bits for the TLS bitmap.
     PVOID ReadOnlySharedMemoryBase;         // Reserved for CSRSS.
-    PSILO_USER_SHARED_DATA SharedData;      // Pointer to the USER_SHARED_DATA for the current SILO.
+    PSILO_USER_SHARED_DATA SharedData;      // Pointer to the USER_SHARED_DATA for the current SILO. // since RS2
     PVOID* ReadOnlyStaticServerData;        // Reserved for CSRSS.
     PCPTABLEINFO AnsiCodePageData;          // Pointer to the ANSI code page data.
     PCPTABLEINFO OemCodePageData;           // Pointer to the OEM code page data.
@@ -1633,7 +1633,7 @@ typedef struct _TEB
     ULONGLONG LastSleepCounter; // since Win11
     ULONG SpinCallCount;
 
-    // Extended feature disable mask (AVX).
+    // Extended feature disable mask (AVX). // since Server 2022 / WIN11
     union
     {
         ULONGLONG ExtendedFeatureDisableMask;

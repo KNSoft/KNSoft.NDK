@@ -116,7 +116,7 @@ RtlValidateUserCallTarget(
 #define IMAGE_FILE_NATIVE_MACHINE_ARM64 0x8
 #define IMAGE_FILE_NATIVE_MACHINE_ARM64EC 0x10
 
-#if !defined(NTDDI_WIN11_BR) || (NTDDI_VERSION < NTDDI_WIN11_BR)
+#if !defined(NTDDI_WIN11_BR)
 typedef struct _IMAGE_FILE_MACHINES
 {
     union
@@ -132,7 +132,10 @@ typedef struct _IMAGE_FILE_MACHINES
         } DUMMYSTRUCTNAME;
     } DUMMYUNIONNAME;
 } IMAGE_FILE_MACHINES;
+#endif
 
+/* winnt.h gates the function declaration separately from IMAGE_FILE_MACHINES. */
+#if !defined(NTDDI_WIN11_BR) || (NTDDI_VERSION < NTDDI_WIN11_BR)
 // rev
 NTSYSAPI
 NTSTATUS

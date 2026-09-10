@@ -21,6 +21,8 @@ _Inline_RtlQueryPerformanceFrequency(
     return TRUE;
 }
 
+/* These implementations read PEB.SharedData, introduced in Windows 10 RS2. */
+#if (NT_VERSION_MIN >= NT_VERSION_WIN10_RS2)
 __inline
 ULONG
 NTAPI
@@ -40,7 +42,6 @@ _Inline_RtlGetActiveConsoleId(VOID)
         NtCurrentPeb()->SharedData->ActiveConsoleId;
 }
 
-#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 __inline
 LONGLONG
 NTAPI

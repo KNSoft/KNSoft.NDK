@@ -979,7 +979,7 @@ typedef struct _FILE_ID_ALL_EXTD_BOTH_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_ALL_EXTD_BOTH_DIR_INFORMATION, FileNameLength)      \
 }
 
-#if !defined(NTDDI_WIN11_GE) || (NTDDI_VERSION < NTDDI_WIN11_GE)
+#if !defined(NTDDI_WIN11_GE)
 /**
  * The FILE_STAT_INFORMATION structure is used to query file statistics.
  * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_stat_information
@@ -1048,7 +1048,7 @@ typedef struct _FILE_MEMORY_PARTITION_INFORMATION
 #define LX_FILE_METADATA_HAS_DEVICE_ID 0x8
 #define LX_FILE_CASE_SENSITIVE_DIR 0x10
 
-#if !defined(NTDDI_WIN11_GE) || (NTDDI_VERSION < NTDDI_WIN11_GE)
+#if !defined(NTDDI_WIN11_GE)
 /**
  * The FILE_STAT_LX_INFORMATION structure is used to query file statistics for Linux compatibility.
  */
@@ -1081,7 +1081,7 @@ typedef struct _FILE_STORAGE_RESERVE_ID_INFORMATION
 
 #define FILE_CS_FLAG_CASE_SENSITIVE_DIR     0x00000001
 
-#if !defined(NTDDI_WIN11_GE) || (NTDDI_VERSION < NTDDI_WIN11_GE)
+#if !defined(NTDDI_WIN11_GE)
 typedef struct _FILE_CASE_SENSITIVE_INFORMATION
 {
     ULONG Flags;
@@ -2082,16 +2082,8 @@ typedef enum _DIRECTORY_NOTIFY_INFORMATION_CLASS
     DirectoryNotifyMaximumInformation
 } DIRECTORY_NOTIFY_INFORMATION_CLASS, *PDIRECTORY_NOTIFY_INFORMATION_CLASS;
 
-#if !defined(NTDDI_WIN10_RS5) || (NTDDI_VERSION < NTDDI_WIN10_RS5)
-
-_Struct_size_bytes_(NextEntryOffset)
-typedef struct _FILE_NOTIFY_INFORMATION
-{
-    ULONG NextEntryOffset;
-    ULONG Action;
-    ULONG FileNameLength;
-    WCHAR FileName[1];
-} FILE_NOTIFY_INFORMATION, *PFILE_NOTIFY_INFORMATION;
+/* Match the declaration visibility guard in winnt.h. */
+#if (_WIN32_WINNT < _WIN32_WINNT_WIN10_RS3)
 
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_NOTIFY_EXTENDED_INFORMATION
@@ -2124,7 +2116,8 @@ typedef struct _FILE_NOTIFY_EXTENDED_INFORMATION
 #define FILE_NAME_FLAG_BOTH          0x03 // NTFS+DOS combined name
 #define FILE_NAME_FLAGS_UNSPECIFIED  0x80 // not specified by file system (do not combine with other flags)
 
-#if !defined(NTDDI_WIN10_NI) || (NTDDI_VERSION < NTDDI_WIN10_NI)
+/* Match the declaration visibility guard in winnt.h. */
+#if (_WIN32_WINNT < _WIN32_WINNT_WIN10_NI)
 
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_NOTIFY_FULL_INFORMATION

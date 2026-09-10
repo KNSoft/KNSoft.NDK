@@ -558,7 +558,7 @@ typedef struct _KUSER_SHARED_DATA
     // N.B. This field must be accessed via the
     //      RtlGetConsoleSessionForegroundProcessId API for an accurate result.
     //
-    /* +0x338 */ LONGLONG ConsoleSessionForegroundProcessId;
+    /* +0x338 */ LONGLONG ConsoleSessionForegroundProcessId; // since VISTA
 
     //
     // N.B. The following data is used to implement the precise time
@@ -839,7 +839,8 @@ _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, TimeZoneBiasEffectiveStart) == 0x
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, TimeZoneBiasEffectiveEnd) == 0x3d0);
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, XState) == 0x3d8);
 
-#if defined(NTDDI_WIN11_BR) && (NTDDI_VERSION >= NTDDI_WIN11_BR)
+/* XSTATE_CONFIGURATION layout follows the SDK, independently of the target NT version. */
+#if defined(NTDDI_WIN11_BR)
 
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, FeatureConfigurationChangeStamp) == 0x730);
 _STATIC_ASSERT(FIELD_OFFSET(KUSER_SHARED_DATA, UserPointerAuthMask) == 0x740);

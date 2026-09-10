@@ -4,7 +4,9 @@
  * NT_VERSION: Make NT version number (ULONG)
  * NT_VERSION_*: NT version numbers
  * NT_VERSION_MIN: Minimum support NT version, can be set by user and will not lower than NT_VERSION_MIN_CONSTRAINED
- * 
+ *   Selects version-dependent ABIs and inline implementations.
+ * NTDDI_VERSION: SDK header API visibility target, not the installed SDK version or an NT build number.
+ *
  * Defined in "NT.h":
  *   GET_NT_VERSION: Get NT version number from `SharedUserData`
  *   IS_NT_VERSION_GE: Return whether NT_VERSION_MIN or GET_NT_VERSION is greater than or equal to the given NT version number
@@ -65,6 +67,8 @@
 #define NT_VERSION_WIN10_21H2 NT_VERSION(10, 0, 19044)
 #define NT_VERSION_WIN10_22H2 NT_VERSION(10, 0, 19045)
 
+#define NT_VERSION_WS2K22 NT_VERSION(10, 0, 20348)
+
 #define NT_VERSION_WIN11 NT_VERSION(10, 0, 22000)
 #define NT_VERSION_WIN11_21H2 NT_VERSION_WIN11
 #define NT_VERSION_WIN11_22H2 NT_VERSION(10, 0, 22621)
@@ -72,7 +76,6 @@
 #define NT_VERSION_WIN11_24H2 NT_VERSION(10, 0, 26100)
 #define NT_VERSION_WIN11_25H2 NT_VERSION(10, 0, 26200)
 #define NT_VERSION_WIN11_26H1 NT_VERSION(10, 0, 28000)
-#define NT_VERSION_WIN11_27H2 NT_VERSION(10, 0, 29500)
 
 /*  ARM support since NT10 */
 #if defined(_M_ARM64) || defined(_M_ARM64EC) || defined(_M_ARM)
