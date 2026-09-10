@@ -79,6 +79,9 @@
     <Filter Include="Win32\API\ShObjIdl\VirtualDesktop">
       <UniqueIdentifier>{e91c8aa7-9871-40c8-bf32-37113cbf9397}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Win32\API\FVE">
+      <UniqueIdentifier>{4357709b-6c8f-453f-9b2a-29f07e0f75d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
@@ -493,9 +496,6 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsCore.h">
       <Filter>Win32\API\CBS</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FveApi.h">
-      <Filter>Win32\API</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ole32.h">
       <Filter>Win32\API</Filter>
     </ClInclude>
@@ -538,6 +538,9 @@
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Subsystem.h">
       <Filter>NT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FVE\FveApi.h">
+      <Filter>Win32\API\FVE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -635,9 +638,6 @@
     </None>
     <None Include="..\Include\KNSoft\NDK\Win32\API\CBS\Analysis.md">
       <Filter>Win32\API\CBS</Filter>
-    </None>
-    <None Include="..\Include\KNSoft\NDK\Win32\API\FVE\Analysis.md">
-      <Filter>Win32\API</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

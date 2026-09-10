@@ -232,7 +232,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsCore.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ComBase.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FveApi.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FVE\FveApi.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\KernelBase.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msftedit.h" />
@@ -283,7 +283,6 @@
     <None Include="..\Include\KNSoft\NDK\Package\RandGen.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\CBS\Analysis.md" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\FVE\Analysis.md" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\ComBase.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\API\msidle.inl" />
