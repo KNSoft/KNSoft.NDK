@@ -228,31 +228,31 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\ZwApi.Manual.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\StrSafe.inl" />
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\AdvAPI32.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsApi.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsCore.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ComBase.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FVE\FveApi.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\KernelBase.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msftedit.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msidle.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Hash.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ole32.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\SecHost.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\ShObjIdl_core.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_h.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_i.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\User32.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\UserMgrCli.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\WinSta.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\CommCtrl.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\HString.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\UxTheme.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinBase.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinUser.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\AdvAPI32.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\CBS\CbsApi.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\CBS\CbsCore.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ComBase\ComBase.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\FVE\FveApi.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Kernel32\Kernel32.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\KernelBase.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\msftedit.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\msidle\msidle.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Ntdll\Ntdll.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Ntdll\Ntdll.Hash.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ComBase\ole32.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\SecHost.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\ShObjIdl_core.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_h.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_i.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\User32\User32.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\UserMgrCli.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinSta.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\CommCtrl.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\UxTheme.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinBase.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinUser.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
   </ItemGroup>
   <ItemGroup>
@@ -283,11 +283,30 @@
     <None Include="..\Include\KNSoft\NDK\Package\ArgParse.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\RandGen.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\CBS\Analysis.md" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\ComBase.inl" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.inl" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\msidle.inl" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\Shell32.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\CBS\Analysis.md" />
+    <None Include="..\Include\KNSoft\NDK\Win32\FVE\Analysis.md" />
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\Analysis.md" />
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Internal.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ProcessEnvironment.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Loader.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Time.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Pointer.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\CriticalSection.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\TlsFls.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\VirtualMemory.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Heap.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Console.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\IO.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\AVX.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ErrorHandling.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Misc.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Process.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\SList.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ThreadPool.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Kernel32.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\msidle\msidle.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\Shell32.inl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -303,7 +322,7 @@
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.CRT.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl">
+    <Midl Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.idl">
       <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)</OutputDirectory>
       <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath)_i.h</InterfaceIdentifierFileName>
       <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FullPath)_i.h</InterfaceIdentifierFileName>

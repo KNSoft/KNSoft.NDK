@@ -34,7 +34,7 @@ NuGet package [KNSoft.NDK](https://www.nuget.org/packages/KNSoft.NDK) includes a
 The following features **are NOT enabled by default**, reference corresponding headers and libraries on demand:
 
 - Ntdll Hash API (`(A_SHA/MD4/MD5)(Init/Update/Final)`)
-  - [Ntdll.Hash.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Win32/API/Ntdll.Hash.h)
+  - [Ntdll.Hash.h](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/Include/KNSoft/NDK/Win32/Ntdll/Ntdll.Hash.h)
   - KNSoft.NDK.Ntdll.Hash.lib (Generated from [KNSoft.NDK.Ntdll.Hash.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.Hash.xml))
 - Ntdll CRT
   - KNSoft.NDK.Ntdll.CRT.lib (Generated from [KNSoft.NDK.Ntdll.CRT.xml](https://github.com/KNSoft/KNSoft.NDK/blob/main/Source/KNSoft.NDK/WinAPI/KNSoft.NDK.Ntdll.CRT.xml))

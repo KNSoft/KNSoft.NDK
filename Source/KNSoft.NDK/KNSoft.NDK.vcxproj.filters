@@ -7,13 +7,7 @@
     <Filter Include="Win32">
       <UniqueIdentifier>{347e9f2f-faac-4fa8-b572-16ecdf28ed59}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Win32\Def">
-      <UniqueIdentifier>{9f7bef88-765d-47ea-93a4-dbd29859e6e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Win32\API">
-      <UniqueIdentifier>{b8cf96b3-56aa-4366-920a-77b5f9d68ee9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Win32\API\CBS">
+    <Filter Include="Win32\CBS">
       <UniqueIdentifier>{a2fdcbec-d55c-4ccc-9b2f-d358d1e4eaf0}</UniqueIdentifier>
     </Filter>
     <Filter Include="NT\Rtl">
@@ -73,14 +67,35 @@
     <Filter Include="Assembly">
       <UniqueIdentifier>{0bbb76ba-4844-48bd-ad6f-68228ff3e7af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Win32\API\ShObjIdl">
+    <Filter Include="Win32\ShObjIdl">
       <UniqueIdentifier>{126c92fb-2301-4663-9e4b-6795c6fbaba9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Win32\API\ShObjIdl\VirtualDesktop">
+    <Filter Include="Win32\ShObjIdl\VirtualDesktop">
       <UniqueIdentifier>{e91c8aa7-9871-40c8-bf32-37113cbf9397}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Win32\API\FVE">
+    <Filter Include="Win32\FVE">
       <UniqueIdentifier>{4357709b-6c8f-453f-9b2a-29f07e0f75d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\ComBase">
+      <UniqueIdentifier>{a36f7a53-0f6c-4dc4-b0fa-4960f2e6551b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\Kernel32">
+      <UniqueIdentifier>{4e7b70d4-c9a2-4e0d-ac0b-bd1c6199c4e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\Ntdll">
+      <UniqueIdentifier>{1112d0cc-9d81-481e-86d5-28d1ed42fec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\User32">
+      <UniqueIdentifier>{6343bb08-3b0a-4066-8d4c-85c6822b9baa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\WinRT">
+      <UniqueIdentifier>{ac45c85c-8c40-4455-b87b-ae8da0a76e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\msidle">
+      <UniqueIdentifier>{78359bf0-1c59-43a3-9801-7e7d58ab78e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinAPI">
+      <UniqueIdentifier>{f478d7dc-cf2e-4249-b863-a709ff03b594}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -91,23 +106,23 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\NT.h">
       <Filter>NT</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\CommCtrl.h">
-      <Filter>Win32\Def</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\CommCtrl.h">
+      <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\HString.h">
-      <Filter>Win32\Def</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.h">
+      <Filter>Win32\WinRT</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinUser.h">
-      <Filter>Win32\Def</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinUser.h">
+      <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Kernel32\Kernel32.h">
+      <Filter>Win32\Kernel32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.Hash.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Ntdll\Ntdll.Hash.h">
+      <Filter>Win32\Ntdll</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\User32.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\User32\User32.h">
+      <Filter>Win32\User32</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Memory.h">
       <Filter>NT\Rtl</Filter>
@@ -439,14 +454,14 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Po\Po.h">
       <Filter>NT\Po</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\SecHost.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\SecHost.h">
+      <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\UserMgrCli.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\UserMgrCli.h">
+      <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\WinSta.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinSta.h">
+      <Filter>Win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32KApi.h">
       <Filter>NT\Win32K</Filter>
@@ -457,14 +472,14 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Package\UnitTest.h">
       <Filter>Package</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\UxTheme.h">
-      <Filter>Win32\Def</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\UxTheme.h">
+      <Filter>Win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\EventTrace.h">
       <Filter>NT\Ex</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\Ntdll.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Ntdll\Ntdll.h">
+      <Filter>Win32\Ntdll</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ke\CpuPartition.h">
       <Filter>NT\Ke</Filter>
@@ -484,30 +499,30 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Rtl\Guid.h">
       <Filter>NT\Rtl</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\KernelBase.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\KernelBase.h">
+      <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\Def\WinBase.h">
-      <Filter>Win32\Def</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinBase.h">
+      <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ComBase.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ComBase\ComBase.h">
+      <Filter>Win32\ComBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsApi.h">
-      <Filter>Win32\API\CBS</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\CBS\CbsApi.h">
+      <Filter>Win32\CBS</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\CBS\CbsCore.h">
-      <Filter>Win32\API\CBS</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\CBS\CbsCore.h">
+      <Filter>Win32\CBS</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ole32.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ComBase\ole32.h">
+      <Filter>Win32\ComBase</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.Ext.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Extension\Misc.h">
       <Filter>NT\Extension</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\AdvAPI32.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\AdvAPI32.h">
+      <Filter>Win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\ZwApi.Manual.h">
       <Filter>NT</Filter>
@@ -515,26 +530,26 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Version.h">
       <Filter>NT</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msidle.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\msidle\msidle.h">
+      <Filter>Win32\msidle</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\ShObjIdl_core.h">
-      <Filter>Win32\API\ShObjIdl</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\ShObjIdl_core.h">
+      <Filter>Win32\ShObjIdl</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.h">
-      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.h">
+      <Filter>Win32\ShObjIdl\VirtualDesktop</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_h.h">
-      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_h.h">
+      <Filter>Win32\ShObjIdl\VirtualDesktop</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_i.h">
-      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.idl_i.h">
+      <Filter>Win32\ShObjIdl\VirtualDesktop</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\NtGdi.h">
       <Filter>NT\Win32K</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\msftedit.h">
-      <Filter>Win32\API</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\msftedit.h">
+      <Filter>Win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Console.h">
       <Filter>NT</Filter>
@@ -542,8 +557,8 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Subsystem.h">
       <Filter>NT</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\API\FVE\FveApi.h">
-      <Filter>Win32\API\FVE</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\FVE\FveApi.h">
+      <Filter>Win32\FVE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -554,8 +569,59 @@
       <Filter>NT</Filter>
     </None>
     <None Include="..\Include\KNSoft\NDK\NDK.inl" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\Kernel32.inl">
-      <Filter>Win32\API</Filter>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Internal.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ProcessEnvironment.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Loader.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Time.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Pointer.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\CriticalSection.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\TlsFls.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\VirtualMemory.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Heap.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Console.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\IO.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\AVX.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ErrorHandling.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Misc.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Process.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\SList.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ThreadPool.inl">
+      <Filter>Win32\Kernel32</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Kernel32.inl">
+      <Filter>Win32\Kernel32</Filter>
     </None>
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Process\EnvironmentBlock.inl">
       <Filter>NT\Rtl\Process</Filter>
@@ -593,14 +659,17 @@
     <None Include="..\Include\KNSoft\NDK\NT\Bcd.inl">
       <Filter>NT</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Rtl\SysInfo.inl">
+      <Filter>NT\Rtl</Filter>
+    </None>
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Wow.inl">
       <Filter>NT\Rtl</Filter>
     </None>
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Path.inl">
       <Filter>NT\Rtl</Filter>
     </None>
-    <None Include="..\Include\KNSoft\NDK\Win32\API\Shell32.inl">
-      <Filter>Win32\API</Filter>
+    <None Include="..\Include\KNSoft\NDK\Win32\Shell32.inl">
+      <Filter>Win32</Filter>
     </None>
     <None Include="..\Include\KNSoft\NDK\Package\ArgParse.inl">
       <Filter>Package</Filter>
@@ -617,9 +686,6 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Stack.inl">
       <Filter>NT\Rtl</Filter>
     </None>
-    <None Include="..\Include\KNSoft\NDK\NT\Rtl\SysInfo.inl">
-      <Filter>NT\Rtl</Filter>
-    </None>
     <None Include="..\Include\KNSoft\NDK\Package\RandGen.inl">
       <Filter>Package</Filter>
     </None>
@@ -633,33 +699,39 @@
       <Filter>NT</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="..\Include\KNSoft\NDK\Win32\API\msidle.inl">
-      <Filter>Win32\API</Filter>
+    <None Include="..\Include\KNSoft\NDK\Win32\msidle\msidle.inl">
+      <Filter>Win32\msidle</Filter>
     </None>
-    <None Include="..\Include\KNSoft\NDK\Win32\API\ComBase.inl">
-      <Filter>Win32\API</Filter>
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.inl">
+      <Filter>Win32\WinRT</Filter>
     </None>
-    <None Include="..\Include\KNSoft\NDK\Win32\API\CBS\Analysis.md">
-      <Filter>Win32\API\CBS</Filter>
+    <None Include="..\Include\KNSoft\NDK\Win32\CBS\Analysis.md">
+      <Filter>Win32\CBS</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\FVE\Analysis.md">
+      <Filter>Win32\FVE</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\Analysis.md">
+      <Filter>Win32\WinRT</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.Hash.xml">
-      <Filter>Win32\API</Filter>
+      <Filter>WinAPI</Filter>
     </Precomp4C_LibCreate>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.WinAPI.xml">
-      <Filter>Win32\API</Filter>
+      <Filter>WinAPI</Filter>
     </Precomp4C_LibCreate>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Win32u.xml">
-      <Filter>Win32\API</Filter>
+      <Filter>WinAPI</Filter>
     </Precomp4C_LibCreate>
     <Precomp4C_LibCreate Include="WinAPI\KNSoft.NDK.Ntdll.CRT.xml">
-      <Filter>Win32\API</Filter>
+      <Filter>WinAPI</Filter>
     </Precomp4C_LibCreate>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="..\Include\KNSoft\NDK\Win32\API\ShObjIdl\VirtualDesktop\VirtualDesktop.idl">
-      <Filter>Win32\API\ShObjIdl\VirtualDesktop</Filter>
+    <Midl Include="..\Include\KNSoft\NDK\Win32\ShObjIdl\VirtualDesktop\VirtualDesktop.idl">
+      <Filter>Win32\ShObjIdl\VirtualDesktop</Filter>
     </Midl>
   </ItemGroup>
 </Project>

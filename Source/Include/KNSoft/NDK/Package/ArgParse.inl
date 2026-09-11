@@ -3,7 +3,7 @@
  * Copyright (c) KNSoft.org (https://github.com/KNSoft). All rights reserved.
  *
  * Provide native implementation of command-line parsing.
- * See also `_Inline_CommandLineToArgv(A/W)` in "..\Win32\API\Shell32.inl" for usage.
+ * See also `_Inline_CommandLineToArgv(A/W)` in "..\Win32\Shell32.inl" for usage.
  * 
  * Source base on Microsoft UCRT:
  * 

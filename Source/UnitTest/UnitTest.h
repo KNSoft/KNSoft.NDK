@@ -3,7 +3,7 @@
 #include <KNSoft/NDK/NDK.h>
 #include <KNSoft/NDK/NDK.inl>
 #include <KNSoft/NDK/Package/UnitTest.h>
-#include <KNSoft/NDK/Win32/API/Ntdll.Hash.h>
+#include <KNSoft/NDK/Win32/Ntdll/Ntdll.Hash.h>
 
 /* For ARM64EC, link x64 DLL import libraries */
 #if defined(_M_ARM64EC)

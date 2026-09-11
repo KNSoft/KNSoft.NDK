@@ -16,30 +16,30 @@
 #include <initguid.h>
 #include <winioctl.h>
 
-#include "Win32/Def/WinBase.h"
-#include "Win32/Def/WinUser.h"
-#include "Win32/Def/HString.h"
-#include "Win32/Def/CommCtrl.h"
-#include "Win32/Def/UxTheme.h"
+#include "Win32/WinBase.h"
+#include "Win32/WinUser.h"
+#include "Win32/WinRT/HString.h"
+#include "Win32/CommCtrl.h"
+#include "Win32/UxTheme.h"
 #include "NT/Afd.h"
 
 /* APIs */
 
-#include "Win32/API/Ntdll.h"
-#include "Win32/API/Kernel32.h"
-#include "Win32/API/KernelBase.h"
-#include "Win32/API/SecHost.h"
-#include "Win32/API/User32.h"
-#include "Win32/API/UserMgrCli.h"
-#include "Win32/API/WinSta.h"
-#include "Win32/API/AdvAPI32.h"
-#include "Win32/API/ComBase.h"
-#include "Win32/API/CBS/CbsApi.h"
-#include "Win32/API/CBS/CbsCore.h"
-#include "Win32/API/FVE/FveApi.h"
-#include "Win32/API/ShObjIdl/ShObjIdl_core.h"
-#include "Win32/API/msidle.h"
-#include "Win32/API/msftedit.h"
+#include "Win32/Ntdll/Ntdll.h"
+#include "Win32/Kernel32/Kernel32.h"
+#include "Win32/KernelBase.h"
+#include "Win32/SecHost.h"
+#include "Win32/User32/User32.h"
+#include "Win32/UserMgrCli.h"
+#include "Win32/WinSta.h"
+#include "Win32/AdvAPI32.h"
+#include "Win32/ComBase/ComBase.h"
+#include "Win32/CBS/CbsApi.h"
+#include "Win32/CBS/CbsCore.h"
+#include "Win32/FVE/FveApi.h"
+#include "Win32/ShObjIdl/ShObjIdl_core.h"
+#include "Win32/msidle/msidle.h"
+#include "Win32/msftedit.h"
 
 /* Enable extensions */
 

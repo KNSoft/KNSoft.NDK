@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../NT/NT.h"
-#include "../Win32/Def/WinBase.h"
+#include "../Win32/WinBase.h"
 #include "StrSafe.inl"
 #include "UnitTest.h"
 
