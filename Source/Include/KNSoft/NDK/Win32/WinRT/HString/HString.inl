@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../../NDK.h"
-#include "../Kernel32/ErrorHandling.inl"
+#include "../../../NDK.h"
+#include "../../Kernel32/ErrorHandling.inl"
 
 EXTERN_C_START
 

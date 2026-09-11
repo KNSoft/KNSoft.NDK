@@ -15,5 +15,5 @@
 #include "NT/NT.inl"
 #include "Win32/Kernel32/Kernel32.inl"
 #include "Win32/Shell32.inl"
-#include "Win32/WinRT/HString.inl"
+#include "Win32/WinRT/HString/HString.inl"
 #include "Win32/msidle/msidle.inl"

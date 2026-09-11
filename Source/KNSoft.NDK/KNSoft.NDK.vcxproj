@@ -249,7 +249,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\UserMgrCli.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinSta.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\CommCtrl.h" />
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\HString.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\UxTheme.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinBase.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinUser.h" />
@@ -285,8 +285,8 @@
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\CBS\Analysis.md" />
     <None Include="..\Include\KNSoft\NDK\Win32\FVE\Analysis.md" />
-    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\Analysis.md" />
-    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\Analysis.md" />
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\HString.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Internal.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ProcessEnvironment.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Loader.inl" />

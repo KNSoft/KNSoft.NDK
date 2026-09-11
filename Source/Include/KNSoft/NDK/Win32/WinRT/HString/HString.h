@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../NT/MinDef.h"
+#include "../../../NT/MinDef.h"
 
 #ifdef __hstring_h__
 #error Include KNSoft.NDK before hstring.h or WinRT headers.

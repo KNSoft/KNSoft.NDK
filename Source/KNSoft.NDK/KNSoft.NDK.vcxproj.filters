@@ -91,6 +91,9 @@
     <Filter Include="Win32\WinRT">
       <UniqueIdentifier>{ac45c85c-8c40-4455-b87b-ae8da0a76e15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Win32\WinRT\HString">
+      <UniqueIdentifier>{4c8660db-6b37-4a2c-a084-7b580d1c1577}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Win32\msidle">
       <UniqueIdentifier>{78359bf0-1c59-43a3-9801-7e7d58ab78e0}</UniqueIdentifier>
     </Filter>
@@ -109,8 +112,8 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\CommCtrl.h">
       <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.h">
-      <Filter>Win32\WinRT</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\HString.h">
+      <Filter>Win32\WinRT\HString</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinUser.h">
       <Filter>Win32</Filter>
@@ -702,8 +705,8 @@
     <None Include="..\Include\KNSoft\NDK\Win32\msidle\msidle.inl">
       <Filter>Win32\msidle</Filter>
     </None>
-    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString.inl">
-      <Filter>Win32\WinRT</Filter>
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\HString.inl">
+      <Filter>Win32\WinRT\HString</Filter>
     </None>
     <None Include="..\Include\KNSoft\NDK\Win32\CBS\Analysis.md">
       <Filter>Win32\CBS</Filter>
@@ -711,8 +714,8 @@
     <None Include="..\Include\KNSoft\NDK\Win32\FVE\Analysis.md">
       <Filter>Win32\FVE</Filter>
     </None>
-    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\Analysis.md">
-      <Filter>Win32\WinRT</Filter>
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\Analysis.md">
+      <Filter>Win32\WinRT\HString</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

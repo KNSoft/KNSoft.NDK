@@ -18,7 +18,7 @@
 
 #include "Win32/WinBase.h"
 #include "Win32/WinUser.h"
-#include "Win32/WinRT/HString.h"
+#include "Win32/WinRT/HString/HString.h"
 #include "Win32/CommCtrl.h"
 #include "Win32/UxTheme.h"
 #include "NT/Afd.h"
