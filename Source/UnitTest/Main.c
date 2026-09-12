@@ -16,6 +16,7 @@ TEST_DECL_FUNC(RtlMemory);
 TEST_DECL_FUNC(RandGen);
 TEST_DECL_FUNC(StrSafeFunc);
 TEST_DECL_FUNC(TebStruct);
+TEST_DECL_FUNC(WinSta);
 
 CONST UNITTEST_ENTRY UnitTestList[] = {
     TEST_DECL_ENTRY(UnitTestFramework),
@@ -33,6 +34,7 @@ CONST UNITTEST_ENTRY UnitTestList[] = {
     TEST_DECL_ENTRY(RandGen),
     TEST_DECL_ENTRY(StrSafeFunc),
     TEST_DECL_ENTRY(TebStruct),
+    TEST_DECL_ENTRY(WinSta),
     { 0 }
 };
 

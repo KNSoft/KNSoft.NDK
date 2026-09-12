@@ -25,9 +25,15 @@
     <ClCompile Include="Assembly.c" />
     <ClCompile Include="RandGen.c" />
     <ClCompile Include="CppCompile.cpp" />
+    <ClCompile Include="Win32\WinSta.c">
+      <Filter>Win32</Filter>
+    </ClCompile>
     <ClCompile Include="HString.c" />
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{f3d9ed41-0d40-48f9-b6bc-489a68a57710}</UniqueIdentifier>
+    </Filter>
     <Filter Include="NT">
       <UniqueIdentifier>{62d5419b-ca75-423e-b61b-b51ebb1a1c18}</UniqueIdentifier>
     </Filter>

@@ -100,6 +100,9 @@
     <Filter Include="WinAPI">
       <UniqueIdentifier>{f478d7dc-cf2e-4249-b863-a709ff03b594}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Win32\WinSta">
+      <UniqueIdentifier>{e4375b4b-5d31-41cb-9cca-4663f913a03b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\KNSoft\NDK\NDK.h" />
@@ -463,8 +466,8 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\UserMgrCli.h">
       <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinSta.h">
-      <Filter>Win32</Filter>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\WinSta\WinSta.h">
+      <Filter>Win32\WinSta</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Win32K\Win32KApi.h">
       <Filter>NT\Win32K</Filter>
@@ -707,6 +710,9 @@
     </None>
     <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\HString.inl">
       <Filter>Win32\WinRT\HString</Filter>
+    </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\WinSta\Analysis.md">
+      <Filter>Win32\WinSta</Filter>
     </None>
     <None Include="..\Include\KNSoft\NDK\Win32\CBS\Analysis.md">
       <Filter>Win32\CBS</Filter>

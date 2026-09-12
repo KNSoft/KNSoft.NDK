@@ -31,7 +31,7 @@
 #include "Win32/SecHost.h"
 #include "Win32/User32/User32.h"
 #include "Win32/UserMgrCli.h"
-#include "Win32/WinSta.h"
+#include "Win32/WinSta/WinSta.h"
 #include "Win32/AdvAPI32.h"
 #include "Win32/ComBase/ComBase.h"
 #include "Win32/CBS/CbsApi.h"
