@@ -288,6 +288,7 @@
     <None Include="..\Include\KNSoft\NDK\Win32\FVE\Analysis.md" />
     <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\Analysis.md" />
     <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\HString.inl" />
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\Windows.Data.Json.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Internal.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\ProcessEnvironment.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\Kernel32\Loader.inl" />

@@ -711,6 +711,9 @@
     <None Include="..\Include\KNSoft\NDK\Win32\WinRT\HString\HString.inl">
       <Filter>Win32\WinRT\HString</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\Win32\WinRT\Windows.Data.Json.inl">
+      <Filter>Win32\WinRT</Filter>
+    </None>
     <None Include="..\Include\KNSoft\NDK\Win32\WinSta\Analysis.md">
       <Filter>Win32\WinSta</Filter>
     </None>
