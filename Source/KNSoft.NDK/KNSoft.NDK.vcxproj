@@ -236,6 +236,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Kernel32\Kernel32.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\KernelBase.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\msftedit.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\MsTscAx.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\msidle\msidle.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Ntdll\Ntdll.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\Ntdll\Ntdll.Hash.h" />

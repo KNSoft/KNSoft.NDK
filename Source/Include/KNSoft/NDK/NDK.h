@@ -40,6 +40,7 @@
 #include "Win32/ShObjIdl/ShObjIdl_core.h"
 #include "Win32/msidle/msidle.h"
 #include "Win32/msftedit.h"
+#include "Win32/MsTscAx.h"
 
 /* Enable extensions */
 

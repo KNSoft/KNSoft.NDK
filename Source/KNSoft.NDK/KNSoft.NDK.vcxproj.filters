@@ -557,6 +557,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\msftedit.h">
       <Filter>Win32</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\Win32\MsTscAx.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Console.h">
       <Filter>NT</Filter>
     </ClInclude>
