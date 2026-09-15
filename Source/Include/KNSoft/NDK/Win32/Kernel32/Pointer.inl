@@ -45,6 +45,8 @@ _Inline_DecodeSystemPointer(
     return RtlDecodeSystemPointer(Ptr);
 }
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
+
 __inline
 HRESULT
 WINAPI
@@ -66,5 +68,7 @@ _Inline_DecodeRemotePointer(
 {
     return RtlDecodeRemotePointer(ProcessHandle, Ptr, DecodedPtr);
 }
+
+#endif
 
 EXTERN_C_END

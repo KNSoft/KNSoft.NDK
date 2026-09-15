@@ -6,6 +6,11 @@
 #include <MSWSock.h>
 #include <tdi.h>
 
+#if (_WIN32_WINNT < 0x0501)
+typedef SOCKADDR_STORAGE_XP SOCKADDR_STORAGE;
+typedef SOCKADDR_STORAGE *PSOCKADDR_STORAGE, FAR *LPSOCKADDR_STORAGE;
+#endif
+
 EXTERN_C_START
 
 /* phnt */
@@ -709,6 +714,7 @@ typedef struct _AFD_TL_IO_CONTROL_INFO
 } AFD_TL_IO_CONTROL_INFO, *PAFD_TL_IO_CONTROL_INFO;
 
 // private
+#if (_WIN32_WINNT >= 0x0501)
 typedef struct _AFD_TPACKETS_INFO
 {
     _Field_size_(ElementCount) PTRANSMIT_PACKETS_ELEMENT ElementArray;
@@ -716,6 +722,7 @@ typedef struct _AFD_TPACKETS_INFO
     ULONG SendSize;
     ULONG Flags;
 } AFD_TPACKETS_INFO, *PAFD_TPACKETS_INFO;
+#endif
 
 // private
 typedef struct _AFD_SUPER_CONNECT_INFO

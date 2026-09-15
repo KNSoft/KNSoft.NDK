@@ -316,6 +316,8 @@ _Inline_WindowsStringHasEmbeddedNull(
     return S_OK;
 }
 
+#if (WINVER >= 0x0600)
+
 __inline
 HRESULT
 STDAPICALLTYPE
@@ -350,6 +352,8 @@ _Inline_WindowsCompareStringOrdinal(
     *result = Value == CSTR_LESS_THAN ? -1 : (Value == CSTR_GREATER_THAN ? 1 : 0);
     return S_OK;
 }
+
+#endif
 
 __inline
 HRESULT

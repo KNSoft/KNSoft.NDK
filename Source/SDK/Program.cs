@@ -15,12 +15,10 @@ TestCodeHelper();
 
 /* Get Syscalls */
 String NtDir = args[0] + @"\Include\KNSoft\NDK\NT";
-List<Cpp.Function> NtSyscalls = [.. SyscallResolver.GetSyscalls(NtDir, SyscallResolver.SyscallType.Nt).OrderBy(x => x.Name)];
-List<Cpp.Function> ZwSyscalls = SyscallResolver.GetSyscalls(NtDir, SyscallResolver.SyscallType.Zw);
-List<Cpp.Function> ZwManualSyscalls = SyscallResolver.GetSyscalls(NtDir, SyscallResolver.SyscallType.ZwManual);
+List<SyscallResolver.Syscall> NtSyscalls = [.. SyscallResolver.GetSyscalls(NtDir, SyscallResolver.SyscallType.Nt).OrderBy(x => x.Name)];
+List<SyscallResolver.Syscall> ZwSyscalls = SyscallResolver.GetSyscalls(NtDir, SyscallResolver.SyscallType.Zw);
 
-List<Cpp.Function> Diff = [.. NtSyscalls.Where(x => ZwSyscalls.Find(y => y.Name[2..] == x.Name[2..]) == null &&
-                                                    ZwManualSyscalls.Find(y => y.Name[2..] == x.Name[2..]) == null &&
+List<SyscallResolver.Syscall> Diff = [.. NtSyscalls.Where(x => ZwSyscalls.Find(y => y.Name[2..] == x.Name[2..]) == null &&
                                                     Array.Find(SyscallResolver.UserModeImplSyscalls, y => y == x.Name) == null)];
 
 /* Report warning if some Nt* have no corresponding Zw* */
@@ -37,8 +35,6 @@ if (Diff.Count > 0)
 StreamWriter ZwApiHeader = Cpp.CreateOutputFile(NtDir + @"\ZwApi.h");
 String ZwApiStart = """
 #include "NT.h"
-
-#include "ZwApi.Manual.h"
 """;
 Cpp.OutputWithNewLine(ZwApiHeader, Cpp.CodeFragment.AutoGenerateFileComment);
 Cpp.OutputWithNewLine(ZwApiHeader, Cpp.CodeFragment.PragmaOnce);
@@ -46,13 +42,23 @@ Cpp.OutputWithNewLine(ZwApiHeader, ZwApiStart);
 Cpp.OutputWithNewLine(ZwApiHeader, Cpp.CodeFragment.ExternCStart);
 for (Int32 i = 0; i < NtSyscalls.Count; i++)
 {
-    if (ZwManualSyscalls.Find(x => x.Name[2..] == NtSyscalls[i].Name[2..]) == null &&
-        Array.Find(SyscallResolver.UserModeImplSyscalls, x => x == NtSyscalls[i].Name) == null)
+    if (Array.Find(SyscallResolver.UserModeImplSyscalls, x => x == NtSyscalls[i].Name) == null)
     {
+        foreach (String[] Condition in NtSyscalls[i].Conditions)
+        {
+            foreach (String Line in Condition)
+            {
+                ZwApiHeader.WriteLine(Line);
+            }
+        }
         NtSyscalls[i].Name = "Zw" + NtSyscalls[i].Name[2..];
         foreach (String Line in Cpp.CodeResolver.FunctionToDeclaration(NtSyscalls[i]))
         {
             ZwApiHeader.WriteLine(Line);
+        }
+        foreach (String[] Condition in NtSyscalls[i].Conditions)
+        {
+            ZwApiHeader.WriteLine("#endif");
         }
         ZwApiHeader.WriteLine();
     }

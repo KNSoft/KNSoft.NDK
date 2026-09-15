@@ -180,6 +180,8 @@ _Inline_IsThreadAFiber(VOID)
     return NtCurrentTeb()->HasFiberData;
 }
 
+#if (_WIN32_WINNT >= 0x0600)
+
 __inline
 DWORD
 WINAPI
@@ -212,6 +214,10 @@ _Inline_FlsFree(
     }
     return TRUE;
 }
+
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 
 __inline
 BOOL
@@ -262,5 +268,7 @@ _Inline_FlsGetValue2(
 {
     return RtlFlsGetValue2(dwFlsIndex);
 }
+
+#endif
 
 EXTERN_C_END

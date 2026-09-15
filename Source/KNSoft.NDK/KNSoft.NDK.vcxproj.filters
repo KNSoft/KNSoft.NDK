@@ -530,9 +530,6 @@
     <ClInclude Include="..\Include\KNSoft\NDK\Win32\AdvAPI32.h">
       <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\KNSoft\NDK\NT\ZwApi.Manual.h">
-      <Filter>NT</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Version.h">
       <Filter>NT</Filter>
     </ClInclude>

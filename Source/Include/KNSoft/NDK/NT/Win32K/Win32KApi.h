@@ -926,6 +926,7 @@ NtUserGetComboBoxInfo(
     _Inout_ PCOMBOBOXINFO pcbi
     );
 
+#if (WINVER >= 0x0601)
 _Kernel_entry_
 NTSYSCALLAPI
 BOOL
@@ -933,6 +934,7 @@ NTAPI
 NtUserGetCurrentInputMessageSource(
     _Inout_ INPUT_MESSAGE_SOURCE* InputMessageSource
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -960,6 +962,7 @@ NtUserGetDCEx(
     _In_ ULONG flags
     );
 
+#if (WINVER >= 0x0602)
 _Kernel_entry_
 NTSYSCALLAPI
 BOOL
@@ -967,6 +970,7 @@ NTAPI
 NtUserGetDisplayAutoRotationPreferences(
     _In_ ORIENTATION_PREFERENCE* pOrientation
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1047,6 +1051,7 @@ NtUserGetMouseMovePointsEx(
     _In_ ULONG Resolution
     );
 
+#if (_WIN32_WINNT >= 0x0501)
 _Kernel_entry_
 NTSYSCALLAPI
 ULONG
@@ -1078,6 +1083,7 @@ NtUserGetRegisteredRawInputDevices(
     _Inout_ PULONG RawInputDeviceCount,
     _In_ ULONG RawInputDeviceSize
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI

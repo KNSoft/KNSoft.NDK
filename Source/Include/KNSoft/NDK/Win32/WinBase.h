@@ -2,12 +2,9 @@
 
 #include "../NT/MinDef.h"
 
-/* Before NT6, 0x400 has other meanings */
-#if NT_VERSION_MIN < NT_VERSION_VISTA
-#define STARTF_RESERVED 0x00000400
-#else
+/* STARTF_HASSHELLDATA was repurposed as STARTF_USEMONITOR in NT6. */
+#define STARTF_HASSHELLDATA 0x00000400
 #define STARTF_USEMONITOR 0x00000400
-#endif
 
 typedef
 _Function_class_(RUNDLL32_ENTRY_FN)

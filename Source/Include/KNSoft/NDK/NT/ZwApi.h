@@ -4,8 +4,6 @@
 
 #include "NT.h"
 
-#include "ZwApi.Manual.h"
-
 EXTERN_C_START
 
 _Kernel_entry_
@@ -160,6 +158,7 @@ ZwAccessCheckByTypeResultListAndAuditAlarmByHandle(
     _Out_ PBOOLEAN GenerateOnClose
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -168,7 +167,9 @@ ZwAcquireCrossVmMutant(
     _In_ HANDLE CrossVmMutant,
     _In_ PLARGE_INTEGER Timeout
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -178,6 +179,7 @@ ZwAcquireProcessActivityReference(
     _In_ HANDLE ParentProcessHandle,
     _In_ PROCESS_ACTIVITY_TYPE ProcessActivityType
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -189,6 +191,7 @@ ZwAddAtom(
     _Out_opt_ PRTL_ATOM Atom
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -199,6 +202,7 @@ ZwAddAtomEx(
     _Out_opt_ PRTL_ATOM Atom,
     _In_ ULONG Flags
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -244,6 +248,7 @@ ZwAdjustPrivilegesToken(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -266,7 +271,10 @@ ZwAdjustTokenClaimsAndDeviceGroups(
     _Out_opt_ PULONG DeviceReturnLength,
     _Out_opt_ PULONG DeviceGroupsReturnBufferLength
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -277,7 +285,10 @@ ZwAlertMultipleThreadByThreadId(
     _Inout_updates_opt_(ExtendedParameterCount) PPS_ALERT_THREAD_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
     );
+#endif
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -286,7 +297,9 @@ ZwAlertResumeThread(
     _In_ HANDLE ThreadHandle,
     _Out_opt_ PULONG PreviousSuspendCount
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -294,7 +307,10 @@ NTAPI
 ZwAlertThread(
     _In_ HANDLE ThreadHandle
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -302,7 +318,11 @@ NTAPI
 ZwAlertThreadByThreadId(
     _In_ HANDLE ThreadId
     );
+#endif
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -311,6 +331,8 @@ ZwAlertThreadByThreadIdEx(
     _In_ HANDLE ThreadId,
     _In_opt_ PRTL_SRWLOCK Lock
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -320,6 +342,7 @@ ZwAllocateLocallyUniqueId(
     _Out_ PLUID Luid
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -329,7 +352,9 @@ ZwAllocateReserveObject(
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_ MEMORY_RESERVE_TYPE Type
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -339,7 +364,10 @@ ZwAllocateUserPhysicalPages(
     _Inout_ PSIZE_T NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -351,6 +379,8 @@ ZwAllocateUserPhysicalPagesEx(
     _Inout_updates_opt_(ExtendedParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -363,6 +393,7 @@ ZwAllocateUuids(
     _Out_ PCHAR Seed
     );
 
+#if !defined(_KERNEL_MODE)
 _Must_inspect_result_
 _When_(return == 0, __drv_allocatesMem(mem))
 _Kernel_entry_
@@ -377,7 +408,10 @@ ZwAllocateVirtualMemory(
     _In_ ULONG AllocationType,
     _In_ ULONG PageProtection
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
 _Must_inspect_result_
 _When_(return == 0, __drv_allocatesMem(Mem))
 _Kernel_entry_
@@ -393,6 +427,8 @@ ZwAllocateVirtualMemoryEx(
     _Inout_updates_opt_(ExtendedParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -438,6 +474,7 @@ ZwAlpcConnectPort(
     _In_opt_ PLARGE_INTEGER Timeout
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -455,6 +492,7 @@ ZwAlpcConnectPortEx(
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES InMessageAttributes,
     _In_opt_ PLARGE_INTEGER Timeout
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -559,6 +597,7 @@ ZwAlpcDisconnectPort(
     _In_ ALPC_DISCONNECT_PORT_FLAGS Flags
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -568,6 +607,7 @@ ZwAlpcImpersonateClientContainerOfPort(
     _In_ PPORT_MESSAGE Message,
     _Reserved_ ULONG Flags
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -675,6 +715,7 @@ ZwApphelpCacheControl(
     _Inout_opt_ PVOID ServiceContext // AHC_SERVICE_DATA
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -683,7 +724,9 @@ ZwAreMappedFilesTheSame(
     _In_ PVOID File1MappedAsAnImage,
     _In_ PVOID File2MappedAsFile
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -692,7 +735,9 @@ ZwAssignProcessToJobObject(
     _In_ HANDLE JobHandle,
     _In_ HANDLE ProcessHandle
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -707,6 +752,7 @@ ZwAssociateWaitCompletionPacket(
     _In_ ULONG_PTR IoStatusInformation,
     _Out_opt_ PBOOLEAN AlreadySignaled
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -718,6 +764,8 @@ ZwCallbackReturn(
     _In_ NTSTATUS Status
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -728,6 +776,8 @@ ZwCallEnclave(
     _In_ ULONG Flags, // ENCLAVE_CALL_FLAG_*
     _Inout_ PVOID* RoutineParamReturn // input routine parameter, output routine return value
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -767,6 +817,7 @@ ZwCancelTimer(
     _Out_opt_ PBOOLEAN CurrentState
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -775,7 +826,9 @@ ZwCancelTimer2(
     _In_ HANDLE TimerHandle,
     _In_ PT2_CANCEL_PARAMETERS Parameters
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -784,7 +837,9 @@ ZwCancelWaitCompletionPacket(
     _In_ HANDLE WaitCompletionPacketHandle,
     _In_ BOOLEAN RemoveSignaledPacket
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -797,7 +852,9 @@ ZwChangeProcessState(
     _In_opt_ _Reserved_ SIZE_T ExtendedInformationLength,
     _In_opt_ _Reserved_ ULONG Reserved
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -810,6 +867,7 @@ ZwChangeThreadState(
     _In_opt_ SIZE_T ExtendedInformationLength,
     _In_opt_ ULONG Reserved
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -819,6 +877,7 @@ ZwClearEvent(
     _In_ HANDLE EventHandle
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -826,6 +885,7 @@ NTAPI
 ZwClose(
     _In_ _Post_ptr_invalid_ HANDLE Handle
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -856,6 +916,7 @@ ZwCommitEnlistment(
     _In_opt_ PLARGE_INTEGER TmVirtualClock
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -864,6 +925,7 @@ ZwCommitRegistryTransaction(
     _In_ HANDLE RegistryTransactionHandle,
     _Reserved_ ULONG Flags
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -883,6 +945,8 @@ ZwCompactKeys(
     _In_reads_(Count) HANDLE KeyArray[]
     );
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -891,7 +955,10 @@ ZwCompareObjects(
     _In_ HANDLE FirstObjectHandle,
     _In_ HANDLE SecondObjectHandle
     );
+#endif
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -900,6 +967,7 @@ ZwCompareSigningLevels(
     _In_ SE_SIGNING_LEVEL FirstSigningLevel,
     _In_ SE_SIGNING_LEVEL SecondSigningLevel
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -951,6 +1019,7 @@ ZwContinue(
     _In_ BOOLEAN TestAlert
     );
 
+#if (NTDDI_VERSION >= NTDDI_WINTHRESHOLD)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -959,7 +1028,9 @@ ZwContinueEx(
     _In_ PCONTEXT ContextRecord,
     _In_ PVOID ContinueArgument // "PKCONTINUE_ARGUMENT ContinueArgument" and "BOOLEAN TestAlert" are valid
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -970,7 +1041,9 @@ ZwConvertBetweenAuxiliaryCounterAndPerformanceCounter(
     _Out_ PULONG64 ConvertedValue,
     _Out_opt_ PULONG64 ConversionError
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_VB)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -987,7 +1060,9 @@ ZwCopyFileChunk(
     _In_opt_ PULONG DestKey,
     _In_ ULONG Flags
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_GA)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -997,7 +1072,9 @@ ZwCreateCpuPartition(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1010,7 +1087,9 @@ ZwCreateCrossVmEvent(
     _In_ LPCGUID VMID,
     _In_ LPCGUID ServiceID
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1023,6 +1102,7 @@ ZwCreateCrossVmMutant(
     _In_ LPCGUID VMID,
     _In_ LPCGUID ServiceID
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1035,6 +1115,7 @@ ZwCreateDebugObject(
     _In_ ULONG Flags
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1044,7 +1125,10 @@ ZwCreateDirectoryObject(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1056,7 +1140,10 @@ ZwCreateDirectoryObjectEx(
     _In_ HANDLE ShadowDirectoryHandle,
     _In_ ULONG Flags
     );
+#endif
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1072,6 +1159,7 @@ ZwCreateEnclave(
     _In_ ULONG EnclaveInformationLength,
     _Out_opt_ PULONG EnclaveError
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -1140,6 +1228,7 @@ ZwCreateIoCompletion(
     _In_opt_ ULONG Count
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1151,7 +1240,9 @@ ZwCreateIoRing(
     _In_ ULONG OutputParametersLength,
     _Out_ PVOID OutputParameters
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1161,7 +1252,9 @@ ZwCreateIRTimer(
     _In_ PULONG TimerId,
     _In_ ACCESS_MASK DesiredAccess
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1171,7 +1264,9 @@ ZwCreateJobObject(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1181,6 +1276,7 @@ ZwCreateJobSet(
     _In_reads_(NumJob) PJOB_SET_ARRAY UserJobSet,
     _In_ ULONG Flags
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1222,6 +1318,7 @@ ZwCreateKeyTransacted(
     _Out_opt_ PULONG Disposition
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1237,6 +1334,7 @@ ZwCreateLowBoxToken(
     _In_ ULONG HandleCount,
     _In_reads_opt_(HandleCount) HANDLE* Handles
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1285,6 +1383,7 @@ ZwCreateNamedPipeFile(
     _In_ PLARGE_INTEGER DefaultTimeout
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1295,7 +1394,10 @@ ZwCreatePagingFile(
     _In_ PLARGE_INTEGER MaximumSize,
     _In_ ULONG Priority
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1306,6 +1408,8 @@ ZwCreatePartition(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ PCOBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1319,6 +1423,7 @@ ZwCreatePort(
     _In_opt_ ULONG MaxPoolUsage
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1329,7 +1434,9 @@ ZwCreatePrivateNamespace(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
     _In_ POBJECT_BOUNDARY_DESCRIPTOR BoundaryDescriptor
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1344,7 +1451,9 @@ ZwCreateProcess(
     _In_opt_ HANDLE DebugPort,
     _In_opt_ HANDLE TokenHandle
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1360,7 +1469,9 @@ ZwCreateProcessEx(
     _In_opt_ HANDLE TokenHandle,
     _Reserved_ ULONG Reserved // JobMemberLevel
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1372,6 +1483,7 @@ ZwCreateProcessStateChange(
     _In_ HANDLE ProcessHandle,
     _In_opt_ _Reserved_ ULONG Reserved
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1406,6 +1518,7 @@ ZwCreateProfileEx(
     _In_reads_(GroupCount) PGROUP_AFFINITY GroupAffinity
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1416,6 +1529,7 @@ ZwCreateRegistryTransaction(
     _In_opt_ POBJECT_ATTRIBUTES ObjAttributes,
     _Reserved_ ULONG CreateOptions
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -1432,6 +1546,7 @@ ZwCreateResourceManager(
     _In_opt_ PUNICODE_STRING Description
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1445,7 +1560,10 @@ ZwCreateSection(
     _In_ ULONG AllocationAttributes,
     _In_opt_ HANDLE FileHandle
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1461,6 +1579,8 @@ ZwCreateSectionEx(
     _Inout_updates_opt_(ExtendedParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1474,6 +1594,7 @@ ZwCreateSemaphore(
     _In_ LONG MaximumCount
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1484,7 +1605,9 @@ ZwCreateSymbolicLinkObject(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
     _In_ PUNICODE_STRING LinkTarget
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1499,7 +1622,9 @@ ZwCreateThread(
     _In_ PINITIAL_TEB InitialTeb,
     _In_ BOOLEAN CreateSuspended
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1517,7 +1642,9 @@ ZwCreateThreadEx(
     _In_ SIZE_T MaximumStackSize,
     _In_opt_ PPS_ATTRIBUTE_LIST AttributeList
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1529,6 +1656,7 @@ ZwCreateThreadStateChange(
     _In_ HANDLE ThreadHandle,
     _In_opt_ _Reserved_ ULONG Reserved
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1541,6 +1669,7 @@ ZwCreateTimer(
     _In_ TIMER_TYPE TimerType
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1552,6 +1681,7 @@ ZwCreateTimer2(
     _In_ ULONG Attributes,
     _In_ ACCESS_MASK DesiredAccess
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1573,6 +1703,7 @@ ZwCreateToken(
     _In_ PTOKEN_SOURCE Source
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1596,6 +1727,7 @@ ZwCreateTokenEx(
     _In_opt_ PTOKEN_DEFAULT_DACL DefaultDacl,
     _In_ PTOKEN_SOURCE Source
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -1629,6 +1761,7 @@ ZwCreateTransactionManager(
     _In_opt_ ULONG CommitStrength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1646,6 +1779,7 @@ ZwCreateUserProcess(
     _Inout_ PPS_CREATE_INFO CreateInfo,
     _In_opt_ PPS_ATTRIBUTE_LIST AttributeList
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1659,6 +1793,7 @@ ZwCreateWaitablePort(
     _In_opt_ ULONG MaxPoolUsage
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1668,7 +1803,9 @@ ZwCreateWaitCompletionPacket(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1682,6 +1819,7 @@ ZwCreateWnfStateName(
     _In_ ULONG MaximumStateSize,
     _In_ PSECURITY_DESCRIPTOR SecurityDescriptor
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1778,6 +1916,7 @@ ZwDeleteObjectAuditAlarm(
     _In_ BOOLEAN GenerateOnClose
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1785,6 +1924,7 @@ NTAPI
 ZwDeletePrivateNamespace(
     _In_ HANDLE NamespaceHandle
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1795,6 +1935,7 @@ ZwDeleteValueKey(
     _In_ PUNICODE_STRING ValueName
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1803,7 +1944,9 @@ ZwDeleteWnfStateData(
     _In_ PCWNF_STATE_NAME StateName,
     _In_opt_ PCSID ExplicitScope
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1811,6 +1954,7 @@ NTAPI
 ZwDeleteWnfStateName(
     _In_ PCWNF_STATE_NAME StateName
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1829,6 +1973,7 @@ ZwDeviceIoControlFile(
     _In_ ULONG OutputBufferLength
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1840,6 +1985,7 @@ ZwDirectGraphicsCall(
     _Out_writes_bytes_opt_(OutputBufferLength) PVOID OutputBuffer,
     _Out_ PULONG ReturnLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1865,6 +2011,7 @@ ZwDrawText(
     _In_ PUNICODE_STRING Text
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1878,6 +2025,7 @@ ZwDuplicateObject(
     _In_ ULONG HandleAttributes,
     _In_ ULONG Options
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -1967,6 +2115,7 @@ ZwEnumerateValueKey(
     _Out_ PULONG ResultLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1975,7 +2124,9 @@ ZwExtendSection(
     _In_ HANDLE SectionHandle,
     _Inout_ PLARGE_INTEGER NewSectionSize
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1987,6 +2138,7 @@ ZwFilterBootOption(
     _In_reads_bytes_opt_(DataSize) PVOID Data,
     _In_ ULONG DataSize
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2001,6 +2153,7 @@ ZwFilterToken(
     _Out_ PHANDLE NewTokenHandle
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2021,6 +2174,7 @@ ZwFilterTokenEx(
     _In_opt_ PTOKEN_GROUPS RestrictedDeviceGroups,
     _Out_ PHANDLE NewTokenHandle
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2041,6 +2195,7 @@ ZwFlushBuffersFile(
     _Out_ PIO_STATUS_BLOCK IoStatusBlock
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2052,6 +2207,7 @@ ZwFlushBuffersFileEx(
     _In_ ULONG ParametersSize,
     _Out_ PIO_STATUS_BLOCK IoStatusBlock
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2062,6 +2218,7 @@ ZwFlushInstallUILanguage(
     _In_ ULONG SetComittedFlag
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2071,6 +2228,7 @@ ZwFlushInstructionCache(
     _In_opt_ PVOID BaseAddress,
     _In_ SIZE_T RegionSize
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2080,6 +2238,7 @@ ZwFlushKey(
     _In_ HANDLE KeyHandle
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2087,7 +2246,9 @@ NTAPI
 ZwFlushProcessWriteBuffers(
     VOID
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2098,7 +2259,9 @@ ZwFlushVirtualMemory(
     _Inout_ PSIZE_T RegionSize,
     _Out_ PIO_STATUS_BLOCK IoStatus
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2106,7 +2269,9 @@ NTAPI
 ZwFlushWriteBuffer(
     VOID
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2116,7 +2281,9 @@ ZwFreeUserPhysicalPages(
     _Inout_ PULONG_PTR NumberOfPages,
     _In_reads_(*NumberOfPages) PULONG_PTR UserPfnArray
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2127,6 +2294,7 @@ ZwFreeVirtualMemory(
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG FreeType
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2162,6 +2330,7 @@ ZwFsControlFile(
     _In_ ULONG OutputBufferLength
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2174,7 +2343,9 @@ ZwGetCachedSigningLevel(
     _Inout_opt_ PULONG ThumbprintSize,
     _Out_opt_ PULONG ThumbprintAlgorithm
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2187,7 +2358,9 @@ ZwGetCompleteWnfStateSubscription(
     _Out_writes_bytes_(DescriptorSize) PWNF_DELIVERY_DESCRIPTOR NewDeliveryDescriptor,
     _In_ ULONG DescriptorSize
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2196,7 +2369,9 @@ ZwGetContextThread(
     _In_ HANDLE ThreadHandle,
     _Inout_ PCONTEXT ThreadContext
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 ULONG
@@ -2204,7 +2379,9 @@ NTAPI
 ZwGetCurrentProcessorNumber(
     VOID
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 ULONG
@@ -2212,6 +2389,7 @@ NTAPI
 ZwGetCurrentProcessorNumberEx(
     _Out_opt_ PPROCESSOR_NUMBER ProcessorNumber
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2232,6 +2410,8 @@ ZwGetMUIRegistryInfo(
     _Out_ PVOID Data
     );
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WS03)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2243,7 +2423,11 @@ ZwGetNextProcess(
     _In_ ULONG Flags,
     _Out_ PHANDLE NewProcessHandle
     );
+#endif
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WS03)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2256,6 +2440,8 @@ ZwGetNextThread(
     _In_opt_ _Reserved_ ULONG Flags,
     _Out_ PHANDLE NewThreadHandle
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2284,6 +2470,7 @@ ZwGetNotificationResourceManager(
     _In_opt_ ULONG_PTR AsynchronousContext
     );
 
+#if (NTDDI_VERSION < NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2294,7 +2481,9 @@ ZwGetPlugPlayEvent(
     _Out_writes_bytes_(EventBufferSize) PPLUGPLAY_EVENT_BLOCK EventBlock,
     _In_ ULONG EventBufferSize
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2308,6 +2497,7 @@ ZwGetWriteWatch(
     _Inout_ PULONG_PTR EntriesInUserAddressArray,
     _Out_ PULONG Granularity
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2326,6 +2516,7 @@ ZwImpersonateClientOfPort(
     _In_ PPORT_MESSAGE Message
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2335,7 +2526,9 @@ ZwImpersonateThread(
     _In_ HANDLE ClientThreadHandle,
     _In_ PSECURITY_QUALITY_OF_SERVICE SecurityQos
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2347,6 +2540,7 @@ ZwInitializeEnclave(
     _In_ ULONG EnclaveInformationLength,
     _Out_opt_ PULONG EnclaveError
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2377,6 +2571,7 @@ ZwInitiatePowerAction(
     _In_ BOOLEAN Asynchronous
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2385,6 +2580,7 @@ ZwIsProcessInJob(
     _In_ HANDLE ProcessHandle,
     _In_opt_ HANDLE JobHandle
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2419,6 +2615,7 @@ ZwLoadDriver(
     _In_ PUNICODE_STRING DriverServiceName
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2434,6 +2631,7 @@ ZwLoadEnclaveData(
     _Out_opt_ PSIZE_T NumberOfBytesWritten,
     _Out_opt_ PULONG EnclaveError
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2454,6 +2652,7 @@ ZwLoadKey2(
     _In_ ULONG Flags
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2468,6 +2667,7 @@ ZwLoadKey3(
     _Out_opt_ PHANDLE RootHandle,
     _Reserved_ PVOID Reserved
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2518,6 +2718,7 @@ ZwLockRegistryKey(
     _In_ HANDLE KeyHandle
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2528,7 +2729,9 @@ ZwLockVirtualMemory(
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG MapType
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2536,7 +2739,9 @@ NTAPI
 ZwMakePermanentObject(
     _In_ HANDLE Handle
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2544,7 +2749,9 @@ NTAPI
 ZwMakeTemporaryObject(
     _In_ HANDLE Handle
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2555,6 +2762,7 @@ ZwManageHotPatch(
     _In_ ULONG HotPatchInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2581,6 +2789,7 @@ ZwMapCMFModule(
     _Out_opt_ PVOID* BaseAddress
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2590,7 +2799,9 @@ ZwMapUserPhysicalPages(
     _In_ SIZE_T NumberOfPages,
     _In_reads_opt_(NumberOfPages) PULONG_PTR UserPfnArray
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2600,7 +2811,9 @@ ZwMapUserPhysicalPagesScatter(
     _In_ SIZE_T NumberOfPages,
     _In_reads_opt_(NumberOfPages) PULONG_PTR UserPfnArray
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2617,7 +2830,10 @@ ZwMapViewOfSection(
     _In_ ULONG AllocationType,
     _In_ ULONG PageProtection
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2633,6 +2849,8 @@ ZwMapViewOfSectionEx(
     _Inout_updates_opt_(ExtendedParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2666,6 +2884,7 @@ ZwNotifyChangeDirectoryFile(
     _In_ BOOLEAN WatchTree
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2682,6 +2901,7 @@ ZwNotifyChangeDirectoryFileEx(
     _In_ BOOLEAN WatchTree,
     _In_opt_ DIRECTORY_NOTIFY_INFORMATION_CLASS DirectoryNotifyInformationClass
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2734,6 +2954,7 @@ ZwNotifyChangeSession(
     _In_ ULONG PayloadSize
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_GA)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2743,7 +2964,9 @@ ZwOpenCpuPartition(
     _In_ ACCESS_MASK DesiredAccess,
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2753,6 +2976,7 @@ ZwOpenDirectoryObject(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -2810,6 +3034,7 @@ ZwOpenIoCompletion(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2819,6 +3044,7 @@ ZwOpenJobObject(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2903,6 +3129,8 @@ ZwOpenObjectAuditAlarm(
     _Out_ PBOOLEAN GenerateOnClose
     );
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2912,7 +3140,10 @@ ZwOpenPartition(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2923,7 +3154,9 @@ ZwOpenPrivateNamespace(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
     _In_ POBJECT_BOUNDARY_DESCRIPTOR BoundaryDescriptor
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2934,6 +3167,7 @@ ZwOpenProcess(
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ PCLIENT_ID ClientId
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -2956,6 +3190,7 @@ ZwOpenProcessTokenEx(
     _Out_ PHANDLE TokenHandle
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2965,6 +3200,7 @@ ZwOpenRegistryTransaction(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjAttributes
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -2979,6 +3215,7 @@ ZwOpenResourceManager(
     _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2988,6 +3225,7 @@ ZwOpenSection(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3009,6 +3247,7 @@ ZwOpenSession(
     _In_ POBJECT_ATTRIBUTES ObjectAttributes
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3018,7 +3257,9 @@ ZwOpenSymbolicLinkObject(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3029,6 +3270,7 @@ ZwOpenThread(
     _In_ PCOBJECT_ATTRIBUTES ObjectAttributes,
     _In_opt_ PCLIENT_ID ClientId
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3100,6 +3342,7 @@ ZwPlugPlayControl(
     _In_ ULONG PnPControlDataLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3111,6 +3354,7 @@ ZwPowerInformation(
     _Out_writes_bytes_opt_(OutputBufferLength) PVOID OutputBuffer,
     _In_ ULONG OutputBufferLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3206,6 +3450,7 @@ ZwPropagationFailed(
     _In_ NTSTATUS PropStatus
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3217,7 +3462,10 @@ ZwProtectVirtualMemory(
     _In_ ULONG NewProtection,
     _Out_ PULONG OldProtection
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3229,6 +3477,8 @@ ZwPssCaptureVaSpaceBulk(
     _In_ SIZE_T BulkInformationLength,
     _Out_opt_ PSIZE_T ReturnLength
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3248,6 +3498,7 @@ ZwQueryAttributesFile(
     _Out_ PFILE_BASIC_INFORMATION FileInformation
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3255,6 +3506,7 @@ NTAPI
 ZwQueryAuxiliaryCounterFrequency(
     _Out_ PULONG64 AuxiliaryCounterFrequency
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3318,6 +3570,7 @@ ZwQueryDirectoryFile(
     _In_ BOOLEAN RestartScan
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3334,7 +3587,9 @@ ZwQueryDirectoryFileEx(
     _In_ ULONG QueryFlags, // FILE_QUERY_XXX
     _In_opt_ PUNICODE_STRING FileName
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3348,6 +3603,7 @@ ZwQueryDirectoryObject(
     _Inout_ PULONG Context,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3407,6 +3663,7 @@ ZwQueryInformationAtom(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3418,7 +3675,9 @@ ZwQueryInformationByName(
     _In_ ULONG Length,
     _In_ FILE_INFORMATION_CLASS FileInformationClass
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_GA)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3430,6 +3689,7 @@ ZwQueryInformationCpuPartition(
     _In_ ULONG CpuPartitionInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -3456,6 +3716,7 @@ ZwQueryInformationFile(
     _In_ FILE_INFORMATION_CLASS FileInformationClass
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3467,6 +3728,7 @@ ZwQueryInformationJobObject(
     _In_ ULONG JobObjectInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3480,6 +3742,7 @@ ZwQueryInformationPort(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3491,6 +3754,7 @@ ZwQueryInformationProcess(
     _In_ ULONG ProcessInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -3505,6 +3769,7 @@ ZwQueryInformationResourceManager(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3516,6 +3781,7 @@ ZwQueryInformationThread(
     _In_ ULONG ThreadInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3596,6 +3862,7 @@ ZwQueryIoCompletion(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3604,6 +3871,7 @@ ZwQueryIoRingCapabilities(
     _In_ SIZE_T IoRingCapabilitiesLength,
     _Out_ PVOID IoRingCapabilities
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3654,6 +3922,7 @@ ZwQueryMutant(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3665,6 +3934,7 @@ ZwQueryObject(
     _In_ ULONG ObjectInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3695,6 +3965,7 @@ ZwQueryPerformanceCounter(
     _Out_opt_ PLARGE_INTEGER PerformanceFrequency
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3702,6 +3973,7 @@ NTAPI
 ZwQueryPortInformationProcess(
     VOID
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3744,6 +4016,7 @@ ZwQuerySecurityAttributesToken(
     _Out_ PULONG ReturnLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3755,7 +4028,9 @@ ZwQuerySecurityObject(
     _In_ ULONG Length,
     _Out_ PULONG LengthNeeded
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3768,6 +4043,7 @@ ZwQuerySecurityPolicy(
     _Out_writes_bytes_opt_(*ValueSize) PVOID Value,
     _Inout_ PULONG ValueSize
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3781,6 +4057,7 @@ ZwQuerySemaphore(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3790,6 +4067,7 @@ ZwQuerySymbolicLinkObject(
     _Inout_ PUNICODE_STRING LinkTarget,
     _Out_opt_ PULONG ReturnedLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3814,6 +4092,7 @@ ZwQuerySystemEnvironmentValueEx(
     _Out_opt_ PULONG Attributes // EFI_VARIABLE_*
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3824,7 +4103,9 @@ ZwQuerySystemInformation(
     _In_ ULONG SystemInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3837,6 +4118,7 @@ ZwQuerySystemInformationEx(
     _In_ ULONG SystemInformationLength,
     _Out_opt_ PULONG ReturnLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -3906,6 +4188,7 @@ ZwQueryVolumeInformationFile(
     _In_ FSINFOCLASS FsInformationClass
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3918,7 +4201,9 @@ ZwQueryWnfStateData(
     _Out_writes_bytes_opt_(*BufferLength) PVOID Buffer,
     _Inout_ PULONG BufferLength
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3930,7 +4215,9 @@ ZwQueryWnfStateNameInformation(
     _Out_writes_bytes_(BufferLength) PVOID Buffer,
     _In_ ULONG BufferLength
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3942,7 +4229,9 @@ ZwQueueApcThread(
     _In_opt_ PVOID ApcArgument2,
     _In_opt_ PVOID ApcArgument3
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3955,7 +4244,10 @@ ZwQueueApcThreadEx(
     _In_opt_ PVOID ApcArgument2,
     _In_opt_ PVOID ApcArgument3
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -3969,6 +4261,8 @@ ZwQueueApcThreadEx2(
     _In_opt_ PVOID ApcArgument2,
     _In_opt_ PVOID ApcArgument3
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4047,6 +4341,7 @@ ZwReadRequestData(
     _Out_opt_ PSIZE_T NumberOfBytesRead
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4058,7 +4353,10 @@ ZwReadVirtualMemory(
     _In_ SIZE_T NumberOfBytesToRead,
     _Out_opt_ PSIZE_T NumberOfBytesRead
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4071,6 +4369,8 @@ ZwReadVirtualMemoryEx(
     _Out_opt_ PSIZE_T NumberOfBytesRead,
     _In_ ULONG Flags
     );
+#endif
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -4113,6 +4413,7 @@ ZwRegisterProtocolAddressInformation(
     _In_opt_ ULONG CreateOptions
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4120,6 +4421,7 @@ NTAPI
 ZwRegisterThreadTerminatePort(
     _In_ HANDLE PortHandle
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4301,6 +4603,7 @@ ZwResetEvent(
     _Out_opt_ PLONG PreviousState
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4310,6 +4613,7 @@ ZwResetWriteWatch(
     _In_ PVOID BaseAddress,
     _In_ SIZE_T RegionSize
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4321,6 +4625,7 @@ ZwRestoreKey(
     _In_ ULONG Flags
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4328,7 +4633,9 @@ NTAPI
 ZwResumeProcess(
     _In_ HANDLE ProcessHandle
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4337,7 +4644,10 @@ ZwResumeThread(
     _In_ HANDLE ThreadHandle,
     _Out_opt_ PULONG PreviousSuspendCount
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4345,6 +4655,8 @@ NTAPI
 ZwRevertContainerImpersonation(
     VOID
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4364,6 +4676,7 @@ ZwRollbackEnlistment(
     _In_opt_ PLARGE_INTEGER TmVirtualClock
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4372,6 +4685,7 @@ ZwRollbackRegistryTransaction(
     _In_ HANDLE RegistryTransactionHandle,
     _Reserved_ ULONG Flags
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4463,6 +4777,7 @@ ZwSetBootOptions(
     _In_ ULONG FieldsToChange
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4474,7 +4789,9 @@ ZwSetCachedSigningLevel(
     _In_ ULONG SourceFileCount,
     _In_opt_ HANDLE TargetFile
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4487,7 +4804,9 @@ ZwSetCachedSigningLevel2(
     _In_opt_ HANDLE TargetFile,
     _In_opt_ SE_SET_FILE_CACHE_INFORMATION* CacheInformation
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4496,6 +4815,7 @@ ZwSetContextThread(
     _In_ HANDLE ThreadHandle,
     _In_ PCONTEXT ThreadContext
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4569,6 +4889,7 @@ ZwSetEventBoostPriority(
     _In_ HANDLE EventHandle
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4577,6 +4898,7 @@ ZwSetEventEx(
     _In_ HANDLE ThreadId,
     _In_opt_ PRTL_SRWLOCK Lock
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4594,6 +4916,7 @@ ZwSetHighWaitLowEventPair(
     _In_ HANDLE EventPairHandle
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_GA)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4607,6 +4930,7 @@ ZwSetInformationCpuPartition(
     _Reserved_ ULONG,
     _Reserved_ ULONG
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4644,6 +4968,7 @@ ZwSetInformationFile(
     _In_ FILE_INFORMATION_CLASS FileInformationClass
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4654,7 +4979,9 @@ ZwSetInformationIoRing(
     _In_ ULONG IoRingInformationLength,
     _In_ PVOID IoRingInformation
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4665,6 +4992,7 @@ ZwSetInformationJobObject(
     _In_reads_bytes_(JobObjectInformationLength) PVOID JobObjectInformation,
     _In_ ULONG JobObjectInformationLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4677,6 +5005,7 @@ ZwSetInformationKey(
     _In_ ULONG KeySetInformationLength
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4687,7 +5016,9 @@ ZwSetInformationObject(
     _In_reads_bytes_(ObjectInformationLength) PVOID ObjectInformation,
     _In_ ULONG ObjectInformationLength
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4698,6 +5029,7 @@ ZwSetInformationProcess(
     _In_reads_bytes_(ProcessInformationLength) PVOID ProcessInformation,
     _In_ ULONG ProcessInformationLength
     );
+#endif
 
 _Must_inspect_result_
 _Kernel_entry_
@@ -4711,6 +5043,8 @@ ZwSetInformationResourceManager(
     _In_ ULONG ResourceManagerInformationLength
     );
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4721,7 +5055,10 @@ ZwSetInformationSymbolicLink(
     _In_reads_bytes_(SymbolicLinkInformationLength) PVOID SymbolicLinkInformation,
     _In_ ULONG SymbolicLinkInformationLength
     );
+#endif
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4732,6 +5069,7 @@ ZwSetInformationThread(
     _In_reads_bytes_(ThreadInformationLength) PVOID ThreadInformation,
     _In_ ULONG ThreadInformationLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4768,6 +5106,7 @@ ZwSetInformationTransactionManager(
     _In_ ULONG TransactionManagerInformationLength
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4780,6 +5119,7 @@ ZwSetInformationVirtualMemory(
     _In_reads_bytes_(VmInformationLength) PVOID VmInformation,
     _In_ ULONG VmInformationLength
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4826,6 +5166,7 @@ ZwSetIoCompletionEx(
     _In_ ULONG_PTR IoStatusInformation
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4834,7 +5175,9 @@ ZwSetIRTimer(
     _In_ HANDLE TimerHandle,
     _In_opt_ PLARGE_INTEGER DueTime
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4847,6 +5190,7 @@ ZwSetLdtEntries(
     _In_ ULONG Entry1Low,
     _In_ ULONG Entry1Hi
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4875,6 +5219,7 @@ ZwSetQuotaInformationFile(
     _In_ ULONG Length
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4884,6 +5229,7 @@ ZwSetSecurityObject(
     _In_ SECURITY_INFORMATION SecurityInformation,
     _In_ PSECURITY_DESCRIPTOR SecurityDescriptor
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -4958,6 +5304,7 @@ ZwSetTimer(
     _Out_opt_ PBOOLEAN PreviousState
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -4968,6 +5315,7 @@ ZwSetTimer2(
     _In_opt_ PLARGE_INTEGER Period,
     _In_opt_ PT2_SET_PARAMETERS Parameters
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5023,6 +5371,7 @@ ZwSetVolumeInformationFile(
     _In_ FSINFOCLASS FsInformationClass
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5030,6 +5379,7 @@ NTAPI
 ZwSetWnfProcessNotificationEvent(
     _In_ HANDLE NotificationEvent
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5048,6 +5398,7 @@ ZwShutdownWorkerFactory(
     _Inout_ volatile LONG* PendingWorkerCount
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5058,6 +5409,7 @@ ZwSignalAndWaitForSingleObject(
     _In_ BOOLEAN Alertable,
     _In_opt_ PLARGE_INTEGER Timeout
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5084,6 +5436,7 @@ ZwStopProfile(
     _In_ HANDLE ProfileHandle
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5094,7 +5447,9 @@ ZwSubmitIoRing(
     _In_opt_ ULONG WaitOperations,
     _In_opt_ PLARGE_INTEGER Timeout
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5105,7 +5460,9 @@ ZwSubscribeWnfStateChange(
     _In_ ULONG EventMask,
     _Out_opt_ PULONG64 SubscriptionId
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5113,7 +5470,9 @@ NTAPI
 ZwSuspendProcess(
     _In_ HANDLE ProcessHandle
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5122,6 +5481,7 @@ ZwSuspendThread(
     _In_ HANDLE ThreadHandle,
     _Out_opt_ PULONG PreviousSuspendCount
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5136,6 +5496,7 @@ ZwSystemDebugControl(
     _Out_opt_ PULONG ReturnLength
     );
 
+#if (NTDDI_VERSION >= NTDDI_WIN10)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5144,7 +5505,9 @@ ZwTerminateEnclave(
     _In_ PVOID BaseAddress,
     _In_ ULONG Flags // TERMINATE_ENCLAVE_FLAG_*
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5153,7 +5516,9 @@ ZwTerminateJobObject(
     _In_ HANDLE JobHandle,
     _In_ NTSTATUS ExitStatus
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5162,7 +5527,9 @@ ZwTerminateProcess(
     _In_opt_ HANDLE ProcessHandle,
     _In_ NTSTATUS ExitStatus
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5171,7 +5538,9 @@ ZwTerminateThread(
     _In_opt_ HANDLE ThreadHandle,
     _In_ NTSTATUS ExitStatus
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5179,6 +5548,7 @@ NTAPI
 ZwTestAlert(
     VOID
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5285,6 +5655,7 @@ ZwUnlockFile(
     _In_ ULONG Key
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5295,7 +5666,9 @@ ZwUnlockVirtualMemory(
     _Inout_ PSIZE_T RegionSize,
     _In_ ULONG MapType
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5304,7 +5677,10 @@ ZwUnmapViewOfSection(
     _In_ HANDLE ProcessHandle,
     _In_opt_ PVOID BaseAddress
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5314,7 +5690,10 @@ ZwUnmapViewOfSectionEx(
     _In_opt_ PVOID BaseAddress,
     _In_ ULONG Flags
     );
+#endif
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5322,7 +5701,9 @@ NTAPI
 ZwUnsubscribeWnfStateChange(
     _In_ PCWNF_STATE_NAME StateName
     );
+#endif
 
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5336,6 +5717,7 @@ ZwUpdateWnfStateData(
     _In_ WNF_CHANGE_STAMP MatchingChangeStamp,
     _In_ LOGICAL CheckStamp
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5346,6 +5728,8 @@ ZwVdmControl(
     _Inout_ PVOID ServiceData
     );
 
+#if !defined(_KERNEL_MODE)
+#if (NTDDI_VERSION >= NTDDI_WIN8)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5354,6 +5738,8 @@ ZwWaitForAlertByThreadId(
     _In_opt_ PVOID Address,
     _In_opt_ PLARGE_INTEGER Timeout
     );
+#endif
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5377,6 +5763,7 @@ ZwWaitForKeyedEvent(
     _In_opt_ PLARGE_INTEGER Timeout
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5388,7 +5775,9 @@ ZwWaitForMultipleObjects(
     _In_ BOOLEAN Alertable,
     _In_opt_ PLARGE_INTEGER Timeout
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5400,7 +5789,9 @@ ZwWaitForMultipleObjects32(
     _In_ BOOLEAN Alertable,
     _In_opt_ PLARGE_INTEGER Timeout
     );
+#endif
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5410,6 +5801,32 @@ ZwWaitForSingleObject(
     _In_ BOOLEAN Alertable,
     _In_opt_ PLARGE_INTEGER Timeout
     );
+#endif
+
+#if (NT_VERSION_MIN >= NT_VERSION_WIN8)
+_Kernel_entry_
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWaitForWorkViaWorkerFactory(
+    _In_ HANDLE WorkerFactoryHandle,
+    _Out_writes_to_(Count, *PacketsReturned) PFILE_IO_COMPLETION_INFORMATION MiniPackets,
+    _In_ ULONG Count,
+    _Out_ PULONG PacketsReturned,
+    _In_ PWORKER_FACTORY_DEFERRED_WORK DeferredWork
+    );
+#endif
+
+#if (NT_VERSION_MIN >= NT_VERSION_WIN8)
+#else
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwWaitForWorkViaWorkerFactory(
+    _In_ HANDLE WorkerFactoryHandle,
+    _Out_ PFILE_IO_COMPLETION_INFORMATION MiniPacket
+    );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
@@ -5544,6 +5961,7 @@ ZwWriteRequestData(
     _Out_opt_ PSIZE_T NumberOfBytesWritten
     );
 
+#if !defined(_KERNEL_MODE)
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -5555,6 +5973,7 @@ ZwWriteVirtualMemory(
     _In_ SIZE_T NumberOfBytesToWrite,
     _Out_opt_ PSIZE_T NumberOfBytesWritten
     );
+#endif
 
 _Kernel_entry_
 NTSYSCALLAPI
