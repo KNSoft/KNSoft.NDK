@@ -16,6 +16,8 @@
 
 #include "../NDK.h"
 
+#include <mbctype.h>
+
 #define _ARGPARSE_PARSE_FUNCNAME(x) Arg_ParseCmdline_##x
 #define ARGPARSE_PARSE_FUNCNAME(x) _ARGPARSE_PARSE_FUNCNAME(x)
 #define ARGPARSE_PARSE_FUNC(x) static __inline VOID _ARGPARSE_PARSE_FUNCNAME(x)
@@ -58,6 +60,15 @@ ARGPARSE_PARSE_FUNC(TChar)(
         }
 
         c = *p++;
+        if (sizeof(TChar) == sizeof(CHAR) && _ismbblead((UCHAR)c) && *p != '\0')
+        {
+            ++*CharC;
+            if (ArgPtr)
+            {
+                *ArgPtr++ = *p;
+            }
+            ++p;
+        }
     } while (c != '\0' && (IsQuoted || (c != ' ' && c != '\t')));
 
     if (c == '\0')
@@ -141,6 +152,15 @@ ARGPARSE_PARSE_FUNC(TChar)(
                     *ArgPtr++ = *p;
                 }
 
+                if (sizeof(TChar) == sizeof(CHAR) && _ismbblead((UCHAR)*p) && p[1] != '\0')
+                {
+                    ++p;
+                    ++*CharC;
+                    if (ArgPtr)
+                    {
+                        *ArgPtr++ = *p;
+                    }
+                }
                 ++*CharC;
             }
 
@@ -250,6 +270,19 @@ ARGPARSE_BUILD_FUNC(TChar)(
                     SlashCount--;
                 }
                 *Cmdline++ = *p;
+            }
+            if (sizeof(TChar) == sizeof(CHAR) && _ismbblead((UCHAR)*p) && p[1] != '\0')
+            {
+                if (CharCount == MaxCharCount)
+                {
+                    return STATUS_INTEGER_OVERFLOW;
+                }
+                CharCount++;
+                p++;
+                if (Cmdline)
+                {
+                    *Cmdline++ = *p;
+                }
             }
             SlashCount = 0;
         }
