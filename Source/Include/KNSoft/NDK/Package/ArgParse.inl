@@ -194,6 +194,123 @@ ARGPARSE_ALLOC_FUNC(TChar)(
     return STATUS_SUCCESS;
 }
 
+#define _ARGPARSE_BUILD_FUNCNAME(x) Arg_BuildCmdline_##x
+#define ARGPARSE_BUILD_FUNCNAME(x) _ARGPARSE_BUILD_FUNCNAME(x)
+#define ARGPARSE_BUILD_FUNC(x) static __inline NTSTATUS _ARGPARSE_BUILD_FUNCNAME(x)
+
+/* ArgV[0] is the program name and must not contain double quotes; later arguments follow UCRT escaping rules. */
+ARGPARSE_BUILD_FUNC(TChar)(
+    _In_ ULONG ArgC,
+    _In_reads_(ArgC) _At_buffer_(ArgV, _Iter_, ArgC, _In_z_) CONST TChar* CONST* ArgV,
+    _Out_opt_ TChar* Cmdline,
+    _Out_ PSIZE_T CharC)
+{
+    CONST SIZE_T MaxCharCount = MAXSIZE_T / sizeof(TChar);
+    CONST TChar* p;
+    SIZE_T CharCount = 0, SlashCount;
+    ULONG Index;
+
+    for (Index = 0; Index < ArgC; Index++)
+    {
+        if (CharCount > MaxCharCount - 3)
+        {
+            return STATUS_INTEGER_OVERFLOW;
+        }
+        CharCount += 3;
+        if (Cmdline)
+        {
+            *Cmdline++ = '"';
+        }
+        SlashCount = 0;
+        for (p = ArgV[Index]; *p != '\0'; p++)
+        {
+            if (Index != 0 && *p == '\\')
+            {
+                SlashCount++;
+                continue;
+            }
+            if (Index != 0 && *p == '"')
+            {
+                if (SlashCount > (MaxCharCount - 1) / 2)
+                {
+                    return STATUS_INTEGER_OVERFLOW;
+                }
+                SlashCount = SlashCount * 2 + 1;
+            }
+            if (SlashCount >= MaxCharCount - CharCount)
+            {
+                return STATUS_INTEGER_OVERFLOW;
+            }
+            CharCount += SlashCount + 1;
+            if (Cmdline)
+            {
+                while (SlashCount != 0)
+                {
+                    *Cmdline++ = '\\';
+                    SlashCount--;
+                }
+                *Cmdline++ = *p;
+            }
+            SlashCount = 0;
+        }
+        // Escape trailing backslashes before the closing quote, except in the program name.
+        if (SlashCount > (MaxCharCount - CharCount) / 2)
+        {
+            return STATUS_INTEGER_OVERFLOW;
+        }
+        SlashCount *= 2;
+        CharCount += SlashCount;
+        if (Cmdline)
+        {
+            while (SlashCount != 0)
+            {
+                *Cmdline++ = '\\';
+                SlashCount--;
+            }
+            *Cmdline++ = '"';
+            *Cmdline++ = Index + 1 < ArgC ? ' ' : '\0';
+        }
+    }
+    if (ArgC == 0)
+    {
+        if (Cmdline)
+        {
+            *Cmdline = '\0';
+        }
+        CharCount = 1;
+    }
+    *CharC = CharCount;
+    return STATUS_SUCCESS;
+}
+
+#define _ARGPARSE_ALLOC_CMDLINE_FUNCNAME(x) Arg_AllocCmdline_##x
+#define ARGPARSE_ALLOC_CMDLINE_FUNCNAME(x) _ARGPARSE_ALLOC_CMDLINE_FUNCNAME(x)
+#define ARGPARSE_ALLOC_CMDLINE_FUNC(x) static __inline NTSTATUS _ARGPARSE_ALLOC_CMDLINE_FUNCNAME(x)
+
+ARGPARSE_ALLOC_CMDLINE_FUNC(TChar)(
+    _In_ ULONG ArgC,
+    _In_reads_(ArgC) _At_buffer_(ArgV, _Iter_, ArgC, _In_z_) CONST TChar* CONST* ArgV,
+    _Out_ TChar** Cmdline)
+{
+    SIZE_T CharCount;
+    TChar* Buffer;
+    NTSTATUS Status;
+
+    Status = ARGPARSE_BUILD_FUNCNAME(TChar)(ArgC, ArgV, NULL, &CharCount);
+    if (!NT_SUCCESS(Status))
+    {
+        return Status;
+    }
+    Buffer = (TChar*)RtlAllocateHeap(RtlProcessHeap(), 0, CharCount * sizeof(TChar));
+    if (Buffer == NULL)
+    {
+        return STATUS_NO_MEMORY;
+    }
+    ARGPARSE_BUILD_FUNCNAME(TChar)(ArgC, ArgV, Buffer, &CharCount);
+    *Cmdline = Buffer;
+    return STATUS_SUCCESS;
+}
+
 #define ARGPARSE_FREE_FUNC(ArgV) RtlFreeHeap(RtlProcessHeap(), 0, ArgV);
 
 #endif
