@@ -695,6 +695,9 @@
     <None Include="..\Include\KNSoft\NDK\Package\RandGen.inl">
       <Filter>Package</Filter>
     </None>
+    <None Include="..\Include\KNSoft\NDK\NT\Nls.inl">
+      <Filter>NT</Filter>
+    </None>
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Security\Token.inl">
       <Filter>NT\Rtl\Security</Filter>
     </None>

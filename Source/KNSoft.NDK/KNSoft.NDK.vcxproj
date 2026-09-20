@@ -282,6 +282,7 @@
     <None Include="..\Include\KNSoft\NDK\NT\Rtl\Wow.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\ArgParse.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\RandGen.inl" />
+    <None Include="..\Include\KNSoft\NDK\NT\Nls.inl" />
     <None Include="..\Include\KNSoft\NDK\Package\UnitTest.inl" />
     <None Include="..\Include\KNSoft\NDK\Win32\WinSta\Analysis.md" />
     <None Include="..\Include\KNSoft\NDK\Win32\CBS\Analysis.md" />
