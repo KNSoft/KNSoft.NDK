@@ -13,6 +13,7 @@ TEST_DECL_FUNC(KUSDStruct);
 TEST_DECL_FUNC(PebLdrStruct);
 TEST_DECL_FUNC(PebStruct);
 TEST_DECL_FUNC(RtlMemory);
+TEST_DECL_FUNC(RtlString);
 TEST_DECL_FUNC(RandGen);
 TEST_DECL_FUNC(StrSafeFunc);
 TEST_DECL_FUNC(TebStruct);
@@ -31,6 +32,7 @@ CONST UNITTEST_ENTRY UnitTestList[] = {
     TEST_DECL_ENTRY(PebLdrStruct),
     TEST_DECL_ENTRY(PebStruct),
     TEST_DECL_ENTRY(RtlMemory),
+    TEST_DECL_ENTRY(RtlString),
     TEST_DECL_ENTRY(RandGen),
     TEST_DECL_ENTRY(StrSafeFunc),
     TEST_DECL_ENTRY(TebStruct),

@@ -155,4 +155,77 @@ _Inline_RtlEraseUnicodeString(
     }
 }
 
+__inline
+CHAR
+NTAPI
+_Inline_RtlUpperChar(
+    _In_ CHAR Character)
+{
+    /* RtlpIsUtf8Process supplies a barrier; its result is unused by RtlUpperChar. */
+    MemoryBarrier();
+    if ((UCHAR)(Character - 'a') <= 'z' - 'a')
+    {
+        return Character ^ ('a' - 'A');
+    }
+    return Character;
+}
+
+__inline
+BOOLEAN
+NTAPI
+_Inline_RtlEqualString(
+    _In_ const STRING* String1,
+    _In_ const STRING* String2,
+    _In_ BOOLEAN CaseInSensitive)
+{
+    USHORT i;
+
+    if (String1->Length != String2->Length)
+    {
+        return FALSE;
+    }
+    if (!CaseInSensitive)
+    {
+        return RtlCompareMemory(String1->Buffer, String2->Buffer, String1->Length) == String1->Length;
+    }
+    for (i = 0; i < String1->Length; i++)
+    {
+        if (String1->Buffer[i] != String2->Buffer[i] &&
+            _Inline_RtlUpperChar(String1->Buffer[i]) != _Inline_RtlUpperChar(String2->Buffer[i]))
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+__inline
+BOOLEAN
+NTAPI
+_Inline_RtlEqualUnicodeString(
+    _In_ PCUNICODE_STRING String1,
+    _In_ PCUNICODE_STRING String2,
+    _In_ BOOLEAN CaseInSensitive)
+{
+    USHORT i;
+
+    if (String1->Length != String2->Length)
+    {
+        return FALSE;
+    }
+    if (!CaseInSensitive)
+    {
+        return RtlEqualMemory(String1->Buffer, String2->Buffer, String1->Length);
+    }
+    for (i = 0; (SIZE_T)i * sizeof(WCHAR) < String1->Length; i++)
+    {
+        if (String1->Buffer[i] != String2->Buffer[i] &&
+            RtlUpcaseUnicodeChar(String1->Buffer[i]) != RtlUpcaseUnicodeChar(String2->Buffer[i]))
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 EXTERN_C_END

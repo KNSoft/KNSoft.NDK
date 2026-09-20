@@ -226,6 +226,7 @@
     <ClCompile Include="NT\PebLdr.c" />
     <ClCompile Include="NT\PebTebKUSD.c" />
     <ClCompile Include="NT\RtlMemory.c" />
+    <ClCompile Include="NT\RtlString.c" />
     <ClCompile Include="RandGen.c" />
     <ClCompile Include="StrSafe.c" />
     <ClCompile Include="UnitTestFramework.c" />
