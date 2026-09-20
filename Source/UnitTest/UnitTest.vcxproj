@@ -224,6 +224,7 @@
     <ClCompile Include="NT\Nls.c" />
     <ClCompile Include="NT\Alpc.c" />
     <ClCompile Include="NT\Bcd.c" />
+    <ClCompile Include="NT\Ldr.c" />
     <ClCompile Include="NT\PebLdr.c" />
     <ClCompile Include="NT\PebTebKUSD.c" />
     <ClCompile Include="NT\RtlMemory.c" />

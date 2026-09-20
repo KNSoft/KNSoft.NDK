@@ -10,6 +10,9 @@
       <Filter>NT</Filter>
     </ClCompile>
     <ClCompile Include="StrSafe.c" />
+    <ClCompile Include="NT\Ldr.c">
+      <Filter>NT</Filter>
+    </ClCompile>
     <ClCompile Include="NT\PebLdr.c">
       <Filter>NT</Filter>
     </ClCompile>
