@@ -221,6 +221,7 @@
     <ClCompile Include="Win32\WinSta.c" />
     <ClCompile Include="HString.c" />
     <ClCompile Include="Main.c" />
+    <ClCompile Include="NT\Nls.c" />
     <ClCompile Include="NT\Alpc.c" />
     <ClCompile Include="NT\Bcd.c" />
     <ClCompile Include="NT\PebLdr.c" />

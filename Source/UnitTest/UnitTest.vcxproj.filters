@@ -3,6 +3,9 @@
   <ItemGroup>
     <ClCompile Include="UnitTestFramework.c" />
     <ClCompile Include="Main.c" />
+    <ClCompile Include="NT\Nls.c">
+      <Filter>NT</Filter>
+    </ClCompile>
     <ClCompile Include="NT\PebTebKUSD.c">
       <Filter>NT</Filter>
     </ClCompile>
