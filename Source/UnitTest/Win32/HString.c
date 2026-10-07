@@ -1,8 +1,12 @@
-﻿#include "UnitTest.h"
+﻿#include "../UnitTest.h"
 
 #include <winstring.h>
 
 #pragma comment(lib, "runtimeobject.lib")
+
+EXTERN_C BOOL HStringCppTestWinrt(VOID);
+EXTERN_C BOOL HStringCppTestReference(VOID);
+EXTERN_C BOOL HStringCppTestWrl(VOID);
 
 static
 VOID
@@ -13,7 +17,7 @@ CheckString(
     _In_ ULONG Length)
 {
     UINT32 SystemLength = MAXUINT32;
-    ULONG InlineLength = MAXULONG;
+    UINT32 InlineLength = MAXUINT32;
     PCWSTR SystemBuffer = WindowsGetStringRawBuffer(String, &SystemLength);
     PCWSTR InlineBuffer = _Inline_WindowsGetStringRawBuffer(String, &InlineLength);
 
@@ -826,4 +830,7 @@ TEST_FUNC(HString)
     TestSubstringAndCompare(TEST_PARAMETER_RESULT);
     TestLifetimeAndBounds(TEST_PARAMETER_RESULT);
     TestInvalidBuffer(TEST_PARAMETER_RESULT);
+    TEST_OK(HStringCppTestWinrt());
+    TEST_OK(HStringCppTestReference());
+    TEST_OK(HStringCppTestWrl());
 }

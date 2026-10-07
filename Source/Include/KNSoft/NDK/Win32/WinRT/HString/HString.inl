@@ -47,7 +47,7 @@ __inline
 HRESULT
 STDAPICALLTYPE
 _Inline_WindowsPreallocateStringBuffer(
-    _In_ ULONG length,
+    _In_ UINT32 length,
     _Outptr_result_buffer_(length + 1) WCHAR** charBuffer,
     _Outptr_ _Result_nullonfailure_ HSTRING_BUFFER* bufferHandle)
 {
@@ -83,7 +83,7 @@ HRESULT
 STDAPICALLTYPE
 _Inline_WindowsCreateString(
     _In_reads_opt_(length) PCNZWCH sourceString,
-    _In_ ULONG length,
+    _In_ UINT32 length,
     _Outptr_result_maybenull_ _Result_nullonfailure_ HSTRING* string)
 {
     if (string == NULL)
@@ -104,7 +104,7 @@ HRESULT
 STDAPICALLTYPE
 _Inline_WindowsCreateStringReference(
     _In_reads_opt_(length + 1) PCWSTR sourceString,
-    _In_ ULONG length,
+    _In_ UINT32 length,
     _Out_ HSTRING_HEADER* hstringHeader,
     _Outptr_result_maybenull_ _Result_nullonfailure_ HSTRING* string)
 {
@@ -144,7 +144,7 @@ _Inline_WindowsCreateStringReference(
 }
 
 __inline
-ULONG
+UINT32
 STDAPICALLTYPE
 _Inline_WindowsGetStringLen(
     _In_opt_ HSTRING string)
@@ -157,7 +157,7 @@ PCWSTR
 STDAPICALLTYPE
 _Inline_WindowsGetStringRawBuffer(
     _In_opt_ HSTRING string,
-    _Out_opt_ ULONG* length)
+    _Out_opt_ UINT32* length)
 {
     HSTRING p = string;
     PCWSTR psz;
@@ -360,7 +360,7 @@ HRESULT
 STDAPICALLTYPE
 _Inline_WindowsSubstring(
     _In_opt_ HSTRING string,
-    _In_ ULONG startIndex,
+    _In_ UINT32 startIndex,
     _Outptr_result_maybenull_ _Result_nullonfailure_ HSTRING* newString)
 {
     ULONG Length;
@@ -393,8 +393,8 @@ HRESULT
 STDAPICALLTYPE
 _Inline_WindowsSubstringWithSpecifiedLength(
     _In_opt_ HSTRING string,
-    _In_ ULONG startIndex,
-    _In_ ULONG length,
+    _In_ UINT32 startIndex,
+    _In_ UINT32 length,
     _Outptr_result_maybenull_ _Result_nullonfailure_ HSTRING* newString)
 {
     ULONG Length;

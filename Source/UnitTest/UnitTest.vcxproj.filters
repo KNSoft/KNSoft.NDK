@@ -37,7 +37,12 @@
     <ClCompile Include="Win32\WinSta.c">
       <Filter>Win32</Filter>
     </ClCompile>
-    <ClCompile Include="HString.c" />
+    <ClCompile Include="Win32\HString.c">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32\HStringCpp.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Win32">
