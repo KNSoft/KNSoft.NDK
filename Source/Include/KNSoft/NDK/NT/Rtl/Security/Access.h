@@ -6,6 +6,14 @@ EXTERN_C_START
 
 /* ntddk.h */
 
+/**
+ * The RtlMapGenericMask routine maps the generic access rights in an access mask to their corresponding specific and
+ * standard rights.
+ *
+ * \param AccessMask A pointer to the access mask whose generic rights are mapped in place.
+ * \param GenericMapping A pointer to the GENERIC_MAPPING that defines the mapping of generic rights.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlmapgenericmask
+ */
 _IRQL_requires_max_(APC_LEVEL)
 NTSYSAPI
 VOID

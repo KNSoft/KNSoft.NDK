@@ -9,6 +9,9 @@ EXTERN_C_START
 #define COMPRESSION_FORMAT_MAX           (0x0008)
 #define COMPRESSION_ENGINE_MAX           (0x0200)
 
+/**
+ * Masks for extracting the compression format and engine from a combined value.
+ */
 #define COMPRESSION_FORMAT_MASK          (0x00FF)
 #define COMPRESSION_ENGINE_MASK          (0xFF00)
 #define COMPRESSION_FORMAT_ENGINE_MASK   (COMPRESSION_FORMAT_MASK |         \
@@ -24,6 +27,9 @@ EXTERN_C_START
 //  is an input.
 //
 
+/**
+ * Describes the format and parameters of a compressed data buffer.
+ */
 typedef struct _COMPRESSED_DATA_INFO
 {
 
@@ -80,7 +86,20 @@ typedef COMPRESSED_DATA_INFO *PCOMPRESSED_DATA_INFO;
 #ifdef _NT_STATIC_RTL_COMPRESS_
 #define NT_RTL_COMPRESS_API
 #else
-#define NT_RTL_COMPRESS_API NTSYSAPI
+#define NT_RTL_COMPRESS_API /**
+ * The RtlGetCompressionWorkSpaceSize routine determines the size of the work space required by the compression and
+ * decompression routines.
+ *
+ * \param CompressionFormatAndEngine The compression format and engine (for example, COMPRESSION_FORMAT_LZNT1 combined
+ * with an engine value).
+ * \param CompressBufferWorkSpaceSize A pointer to a variable that receives the work space size required to compress a
+ * buffer.
+ * \param CompressFragmentWorkSpaceSize A pointer to a variable that receives the work space size required to compress a
+ * fragment.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlgetcompressionworkspacesize
+ */
+NTSYSAPI
 #endif
 
 NT_RTL_COMPRESS_API
@@ -93,6 +112,20 @@ RtlGetCompressionWorkSpaceSize(
 );
 
 NT_RTL_COMPRESS_API
+/**
+ * The RtlCompressBuffer routine compresses a buffer using the specified compression format and engine.
+ *
+ * \param CompressionFormatAndEngine The compression format (COMPRESSION_FORMAT_*) combined with the engine
+ * (COMPRESSION_ENGINE_*).
+ * \param UncompressedBuffer The data to compress.
+ * \param UncompressedBufferSize The size, in bytes, of UncompressedBuffer.
+ * \param CompressedBuffer A buffer that receives the compressed data.
+ * \param CompressedBufferSize The size, in bytes, of CompressedBuffer.
+ * \param UncompressedChunkSize The chunk size used during compression (typically 4096).
+ * \param FinalCompressedSize Receives the size, in bytes, of the compressed data.
+ * \param WorkSpace A workspace buffer sized per RtlGetCompressionWorkSpaceSize.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSTATUS
 NTAPI
 RtlCompressBuffer(
@@ -107,6 +140,19 @@ RtlCompressBuffer(
 );
 
 NT_RTL_COMPRESS_API
+/**
+ * The RtlDecompressBuffer routine decompresses an entire compressed buffer.
+ *
+ * \param CompressionFormat The compression format used to compress the buffer.
+ * \param UncompressedBuffer A buffer that receives the decompressed data.
+ * \param UncompressedBufferSize The size, in bytes, of the uncompressed buffer.
+ * \param CompressedBuffer A pointer to the compressed data.
+ * \param CompressedBufferSize The size, in bytes, of the compressed buffer.
+ * \param FinalUncompressedSize A pointer to a variable that receives the number of bytes written to the uncompressed
+ * buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtldecompressbuffer
+ */
 NTSTATUS
 NTAPI
 RtlDecompressBuffer(
@@ -120,6 +166,19 @@ RtlDecompressBuffer(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8) || defined(_NT_STATIC_RTL_COMPRESS_)
 NT_RTL_COMPRESS_API
+/**
+ * The RtlDecompressBufferEx routine decompresses a buffer using the specified compression format, with an optional
+ * caller-supplied workspace.
+ *
+ * \param CompressionFormat The compression format (COMPRESSION_FORMAT_*) of the compressed data.
+ * \param UncompressedBuffer A buffer that receives the decompressed data.
+ * \param UncompressedBufferSize The size, in bytes, of UncompressedBuffer.
+ * \param CompressedBuffer The compressed data to decompress.
+ * \param CompressedBufferSize The size, in bytes, of CompressedBuffer.
+ * \param FinalUncompressedSize Receives the size, in bytes, of the decompressed data.
+ * \param WorkSpace An optional workspace buffer sized per RtlGetCompressionWorkSpaceSize.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSTATUS
 NTAPI
 RtlDecompressBufferEx(
@@ -135,6 +194,20 @@ RtlDecompressBufferEx(
 
 #if (NTDDI_VERSION >= NTDDI_WINBLUE) || defined(_NT_STATIC_RTL_COMPRESS_)
 NT_RTL_COMPRESS_API
+/**
+ * The RtlDecompressBufferEx2 routine decompresses a buffer using the specified compression format and chunk size, with
+ * an optional workspace.
+ *
+ * \param CompressionFormat The compression format (COMPRESSION_FORMAT_*) of the compressed data.
+ * \param UncompressedBuffer A buffer that receives the decompressed data.
+ * \param UncompressedBufferSize The size, in bytes, of UncompressedBuffer.
+ * \param CompressedBuffer The compressed data to decompress.
+ * \param CompressedBufferSize The size, in bytes, of CompressedBuffer.
+ * \param UncompressedChunkSize The chunk size used during compression (typically 4096).
+ * \param FinalUncompressedSize Receives the size, in bytes, of the decompressed data.
+ * \param WorkSpace An optional workspace buffer sized per RtlGetCompressionWorkSpaceSize.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSTATUS
 NTAPI
 RtlDecompressBufferEx2(
@@ -150,6 +223,19 @@ RtlDecompressBufferEx2(
 #endif
 
 NT_RTL_COMPRESS_API
+/**
+ * The RtlDecompressFragment routine decompresses a fragment of a compressed buffer beginning at the specified offset.
+ *
+ * \param CompressionFormat The compression format (COMPRESSION_FORMAT_*) of the compressed data.
+ * \param UncompressedFragment A buffer that receives the decompressed fragment.
+ * \param UncompressedFragmentSize The size, in bytes, of UncompressedFragment.
+ * \param CompressedBuffer The compressed data to decompress.
+ * \param CompressedBufferSize The size, in bytes, of CompressedBuffer.
+ * \param FragmentOffset The offset, in bytes, into the uncompressed data at which the fragment begins.
+ * \param FinalUncompressedSize Receives the size, in bytes, of the decompressed fragment.
+ * \param WorkSpace A workspace buffer sized per RtlGetCompressionWorkSpaceSize.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSTATUS
 NTAPI
 RtlDecompressFragment(
@@ -165,6 +251,20 @@ RtlDecompressFragment(
 
 #if (NTDDI_VERSION >= NTDDI_WINBLUE) || defined(_NT_STATIC_RTL_COMPRESS_)
 NT_RTL_COMPRESS_API
+/**
+ * The RtlDecompressFragmentEx routine decompresses a fragment of a compressed buffer using the specified chunk size.
+ *
+ * \param CompressionFormat The compression format (COMPRESSION_FORMAT_*) of the compressed data.
+ * \param UncompressedFragment A buffer that receives the decompressed fragment.
+ * \param UncompressedFragmentSize The size, in bytes, of UncompressedFragment.
+ * \param CompressedBuffer The compressed data to decompress.
+ * \param CompressedBufferSize The size, in bytes, of CompressedBuffer.
+ * \param FragmentOffset The offset, in bytes, into the uncompressed data at which the fragment begins.
+ * \param UncompressedChunkSize The chunk size used during compression (typically 4096).
+ * \param FinalUncompressedSize Receives the size, in bytes, of the decompressed fragment.
+ * \param WorkSpace A workspace buffer sized per RtlGetCompressionWorkSpaceSize.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSTATUS
 NTAPI
 RtlDecompressFragmentEx(
@@ -180,6 +280,18 @@ RtlDecompressFragmentEx(
 );
 #endif
 
+/**
+ * The RtlDescribeChunk routine describes the next chunk within a compressed buffer and advances the buffer pointer past
+ * it.
+ *
+ * \param CompressionFormat The compression format used to compress the buffer.
+ * \param CompressedBuffer A pointer to a variable that points to the current position in the compressed buffer. On
+ * return, the variable is advanced past the described chunk.
+ * \param EndOfCompressedBufferPlus1 A pointer to the first byte beyond the end of the compressed buffer.
+ * \param ChunkBuffer A pointer to a variable that receives a pointer to the chunk data.
+ * \param ChunkSize A pointer to a variable that receives the size, in bytes, of the chunk.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -191,6 +303,17 @@ RtlDescribeChunk(
     _Out_ PULONG ChunkSize
 );
 
+/**
+ * The RtlReserveChunk routine reserves space for a chunk within a compressed buffer.
+ *
+ * \param CompressionFormat The compression format used to compress the buffer.
+ * \param CompressedBuffer A pointer to a variable that points to the current position in the compressed buffer. On
+ * return, the variable is advanced past the reserved chunk.
+ * \param EndOfCompressedBufferPlus1 A pointer to the first byte beyond the end of the compressed buffer.
+ * \param ChunkBuffer A pointer to a variable that receives a pointer to the reserved chunk data.
+ * \param ChunkSize The size, in bytes, of the chunk to reserve.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -202,6 +325,19 @@ RtlReserveChunk(
     _In_ ULONG ChunkSize
 );
 
+/**
+ * The RtlDecompressChunks routine decompresses a set of compressed chunks described by a compressed data information
+ * structure.
+ *
+ * \param UncompressedBuffer A buffer that receives the decompressed data.
+ * \param UncompressedBufferSize The size, in bytes, of the uncompressed buffer.
+ * \param CompressedBuffer A pointer to the compressed data.
+ * \param CompressedBufferSize The size, in bytes, of the compressed buffer.
+ * \param CompressedTail A pointer to the compressed tail data.
+ * \param CompressedTailSize The size, in bytes, of the compressed tail.
+ * \param CompressedDataInfo A pointer to the structure that describes the compressed chunks.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -215,6 +351,18 @@ RtlDecompressChunks(
     _In_ PCOMPRESSED_DATA_INFO CompressedDataInfo
 );
 
+/**
+ * The RtlCompressChunks routine compresses a buffer as a series of chunks, recording per-chunk metadata.
+ *
+ * \param UncompressedBuffer The data to compress.
+ * \param UncompressedBufferSize The size, in bytes, of UncompressedBuffer.
+ * \param CompressedBuffer A buffer that receives the compressed data.
+ * \param CompressedBufferSize The size, in bytes, of CompressedBuffer.
+ * \param CompressedDataInfo Receives per-chunk compressed data information.
+ * \param CompressedDataInfoLength The size, in bytes, of CompressedDataInfo.
+ * \param WorkSpace A workspace buffer sized per RtlGetCompressionWorkSpaceSize.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

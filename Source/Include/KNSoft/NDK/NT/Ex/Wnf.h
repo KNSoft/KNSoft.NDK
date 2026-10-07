@@ -6,6 +6,9 @@ EXTERN_C_START
 
 /* phnt */
 
+/**
+ * The WNF_STATE_NAME_LIFETIME enumeration defines the lifetime of a Windows Notification Facility (WNF) state name.
+ */
 typedef enum _WNF_STATE_NAME_LIFETIME
 {
     WnfWellKnownStateName,
@@ -14,6 +17,9 @@ typedef enum _WNF_STATE_NAME_LIFETIME
     WnfTemporaryStateName
 } WNF_STATE_NAME_LIFETIME, *PWNF_STATE_NAME_LIFETIME;
 
+/**
+ * The WNF_STATE_NAME_INFORMATION enumeration defines the queryable information about a WNF state name.
+ */
 typedef enum _WNF_STATE_NAME_INFORMATION
 {
     WnfInfoStateNameExist,
@@ -21,6 +27,9 @@ typedef enum _WNF_STATE_NAME_INFORMATION
     WnfInfoIsQuiescent
 } WNF_STATE_NAME_INFORMATION, *PWNF_STATE_NAME_INFORMATION;
 
+/**
+ * The WNF_DATA_SCOPE enumeration defines the scope in which a WNF state's data is maintained.
+ */
 typedef enum _WNF_DATA_SCOPE
 {
     WnfDataScopeSystem,
@@ -31,6 +40,9 @@ typedef enum _WNF_DATA_SCOPE
     WnfDataScopePhysicalMachine, // WIN11
 } WNF_DATA_SCOPE;
 
+/**
+ * The WNF_TYPE_ID structure identifies the type of data associated with a WNF state.
+ */
 typedef struct _WNF_TYPE_ID
 {
     GUID TypeId;
@@ -40,6 +52,9 @@ typedef const WNF_TYPE_ID *PCWNF_TYPE_ID;
 
 typedef ULONG WNF_CHANGE_STAMP, *PWNF_CHANGE_STAMP;
 
+/**
+ * The WNF_DELIVERY_DESCRIPTOR structure describes a Windows Notification Facility (WNF) state change delivery.
+ */
 typedef struct _WNF_DELIVERY_DESCRIPTOR
 {
     ULONGLONG SubscriptionId;

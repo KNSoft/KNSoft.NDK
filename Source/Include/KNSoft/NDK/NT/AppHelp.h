@@ -75,6 +75,9 @@ typedef enum _AHC_INFO_CLASS
 // Cache structures and APIs.
 //
 
+/**
+ * The AHC_SERVICE_CLASS enumeration identifies the operation class for an NtApphelpCacheControl request.
+ */
 typedef enum _AHC_SERVICE_CLASS
 {
     ApphelpCacheServiceLookup = 0,
@@ -92,6 +95,10 @@ typedef enum _AHC_SERVICE_CLASS
     ApphelpCacheServiceMax
 } AHC_SERVICE_CLASS;
 
+/**
+ * The AHC_SERVICE_LOOKUP structure contains the parameters for an application compatibility (AppHelp) cache lookup
+ * request.
+ */
 typedef struct _AHC_SERVICE_LOOKUP
 {
     AHC_INFO_CLASS InfoClass;                   // Information to lookup.
@@ -106,6 +113,10 @@ typedef struct _AHC_SERVICE_LOOKUP
     UINT EnvironmentSize;                       // Size of environment block in bytes.
 } AHC_SERVICE_LOOKUP, *PAHC_SERVICE_LOOKUP;
 
+/**
+ * The AHC_SERVICE_REMOVE structure contains the parameters for an application compatibility (AppHelp) cache remove
+ * request.
+ */
 typedef struct _AHC_SERVICE_REMOVE
 {
     AHC_INFO_CLASS InfoClass;
@@ -114,6 +125,10 @@ typedef struct _AHC_SERVICE_REMOVE
     UNICODE_STRING ExeSignature;
 } AHC_SERVICE_REMOVE, *PAHC_SERVICE_REMOVE;
 
+/**
+ * The AHC_SERVICE_UPDATE structure contains the parameters for an application compatibility (AppHelp) cache update
+ * request.
+ */
 typedef struct _AHC_SERVICE_UPDATE
 {
     AHC_INFO_CLASS InfoClass;
@@ -124,11 +139,19 @@ typedef struct _AHC_SERVICE_UPDATE
     ULONG DataSize;
 } AHC_SERVICE_UPDATE, *PAHC_SERVICE_UPDATE;
 
+/**
+ * The AHC_SERVICE_CLEAR structure contains the parameters for an application compatibility (AppHelp) cache clear
+ * request.
+ */
 typedef struct _AHC_SERVICE_CLEAR
 {
     AHC_INFO_CLASS InfoClass;
 } AHC_SERVICE_CLEAR, *PAHC_SERVICE_CLEAR;
 
+/**
+ * The AHC_SERVICE_LOOKUP_CDB structure contains the compatibility database (CDB) parameters for an application
+ * compatibility cache lookup.
+ */
 typedef struct _AHC_SERVICE_LOOKUP_CDB
 {
     UNICODE_STRING Name;
@@ -179,6 +202,9 @@ typedef struct _AHC_SERVICE_LOOKUP_CDB
 // Statistics.
 //
 
+/**
+ * The AHC_MAIN_STATISTICS structure contains the main application compatibility (AppHelp) cache statistics.
+ */
 typedef struct _AHC_MAIN_STATISTICS
 {
     ULONG Lookup;                               // Count of lookup calls.
@@ -189,6 +215,9 @@ typedef struct _AHC_MAIN_STATISTICS
     ULONG SnapCache;                            // Count of snap store calls.
 } AHC_MAIN_STATISTICS, *PAHC_MAIN_STATISTICS;
 
+/**
+ * The AHC_STORE_STATISTICS structure contains the application compatibility (AppHelp) cache store statistics.
+ */
 typedef struct _AHC_STORE_STATISTICS
 {
     ULONG LookupHits;                           // Count of lookup hits.
@@ -198,6 +227,9 @@ typedef struct _AHC_STORE_STATISTICS
     ULONG Updated;                              // Count of updates.
 } AHC_STORE_STATISTICS, *PAHC_STORE_STATISTICS;
 
+/**
+ * The AHC_STATISTICS structure contains the combined application compatibility (AppHelp) cache statistics.
+ */
 typedef struct _AHC_STATISTICS
 {
     ULONG Size;                                 // Size of the structure.
@@ -205,6 +237,9 @@ typedef struct _AHC_STATISTICS
     AHC_STORE_STATISTICS Store;                 // Store statistics.
 } AHC_STATISTICS, *PAHC_STATISTICS;
 
+/**
+ * The AHC_SERVICE_DATAQUERY structure contains the parameters for an application compatibility cache data query.
+ */
 typedef struct _AHC_SERVICE_DATAQUERY
 {
     AHC_STATISTICS Stats;                       // Statistics.
@@ -212,6 +247,9 @@ typedef struct _AHC_SERVICE_DATAQUERY
     PBYTE Data;                                 // Data.
 } AHC_SERVICE_DATAQUERY, *PAHC_SERVICE_DATAQUERY;
 
+/**
+ * The AHC_SERVICE_DATACACHE structure contains the cached data for an application compatibility cache entry.
+ */
 typedef struct _AHC_SERVICE_DATACACHE
 {
     HANDLE FileHandle;                          // User space handle to file.
@@ -226,12 +264,19 @@ typedef struct _AHC_SERVICE_DATACACHE
     PBYTE CustomData;                           // Pointer to the custom data.
 } AHC_SERVICE_DATACACHE, *PAHC_SERVICE_DATACACHE;
 
+/**
+ * The AHC_SERVICE_HWID_QUERY structure contains the parameters for an application compatibility hardware ID (HWID)
+ * query.
+ */
 typedef struct _AHC_SERVICE_HWID_QUERY
 {
     BOOLEAN QueryResult;                        // Query result
     UNICODE_STRING HwId;                        // Query HwId; can contain wildcards
 } AHC_SERVICE_HWID_QUERY, *PAHC_SERVICE_HWID_QUERY;
 
+/**
+ * The AHC_SERVICE_DATA structure contains the service data passed to NtApphelpCacheControl.
+ */
 typedef struct _AHC_SERVICE_DATA
 {
     AHC_SERVICE_LOOKUP Lookup;                  // Lookup EXE/Package.
@@ -246,6 +291,13 @@ typedef struct _AHC_SERVICE_DATA
     ULONG ParamsOutSize;                        // Parameters out size.
 } AHC_SERVICE_DATA, *PAHC_SERVICE_DATA;
 
+/**
+ * The NtApphelpCacheControl routine performs an operation on the application compatibility (AppHelp) shim cache.
+ *
+ * \param[in] ServiceClass The application compatibility cache operation to perform.
+ * \param[in, out, optional] ServiceContext Pointer to the operation-specific data buffer (AHC_SERVICE_DATA).
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS

@@ -7,9 +7,19 @@ EXTERN_C_START
 
 /* Addendum to SList */
 
+/**
+ * The RtlInterlockedPushListSList routine atomically pushes a list of entries onto a singly linked interlocked list
+ * (SLIST).
+ *
+ * \param ListHead The SLIST header to push onto.
+ * \param List A pointer to the first entry in the list being inserted.
+ * \param ListEnd A pointer to the last entry in the list being inserted.
+ * \param Count The number of entries in the list being inserted.
+ * \return The previous first entry of the list.
+ */
 NTSYSAPI
 PSLIST_ENTRY
-NTAPI
+FASTCALL
 RtlInterlockedPushListSList(
     _Inout_ PSLIST_HEADER ListHead,
     _Inout_ __drv_aliasesMem PSLIST_ENTRY List,
@@ -25,6 +35,9 @@ RtlInterlockedPushListSList(
 
 #define InitializeListHead32(ListHead) ((ListHead)->Flink = (ListHead)->Blink = PtrToUlong((ListHead)))
 
+/**
+ * Declares and statically initializes a doubly linked list head.
+ */
 #define RTL_STATIC_LIST_HEAD(x) LIST_ENTRY x = { &x, &x }
 
 FORCEINLINE
@@ -362,6 +375,12 @@ AppendTailList(
 
 #endif // NO_KERNEL_LIST_ENTRY_CHECKS
 
+/**
+ * The IsSingleListEmpty routine indicates whether a singly linked list is empty.
+ *
+ * \param ListHead A pointer to the SINGLE_LIST_ENTRY that serves as the list header.
+ * \return Returns `TRUE` if the list is empty, otherwise `FALSE`.
+ */
 _Must_inspect_result_
 FORCEINLINE
 BOOLEAN
@@ -402,6 +421,13 @@ PushEntryList(
 // Single list volatile accessors
 //
 
+/**
+ * The IsSingleListEmptyNoFence routine indicates whether a singly linked list is empty using a no-fence
+ * (non-serializing) read.
+ *
+ * \param ListHead A pointer to the SINGLE_LIST_ENTRY that serves as the list header.
+ * \return Returns `TRUE` if the list is empty, otherwise `FALSE`.
+ */
 _Must_inspect_result_
 FORCEINLINE
 BOOLEAN
@@ -411,6 +437,13 @@ IsSingleListEmptyNoFence(
     return ReadPointerNoFence((PVOID*)&ListHead->Next) == NULL;
 }
 
+/**
+ * The PopEntryListNoFence routine removes the first entry from a singly linked list using a no-fence (non-serializing)
+ * read.
+ *
+ * \param ListHead A pointer to the SINGLE_LIST_ENTRY that serves as the list header.
+ * \return PSINGLE_LIST_ENTRY A pointer to the entry removed from the list, or `NULL` if the list was empty.
+ */
 FORCEINLINE
 PSINGLE_LIST_ENTRY
 PopEntryListNoFence(
@@ -427,6 +460,13 @@ PopEntryListNoFence(
     return FirstEntry;
 }
 
+/**
+ * The PushEntryListNoFence routine inserts an entry at the front of a singly linked list using a no-fence
+ * (non-serializing) write.
+ *
+ * \param ListHead A pointer to the SINGLE_LIST_ENTRY that serves as the list header.
+ * \param Entry A pointer to the SINGLE_LIST_ENTRY to insert at the front of the list.
+ */
 FORCEINLINE
 VOID
 PushEntryListNoFence(
@@ -442,6 +482,13 @@ PushEntryListNoFence(
 // List volatile accessors
 //
 
+/**
+ * The RemoveEntryListNoFence routine removes an entry from a doubly linked list using no-fence (non-serializing)
+ * writes.
+ *
+ * \param Entry A pointer to the LIST_ENTRY that represents the entry to remove.
+ * \return Returns `TRUE` if the list is empty after removing the entry, otherwise `FALSE`.
+ */
 FORCEINLINE
 BOOLEAN
 RemoveEntryListNoFence(
@@ -466,6 +513,13 @@ RemoveEntryListNoFence(
     return (BOOLEAN)(PrevEntry == NextEntry);
 }
 
+/**
+ * The RemoveHeadListNoFence routine removes the entry at the head of a doubly linked list using no-fence
+ * (non-serializing) accesses.
+ *
+ * \param ListHead A pointer to the LIST_ENTRY that serves as the list header.
+ * \return PLIST_ENTRY A pointer to the entry removed from the head of the list.
+ */
 FORCEINLINE
 PLIST_ENTRY
 RemoveHeadListNoFence(
@@ -494,6 +548,13 @@ RemoveHeadListNoFence(
     return Entry;
 }
 
+/**
+ * The RemoveTailListNoFence routine removes the entry at the tail of a doubly linked list using no-fence
+ * (non-serializing) accesses.
+ *
+ * \param ListHead A pointer to the LIST_ENTRY that serves as the list header.
+ * \return PLIST_ENTRY A pointer to the entry removed from the tail of the list.
+ */
 FORCEINLINE
 PLIST_ENTRY
 RemoveTailListNoFence(
@@ -522,6 +583,13 @@ RemoveTailListNoFence(
     return Entry;
 }
 
+/**
+ * The InsertTailListNoFence routine inserts an entry at the tail of a doubly linked list using a no-fence
+ * (non-serializing) write.
+ *
+ * \param ListHead A pointer to the LIST_ENTRY that serves as the list header.
+ * \param Entry A pointer to the LIST_ENTRY to insert at the tail of the list.
+ */
 FORCEINLINE
 VOID
 InsertTailListNoFence(
@@ -549,6 +617,13 @@ InsertTailListNoFence(
     return;
 }
 
+/**
+ * The InsertHeadListNoFence routine inserts an entry at the head of a doubly linked list using a no-fence
+ * (non-serializing) write.
+ *
+ * \param ListHead A pointer to the LIST_ENTRY that serves as the list header.
+ * \param Entry A pointer to the LIST_ENTRY to insert at the head of the list.
+ */
 FORCEINLINE
 VOID
 InsertHeadListNoFence(
@@ -576,6 +651,13 @@ InsertHeadListNoFence(
     return;
 }
 
+/**
+ * The AppendTailListNoFence routine appends a doubly linked list to the tail of another doubly linked list using a
+ * no-fence (non-serializing) write.
+ *
+ * \param ListHead A pointer to the LIST_ENTRY that serves as the header of the destination list.
+ * \param ListToAppend A pointer to the LIST_ENTRY that serves as the header of the list to append.
+ */
 FORCEINLINE
 VOID
 AppendTailListNoFence(
@@ -595,6 +677,9 @@ AppendTailListNoFence(
 }
 
 // Rtl-prefixed aliases for list helpers.
+/**
+ * Rtl-prefixed aliases for the standard doubly linked list manipulation macros.
+ */
 #define RtlInitializeListHead InitializeListHead
 #define RtlInitializeListHead32 InitializeListHead32
 #define RtlIsListEmpty IsListEmpty

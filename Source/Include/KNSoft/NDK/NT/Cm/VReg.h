@@ -25,6 +25,10 @@ EXTERN_C_START
 #define IOCTL_VR_UNLOAD_DIFFERENCING_HIVE_FOR_HOST  CTL_CODE(FILE_DEVICE_UNKNOWN, 9, METHOD_BUFFERED, FILE_ANY_ACCESS) // in: VR_UNLOAD_DIFFERENCING_HIVE_FOR_HOST
 
 // private
+/**
+ * VR_INITIALIZE_JOB_FOR_VREG is used with the VReg driver to associate a job object
+ * with the virtualization driver instance.
+ */
 typedef struct _VR_INITIALIZE_JOB_FOR_VREG
 {
     HANDLE Job;
@@ -36,6 +40,13 @@ typedef struct _VR_INITIALIZE_JOB_FOR_VREG
 #define VR_FLAG_LOCAL_MACHINE_TRUST_CLASS 0x00000004 // since 21H1
 
 // rev + private
+/**
+ * VR_LOAD_DIFFERENCING_HIVE describes parameters for loading a differencing hive
+ * for the virtualization driver.
+ *
+ * The structure contains job handle, path length fields, flags and an inline
+ * buffer with wide-character strings for the paths.
+ */
 typedef struct _VR_LOAD_DIFFERENCING_HIVE
 {
     HANDLE Job;
@@ -54,6 +65,10 @@ typedef struct _VR_LOAD_DIFFERENCING_HIVE
 } VR_LOAD_DIFFERENCING_HIVE, *PVR_LOAD_DIFFERENCING_HIVE;
 
 // rev + private
+/**
+ * VR_CREATE_NAMESPACE_NODE contains parameters for creating a namespace node
+ * that maps a container path to a host path for virtualized registry access.
+ */
 typedef struct _VR_CREATE_NAMESPACE_NODE
 {
     HANDLE Job;
@@ -68,6 +83,10 @@ typedef struct _VR_CREATE_NAMESPACE_NODE
 } VR_CREATE_NAMESPACE_NODE, *PVR_CREATE_NAMESPACE_NODE;
 
 // private
+/**
+ * VR_MODIFY_FLAGS specifies flags to add or remove for a given job in the
+ * virtualization driver.
+ */
 typedef struct _VR_MODIFY_FLAGS
 {
     HANDLE Job;
@@ -76,6 +95,10 @@ typedef struct _VR_MODIFY_FLAGS
 } VR_MODIFY_FLAGS, *PVR_MODIFY_FLAGS;
 
 // private
+/**
+ * NAMESPACE_NODE_DATA describes a single namespace node entry containing access
+ * mask, path lengths, flags and inline strings for paths.
+ */
 typedef struct _NAMESPACE_NODE_DATA
 {
     ACCESS_MASK AccessMask;
@@ -89,6 +112,11 @@ typedef struct _NAMESPACE_NODE_DATA
 } NAMESPACE_NODE_DATA, *PNAMESPACE_NODE_DATA;
 
 // private
+/**
+ * VR_CREATE_MULTIPLE_NAMESPACE_NODES is used to create multiple namespace nodes
+ * in a single operation. It contains the job handle, number of keys and an
+ * inline array of NAMESPACE_NODE_DATA items.
+ */
 typedef struct _VR_CREATE_MULTIPLE_NAMESPACE_NODES
 {
     HANDLE Job;
@@ -97,6 +125,10 @@ typedef struct _VR_CREATE_MULTIPLE_NAMESPACE_NODES
 } VR_CREATE_MULTIPLE_NAMESPACE_NODES, *PVR_CREATE_MULTIPLE_NAMESPACE_NODES;
 
 // private
+/**
+ * VR_UNLOAD_DYNAMICALLY_LOADED_HIVES requests unloading of dynamically loaded
+ * differencing hives for a job.
+ */
 typedef struct _VR_UNLOAD_DYNAMICALLY_LOADED_HIVES
 {
     HANDLE Job;
@@ -108,6 +140,10 @@ typedef struct _VR_UNLOAD_DYNAMICALLY_LOADED_HIVES
 #define VR_KEY_CONTROL_SET 2      // \Registry\Machine\System\ControlSet001 // since REDSTONE2
 
 // rev
+/**
+ * VR_GET_VIRTUAL_ROOT is used to request a virtual root key for a given job
+ * and index (VR_KEY_*).
+ */
 typedef struct _VR_GET_VIRTUAL_ROOT
 {
     HANDLE Job;
@@ -115,12 +151,21 @@ typedef struct _VR_GET_VIRTUAL_ROOT
 } VR_GET_VIRTUAL_ROOT, *PVR_GET_VIRTUAL_ROOT;
 
 // rev
+/**
+ * VR_GET_VIRTUAL_ROOT_RESULT contains the resulting key handle returned by
+ * a VR_GET_VIRTUAL_ROOT request.
+ */
 typedef struct _VR_GET_VIRTUAL_ROOT_RESULT
 {
     HANDLE Key;
 } VR_GET_VIRTUAL_ROOT_RESULT, *PVR_GET_VIRTUAL_ROOT_RESULT;
 
 // rev
+/**
+ * VR_LOAD_DIFFERENCING_HIVE_FOR_HOST describes parameters to load a differencing
+ * hive on behalf of a host. It contains flags, path lengths and inline string
+ * buffers for the key and hive paths.
+ */
 typedef struct _VR_LOAD_DIFFERENCING_HIVE_FOR_HOST
 {
     ULONG LoadFlags; // NtLoadKeyEx flags
@@ -137,6 +182,11 @@ typedef struct _VR_LOAD_DIFFERENCING_HIVE_FOR_HOST
 } VR_LOAD_DIFFERENCING_HIVE_FOR_HOST, *PVR_LOAD_DIFFERENCING_HIVE_FOR_HOST;
 
 // rev
+/**
+ * VR_UNLOAD_DIFFERENCING_HIVE_FOR_HOST is used to request unloading of a
+ * differencing hive for the host. It contains the target key path length and
+ * path buffer.
+ */
 typedef struct _VR_UNLOAD_DIFFERENCING_HIVE_FOR_HOST
 {
     ULONG Reserved;

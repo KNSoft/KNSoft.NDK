@@ -49,6 +49,12 @@ typedef enum _KPROFILE_SOURCE
 typedef LONG KPRIORITY;
 
 #define LOW_PRIORITY 0              // Lowest thread priority level
+#define IDLE_BASE_PRIORITY 1        // Idle thread priority level
+#define BELOW_NORMAL_BASE_PRIORITY 6 // Below-normal thread base priority level
+#define NORMAL_BASE_PRIORITY 8      // Normal thread base priority level
+#define ABOVE_NORMAL_BASE_PRIORITY 10 // Above-normal thread base priority level
+#define HIGH_BASE_PRIORITY 13       // High thread base priority level
+#define TIME_CRITICAL_PRIORITY 15   // Highest variable thread priority level
 #define LOW_REALTIME_PRIORITY 16    // Lowest realtime priority level
 #define HIGH_PRIORITY 31            // Highest thread priority level
 #define MAXIMUM_PRIORITY 32         // Number of thread priority levels
@@ -140,6 +146,14 @@ typedef enum _KWAIT_REASON
     MaximumWaitReason
 } KWAIT_REASON, *PKWAIT_REASON;
 
+/**
+ * The NtCallbackReturn routine returns from a user-mode callback to the kernel.
+ *
+ * \param OutputBuffer An optional pointer to a buffer containing the output data to be returned to the kernel.
+ * \param OutputLength The length, in bytes, of the output buffer.
+ * \param Status The status code to be returned to the kernel.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -149,6 +163,13 @@ NtCallbackReturn(
     _In_ ULONG OutputLength,
     _In_ NTSTATUS Status);
 
+/**
+ * The NtYieldExecution routine yields execution of the current thread to another thread.
+ *
+ * \return NTSTATUS Successful or errant status. STATUS_NO_YIELD_PERFORMED if no other thread was ready to run.
+ * \remarks Only threads that are ready to run on the current processor are considered.
+ * Note that kernelbase!SwitchToThread does not call this routine; it calls RtlDelayExecution with a zero interval.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -158,14 +179,22 @@ NtYieldExecution(VOID);
 /**
  * The NtDelayExecution routine suspends the current thread until the specified condition is met.
  *
- * @param Alertable The function returns when either the time-out period has elapsed or when the APC function is called.
- * @param DelayInterval A pointer to the time interval for which execution is to be suspended, in units of 100 nanoseconds.
+ * @param Alertable If TRUE, the wait is alertable and can be terminated by an alert or by the delivery of a user-mode
+ * APC.
+ * @param DelayInterval A pointer to the time interval for which execution is to be suspended, in units of 100
+ * nanoseconds.
  * - A negative value specifies an interval relative to the current time.
  * - A positive value specifies an absolute time, measured in 100-nanosecond intervals since January 1, 1601 (UTC).
- * - A value of zero causes the thread to relinquish the remainder of its time slice to any other thread that is ready to run.
- * - If there are no other threads ready to run, the function returns immediately, and the thread continues execution.
- * @return NTSTATUS Successful or errant status. The return value is STATUS_USER_APC when Alertable is TRUE, and the function returned due to one or more I/O completion callback functions.
- * @remarks Note that a ready thread is not guaranteed to run immediately. Consequently, the thread will not run until some arbitrary time after the sleep interval elapses,
+ * - A value of zero causes the thread to relinquish the remainder of its time slice to any other thread that is ready
+ * to run.
+ * - If there are no other threads ready to run, the function returns STATUS_NO_YIELD_PERFORMED immediately, and the
+ * thread continues execution.
+ * @return NTSTATUS Successful or errant status.
+ * - STATUS_SUCCESS when the interval elapses.
+ * - STATUS_USER_APC or STATUS_ALERTED when Alertable is TRUE and the wait was interrupted.
+ * - STATUS_NO_YIELD_PERFORMED when DelayInterval is zero and no other thread was ready to run.
+ * @remarks Note that a ready thread is not guaranteed to run immediately. Consequently, the thread will not run until
+ * some arbitrary time after the sleep interval elapses,
  * based upon the system "tick" frequency and the load factor from other processes.
  * @see https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleepex
  */

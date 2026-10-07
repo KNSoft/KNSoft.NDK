@@ -363,6 +363,9 @@ typedef struct _POOLED_USAGE_AND_LIMITS
     SIZE_T PagefileLimit;            // The limit on pagefile usage.
 } POOLED_USAGE_AND_LIMITS, *PPOOLED_USAGE_AND_LIMITS;
 
+/**
+ * Flags used to manage exception ports for a process.
+ */
 #define PROCESS_EXCEPTION_PORT_ALL_STATE_BITS 0x00000003
 #define PROCESS_EXCEPTION_PORT_ALL_STATE_FLAGS ((ULONG_PTR)((1UL << PROCESS_EXCEPTION_PORT_ALL_STATE_BITS) - 1))
 

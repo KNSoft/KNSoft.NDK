@@ -127,6 +127,7 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Time.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\Wnf.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ex\WorkerFactory.h" />
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Hv.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Image.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Io\Completion.h" />
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Io\File.h" />

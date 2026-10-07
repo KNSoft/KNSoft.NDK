@@ -269,9 +269,21 @@ typedef enum _TOKEN_INFORMATION_CLASS
     TokenIsAppSilo,                       // q: ULONG // since WIN11 22H2 // previously TokenOriginatingProcessTrustLevel // q: TOKEN_PROCESS_TRUST_LEVEL
     TokenLoggingInformation,              // q: TOKEN_LOGGING_INFORMATION // since 24H2
     TokenLearningMode,                    // q: // since 25H2
+    TokenIsSystemManagedAdmin,
+    TokenIsInstaller,
+    TokenHasTamperProtection,
+    TokenAppIdentitySid,
+    TokenAppInstanceSid,
+    TokenAppSuiteSid,
+    TokenEntitlements,
+    TokenAgentId,
     MaxTokenInfoClass
 } TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
 #endif /* defined(_KERNEL_MODE) */
+
+#if !defined(_KERNEL_MODE)
+#define TokenAgentId ((TOKEN_INFORMATION_CLASS)58)
+#endif
 
 // Types
 
@@ -740,6 +752,44 @@ NtAdjustGroupsToken(
 );
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The NtAdjustTokenClaimsAndDeviceGroups routine adjusts the user claims, device claims, and device groups in the
+ * specified access token.
+ *
+ * \param TokenHandle Handle to the token that contains the claims and device groups to be modified.
+ * \param UserResetToDefault Specifies whether the function resets the user claims to the default state. If this value
+ * is TRUE, the function resets all user claims to their default state and ignores the NewUserState parameter.
+ * \param DeviceResetToDefault Specifies whether the function resets the device claims to the default state. If this
+ * value is TRUE, the function resets all device claims to their default state and ignores the NewDeviceState parameter.
+ * \param DeviceGroupsResetToDefault Specifies whether the function resets the device groups to the default state. If
+ * this value is TRUE, the function resets all device groups to their default state and ignores the NewDeviceGroupsState
+ * parameter.
+ * \param NewUserState A pointer to a TOKEN_SECURITY_ATTRIBUTES_INFORMATION structure that specifies an array of user
+ * claims and their attributes. If UserResetToDefault is TRUE, the function ignores this parameter.
+ * \param NewDeviceState A pointer to a TOKEN_SECURITY_ATTRIBUTES_INFORMATION structure that specifies an array of
+ * device claims and their attributes. If DeviceResetToDefault is TRUE, the function ignores this parameter.
+ * \param NewDeviceGroupsState A pointer to a TOKEN_GROUPS structure that specifies an array of device groups and their
+ * attributes. If DeviceGroupsResetToDefault is TRUE, the function ignores this parameter.
+ * \param UserBufferLength Specifies the size, in bytes, of the buffer pointed to by the PreviousUserState parameter.
+ * This parameter can be zero if the PreviousUserState parameter is NULL.
+ * \param PreviousUserState A pointer to a buffer that the function fills with a TOKEN_SECURITY_ATTRIBUTES_INFORMATION
+ * structure that contains the previous state of any user claims that the function modifies.
+ * \param DeviceBufferLength Specifies the size, in bytes, of the buffer pointed to by the PreviousDeviceState
+ * parameter. This parameter can be zero if the PreviousDeviceState parameter is NULL.
+ * \param PreviousDeviceState A pointer to a buffer that the function fills with a TOKEN_SECURITY_ATTRIBUTES_INFORMATION
+ * structure that contains the previous state of any device claims that the function modifies.
+ * \param DeviceGroupsBufferLength Specifies the size, in bytes, of the buffer pointed to by the PreviousDeviceGroups
+ * parameter. This parameter can be zero if the PreviousDeviceGroups parameter is NULL.
+ * \param PreviousDeviceGroups A pointer to a buffer that the function fills with a TOKEN_GROUPS structure that contains
+ * the previous state of any device groups that the function modifies.
+ * \param UserReturnLength A pointer to a variable that receives the required size, in bytes, of the buffer pointed to
+ * by the PreviousUserState parameter. This parameter can be NULL if PreviousUserState is NULL.
+ * \param DeviceReturnLength A pointer to a variable that receives the required size, in bytes, of the buffer pointed to
+ * by the PreviousDeviceState parameter. This parameter can be NULL if PreviousDeviceState is NULL.
+ * \param DeviceGroupsReturnBufferLength A pointer to a variable that receives the required size, in bytes, of the
+ * buffer pointed to by the PreviousDeviceGroups parameter. This parameter can be NULL if PreviousDeviceGroups is NULL.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -796,6 +846,35 @@ NtFilterToken(
 );
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The NtFilterTokenEx routine creates a new access token that is a restricted version of an existing access token.
+ *
+ * \param ExistingTokenHandle Handle to a primary or impersonation token. The token can also be a restricted token. This
+ * token must already be open for TOKEN_DUPLICATE access.
+ * \param Flags Specifies additional privilege options.
+ * \param SidsToDisable The deny-only SIDs to include in the restricted token. The system uses a deny-only SID to deny
+ * access to a securable object. The absence of a deny-only SID does not allow access.
+ * \param PrivilegesToDelete The privileges to delete in the restricted token. This parameter is optional and can be
+ * NULL.
+ * \param RestrictedSids The list of restricting SIDs for the new token. This parameter is optional and can be NULL.
+ * \param DisableUserClaimsCount The number of user claims to disable.
+ * \param UserClaimsToDisable The list of user claims to disable in the restricted token. This parameter is optional and
+ * can be NULL.
+ * \param DisableDeviceClaimsCount The number of device claims to disable.
+ * \param DeviceClaimsToDisable The list of device claims to disable in the restricted token. This parameter is optional
+ * and can be NULL.
+ * \param DeviceGroupsToDisable The list of device groups to disable in the restricted token. This parameter is optional
+ * and can be NULL.
+ * \param RestrictedUserAttributes The list of restricted user attributes for the new token. This parameter is optional
+ * and can be NULL.
+ * \param RestrictedDeviceAttributes The list of restricted device attributes for the new token. This parameter is
+ * optional and can be NULL.
+ * \param RestrictedDeviceGroups The list of restricted device groups for the new token. This parameter is optional and
+ * can be NULL.
+ * \param NewTokenHandle The new restricted token. The new token is the same type, primary or impersonation, as the
+ * existing token.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1070,6 +1149,17 @@ typedef struct _SE_SET_FILE_CACHE_INFORMATION
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 
 // rev
+/**
+ * The NtSetCachedSigningLevel2 routine sets the cached signing level of a file.
+ *
+ * \param Flags The flags to set on the file.
+ * \param InputSigningLevel The signing level to set on the file.
+ * \param SourceFiles Pointer to a set of source file handles.
+ * \param SourceFileCount The source file count.
+ * \param TargetFile The target file.
+ * \param CacheInformation Pointer to the cache information.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1088,6 +1178,13 @@ NtSetCachedSigningLevel2(
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 
 // rev
+/**
+ * The NtCompareSigningLevels routine compares two signing levels.
+ *
+ * \param FirstSigningLevel The first signing level to compare.
+ * \param SecondSigningLevel The second signing level to compare.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1396,6 +1493,9 @@ NtPrivilegedServiceAuditAlarm(
     _In_ BOOLEAN AccessGranted
 );
 
+/**
+ * The SECURE_SETTING_VALUE_TYPE enumeration identifies the data type of a secure setting value.
+ */
 typedef enum _SECURE_SETTING_VALUE_TYPE
 {
     SecureSettingValueTypeBoolean = 0,
@@ -1407,6 +1507,17 @@ typedef enum _SECURE_SETTING_VALUE_TYPE
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
 // rev
+/**
+ * The NtQuerySecurityPolicy routine queries a value from the system security policy.
+ *
+ * \param[in] Policy The name of the security policy to query.
+ * \param[in] KeyName The name of the policy key.
+ * \param[in] ValueName The name of the value to query.
+ * \param[in] ValueType The type of the value to retrieve.
+ * \param[out, optional] Value Pointer to a buffer that receives the value data.
+ * \param[in, out] ValueSize On input, the size, in bytes, of the buffer; on output, the size of the data returned.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS

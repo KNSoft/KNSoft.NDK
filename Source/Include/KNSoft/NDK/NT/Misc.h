@@ -31,6 +31,10 @@ typedef enum _PCW_CALLBACK_TYPE
     PcwCallbackCollectData = 3,
 } PCW_CALLBACK_TYPE;
 
+/**
+ * The PCW_CALLBACK_INFORMATION structure contains the information passed to a Performance Counters for Windows (PCW)
+ * callback.
+ */
 typedef struct _PCW_CALLBACK_INFORMATION
 {
     PCW_CALLBACK_TYPE Type;
@@ -79,13 +83,28 @@ PcwCreateQuery(
     _In_opt_ HANDLE CancelEventHandle
     );
 
+/**
+ * The PCW_ADD_QUERY_ITEM_FLAGS enumeration defines the flags used when adding a query item to a PCW query.
+ */
 typedef enum _PCW_ADD_QUERY_ITEM_FLAGS
 {
     PCW_ADD_QUERY_ITEM_NONE = 0x0,
     PCW_ADD_QUERY_ITEM_INSTANCE_WILDCARD = 0x1,
 } PCW_ADD_QUERY_ITEM_FLAGS;
 
-// Adds a counterset to a query
+/**
+ * The PcwAddQueryItem routine adds a counter query item to a Performance Counters for Windows (PCW) query.
+ *
+ * \param[out] ItemId Pointer to a variable that receives the identifier assigned to the query item.
+ * \param[in] QueryHandle Handle to the PCW query.
+ * \param[in] Flags Flags that control the query item.
+ * \param[in] CounterSetPath The path of the counter set to query.
+ * \param[in] InstanceName The name of the instance to query.
+ * \param[in] InstanceId The identifier of the instance to query.
+ * \param[in] CounterMask A bitmask that selects the counters to include.
+ * \param[in, optional] UserData Caller-defined data to associate with the query item.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -100,7 +119,15 @@ PcwAddQueryItem(
     _In_opt_ PVOID UserData
     );
 
-// Triggers data collection for a query
+/**
+ * The PcwCollectData routine collects counter data for a Performance Counters for Windows (PCW) query.
+ *
+ * \param[in] QueryHandle Handle to the PCW query.
+ * \param[out] Buffer Pointer to a buffer that receives the collected counter data.
+ * \param[in] BufferSize The size, in bytes, of the buffer.
+ * \param[out] BytesReturned Pointer to a variable that receives the number of bytes written.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -111,7 +138,13 @@ PcwCollectData(
     _Out_ PULONG BytesReturned
     );
 
-// Removes an item from a query
+/**
+ * The PcwRemoveQueryItem routine removes a counter query item from a Performance Counters for Windows (PCW) query.
+ *
+ * \param[in] QueryHandle Handle to the PCW query.
+ * \param[in] ItemId The identifier of the query item to remove.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -121,6 +154,14 @@ PcwRemoveQueryItem(
     );
 
 // Associates user data with a query item
+/**
+ * The PcwSetQueryItemUserData routine sets the caller-defined data associated with a PCW query item.
+ *
+ * \param[in] QueryHandle Handle to the PCW query.
+ * \param[in] ItemId The identifier of the query item.
+ * \param[in] UserData The caller-defined data to associate with the query item.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -131,7 +172,13 @@ PcwSetQueryItemUserData(
     );
 
 // HPCW_NOTIFIER APIs
-// Creates a notifier object for consumers
+/**
+ * The PcwCreateNotifier routine creates a Performance Counters for Windows (PCW) notifier.
+ *
+ * \param[out] NotifierHandle Pointer to a variable that receives the notifier handle.
+ * \param[in] Name The name of the notifier.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -140,15 +187,33 @@ PcwCreateNotifier(
     _In_ PCUNICODE_STRING Name
     );
 
-// Checks if a notifier is still active
+/**
+ * The PcwIsNotifierAlive routine determines whether a Performance Counters for Windows (PCW) notifier is still alive.
+ *
+ * \param[out] Alive Pointer to a boolean receiving whether the notifier is alive.
+ * \param[in] Registration Handle to the PCW registration.
+ * \param[in] NotificationId Pointer to the notification ID.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
-BOOLEAN
+NTSTATUS
 NTAPI
 PcwIsNotifierAlive(
-    _In_ HPCW_NOTIFIER NotifierHandle
+    _Out_ PBOOLEAN Alive,
+    _In_ HANDLE Registration,
+    _In_ const ULONGLONG *NotificationId
     );
 
-// Retrieves data from a notifier
+/**
+ * The PcwReadNotificationData routine reads pending notification data from a Performance Counters for Windows (PCW)
+ * notifier.
+ *
+ * \param[in] NotifierHandle Handle to the PCW notifier.
+ * \param[out] Buffer Pointer to a buffer that receives the notification data.
+ * \param[in] BufferSize The size, in bytes, of the buffer.
+ * \param[out] BytesReturned Pointer to a variable that receives the number of bytes written.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -159,38 +224,71 @@ PcwReadNotificationData(
     _Out_ PULONG BytesReturned
     );
 
-// Completes a pending notification
+/**
+ * The PcwCompleteNotification routine completes a pending Performance Counters for Windows (PCW) notification.
+ *
+ * \param[out] Result Pointer to a boolean receiving the result.
+ * \param[in] Notifier Handle to the PCW notifier.
+ * \param[in] Status The completion status of the notification.
+ * \param[in, optional] UserData Caller-defined data associated with the completion.
+ * \param[in] UserDataSize The size, in bytes, of the user data.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 PcwCompleteNotification(
-    _In_ HPCW_NOTIFIER NotifierHandle,
+    _Out_ PBOOLEAN Result,
+    _In_ HANDLE Notifier,
     _In_ NTSTATUS Status,
     _In_opt_ PVOID UserData,
     _In_ ULONG UserDataSize
     );
 
-// Other PCW APIs
-// Registers a provider counterset
+/**
+ * The PcwRegisterCounterSet routine registers a Performance Counters for Windows (PCW) counter set.
+ *
+ * \param[out] Registration Pointer to a variable that receives the registration handle.
+ * \param[in] Name The name of the counter set.
+ * \param[in, optional] NotificationFile Optional handle to the notification file.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 PcwRegisterCounterSet(
-    _Out_ HPCW_REGISTRATION* Registration,
+    _Out_ PHANDLE Registration,
     _In_ PCUNICODE_STRING Name,
-    _In_ PPCW_CALLBACK Callback,
-    _In_opt_ PVOID UserData
+    _In_opt_ HANDLE NotificationFile
     );
 
-// Closes a registration handle
+/**
+ * The PcwDisconnectCounterSet routine disconnects a registered Performance Counters for Windows (PCW) counter set.
+ *
+ * \param[out] Result Pointer to a boolean receiving the result.
+ * \param[in] Registration Handle to the PCW counter set registration.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
-VOID
+NTSTATUS
 NTAPI
 PcwDisconnectCounterSet(
-    _In_ HPCW_REGISTRATION RegistrationHandle
+    _Out_ PBOOLEAN Result,
+    _In_ HANDLE Registration
     );
 
-// Lists instances of a counterset
+/**
+ * The PcwEnumerateInstances routine enumerates the instances of a registered Performance Counters for Windows (PCW)
+ * counter set.
+ *
+ * \param[in] RegistrationHandle Handle to the PCW counter set registration.
+ * \param[in] CounterSetPath The path of the counter set.
+ * \param[in] InstanceName The name of the instance to enumerate.
+ * \param[out] Buffer Pointer to a buffer that receives the enumerated instance data.
+ * \param[in] BufferSize The size, in bytes, of the buffer.
+ * \param[out] BytesReturned Pointer to a variable that receives the number of bytes written.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -203,7 +301,17 @@ PcwEnumerateInstances(
     _Out_ PULONG BytesReturned
     );
 
-// Queries security descriptor for a counterset
+/**
+ * The PcwQueryCounterSetSecurity routine queries the security descriptor of a Performance Counters for Windows (PCW)
+ * counter set.
+ *
+ * \param[in] Name The name of the counter set.
+ * \param[in] SecurityInformation The security information to query.
+ * \param[out, optional] SecurityDescriptor Pointer to a buffer that receives the security descriptor.
+ * \param[in] BufferSize The size, in bytes, of the buffer.
+ * \param[out] BytesReturned Pointer to a variable that receives the number of bytes required or written.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -215,7 +323,20 @@ PcwQueryCounterSetSecurity(
     _Out_ PULONG BytesReturned
     );
 
-// Sends a notification to consumers
+/**
+ * The PcwSendNotification routine sends a notification to a registered Performance Counters for Windows (PCW) counter
+ * set.
+ *
+ * \param[in] RegistrationHandle Handle to the PCW counter set registration.
+ * \param[in] NotificationType The type of notification to send.
+ * \param[in, optional] NotificationData Pointer to the notification data.
+ * \param[in, optional] InstanceName The name of the instance associated with the notification.
+ * \param[in] InstanceId The identifier of the instance.
+ * \param[out, optional] OutputBuffer Pointer to a buffer that receives the notification response.
+ * \param[in] OutputBufferSize The size, in bytes, of the output buffer.
+ * \param[out, optional] BytesReturned Pointer to a variable that receives the number of bytes written.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -230,7 +351,20 @@ PcwSendNotification(
     _Out_opt_ PULONG BytesReturned
     );
 
-// Sends a notification without a registration handle
+/**
+ * The PcwSendStatelessNotification routine sends a stateless notification to a Performance Counters for Windows (PCW)
+ * counter set.
+ *
+ * \param[in] CounterSetName The name of the counter set.
+ * \param[in] NotificationType The type of notification to send.
+ * \param[in, optional] NotificationData Pointer to the notification data.
+ * \param[in, optional] InstanceName The name of the instance associated with the notification.
+ * \param[in] InstanceId The identifier of the instance.
+ * \param[out, optional] OutputBuffer Pointer to a buffer that receives the notification response.
+ * \param[in] OutputBufferSize The size, in bytes, of the output buffer.
+ * \param[out, optional] BytesReturned Pointer to a variable that receives the number of bytes written.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -245,7 +379,15 @@ PcwSendStatelessNotification(
     _Out_opt_ PULONG BytesReturned
     );
 
-// Sets security descriptor for a counterset
+/**
+ * The PcwSetCounterSetSecurity routine sets the security descriptor of a Performance Counters for Windows (PCW) counter
+ * set.
+ *
+ * \param[in] Name The name of the counter set.
+ * \param[in] SecurityInformation The security information to set.
+ * \param[in] SecurityDescriptor Pointer to the security descriptor to apply.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -255,7 +397,13 @@ PcwSetCounterSetSecurity(
     _In_ PSECURITY_DESCRIPTOR SecurityDescriptor
     );
 
-// Clears security descriptor for a counterset
+/**
+ * The PcwClearCounterSetSecurity routine clears the security descriptor of a Performance Counters for Windows (PCW)
+ * counter set, restoring the default.
+ *
+ * \param[in] Name The name of the counter set.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -306,7 +454,7 @@ typedef struct _PCW_INSTANCE_BUFFER
     ULONG Index;
     ULONG CounterDataOffset;
     ULONG Reserved0C;
-    WCHAR InstanceName[1];
+    WCHAR InstanceName[ANYSIZE_ARRAY];
 } PCW_INSTANCE_BUFFER, *PPCW_INSTANCE_BUFFER;
 
 /**
@@ -322,8 +470,8 @@ typedef struct _PCW_COUNTER_RECORD
         {
             USHORT CounterId;
             USHORT ValueSize;
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
     ULONG64 Value;
 } PCW_COUNTER_RECORD, *PPCW_COUNTER_RECORD;
 
@@ -340,8 +488,8 @@ typedef struct _PCW_COUNTER_TRAILER
         {
             USHORT CounterId;
             USHORT ValueSize;
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
     ULONG TickCount;
 } PCW_COUNTER_TRAILER, *PPCW_COUNTER_TRAILER;
 
@@ -361,7 +509,7 @@ typedef struct _PCW_ENUMERATE_INSTANCE
 {
     ULONG Size;
     ULONG InstanceId;
-    WCHAR InstanceName[1];
+    WCHAR InstanceName[ANYSIZE_ARRAY];
 } PCW_ENUMERATE_INSTANCE, *PPCW_ENUMERATE_INSTANCE;
 
 //
@@ -378,10 +526,10 @@ PcwQueryGetHeader(
     _In_ PPCW_QUERY_SNAPSHOT Snapshot
     )
 {
-    PCW_RESULT_ROOT* root;
+    PPCW_RESULT_ROOT root;
 
-    root = (PCW_RESULT_ROOT*)Snapshot->RawBuffer;
-    return (PCW_RESULT_HEADER*)Add2Ptr(Snapshot->RawBuffer, root->HeaderOffset);
+    root = (PPCW_RESULT_ROOT)Snapshot->RawBuffer;
+    return (PPCW_RESULT_HEADER)Add2Ptr(Snapshot->RawBuffer, root->HeaderOffset);
 }
 
 /**
@@ -394,7 +542,7 @@ PcwHeaderGetFirstInstance(
     _In_ PPCW_RESULT_HEADER Header
     )
 {
-    return (PCW_INSTANCE_BUFFER*)Add2Ptr(Header, Header->InstanceListOffset);
+    return (PPCW_INSTANCE_BUFFER)Add2Ptr(Header, Header->InstanceListOffset);
 }
 
 /**
@@ -407,7 +555,7 @@ PcwInstanceGetNext(
     _In_ PPCW_INSTANCE_BUFFER Instance
     )
 {
-    return (PCW_INSTANCE_BUFFER*)Add2Ptr(Instance, Instance->Size);
+    return (PPCW_INSTANCE_BUFFER)Add2Ptr(Instance, Instance->Size);
 }
 
 /**
@@ -420,7 +568,7 @@ PcwInstanceGetFirstCounter(
     _In_ PPCW_INSTANCE_BUFFER Instance
     )
 {
-    return (PCW_COUNTER_RECORD*)Add2Ptr(Instance, Instance->CounterDataOffset);
+    return (PPCW_COUNTER_RECORD)Add2Ptr(Instance, Instance->CounterDataOffset);
 }
 
 /**
@@ -433,7 +581,7 @@ PcwCounterGetNext(
     _In_ PPCW_COUNTER_RECORD Counter
     )
 {
-    return (PCW_COUNTER_RECORD*)Add2Ptr(Counter, Counter->Size);
+    return (PPCW_COUNTER_RECORD)Add2Ptr(Counter, Counter->Size);
 }
 
 /**
@@ -446,7 +594,7 @@ PcwCounterGetTrailer(
     _In_ PPCW_COUNTER_RECORD Counter
     )
 {
-    return (PCW_COUNTER_TRAILER*)Add2Ptr(Counter, Counter->Size);
+    return (PPCW_COUNTER_TRAILER)Add2Ptr(Counter, Counter->Size);
 }
 
 /**
@@ -459,7 +607,7 @@ PcwEnumerateHeaderGetFirstInstance(
     _In_ PPCW_ENUMERATE_INSTANCES_HEADER Header
     )
 {
-    return (PCW_ENUMERATE_INSTANCE*)Add2Ptr(Header, Header->FirstInstanceOffset);
+    return (PPCW_ENUMERATE_INSTANCE)Add2Ptr(Header, Header->FirstInstanceOffset);
 }
 
 /**
@@ -472,7 +620,7 @@ PcwEnumerateInstanceGetNext(
     _In_ PPCW_ENUMERATE_INSTANCE Instance
     )
 {
-    return (PCW_ENUMERATE_INSTANCE*)Add2Ptr(Instance, Instance->Size);
+    return (PPCW_ENUMERATE_INSTANCE)Add2Ptr(Instance, Instance->Size);
 }
 
 EXTERN_C_END

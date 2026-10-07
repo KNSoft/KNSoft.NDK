@@ -6,12 +6,18 @@ EXTERN_C_START
 
 /* phnt */
 
+/**
+ * Represents a reference-counted current directory handle.
+ */
 typedef struct _RTLP_CURDIR_REF
 {
     LONG ReferenceCount;
     HANDLE DirectoryHandle;
 } RTLP_CURDIR_REF, *PRTLP_CURDIR_REF;
 
+/**
+ * Describes a path expressed relative to a containing directory, as produced by path parsing routines.
+ */
 typedef struct _RTL_RELATIVE_NAME_U
 {
     UNICODE_STRING RelativeName;
@@ -19,6 +25,9 @@ typedef struct _RTL_RELATIVE_NAME_U
     PRTLP_CURDIR_REF CurDirRef;
 } RTL_RELATIVE_NAME_U, *PRTL_RELATIVE_NAME_U;
 
+/**
+ * Identifies the syntactic type of a DOS path.
+ */
 typedef enum _RTL_PATH_TYPE
 {
     RtlPathTypeUnknown,
@@ -33,6 +42,9 @@ typedef enum _RTL_PATH_TYPE
 
 // Data exports (ntdll.lib/ntdllp.lib)
 
+/**
+ * Well-known module name and path-separator string constants.
+ */
 NTSYSAPI PCWSTR RtlNtdllName;
 NTSYSAPI UNICODE_STRING RtlDosPathSeperatorsString;
 NTSYSAPI UNICODE_STRING RtlAlternateDosPathSeperatorString;
@@ -110,6 +122,22 @@ RtlGetFullPathName_UEx(
     _Out_opt_ ULONG *BytesRequired
 );
 
+/**
+ * The RtlGetFullPathName_UstrEx routine retrieves the full path and file name of the specified file as a counted
+ * Unicode string.
+ *
+ * \param FileName A pointer to the file name to resolve.
+ * \param StaticString A caller-supplied buffer that receives the full path if it is large enough.
+ * \param DynamicString An optional buffer that receives an allocated string when the static buffer is too small.
+ * \param StringUsed An optional pointer to a variable that receives which of the static or dynamic strings holds the
+ * result.
+ * \param FilePartPrefixCch An optional pointer to a variable that receives the length, in characters, of the path
+ * preceding the file name.
+ * \param NameInvalid An optional pointer to a variable that receives whether the name is invalid.
+ * \param InputPathType A pointer to a variable that receives the RTL_PATH_TYPE of the input path.
+ * \param BytesRequired An optional pointer to a variable that receives the number of bytes required for the full path.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -155,6 +183,11 @@ RtlSetCurrentDirectory_U(
     _In_ PUNICODE_STRING PathName
 );
 
+/**
+ * The RtlGetLongestNtPathLength routine returns the length, in characters, of the longest possible NT path name.
+ *
+ * \return ULONG The maximum NT path length, in characters.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -162,6 +195,9 @@ RtlGetLongestNtPathLength(
     VOID
 );
 
+/**
+ * Represents a growable memory buffer with a fixed-size static portion.
+ */
 typedef struct _RTL_BUFFER
 {
     PUCHAR Buffer;
@@ -170,6 +206,9 @@ typedef struct _RTL_BUFFER
     SIZE_T StaticSize;
 } RTL_BUFFER, *PRTL_BUFFER;
 
+/**
+ * Represents a Unicode string backed by a growable RTL_BUFFER.
+ */
 typedef struct _RTL_UNICODE_STRING_BUFFER
 {
     UNICODE_STRING String;
@@ -178,6 +217,17 @@ typedef struct _RTL_UNICODE_STRING_BUFFER
 } RTL_UNICODE_STRING_BUFFER, *PRTL_UNICODE_STRING_BUFFER;
 
 // rev
+/**
+ * The RtlNtPathNameToDosPathName routine converts an NT path name to its equivalent DOS path name.
+ *
+ * \param Flags Reserved. This parameter must be zero.
+ * \param Path A pointer to a path buffer that contains the NT path on input and receives the DOS path on output.
+ * \param Disposition An optional pointer to a variable that receives the DOS path type (as returned by
+ * RtlDetermineDosPathNameType_U).
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the resulting
+ * path.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -188,6 +238,15 @@ RtlNtPathNameToDosPathName(
     _Inout_opt_ PWSTR* FilePart
 );
 
+/**
+ * The RtlDosPathNameToNtPathName_U routine converts a DOS path name to its equivalent NT path name.
+ *
+ * \param DosFileName A pointer to the DOS path name to convert.
+ * \param NtFileName A pointer to a UNICODE_STRING that receives the equivalent NT path name.
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the NT path.
+ * \param RelativeName An optional pointer to a structure that receives relative-name information.
+ * \return `TRUE` if the conversion succeeded, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -198,6 +257,16 @@ RtlDosPathNameToNtPathName_U(
     _Out_opt_ PRTL_RELATIVE_NAME_U RelativeName
 );
 
+/**
+ * The RtlDosPathNameToNtPathName_U_WithStatus routine converts a DOS path name to its equivalent NT path name and
+ * returns a status code.
+ *
+ * \param DosFileName A pointer to the DOS path name to convert.
+ * \param NtFileName A pointer to a UNICODE_STRING that receives the equivalent NT path name.
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the NT path.
+ * \param RelativeName An optional pointer to a structure that receives relative-name information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -210,6 +279,16 @@ RtlDosPathNameToNtPathName_U_WithStatus(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
 // rev
+/**
+ * The RtlDosLongPathNameToNtPathName_U_WithStatus routine converts a DOS long path name to its equivalent NT path name
+ * and returns a status code.
+ *
+ * \param DosFileName A pointer to the DOS long path name to convert.
+ * \param NtFileName A pointer to a UNICODE_STRING that receives the equivalent NT path name.
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the NT path.
+ * \param RelativeName An optional pointer to a structure that receives relative-name information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -221,6 +300,16 @@ RtlDosLongPathNameToNtPathName_U_WithStatus(
 );
 #endif
 
+/**
+ * The RtlDosPathNameToRelativeNtPathName_U routine converts a DOS path name to its equivalent NT path name, including
+ * relative-name information.
+ *
+ * \param DosFileName A pointer to the DOS path name to convert.
+ * \param NtFileName A pointer to a UNICODE_STRING that receives the equivalent NT path name.
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the NT path.
+ * \param RelativeName An optional pointer to a structure that receives relative-name information.
+ * \return `TRUE` if the conversion succeeded, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -231,6 +320,16 @@ RtlDosPathNameToRelativeNtPathName_U(
     _Out_opt_ PRTL_RELATIVE_NAME_U RelativeName
 );
 
+/**
+ * The RtlDosPathNameToRelativeNtPathName_U_WithStatus routine converts a DOS path name to its equivalent NT path name,
+ * including relative-name information, and returns a status code.
+ *
+ * \param DosFileName A pointer to the DOS path name to convert.
+ * \param NtFileName A pointer to a UNICODE_STRING that receives the equivalent NT path name.
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the NT path.
+ * \param RelativeName An optional pointer to a structure that receives relative-name information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -243,6 +342,16 @@ RtlDosPathNameToRelativeNtPathName_U_WithStatus(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
 // rev
+/**
+ * The RtlDosLongPathNameToRelativeNtPathName_U_WithStatus routine converts a DOS long path name to its equivalent NT
+ * path name, including relative-name information, and returns a status code.
+ *
+ * \param DosFileName A pointer to the DOS long path name to convert.
+ * \param NtFileName A pointer to a UNICODE_STRING that receives the equivalent NT path name.
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the NT path.
+ * \param RelativeName An optional pointer to a structure that receives relative-name information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -254,6 +363,12 @@ RtlDosLongPathNameToRelativeNtPathName_U_WithStatus(
 );
 #endif
 
+/**
+ * The RtlReleaseRelativeName routine releases the resources associated with a relative-name structure previously
+ * returned by one of the RtlDosPathNameToRelativeNtPathName routines.
+ *
+ * \param RelativeName A pointer to the relative-name structure to release.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -261,6 +376,17 @@ RtlReleaseRelativeName(
     _Inout_ PRTL_RELATIVE_NAME_U RelativeName
 );
 
+/**
+ * The RtlDosSearchPath_U routine searches a set of directories for the specified file.
+ *
+ * \param Path A pointer to the search path, consisting of one or more directories separated by semicolons.
+ * \param FileName A pointer to the name of the file to locate.
+ * \param Extension An optional default extension to append when the file name has none.
+ * \param BufferLength The size, in bytes, of the output buffer.
+ * \param Buffer A buffer that receives the full path of the located file.
+ * \param FilePart An optional pointer to a variable that receives a pointer to the file-name portion of the result.
+ * \return ULONG The length, in bytes, of the string copied to Buffer, or the required size if the buffer is too small.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -273,10 +399,29 @@ RtlDosSearchPath_U(
     _Out_opt_ PWSTR *FilePart
 );
 
+/**
+ * Flags for the RTL DOS path search routines.
+ */
 #define RTL_DOS_SEARCH_PATH_FLAG_APPLY_ISOLATION_REDIRECTION 0x00000001
 #define RTL_DOS_SEARCH_PATH_FLAG_DISALLOW_DOT_RELATIVE_PATH_SEARCH 0x00000002
 #define RTL_DOS_SEARCH_PATH_FLAG_APPLY_DEFAULT_EXTENSION_WHEN_NOT_RELATIVE_PATH_EVEN_IF_FILE_HAS_EXTENSION 0x00000004
 
+/**
+ * The RtlDosSearchPath_Ustr routine searches a set of directories for the specified file and returns the result as a
+ * counted Unicode string.
+ *
+ * \param Flags Flags that control the search behavior.
+ * \param Path A pointer to the search path, consisting of one or more directories separated by semicolons.
+ * \param FileName A pointer to the name of the file to locate.
+ * \param DefaultExtension An optional default extension to append when the file name has none.
+ * \param StaticString A caller-supplied buffer that receives the result if it is large enough.
+ * \param DynamicString An optional buffer that receives an allocated string when the static buffer is too small.
+ * \param FullFileNameOut An optional pointer to a variable that receives a pointer to the full file name.
+ * \param FilePartPrefixCch An optional pointer to a variable that receives the length, in characters, of the path
+ * preceding the file name.
+ * \param BytesRequired An optional pointer to a variable that receives the number of bytes required for the full path.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -292,6 +437,12 @@ RtlDosSearchPath_Ustr(
     _Out_opt_ SIZE_T *BytesRequired
 );
 
+/**
+ * The RtlDoesFileExists_U routine determines whether the specified file exists.
+ *
+ * \param FileName A pointer to the name of the file to test.
+ * \return `TRUE` if the file exists, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -300,6 +451,21 @@ RtlDoesFileExists_U(
 );
 
 // ros
+/**
+ * The RtlDosApplyFileIsolationRedirection_Ustr routine applies side-by-side (SxS) isolation redirection to the
+ * specified file name.
+ *
+ * \param Flags Flags that control the redirection behavior.
+ * \param OriginalName A pointer to the original file name to redirect.
+ * \param Extension A pointer to the default extension to apply when the name has none.
+ * \param StaticString An optional caller-supplied buffer that receives the redirected name if it is large enough.
+ * \param DynamicString An optional buffer that receives an allocated string when the static buffer is too small.
+ * \param NewName An optional pointer to a variable that receives a pointer to the redirected name.
+ * \param NewFlags A pointer to a variable that receives flags describing the redirection result.
+ * \param FileNameSize A pointer to a variable that receives the size, in bytes, of the redirected name.
+ * \param RequiredLength A pointer to a variable that receives the number of bytes required for the redirected name.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -315,6 +481,15 @@ RtlDosApplyFileIsolationRedirection_Ustr(
     _In_ PSIZE_T RequiredLength
 );
 
+/**
+ * The RtlGetLengthWithoutLastFullDosOrNtPathElement routine computes the length of a path string excluding its last
+ * full DOS or NT path element.
+ *
+ * \param Flags Reserved. This parameter must be zero.
+ * \param PathString A pointer to the path string to examine.
+ * \param Length A pointer to a variable that receives the length, in characters, of the path without its last element.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -324,6 +499,16 @@ RtlGetLengthWithoutLastFullDosOrNtPathElement(
     _Out_ PULONG Length
 );
 
+/**
+ * The RtlGetLengthWithoutTrailingPathSeperators routine computes the length of a path string excluding any trailing
+ * path separators.
+ *
+ * \param Flags Reserved. This parameter must be zero.
+ * \param PathString A pointer to the path string to examine.
+ * \param Length A pointer to a variable that receives the length, in characters, of the path without trailing
+ * separators.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -333,6 +518,9 @@ RtlGetLengthWithoutTrailingPathSeperators(
     _Out_ PULONG Length
 );
 
+/**
+ * Maintains state used when generating short (8.3) file names from long names.
+ */
 typedef struct _GENERATE_NAME_CONTEXT
 {
     USHORT Checksum;
@@ -345,6 +533,17 @@ typedef struct _GENERATE_NAME_CONTEXT
 } GENERATE_NAME_CONTEXT, *PGENERATE_NAME_CONTEXT;
 
 // private
+/**
+ * The RtlGenerate8dot3Name routine generates a short (8.3) file name from the specified long file name.
+ *
+ * \param Name A pointer to the long file name from which the short name is generated.
+ * \param AllowExtendedCharacters A boolean that specifies whether extended characters are permitted in the generated
+ * name.
+ * \param Context A pointer to a context structure that maintains state across successive generation attempts.
+ * \param Name8dot3 A pointer to a UNICODE_STRING that receives the generated 8.3 name.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlgenerate8dot3name
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -358,6 +557,15 @@ RtlGenerate8dot3Name(
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
 // private
+/**
+ * The RtlComputePrivatizedDllName_U routine computes the privatized (side-by-side) DLL file names for the specified
+ * DLL.
+ *
+ * \param DllName A pointer to the name of the DLL to privatize.
+ * \param RealName A pointer to a UNICODE_STRING that receives the fully qualified real DLL name.
+ * \param LocalName A pointer to a UNICODE_STRING that receives the local (privatized) DLL name.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -368,6 +576,13 @@ RtlComputePrivatizedDllName_U(
 );
 
 // rev
+/**
+ * The RtlGetSearchPath routine retrieves the search path used to locate images and files for the current process.
+ *
+ * \param SearchPath A pointer to a variable that receives an allocated null-terminated search path string. The caller
+ * frees the string with RtlReleasePath.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -376,6 +591,13 @@ RtlGetSearchPath(
 );
 
 // rev
+/**
+ * The RtlSetSearchPathMode routine sets the search path mode used when locating images and files for the current
+ * process.
+ *
+ * \param Flags Flags that specify the search path mode.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -384,6 +606,14 @@ RtlSetSearchPathMode(
 );
 
 // rev
+/**
+ * The RtlGetExePath routine retrieves the executable search path for the specified application.
+ *
+ * \param DosPathName A pointer to the DOS path name of the application.
+ * \param SearchPath A pointer to a variable that receives an allocated null-terminated search path string. The caller
+ * frees the string with RtlReleasePath.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -393,6 +623,12 @@ RtlGetExePath(
 );
 
 // rev
+/**
+ * The RtlReleasePath routine frees a path buffer previously allocated by the RtlGetSearchPath or RtlGetExePath
+ * routines.
+ *
+ * \param Path A pointer to the path buffer to free.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -403,6 +639,17 @@ RtlReleasePath(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
+/**
+ * The RtlReplaceSystemDirectoryInPath routine replaces the system directory in a path with the directory appropriate
+ * for the specified machine architecture.
+ *
+ * \param Destination A pointer to a UNICODE_STRING that contains the path on input and receives the modified path on
+ * output.
+ * \param Machine The source machine architecture (an IMAGE_FILE_MACHINE_* value).
+ * \param TargetMachine The target machine architecture (an IMAGE_FILE_MACHINE_* value).
+ * \param IncludePathSeperator A boolean that specifies whether a trailing path separator is included.
+ * \return ULONG The length, in bytes, of the resulting path.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -415,6 +662,11 @@ RtlReplaceSystemDirectoryInPath(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
+/**
+ * The RtlGetNtSystemRoot routine returns the path of the Windows system root directory.
+ *
+ * \return PWSTR A pointer to a null-terminated string containing the system root path.
+ */
 NTSYSAPI
 PWSTR
 NTAPI
@@ -423,6 +675,11 @@ RtlGetNtSystemRoot(
 );
 #endif
 
+/**
+ * The RtlAreLongPathsEnabled routine determines whether long path support is enabled for the current process.
+ *
+ * \return `TRUE` if long paths are enabled, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -432,6 +689,14 @@ RtlAreLongPathsEnabled(
 
 
 // RtlCanonicalizeDomainName
+/**
+ * The RtlCanonicalizeDomainName routine produces the canonical form of a domain name.
+ *
+ * \param DestinationName A pointer to a UNICODE_STRING that receives the canonicalized name.
+ * \param SourceName A pointer to the Unicode string that specifies the domain name to canonicalize.
+ * \param AllowInvalidLabels If `TRUE`, labels that are otherwise invalid are permitted.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -442,6 +707,14 @@ RtlCanonicalizeDomainName(
     );
 
 // RtlConstructCrossVmEventPath
+/**
+ * The RtlConstructCrossVmEventPath routine constructs the object path for a cross-VM event identified by two GUIDs.
+ *
+ * \param ObjectPath A pointer to a UNICODE_STRING that receives the constructed event path.
+ * \param Guid1 A pointer to the first GUID that identifies the cross-VM channel.
+ * \param Guid2 A pointer to the second GUID that identifies the cross-VM channel.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -452,6 +725,14 @@ RtlConstructCrossVmEventPath(
     );
 
 // RtlConstructCrossVmMutexPath
+/**
+ * The RtlConstructCrossVmMutexPath routine constructs the object path for a cross-VM mutex identified by two GUIDs.
+ *
+ * \param ObjectPath A pointer to a UNICODE_STRING that receives the constructed mutex path.
+ * \param Guid1 A pointer to the first GUID that identifies the cross-VM channel.
+ * \param Guid2 A pointer to the second GUID that identifies the cross-VM channel.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -462,6 +743,13 @@ RtlConstructCrossVmMutexPath(
     );
 
 // RtlCreateSystemVolumeInformationFolder
+/**
+ * The RtlCreateSystemVolumeInformationFolder routine creates the System Volume Information folder on the volume at the
+ * specified root path.
+ *
+ * \param RootPath A pointer to the Unicode string that specifies the volume root path.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

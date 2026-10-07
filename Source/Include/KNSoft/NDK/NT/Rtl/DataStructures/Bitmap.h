@@ -13,6 +13,9 @@ EXTERN_C_START
 //  aligned and multiple longwords in size).
 //
 
+/**
+ * Represents a bitmap of a specified number of bits.
+ */
 typedef struct _RTL_BITMAP
 {
     ULONG SizeOfBitMap; // Number of bits in bit map
@@ -234,6 +237,9 @@ RtlSetBits(
 //  of this structure, one for each run located.
 //
 
+/**
+ * Describes a run of contiguous bits within a bitmap.
+ */
 typedef struct _RTL_BITMAP_RUN
 {
     ULONG StartingIndex;
@@ -330,6 +336,14 @@ RtlCheckBit(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+/**
+ * The RtlNumberOfClearBitsInRange routine returns the number of clear bits within a specified range of a bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP that describes the bitmap.
+ * \param StartingIndex The zero-based index of the first bit in the range.
+ * \param Length The number of bits in the range to examine.
+ * \return ULONG The number of clear bits in the specified range.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -338,6 +352,14 @@ RtlNumberOfClearBitsInRange(
     _In_ ULONG StartingIndex,
     _In_ ULONG Length);
 
+/**
+ * The RtlNumberOfSetBitsInRange routine returns the number of set bits within a specified range of a bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP that describes the bitmap.
+ * \param StartingIndex The zero-based index of the first bit in the range.
+ * \param Length The number of bits in the range to examine.
+ * \return ULONG The number of set bits in the specified range.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -488,6 +510,12 @@ RtlFindMostSignificantBit(
 // value.
 //
 
+/**
+ * The RtlNumberOfSetBitsUlongPtr routine returns the number of bits set to one in the specified pointer-sized value.
+ *
+ * \param Target The value whose set bits are counted.
+ * \return ULONG The number of bits set to one in Target.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -496,6 +524,13 @@ RtlNumberOfSetBitsUlongPtr(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
+/**
+ * The RtlCopyBitMap routine copies the bits of one bitmap into another bitmap starting at a specified target bit.
+ *
+ * \param Source A pointer to the RTL_BITMAP to copy from.
+ * \param Destination A pointer to the RTL_BITMAP to copy into.
+ * \param TargetBit The zero-based index in the destination bitmap at which copying begins.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -504,6 +539,14 @@ RtlCopyBitMap(
     _In_ PRTL_BITMAP Destination,
     _In_range_(0, Destination->SizeOfBitMap - 1) ULONG TargetBit);
 
+/**
+ * The RtlExtractBitMap routine extracts a range of bits from a source bitmap into a destination bitmap.
+ *
+ * \param Source A pointer to the RTL_BITMAP to extract from.
+ * \param Destination A pointer to the RTL_BITMAP that receives the extracted bits.
+ * \param TargetBit The zero-based index of the first bit to extract from the source bitmap.
+ * \param NumberOfBits The number of bits to extract.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -521,12 +564,22 @@ RtlExtractBitMap(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+/**
+ * Represents a bitmap addressed with 64-bit indices.
+ */
 typedef struct _RTL_BITMAP_EX
 {
     ULONG64 SizeOfBitMap;
     PULONG64 Buffer;
 } RTL_BITMAP_EX, *PRTL_BITMAP_EX;
 
+/**
+ * The RtlInitializeBitMapEx routine initializes a 64-bit-capable extended bitmap header over a caller-supplied buffer.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX to initialize.
+ * \param BitMapBuffer A pointer to the caller-allocated buffer that stores the bitmap bits.
+ * \param SizeOfBitMap The size of the bitmap, in bits.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -535,6 +588,13 @@ RtlInitializeBitMapEx(
     _In_ PULONG64 BitMapBuffer,
     _In_ ULONG64 SizeOfBitMap);
 
+/**
+ * The RtlTestBitEx routine tests whether a specified bit is set in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param BitNumber The zero-based index of the bit to test.
+ * \return Returns `TRUE` if the specified bit is set, otherwise `FALSE`.
+ */
 _Check_return_
 NTSYSAPI
 BOOLEAN
@@ -543,12 +603,23 @@ RtlTestBitEx(
     _In_ PRTL_BITMAP_EX BitMapHeader,
     _In_range_(<, BitMapHeader->SizeOfBitMap) ULONG64 BitNumber);
 
+/**
+ * The RtlClearAllBitsEx routine clears every bit in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ */
 NTSYSAPI
 VOID
 NTAPI
 RtlClearAllBitsEx(
     _In_ PRTL_BITMAP_EX BitMapHeader);
 
+/**
+ * The RtlClearBitEx routine clears a single bit in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param BitNumber The zero-based index of the bit to clear.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -556,6 +627,12 @@ RtlClearBitEx(
     _In_ PRTL_BITMAP_EX BitMapHeader,
     _In_range_(<, BitMapHeader->SizeOfBitMap) ULONG64 BitNumber);
 
+/**
+ * The RtlSetBitEx routine sets a single bit in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param BitNumber The zero-based index of the bit to set.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -563,6 +640,13 @@ RtlSetBitEx(
     _In_ PRTL_BITMAP_EX BitMapHeader,
     _In_range_(<, BitMapHeader->SizeOfBitMap) ULONG64 BitNumber);
 
+/**
+ * The RtlSetBitsEx routine sets a run of consecutive bits in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param StartingIndex The zero-based index of the first bit to set.
+ * \param NumberToSet The number of consecutive bits to set.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -571,12 +655,25 @@ RtlSetBitsEx(
     _In_ ULONGLONG StartingIndex,
     _In_ ULONGLONG NumberToSet);
 
+/**
+ * The RtlSetAllBitsEx routine sets every bit in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ */
 NTSYSAPI
 VOID
 NTAPI
 RtlSetAllBitsEx(
     _In_ PRTL_BITMAP_EX BitMapHeader);
 
+/**
+ * The RtlFindSetBitsEx routine searches an extended bitmap for a run of the specified number of set bits.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param NumberToFind The number of consecutive set bits to locate.
+ * \param HintIndex The zero-based index at which to begin the search.
+ * \return ULONG64 The starting index of the located run, or -1 if no such run exists.
+ */
 NTSYSAPI
 ULONG64
 NTAPI
@@ -585,6 +682,14 @@ RtlFindSetBitsEx(
     _In_ ULONG64 NumberToFind,
     _In_ ULONG64 HintIndex);
 
+/**
+ * The RtlFindSetBitsAndClearEx routine searches an extended bitmap for a run of set bits and clears them.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param NumberToFind The number of consecutive set bits to locate and clear.
+ * \param HintIndex The zero-based index at which to begin the search.
+ * \return ULONG64 The starting index of the located run, or -1 if no such run exists.
+ */
 NTSYSAPI
 ULONG64
 NTAPI
@@ -593,12 +698,26 @@ RtlFindSetBitsAndClearEx(
     _In_ ULONG64 NumberToFind,
     _In_ ULONG64 HintIndex);
 
+/**
+ * The RtlNumberOfClearBitsEx routine returns the number of clear bits in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \return ULONGLONG The number of clear bits in the bitmap.
+ */
 NTSYSAPI
 ULONGLONG
 NTAPI
 RtlNumberOfClearBitsEx(
     _In_ PRTL_BITMAP_EX BitMapHeader);
 
+/**
+ * The RtlFindClearBitsAndSetEx routine searches an extended bitmap for a run of clear bits and sets them.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param NumberToFind The number of consecutive clear bits to locate and set.
+ * \param HintIndex The zero-based index at which to begin the search.
+ * \return ULONGLONG The starting index of the located run, or -1 if no such run exists.
+ */
 NTSYSAPI
 ULONGLONG
 NTAPI
@@ -607,6 +726,14 @@ RtlFindClearBitsAndSetEx(
     _In_ ULONGLONG NumberToFind,
     _In_ ULONGLONG HintIndex);
 
+/**
+ * The RtlFindClearBitsEx routine searches an extended bitmap for a run of the specified number of clear bits.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param NumberToFind The number of consecutive clear bits to locate.
+ * \param HintIndex The zero-based index at which to begin the search.
+ * \return ULONGLONG The starting index of the located run, or -1 if no such run exists.
+ */
 NTSYSAPI
 ULONGLONG
 NTAPI
@@ -615,6 +742,13 @@ RtlFindClearBitsEx(
     _In_ ULONGLONG NumberToFind,
     _In_ ULONGLONG HintIndex);
 
+/**
+ * The RtlClearBitsEx routine clears a run of consecutive bits in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param StartingIndex The zero-based index of the first bit to clear.
+ * \param NumberToClear The number of consecutive bits to clear.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -623,11 +757,87 @@ RtlClearBitsEx(
     _In_ ULONGLONG StartingIndex,
     _In_ ULONGLONG NumberToClear);
 
+/**
+ * The RtlNumberOfSetBitsEx routine returns the number of set bits in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \return ULONGLONG The number of set bits in the bitmap.
+ */
 NTSYSAPI
 ULONGLONG
 NTAPI
 RtlNumberOfSetBitsEx(
     _In_ PRTL_BITMAP_EX BitMapHeader);
+
+/**
+ * The RtlInterlockedClearBitRunEx routine atomically clears a run of consecutive bits in an extended bitmap.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param StartingIndex The zero-based index of the first bit to clear.
+ * \param NumberToClear The number of consecutive bits to clear.
+ */
+NTSYSAPI
+VOID
+NTAPI
+RtlInterlockedClearBitRunEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_range_(0, BitMapHeader->SizeOfBitMap - NumberToClear) ULONG64 StartingIndex,
+    _In_range_(0, BitMapHeader->SizeOfBitMap - StartingIndex) ULONG64 NumberToClear
+    );
+
+/**
+ * The RtlLengthCurrentClearRunBackwardEx routine computes the length of a run of clear (zero) bits in an extended
+ * bitmap starting from a given index and searching backward.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param StartingIndex The zero-based index from which to begin searching backward.
+ * \param MaximumLength The maximum number of bits to check.
+ * \return The number of contiguous clear bits found backward from StartingIndex, up to MaximumLength.
+ */
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlLengthCurrentClearRunBackwardEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_ ULONGLONG StartingIndex,
+    _In_ ULONGLONG MaximumLength
+    );
+
+/**
+ * The RtlLengthCurrentClearRunForwardEx routine computes the length of a run of clear (zero) bits in an extended bitmap
+ * starting from a given index and searching forward.
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param StartingIndex The zero-based index from which to begin searching forward.
+ * \param MaximumLength The maximum number of bits to check.
+ * \return The number of contiguous clear bits found forward from StartingIndex, up to MaximumLength.
+ */
+NTSYSAPI
+ULONGLONG
+NTAPI
+RtlLengthCurrentClearRunForwardEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_ ULONGLONG StartingIndex,
+    _In_ ULONGLONG MaximumLength
+    );
+
+/**
+ * The RtlAreBitsClearEx routine determines whether all bits within a specified range of an extended bitmap are clear
+ * (zero).
+ *
+ * \param BitMapHeader A pointer to the RTL_BITMAP_EX that describes the bitmap.
+ * \param StartingIndex The zero-based index of the first bit to examine.
+ * \param Length The number of bits to check.
+ * \return TRUE if all bits in the specified range are clear; otherwise, FALSE.
+ */
+NTSYSAPI
+BOOLEAN
+NTAPI
+RtlAreBitsClearEx(
+    _In_ PRTL_BITMAP_EX BitMapHeader,
+    _In_ ULONGLONG StartingIndex,
+    _In_ ULONGLONG Length
+    );
 
 #endif
 

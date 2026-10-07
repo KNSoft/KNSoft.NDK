@@ -1844,6 +1844,11 @@ NtCreateJobSet(
     );
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+/**
+ * The NtRevertContainerImpersonation routine reverts container impersonation on the current thread.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -2041,6 +2046,18 @@ typedef struct _PSSNT_WALK_MARKER_INFO
 } PSSNT_WALK_MARKER_INFO, *PPSSNT_WALK_MARKER_INFO;
     
 // rev
+/**
+ * The PssNtWalkSnapshot routine walks a process snapshot, retrieving information about threads, modules, or memory
+ * allocations.
+ *
+ * \param SnapshotHandle A handle to the process snapshot.
+ * \param InformationClass The information class identifying the type of data to walk (PSS_WALK_INFORMATION_CLASS).
+ * \param WalkMarkerHandle A handle to the walk marker tracking position within the snapshot.
+ * \param Buffer A pointer to the buffer receiving the snapshot record.
+ * \param BufferLength The size, in bytes, of the buffer pointed to by Buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/processsnapshot/nf-processsnapshot-psswalksnapshot
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -2053,6 +2070,13 @@ PssNtWalkSnapshot(
     );
 
 // rev
+/**
+ * The PssNtFreeWalkMarker routine frees a walk marker created for walking a process snapshot.
+ *
+ * \param WalkMarkerHandle A pointer to the walk marker handle to free.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/processsnapshot/nf-processsnapshot-psswalkmarkerfree
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -2061,6 +2085,13 @@ PssNtFreeWalkMarker(
     );
 
 // rev
+/**
+ * The PssNtValidateDescriptor routine validates a process snapshot descriptor.
+ *
+ * \param SnapshotHandle A handle to the process snapshot.
+ * \param ExceptionAddress An optional return address where an exception occurred.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

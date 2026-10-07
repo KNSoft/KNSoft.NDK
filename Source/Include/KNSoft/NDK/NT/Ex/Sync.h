@@ -101,8 +101,9 @@ NtSetEvent(
 /**
  * The NtSetEventEx routine sets an event object to the signaled state and optionally acquires a lock.
  *
- * @param ThreadId A handle to the thread.
- * @param Lock A pointer to an RTL_SRWLOCK structure that specifies the lock to acquire.
+ * @param EventHandle A handle to the event object.
+ * @param PreviousState An optional pointer to a variable that receives the previous state of the event.
+ * @param LockAddress An optional user-mode lock address.
  * @return NTSTATUS Successful or errant status.
  */
 _Kernel_entry_
@@ -110,8 +111,9 @@ NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtSetEventEx(
-    _In_ HANDLE ThreadId,
-    _In_opt_ PRTL_SRWLOCK Lock
+    _In_ HANDLE EventHandle,
+    _Out_opt_ PLONG PreviousState,
+    _In_opt_ PVOID LockAddress
 );
 #endif
 
@@ -330,6 +332,9 @@ NtSetHighWaitLowEventPair(
 #define MUTANT_ALL_ACCESS (MUTANT_QUERY_STATE|STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE)
 #endif
 
+/**
+ * The MUTANT_INFORMATION_CLASS enumeration defines the information classes for querying a mutant (mutex) object.
+ */
 typedef enum _MUTANT_INFORMATION_CLASS
 {
     MutantBasicInformation, // MUTANT_BASIC_INFORMATION
@@ -443,6 +448,9 @@ NtQueryMutant(
 #define SEMAPHORE_ALL_ACCESS (SEMAPHORE_QUERY_STATE|SEMAPHORE_MODIFY_STATE|STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE)
 #endif
 
+/**
+ * The SEMAPHORE_INFORMATION_CLASS enumeration defines the information classes for querying a semaphore object.
+ */
 typedef enum _SEMAPHORE_INFORMATION_CLASS
 {
     SemaphoreBasicInformation
@@ -550,11 +558,17 @@ NtQuerySemaphore(
 #define TIMER_ALL_ACCESS (TIMER_QUERY_STATE|TIMER_MODIFY_STATE|STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE)
 #endif
 
+/**
+ * The TIMER_INFORMATION_CLASS enumeration defines the information classes for querying a timer object.
+ */
 typedef enum _TIMER_INFORMATION_CLASS
 {
     TimerBasicInformation // TIMER_BASIC_INFORMATION
 } TIMER_INFORMATION_CLASS;
 
+/**
+ * The TIMER_SET_INFORMATION_CLASS enumeration defines the information classes for setting timer object information.
+ */
 typedef enum _TIMER_SET_INFORMATION_CLASS
 {
     TimerSetCoalescableTimer, // TIMER_SET_COALESCABLE_TIMER_INFO
@@ -580,6 +594,9 @@ TIMER_APC_ROUTINE(
     _In_ LONG TimerHighValue);
 typedef TIMER_APC_ROUTINE* PTIMER_APC_ROUTINE;
 
+/**
+ * The TIMER_SET_COALESCABLE_TIMER_INFO structure specifies the parameters used to configure a coalescable timer.
+ */
 typedef struct _TIMER_SET_COALESCABLE_TIMER_INFO
 {
     _In_ LARGE_INTEGER DueTime;
@@ -716,6 +733,9 @@ NtQueryTimer(
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 
 // ExCheckValidIRTimerId
+/**
+ * The IR_TIMER_PROVIDER_INDEX enumeration identifies the interrupt-routing timer provider.
+ */
 typedef enum _IR_TIMER_PROVIDER_INDEX
 {
     IR_TIMER_PROVIDER_TESTIDENTIFIER, // Token(Service SID)
@@ -839,6 +859,9 @@ NtSetIRTimer(
     (TIMER2_ATTRIBUTE_IR_TIMER | ((R) ? TIMER2_ATTRIBUTE_HIGH_RESOLUTION : 0))
 
 // rev
+/**
+ * The TIMER2_ATTRIBUTES union describes the attributes used when creating a Timer2 object.
+ */
 typedef union _TIMER2_ATTRIBUTES
 {
     ULONG Value;
@@ -849,8 +872,8 @@ typedef union _TIMER2_ATTRIBUTES
         ULONG HighResolution : 1; // bit 2 == TIMER2_ATTRIBUTE_HIGH_RESOLUTION
         ULONG NoWake : 1;         // bit 3 == TIMER2_ATTRIBUTE_NO_WAKE
         ULONG Reserved1 : 27;     // bits [4..30] (reserved)
-        TIMER_TYPE NotificationType : 1; // bit 31 == TIMER2_ATTRIBUTE_NOTIFICATION
-    };
+        ULONG NotificationType : 1; // TIMER_TYPE, bit 31 == TIMER2_ATTRIBUTE_NOTIFICATION
+    } DUMMYSTRUCTNAME;
 } TIMER2_ATTRIBUTES;
 
 /**
@@ -1179,6 +1202,18 @@ NtWaitForKeyedEvent(
 #if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 
 // rev
+/**
+ * The NtCreateCrossVmEvent routine creates a cross-VM event object for communication between virtual machine
+ * partitions.
+ *
+ * \param[out] CrossVmEvent Pointer to a variable that receives a handle to the cross-VM event object.
+ * \param[in] DesiredAccess The requested access to the event object.
+ * \param[in, optional] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \param[in] CrossVmEventFlags Flags that control the cross-VM event creation.
+ * \param[in] VMID Pointer to the GUID that identifies the target virtual machine.
+ * \param[in] ServiceID Pointer to the GUID that identifies the service.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1193,6 +1228,18 @@ NtCreateCrossVmEvent(
 );
 
 // rev
+/**
+ * The NtCreateCrossVmMutant routine creates a cross-VM mutant object for synchronization between virtual machine
+ * partitions.
+ *
+ * \param[out] EventHandle Pointer to a variable that receives a handle to the cross-VM mutant object.
+ * \param[in] DesiredAccess The requested access to the mutant object.
+ * \param[in, optional] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \param[in] CrossVmEventFlags Flags that control the cross-VM mutant creation.
+ * \param[in] VMID Pointer to the GUID that identifies the target virtual machine.
+ * \param[in] ServiceID Pointer to the GUID that identifies the service.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -1207,6 +1254,13 @@ NtCreateCrossVmMutant(
 );
 
 // rev
+/**
+ * The NtAcquireCrossVmMutant routine acquires (waits on) a cross-VM mutant object.
+ *
+ * \param[in] CrossVmMutant Handle to the cross-VM mutant object.
+ * \param[in] Timeout Pointer to the timeout value for the acquire operation.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS

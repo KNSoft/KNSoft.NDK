@@ -16,6 +16,9 @@ EXTERN_C_START
 #define RTL_RESOURCE_TYPE 1
 
 // private
+/**
+ * The RTL_PROCESS_LOCK_INFORMATION structure describes a single critical section or resource lock in a process.
+ */
 typedef struct _RTL_PROCESS_LOCK_INFORMATION
 {
     PVOID Address;
@@ -31,6 +34,9 @@ typedef struct _RTL_PROCESS_LOCK_INFORMATION
 } RTL_PROCESS_LOCK_INFORMATION, *PRTL_PROCESS_LOCK_INFORMATION;
 
 // private
+/**
+ * The RTL_PROCESS_LOCKS structure contains information about all locks held within a process.
+ */
 typedef struct _RTL_PROCESS_LOCKS
 {
     ULONG NumberOfLocks;
@@ -38,6 +44,9 @@ typedef struct _RTL_PROCESS_LOCKS
 } RTL_PROCESS_LOCKS, *PRTL_PROCESS_LOCKS;
 
 // private
+/**
+ * The RTL_PROCESS_BACKTRACE_INFORMATION structure describes a single stack back trace captured for a process.
+ */
 typedef struct _RTL_PROCESS_BACKTRACE_INFORMATION
 {
     PCHAR SymbolicBackTrace;
@@ -48,6 +57,9 @@ typedef struct _RTL_PROCESS_BACKTRACE_INFORMATION
 } RTL_PROCESS_BACKTRACE_INFORMATION, *PRTL_PROCESS_BACKTRACE_INFORMATION;
 
 // private
+/**
+ * The RTL_PROCESS_BACKTRACES structure contains the stack back traces captured for a process.
+ */
 typedef struct _RTL_PROCESS_BACKTRACES
 {
     SIZE_T CommittedMemory;
@@ -57,6 +69,21 @@ typedef struct _RTL_PROCESS_BACKTRACES
     _Field_size_(NumberOfBackTraces) RTL_PROCESS_BACKTRACE_INFORMATION BackTraces[1];
 } RTL_PROCESS_BACKTRACES, *PRTL_PROCESS_BACKTRACES;
 
+/**
+ * The RtlCreateProcessParameters routine creates and initializes a process parameters block for a new process.
+ *
+ * \param ProcessParameters Receives the newly allocated process parameters block.
+ * \param ImagePathName The image path name of the process.
+ * \param DllPath An optional DLL search path.
+ * \param CurrentDirectory An optional current directory.
+ * \param CommandLine An optional command line.
+ * \param Environment An optional environment block for the process.
+ * \param WindowTitle An optional window title.
+ * \param DesktopInfo An optional desktop information string.
+ * \param ShellInfo An optional shell information string.
+ * \param RuntimeData An optional runtime data string.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -72,6 +99,23 @@ RtlCreateProcessParameters(
     _In_opt_ PUNICODE_STRING ShellInfo,
     _In_opt_ PUNICODE_STRING RuntimeData);
 
+/**
+ * The RtlCreateProcessParametersEx routine creates and initializes a process parameters block for a new process, with
+ * control over normalization.
+ *
+ * \param ProcessParameters Receives the newly allocated process parameters block.
+ * \param ImagePathName The image path name of the process.
+ * \param DllPath An optional DLL search path.
+ * \param CurrentDirectory An optional current directory.
+ * \param CommandLine An optional command line.
+ * \param Environment An optional environment block for the process.
+ * \param WindowTitle An optional window title.
+ * \param DesktopInfo An optional desktop information string.
+ * \param ShellInfo An optional shell information string.
+ * \param RuntimeData An optional runtime data string.
+ * \param Flags Pass RTL_USER_PROC_PARAMS_NORMALIZED to keep the parameters normalized.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -91,43 +135,67 @@ RtlCreateProcessParametersEx(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS4)
 // private
+/**
+ * The RtlCreateProcessParametersWithTemplate routine creates a process parameters block using an existing
+ * process parameters block as a template.
+ *
+ * \param ProcessParameters Receives a pointer to the created process parameters block.
+ * \param Template Pointer to an existing process parameters block to use as a template.
+ * \param Flags Pass RTL_USER_PROC_PARAMS_NORMALIZED to keep parameters normalized.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlCreateProcessParametersWithTemplate(
     _Out_ PRTL_USER_PROCESS_PARAMETERS *ProcessParameters,
-    _In_ PUNICODE_STRING ImagePathName,
-    _In_opt_ PUNICODE_STRING DllPath,
-    _In_opt_ PUNICODE_STRING CurrentDirectory,
-    _In_opt_ PUNICODE_STRING CommandLine,
-    _In_opt_ PVOID Environment,
-    _In_opt_ PUNICODE_STRING WindowTitle,
-    _In_opt_ PUNICODE_STRING DesktopInfo,
-    _In_opt_ PUNICODE_STRING ShellInfo,
-    _In_opt_ PUNICODE_STRING RuntimeData,
-    _In_opt_ PUNICODE_STRING RedirectionDllName,
+    _In_ PRTL_USER_PROCESS_PARAMETERS Template,
     _In_ ULONG Flags // pass RTL_USER_PROC_PARAMS_NORMALIZED to keep parameters normalized
-);
+    );
 #endif
 
+/**
+ * The RtlDestroyProcessParameters routine releases the memory used by a process parameters block created by
+ * RtlCreateProcessParameters.
+ *
+ * \param ProcessParameters A pointer to the process parameters block to destroy.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlDestroyProcessParameters(
     _In_ _Post_invalid_ PRTL_USER_PROCESS_PARAMETERS ProcessParameters);
 
+/**
+ * The RtlNormalizeProcessParams routine converts the embedded pointers in a process parameters block from relative
+ * offsets to absolute addresses.
+ *
+ * \param ProcessParameters A pointer to the process parameters block to normalize.
+ * \return A pointer to the normalized process parameters block.
+ */
 NTSYSAPI
 PRTL_USER_PROCESS_PARAMETERS
 NTAPI
 RtlNormalizeProcessParams(
     _Inout_ PRTL_USER_PROCESS_PARAMETERS ProcessParameters);
 
+/**
+ * The RtlDeNormalizeProcessParams routine converts the embedded pointers in a process parameters block from absolute
+ * addresses back to relative offsets.
+ *
+ * \param ProcessParameters A pointer to the process parameters block to de-normalize.
+ * \return A pointer to the de-normalized process parameters block.
+ */
 NTSYSAPI
 PRTL_USER_PROCESS_PARAMETERS
 NTAPI
 RtlDeNormalizeProcessParams(
     _Inout_ PRTL_USER_PROCESS_PARAMETERS ProcessParameters);
 
+/**
+ * Receives information about a process created by RtlCreateUserProcess.
+ */
 typedef struct _RTL_USER_PROCESS_INFORMATION
 {
     ULONG Length;
@@ -168,8 +236,14 @@ RtlCreateUserProcess(
     _In_opt_ HANDLE TokenHandle, // used to be ExceptionPort
     _Out_ PRTL_USER_PROCESS_INFORMATION ProcessInformation);
 
+/**
+ * Version number of the RTL_USER_PROCESS_EXTENDED_PARAMETERS structure.
+ */
 #define RTL_USER_PROCESS_EXTENDED_PARAMETERS_VERSION 1
 
+/**
+ * Specifies extended parameters for creating a user-mode process.
+ */
 typedef struct _RTL_USER_PROCESS_EXTENDED_PARAMETERS
 {
     USHORT Version;
@@ -221,6 +295,9 @@ NTAPI
 RtlExitUserProcess(
     _In_ NTSTATUS ExitStatus);
 
+/**
+ * Flags for RtlCloneUserProcess.
+ */
 #define RTL_CLONE_PROCESS_FLAGS_CREATE_SUSPENDED    0x00000001
 #define RTL_CLONE_PROCESS_FLAGS_INHERIT_HANDLES     0x00000002
 #define RTL_CLONE_PROCESS_FLAGS_NO_SYNCHRONIZE      0x00000004 // don't update synchronization objects
@@ -247,24 +324,51 @@ RtlCloneUserProcess(
     _Out_ PRTL_USER_PROCESS_INFORMATION ProcessInformation);
 
 // rev
+/**
+ * The RtlPrepareForProcessCloning routine prepares the current process for cloning by acquiring the locks required to
+ * produce a consistent clone.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlPrepareForProcessCloning(VOID);
 
 // rev
+/**
+ * The RtlCompleteProcessCloning routine completes a process cloning operation started by RtlPrepareForProcessCloning,
+ * releasing the locks acquired for cloning.
+ *
+ * \param Completed A value indicating whether the clone completed successfully.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlCompleteProcessCloning(
     _In_ LOGICAL Completed);
 
+/**
+ * The RtlUpdateClonedCriticalSection routine updates a critical section in a cloned process so that it is usable in the
+ * clone.
+ *
+ * \param CriticalSection A pointer to the critical section to update.
+ */
 NTSYSAPI
 VOID
 NTAPI
 RtlUpdateClonedCriticalSection(
     _Inout_ PRTL_CRITICAL_SECTION CriticalSection);
 
+/**
+ * The RtlUpdateClonedSRWLock routine updates a slim reader/writer (SRW) lock in a cloned process so that it is usable
+ * in the clone.
+ *
+ * \param SRWLock A pointer to the SRW lock to update.
+ * \param Shared A value indicating whether the lock is set to a shared acquire (`TRUE`) or an exclusive acquire
+ * (`FALSE`).
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -274,12 +378,18 @@ RtlUpdateClonedSRWLock(
 );
 
 // rev RtlCloneUserProcess Flags
+/**
+ * Flags for RtlCreateProcessReflection.
+ */
 #define RTL_PROCESS_REFLECTION_FLAGS_CREATE_SUSPENDED 0x00000001
 #define RTL_PROCESS_REFLECTION_FLAGS_INHERIT_HANDLES  0x00000002
 #define RTL_PROCESS_REFLECTION_FLAGS_NO_SUSPEND       0x00000004
 #define RTL_PROCESS_REFLECTION_FLAGS_NO_SYNCHRONIZE   0x00000008
 #define RTL_PROCESS_REFLECTION_FLAGS_NO_CLOSE_EVENT   0x00000010
 
+/**
+ * Receives information about a process created by reflection (cloning).
+ */
 typedef struct _RTLP_PROCESS_REFLECTION_REFLECTION_INFORMATION
 {
     HANDLE ReflectionProcessHandle;
@@ -287,6 +397,9 @@ typedef struct _RTLP_PROCESS_REFLECTION_REFLECTION_INFORMATION
     CLIENT_ID ReflectionClientId;
 } RTLP_PROCESS_REFLECTION_REFLECTION_INFORMATION, *PRTLP_PROCESS_REFLECTION_REFLECTION_INFORMATION;
 
+/**
+ * Public alias for the process reflection information structure.
+ */
 typedef RTLP_PROCESS_REFLECTION_REFLECTION_INFORMATION PROCESS_REFLECTION_INFORMATION, *PPROCESS_REFLECTION_INFORMATION;
 
 /**
@@ -322,11 +435,12 @@ RtlCreateProcessReflection(
  */
 NTSYSAPI
 NTSTATUS
-NTAPI
+STDAPIVCALLTYPE
 RtlSetProcessIsCritical(
     _In_ BOOLEAN NewValue,
     _Out_opt_ PBOOLEAN OldValue,
-    _In_ BOOLEAN CheckFlag);
+    _In_ BOOLEAN CheckFlag
+    );
 
 /**
  * The RtlSetThreadIsCritical function sets or clears the critical status of the current thread.
@@ -339,11 +453,12 @@ RtlSetProcessIsCritical(
  */
 NTSYSAPI
 NTSTATUS
-NTAPI
+STDAPIVCALLTYPE
 RtlSetThreadIsCritical(
     _In_ BOOLEAN NewValue,
     _Out_opt_ PBOOLEAN OldValue,
-    _In_ BOOLEAN CheckFlag);
+    _In_ BOOLEAN CheckFlag
+    );
 
 // rev
 /**
@@ -448,6 +563,12 @@ RtlCreateUserThread(
     _Out_opt_ PHANDLE ThreadHandle,
     _Out_opt_ PCLIENT_ID ClientId);
 
+/**
+ * The RtlUserThreadStart routine is the default entry-point wrapper for user-mode threads created by the loader.
+ *
+ * \param Function The thread start routine to invoke.
+ * \param Parameter The parameter passed to the thread start routine.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -542,6 +663,9 @@ RtlRemoteCall(
 
 #ifdef _WIN64
 
+/**
+ * Identifies how a dynamic function table describes its function entries.
+ */
 typedef enum _FUNCTION_TABLE_TYPE
 {
     RF_SORTED,
@@ -550,6 +674,9 @@ typedef enum _FUNCTION_TABLE_TYPE
     RF_KERNEL_DYNAMIC
 } FUNCTION_TABLE_TYPE;
 
+/**
+ * Describes a dynamically registered exception and unwind function table.
+ */
 typedef struct _DYNAMIC_FUNCTION_TABLE
 {
     LIST_ENTRY ListEntry;
@@ -567,6 +694,12 @@ typedef struct _DYNAMIC_FUNCTION_TABLE
     RTL_BALANCED_NODE TreeNodeMax;
 } DYNAMIC_FUNCTION_TABLE, *PDYNAMIC_FUNCTION_TABLE;
 
+/**
+ * The RtlGetFunctionTableListHead routine returns the head of the list of dynamic function tables for the current
+ * process.
+ *
+ * \return A pointer to the list head of the process dynamic function tables.
+ */
 NTSYSAPI
 PLIST_ENTRY
 NTAPI
@@ -574,6 +707,12 @@ RtlGetFunctionTableListHead(VOID);
 
 #endif
 
+/**
+ * The RtlIsThreadWithinLoaderCallout routine determines whether the current thread is executing within a loader
+ * callout.
+ *
+ * \return `TRUE` if the current thread is within a loader callout, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -590,6 +729,12 @@ NTAPI
 RtlDllShutdownInProgress(VOID);
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The RtlSetProxiedProcessId routine sets the proxied process identifier for the current process.
+ *
+ * \param ProxiedProcessId The proxied process identifier to set.
+ * \return ULONG The previous proxied process identifier.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -597,6 +742,13 @@ RtlSetProxiedProcessId(
     _In_ ULONG ProxiedProcessId);
 #endif
 
+/**
+ * The RtlDelayExecution routine suspends the current thread for the specified interval.
+ *
+ * \param Alertable If `TRUE`, the delay can be interrupted by the delivery of an alert to the thread.
+ * \param DelayInterval An optional pointer to the interval to wait, in 100-nanosecond units.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -604,6 +756,12 @@ RtlDelayExecution(
     _In_ BOOLEAN Alertable,
     _In_opt_ PLARGE_INTEGER DelayInterval);
 
+/**
+ * The RtlGetCurrentThreadPrimaryGroup routine returns the processor group number that is primary for the current
+ * thread.
+ *
+ * \return USHORT The primary processor group number of the current thread.
+ */
 NTSYSAPI
 USHORT
 NTAPI
@@ -612,6 +770,15 @@ RtlGetCurrentThreadPrimaryGroup(VOID);
 #if (NTDDI_VERSION >= NTDDI_WIN11_GE)
 
 // rev
+/**
+ * The RtlQueryProcessAvailableCpus routine retrieves the set of processors available to the specified process.
+ *
+ * \param ProcessHandle A handle to the process to query.
+ * \param Affinity A pointer to a KAFFINITY_EX structure that receives the available processor affinity.
+ * \param ObservedSequenceNumber The sequence number previously observed by the caller.
+ * \param SequenceNumber An optional pointer to a variable that receives the current sequence number.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -623,6 +790,14 @@ RtlQueryProcessAvailableCpus(
 );
 
 // rev
+/**
+ * The RtlQueryProcessAvailableCpusCount routine retrieves the number of processors available to the specified process.
+ *
+ * \param ProcessHandle A handle to the process to query.
+ * \param AvailableCpusCount A pointer to a variable that receives the number of available processors.
+ * \param SequenceNumber An optional pointer to a variable that receives the current sequence number.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

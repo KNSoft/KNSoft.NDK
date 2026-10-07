@@ -12,6 +12,15 @@ EXTERN_C_START
 #pragma region Enclave
 
 // RtlCallEnclave
+/**
+ * The RtlCallEnclave routine calls a routine inside a VBS enclave.
+ *
+ * \param Routine The address of the routine to call within the enclave.
+ * \param Reserved Reserved; must be NULL.
+ * \param Flags Call flags controlling the enclave transition.
+ * \param ReturnValue Receives the value returned by the enclave routine.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -23,14 +32,28 @@ RtlCallEnclave(
     );
 
 // RtlCallEnclaveReturn
+/**
+ * The RtlCallEnclaveReturn routine returns control from an enclave call back to the host.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlCallEnclaveReturn(
-    void
+    VOID
     );
 
 // RtlEnclaveCallDispatchReturn
+/**
+ * The RtlEnclaveCallDispatchReturn routine returns control from an enclave dispatch call back to the host.
+ *
+ * \param EnclaveTarget The enclave target address associated with the dispatch.
+ * \param LeafRoutine An optional leaf routine to invoke on return.
+ * \param LeafNumber The enclave leaf number.
+ * \param DispatchContext On input the current dispatch context; receives the updated context.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -46,6 +69,12 @@ RtlEnclaveCallDispatchReturn(
 #pragma region Atom
 
 // RtlInitializeAtomPackage
+/**
+ * The RtlInitializeAtomPackage routine initializes the process-wide atom package.
+ *
+ * \param Callback An optional callback invoked by the atom package.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -151,6 +180,9 @@ VOID NTAPI RTL_TIMER_CALLBACK(
     _In_ PVOID Parameter,
     _In_ BOOLEAN TimerOrWaitFired
     );
+/**
+ * Pointer to an RTL_TIMER_CALLBACK callback.
+ */
 typedef RTL_TIMER_CALLBACK *PRTL_TIMER_CALLBACK;
 
 /**
@@ -179,6 +211,18 @@ RtlCreateTimer(
     _In_ ULONG Period,
     _In_ ULONG Flags);
 
+/**
+ * The RtlSetTimer routine creates a timer within a timer queue.
+ *
+ * \param TimerQueueHandle A handle to the timer queue.
+ * \param Handle Receives a handle to the newly created timer.
+ * \param Function The callback invoked when the timer expires.
+ * \param Context An optional context value passed to the callback.
+ * \param DueTime The time, in milliseconds, before the timer first expires.
+ * \param Period The period, in milliseconds, for recurring expiration; zero for one-shot.
+ * \param Flags Flags controlling timer behavior.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -191,6 +235,15 @@ RtlSetTimer(
     _In_ ULONG Period,
     _In_ ULONG Flags);
 
+/**
+ * The RtlUpdateTimer routine changes the due time and period of an existing timer.
+ *
+ * \param TimerQueueHandle A handle to the timer queue that owns the timer.
+ * \param TimerHandle A handle to the timer to update.
+ * \param DueTime The new time, in milliseconds, before the timer first fires.
+ * \param Period The new period, in milliseconds, between subsequent firings, or zero for a one-shot timer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -200,8 +253,20 @@ RtlUpdateTimer(
     _In_ ULONG DueTime,
     _In_ ULONG Period);
 
+/**
+ * Flag requesting that timer deletion block until pending callbacks complete.
+ */
 #define RTL_TIMER_DELETE_WAIT_FOR_COMPLETION ((HANDLE)(LONG_PTR)-1)
 
+/**
+ * The RtlDeleteTimer routine deletes a timer from a timer queue, optionally waiting for pending callbacks to complete.
+ *
+ * \param TimerQueueHandle A handle to the timer queue that owns the timer.
+ * \param TimerToCancel A handle to the timer to delete.
+ * \param Event An optional handle to an event signaled when the timer is deleted, or
+ * RTL_TIMER_DELETE_WAIT_FOR_COMPLETION to wait for completion.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -211,12 +276,27 @@ RtlDeleteTimer(
     _In_opt_ HANDLE Event // optional: RTL_TIMER_DELETE_WAIT_FOR_COMPLETION
 );
 
+/**
+ * The RtlDeleteTimerQueue routine deletes a timer queue and all of the timers it contains.
+ *
+ * \param TimerQueueHandle A handle to the timer queue to delete.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlDeleteTimerQueue(
     _In_ HANDLE TimerQueueHandle);
 
+/**
+ * The RtlDeleteTimerQueueEx routine deletes a timer queue and all of its timers, optionally waiting for pending
+ * callbacks to complete.
+ *
+ * \param TimerQueueHandle A handle to the timer queue to delete.
+ * \param Event An optional handle to an event signaled when the queue is deleted, or a sentinel value to wait for
+ * completion.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -261,13 +341,25 @@ RtlQueryPerformanceFrequency(
 
 #pragma region Transactions
 
+/**
+ * The RtlGetCurrentTransaction routine returns the transaction handle associated with the calling thread.
+ *
+ * \return HANDLE A handle to the current transaction, or NULL if no transaction is active.
+ */
 NTSYSAPI
 HANDLE
 NTAPI
 RtlGetCurrentTransaction(
-    _In_opt_ PCWSTR ExistingFileName,
-    _In_opt_ PCWSTR NewFileName);
+    VOID
+    );
 
+/**
+ * The RtlSetCurrentTransaction routine associates the specified transaction handle with the calling thread.
+ *
+ * \param TransactionHandle An optional handle to the transaction to associate with the current thread, or NULL to clear
+ * the current transaction.
+ * \return `TRUE` if the transaction was set, otherwise `FALSE`.
+ */
 NTSYSAPI
 LOGICAL
 NTAPI
@@ -381,17 +473,33 @@ RtlDecodeRemotePointer(
 
 #pragma region Session
 
+/**
+ * The RtlGetCurrentServiceSessionId routine returns the service session identifier associated with the current process.
+ *
+ * \return ULONG The current service session identifier, or zero if none is assigned.
+ */
 NTSYSAPI
 ULONG
 NTAPI
 RtlGetCurrentServiceSessionId(VOID);
 
+/**
+ * The RtlGetActiveConsoleId routine returns the session identifier of the currently active console session.
+ *
+ * \return ULONG The identifier of the active console session.
+ */
 NTSYSAPI
 ULONG
 NTAPI
 RtlGetActiveConsoleId(VOID);
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS1)
+/**
+ * The RtlGetConsoleSessionForegroundProcessId routine returns the process identifier of the foreground process in the
+ * active console session.
+ *
+ * \return LONGLONG The process identifier of the console session's foreground process.
+ */
 NTSYSAPI
 LONGLONG
 NTAPI
@@ -399,11 +507,21 @@ RtlGetConsoleSessionForegroundProcessId(VOID);
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+/**
+ * Contains properties describing a session.
+ */
 typedef struct _RTL_SESSION_PROPERTIES
 {
     ULONG IsCurrentSessionId;
 } RTL_SESSION_PROPERTIES, *PRTL_SESSION_PROPERTIES;
 
+/**
+ * The RtlGetSessionProperties routine retrieves the properties of the specified session.
+ *
+ * \param SessionId The identifier of the session to query.
+ * \param SessionProperties A pointer to an RTL_SESSION_PROPERTIES structure that receives the session properties.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -416,22 +534,49 @@ RtlGetSessionProperties(
 
 #pragma region Lock/Unlock TEB/Stack/Module Section
 
+/**
+ * The RtlLockCurrentThread routine locks the current thread to prevent it from being suspended or terminated during a
+ * critical operation.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
+_Acquires_lock_(NtCurrentThread())
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlLockCurrentThread(VOID);
 
+/**
+ * The RtlUnlockCurrentThread routine releases a lock previously acquired by RtlLockCurrentThread on the current thread.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
+_Releases_lock_(NtCurrentThread())
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlUnlockCurrentThread(VOID);
 
+/**
+ * The RtlLockModuleSection routine locks the image section containing the specified address into the working set.
+ *
+ * \param Address An address within the module section to lock.
+ * \return NTSTATUS Successful or errant status.
+ */
+_Acquires_lock_(Address)
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlLockModuleSection(
     _In_ PVOID Address);
 
+/**
+ * The RtlUnlockModuleSection routine unlocks the image section containing the specified address.
+ *
+ * \param Address An address within the module section to unlock.
+ * \return NTSTATUS Successful or errant status.
+ */
+_Releases_lock_(Address)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -444,6 +589,15 @@ RtlUnlockModuleSection(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
 
+/**
+ * The RtlIsCloudFilesPlaceholder routine determines whether a file or directory is a Cloud Files placeholder, based on
+ * its attributes and reparse tag.
+ *
+ * \param FileAttributes The file attributes of the file or directory.
+ * \param ReparseTag The reparse tag (or EaSize) of the file or directory.
+ * \return Returns `TRUE` if the file or directory is a Cloud Files placeholder, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtliscloudfilesplaceholder
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -451,6 +605,15 @@ RtlIsCloudFilesPlaceholder(
     _In_ ULONG FileAttributes,
     _In_ ULONG ReparseTag);
 
+/**
+ * The RtlIsPartialPlaceholder routine determines whether a file or directory is a partial Cloud Files placeholder,
+ * based on its attributes and reparse tag.
+ *
+ * \param FileAttributes The file attributes of the file or directory.
+ * \param ReparseTag The reparse tag (or EaSize) of the file or directory.
+ * \return Returns `TRUE` if the file or directory is a partial placeholder, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlispartialplaceholder
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -458,6 +621,15 @@ RtlIsPartialPlaceholder(
     _In_ ULONG FileAttributes,
     _In_ ULONG ReparseTag);
 
+/**
+ * The RtlIsPartialPlaceholderFileHandle routine determines whether the file referenced by a handle is a partial
+ * placeholder.
+ *
+ * \param FileHandle A handle to the file to test. The handle must have at least FILE_READ_ATTRIBUTES access.
+ * \param IsPartialPlaceholder A pointer to a variable that receives whether the file is a partial placeholder.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlispartialplaceholderfilehandle
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -465,6 +637,15 @@ RtlIsPartialPlaceholderFileHandle(
     _In_ HANDLE FileHandle,
     _Out_ PBOOLEAN IsPartialPlaceholder);
 
+/**
+ * The RtlIsPartialPlaceholderFileInfo routine determines whether file information describes a partial cloud-files
+ * placeholder.
+ *
+ * \param InfoBuffer A buffer containing file information of the specified class.
+ * \param InfoClass The file information class of the data in InfoBuffer.
+ * \param IsPartialPlaceholder Receives TRUE if the file is a partial placeholder.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -474,19 +655,37 @@ RtlIsPartialPlaceholderFileInfo(
     _Out_ PBOOLEAN IsPartialPlaceholder);
 
 #undef PHCM_MAX
+/**
+ * Process placeholder compatibility mode values.
+ */
 #define PHCM_APPLICATION_DEFAULT ((CHAR)0)
 #define PHCM_DISGUISE_PLACEHOLDERS ((CHAR)1)
 #define PHCM_EXPOSE_PLACEHOLDERS ((CHAR)2)
 #define PHCM_MAX ((CHAR)2)
 
+/**
+ * Error values returned by the placeholder compatibility mode routines.
+ */
 #define PHCM_ERROR_INVALID_PARAMETER ((CHAR)-1)
 #define PHCM_ERROR_NO_TEB ((CHAR)-2)
 
+/**
+ * The RtlQueryThreadPlaceholderCompatibilityMode routine returns the placeholder compatibility mode for the current
+ * thread.
+ *
+ * \return CHAR The current thread placeholder compatibility mode.
+ */
 NTSYSAPI
 CHAR
 NTAPI
 RtlQueryThreadPlaceholderCompatibilityMode(VOID);
 
+/**
+ * The RtlSetThreadPlaceholderCompatibilityMode routine sets the placeholder compatibility mode for the current thread.
+ *
+ * \param Mode The placeholder compatibility mode to set.
+ * \return CHAR The previous thread placeholder compatibility mode.
+ */
 NTSYSAPI
 CHAR
 NTAPI
@@ -496,17 +695,33 @@ RtlSetThreadPlaceholderCompatibilityMode(
 #endif
 
 #undef PHCM_MAX
+/**
+ * Extended (thread-level) placeholder compatibility mode values.
+ */
 #define PHCM_DISGUISE_FULL_PLACEHOLDERS ((CHAR)3)
 #define PHCM_MAX ((CHAR)3)
 #define PHCM_ERROR_NO_PEB ((CHAR)-3)
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS4)
 
+/**
+ * The RtlQueryProcessPlaceholderCompatibilityMode routine returns the placeholder compatibility mode for the current
+ * process.
+ *
+ * \return CHAR The current process placeholder compatibility mode.
+ */
 NTSYSAPI
 CHAR
 NTAPI
 RtlQueryProcessPlaceholderCompatibilityMode(VOID);
 
+/**
+ * The RtlSetProcessPlaceholderCompatibilityMode routine sets the placeholder compatibility mode for the current
+ * process.
+ *
+ * \param Mode The placeholder compatibility mode to set.
+ * \return CHAR The previous process placeholder compatibility mode.
+ */
 NTSYSAPI
 CHAR
 NTAPI
@@ -516,6 +731,13 @@ RtlSetProcessPlaceholderCompatibilityMode(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS2)
+/**
+ * The RtlIsNonEmptyDirectoryReparsePointAllowed routine determines whether a reparse point identified by the specified
+ * tag is allowed on a non-empty directory.
+ *
+ * \param ReparseTag The reparse tag to test.
+ * \return Returns `TRUE` if the reparse tag is allowed on a non-empty directory, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -528,6 +750,15 @@ RtlIsNonEmptyDirectoryReparsePointAllowed(
 #pragma region AppX
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The RtlAppxIsFileOwnedByTrustedInstaller routine determines whether the file referenced by a handle is owned by the
+ * TrustedInstaller.
+ *
+ * \param FileHandle A handle to the file to test.
+ * \param IsFileOwnedByTrustedInstaller A pointer to a variable that receives whether the file is owned by the
+ * TrustedInstaller.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -537,11 +768,17 @@ RtlAppxIsFileOwnedByTrustedInstaller(
 #endif
 
 // Windows Internals book
+/**
+ * Package claim flags describing a packaged application activation token.
+ */
 #define PSM_ACTIVATION_TOKEN_PACKAGED_APPLICATION       0x00000001UL // AppX package format
 #define PSM_ACTIVATION_TOKEN_SHARED_ENTITY              0x00000002UL // Shared token, multiple binaries in the same package
 #define PSM_ACTIVATION_TOKEN_FULL_TRUST                 0x00000004UL // Trusted (Centennial), converted Win32 application
 #define PSM_ACTIVATION_TOKEN_NATIVE_SERVICE             0x00000008UL // Packaged service created by SCM
 //#define PSM_ACTIVATION_TOKEN_DEVELOPMENT_APP          0x00000010UL
+/**
+ * Additional package claim and activation token flags.
+ */
 #define PSM_ACTIVATION_TOKEN_MULTIPLE_INSTANCES_ALLOWED 0x00000010UL
 #define PSM_ACTIVATION_TOKEN_BREAKAWAY_INHIBITED        0x00000020UL // Cannot create non-packaged child processes
 #define PSM_ACTIVATION_TOKEN_RUNTIME_BROKER             0x00000040UL // rev
@@ -557,9 +794,15 @@ RtlAppxIsFileOwnedByTrustedInstaller(
 //#define PackageOrigin_DeveloperSigned   5
 //#define PackageOrigin_LineOfBusiness    6
 
+/**
+ * Constants describing minimum system application claim values.
+ */
 #define PSMP_MINIMUM_SYSAPP_CLAIM_VALUES 2
 #define PSMP_MAXIMUM_SYSAPP_CLAIM_VALUES 4
 
+/**
+ * Describes the package claim (origin and flags) associated with a process.
+ */
 typedef struct _PS_PKG_CLAIM
 {
     ULONG Flags;  // PSM_ACTIVATION_TOKEN_*
@@ -567,6 +810,9 @@ typedef struct _PS_PKG_CLAIM
 } PS_PKG_CLAIM, *PPS_PKG_CLAIM;
 
 // private // WIN://BGKD
+/**
+ * Identifies the background activation type of a packaged application.
+ */
 typedef enum _PSM_ACTIVATE_BACKGROUND_TYPE
 {
   PsmActNotBackground = 0,
@@ -577,6 +823,22 @@ typedef enum _PSM_ACTIVATE_BACKGROUND_TYPE
 } PSM_ACTIVATE_BACKGROUND_TYPE;
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+/**
+ * The RtlQueryPackageClaims routine retrieves the package claims associated with a token, including the package full
+ * name, application identifier, and attributes.
+ *
+ * \param TokenHandle A handle to the token to query.
+ * \param PackageFullName An optional buffer that receives the package full name.
+ * \param PackageSize An optional pointer to the size, in bytes, of the PackageFullName buffer; updated with the
+ * required or written size.
+ * \param AppId An optional buffer that receives the application identifier.
+ * \param AppIdSize An optional pointer to the size, in bytes, of the AppId buffer; updated with the required or written
+ * size.
+ * \param DynamicId An optional pointer to a variable that receives the dynamic package identifier.
+ * \param PkgClaim An optional pointer to a PS_PKG_CLAIM structure that receives the package claim.
+ * \param AttributesPresent An optional pointer to a variable that receives the mask of attributes present.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -592,6 +854,20 @@ RtlQueryPackageClaims(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The RtlQueryPackageIdentity routine retrieves the package identity associated with a token, including the package
+ * full name and application identifier.
+ *
+ * \param TokenHandle A handle to the token to query.
+ * \param PackageFullName A buffer that receives the package full name.
+ * \param PackageSize A pointer to the size, in bytes, of the PackageFullName buffer; updated with the required or
+ * written size.
+ * \param AppId An optional buffer that receives the application identifier.
+ * \param AppIdSize An optional pointer to the size, in bytes, of the AppId buffer; updated with the required or written
+ * size.
+ * \param Packaged An optional pointer to a variable that receives whether the token belongs to a packaged application.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -605,6 +881,21 @@ RtlQueryPackageIdentity(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WINBLUE)
+/**
+ * The RtlQueryPackageIdentityEx routine retrieves the package identity associated with a token, with additional dynamic
+ * identifier and flag outputs.
+ *
+ * \param TokenHandle A handle to the token to query.
+ * \param PackageFullName A buffer that receives the package full name.
+ * \param PackageSize A pointer to the size, in bytes, of the PackageFullName buffer; updated with the required or
+ * written size.
+ * \param AppId An optional buffer that receives the application identifier.
+ * \param AppIdSize An optional pointer to the size, in bytes, of the AppId buffer; updated with the required or written
+ * size.
+ * \param DynamicId An optional pointer to a variable that receives the dynamic package identifier.
+ * \param Flags An optional pointer to a variable that receives package identity flags.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -624,8 +915,18 @@ RtlQueryPackageIdentityEx(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 
+/**
+ * Constant used to derive a WNF state name key.
+ */
 #define WNF_STATE_KEY 0x41C64E6DA3BC0074
 
+/**
+ * The RtlEqualWnfChangeStamps routine determines whether two WNF change stamps are equal.
+ *
+ * \param ChangeStamp1 The first WNF change stamp to compare.
+ * \param ChangeStamp2 The second WNF change stamp to compare.
+ * \return Returns `TRUE` if the change stamps are equal, otherwise `FALSE`.
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -645,8 +946,21 @@ NTSTATUS NTAPI WNF_USER_CALLBACK(
     _In_reads_bytes_opt_(Length) const VOID* Buffer,
     _In_ ULONG Length
 );
+/**
+ * Pointer to a WNF_USER_CALLBACK callback.
+ */
 typedef WNF_USER_CALLBACK *PWNF_USER_CALLBACK;
 
+/**
+ * The RtlQueryWnfStateData routine retrieves the current data for a WNF state name via a user callback.
+ *
+ * \param ChangeStamp Receives the change stamp of the current state data.
+ * \param StateName The WNF state name to query.
+ * \param Callback The callback invoked with the current state data.
+ * \param CallbackContext An optional context value passed to the callback.
+ * \param TypeId An optional type identifier describing the state data.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -658,6 +972,16 @@ RtlQueryWnfStateData(
     _In_opt_ PWNF_TYPE_ID TypeId
 );
 
+/**
+ * The RtlPublishWnfStateData routine publishes new state data for a WNF state name.
+ *
+ * \param StateName The WNF state name to publish to.
+ * \param TypeId An optional pointer to the type identifier that describes the data format.
+ * \param Buffer An optional pointer to the buffer that contains the state data to publish.
+ * \param Length The size, in bytes, of the data in Buffer.
+ * \param ExplicitScope An optional pointer to the explicit scope in which to publish the data.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -669,10 +993,29 @@ RtlPublishWnfStateData(
     _In_opt_ const VOID * ExplicitScope
 );
 
+/**
+ * Pointer to an opaque WNF_USER_SUBSCRIPTION structure.
+ */
 typedef struct WNF_USER_SUBSCRIPTION *PWNF_USER_SUBSCRIPTION;
 
+/**
+ * Flag controlling WNF serialization group creation.
+ */
 #define WNF_CREATE_SERIALIZATION_GROUP_FLAG 0x00000001L
 
+/**
+ * The RtlSubscribeWnfStateChangeNotification routine subscribes to change notifications for a WNF state name.
+ *
+ * \param SubscriptionHandle Receives the subscription handle.
+ * \param StateName The WNF state name to subscribe to.
+ * \param ChangeStamp The change stamp from which to begin receiving notifications.
+ * \param Callback The callback invoked when the state changes.
+ * \param CallbackContext An optional context value passed to the callback.
+ * \param TypeId An optional type identifier describing the state data.
+ * \param SerializationGroup An optional serialization group for ordering callbacks.
+ * \param Flags Flags controlling the subscription.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -687,6 +1030,12 @@ RtlSubscribeWnfStateChangeNotification(
     _In_ ULONG Flags
 );
 
+/**
+ * The RtlUnsubscribeWnfStateChangeNotification routine removes a WNF state change notification subscription.
+ *
+ * \param SubscriptionHandle A pointer to the user subscription to remove.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -694,6 +1043,12 @@ RtlUnsubscribeWnfStateChangeNotification(
     _In_ PWNF_USER_SUBSCRIPTION SubscriptionHandle
 );
 
+/**
+ * The RtlWnfDllUnloadCallback routine cancels any WNF subscriptions owned by a module as it is unloaded.
+ *
+ * \param DllBase The base address of the module being unloaded.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -707,6 +1062,9 @@ RtlWnfDllUnloadCallback(
 
 #pragma region Unload Event Trace
 
+/**
+ * Maximum number of module unload event trace records retained.
+ */
 #define RTL_UNLOAD_EVENT_TRACE_NUMBER 64
 
 // private
@@ -737,6 +1095,9 @@ typedef struct _RTL_UNLOAD_EVENT_TRACE64
     ULONG Version[2];
 } RTL_UNLOAD_EVENT_TRACE64, *PRTL_UNLOAD_EVENT_TRACE64;
 
+/**
+ * 32-bit form of a module unload event trace record.
+ */
 typedef struct _RTL_UNLOAD_EVENT_TRACE32
 {
     VOID* POINTER_32 BaseAddress;
@@ -781,6 +1142,9 @@ RtlGetUnloadEventTraceEx(
 
 #pragma region State Isolation
 
+/**
+ * Identifies whether a state location resides in the registry or the file system.
+ */
 typedef enum _STATE_LOCATION_TYPE
 {
     LocationTypeRegistry,
@@ -790,11 +1154,28 @@ typedef enum _STATE_LOCATION_TYPE
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
 
+/**
+ * The RtlIsStateSeparationEnabled routine determines whether OS state separation is enabled on the current system.
+ *
+ * \return Returns `TRUE` if state separation is enabled, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
 RtlIsStateSeparationEnabled(VOID);
 
+/**
+ * The RtlGetPersistedStateLocation routine resolves the persisted state storage location for a source identifier.
+ *
+ * \param SourceID A pointer to the null-terminated source identifier.
+ * \param CustomValue An optional pointer to a custom value that refines the location.
+ * \param DefaultPath An optional pointer to a default path used when no persisted location is configured.
+ * \param StateLocationType The STATE_LOCATION_TYPE that selects the class of location to resolve.
+ * \param TargetPath An optional buffer that receives the resolved location path.
+ * \param BufferLengthIn The size, in bytes, of the TargetPath buffer.
+ * \param BufferLengthOut An optional pointer to a variable that receives the required or written length, in bytes.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -813,6 +1194,13 @@ RtlGetPersistedStateLocation(
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
 
+/**
+ * The RtlQueryPropertyStore routine retrieves the value associated with a key in the process property store.
+ *
+ * \param Key The key whose value is retrieved.
+ * \param Context A pointer to a variable that receives the value associated with the key.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -820,6 +1208,13 @@ RtlQueryPropertyStore(
     _In_ ULONG_PTR Key,
     _Out_ PULONG_PTR Context);
 
+/**
+ * The RtlRemovePropertyStore routine removes a key and its value from the process property store.
+ *
+ * \param Key The key to remove.
+ * \param Context A pointer to a variable that receives the value that was associated with the key.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -827,6 +1222,16 @@ RtlRemovePropertyStore(
     _In_ ULONG_PTR Key,
     _Out_ PULONG_PTR Context);
 
+/**
+ * The RtlCompareExchangePropertyStore routine atomically compares and exchanges the value associated with a key in the
+ * process property store.
+ *
+ * \param Key The key whose value is exchanged.
+ * \param Comperand A pointer to the value that the current value is compared against.
+ * \param Exchange An optional pointer to the value to store if the comparison succeeds.
+ * \param Context A pointer to a variable that receives the previous value associated with the key.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -842,6 +1247,22 @@ RtlCompareExchangePropertyStore(
 
 #pragma region Thread Pool (Old)
 
+/**
+ * The RtlRegisterWait routine directs a wait thread in the thread pool to wait on the object.
+ *
+ * \param WaitHandle A pointer to a variable that receives a wait handle on return.
+ * Note that a wait handle cannot be used in functions that require an object handle.
+ * \param Handle A handle to the object. If this handle is closed while the wait is
+ * still pending, the function's behavior is undefined. The handle must have SYNCHRONIZE access.
+ * \param Function A pointer to the callback routine invoked when the object is signaled or the wait times out.
+ * \param Context Optional value that is passed to the callback function.
+ * \param Milliseconds The time-out interval, in milliseconds.
+ * \param Flags Flags that control the behavior of the wait handle.
+ * \return NTSTATUS Successful or errant status.
+ * \remarks The wait thread queues the specified callback function to the thread pool
+ * when the specified object is in the signaled state or the time-out interval elapses.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-registerwaitforsingleobject
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -853,12 +1274,22 @@ RtlRegisterWait(
     _In_ ULONG Milliseconds,
     _In_ ULONG Flags);
 
+/**
+ * The RtlDeregisterWait routine cancels a registered wait operation issued by the RtlRegisterWait function.
+ *
+ * \param WaitHandle The wait handle
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-unregisterwait
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlDeregisterWait(
     _In_ HANDLE WaitHandle);
 
+/**
+ * Flag requesting that wait deregistration block until pending callbacks complete.
+ */
 #define RTL_WAITER_DEREGISTER_WAIT_FOR_COMPLETION ((HANDLE)(LONG_PTR)-1)
 
 /**
@@ -884,8 +1315,19 @@ typedef _Function_class_(RTL_WORK_CALLBACK)
 VOID NTAPI RTL_WORK_CALLBACK(
     _In_ PVOID ThreadParameter
     );
+/**
+ * Pointer to an RTL_WORK_CALLBACK callback.
+ */
 typedef RTL_WORK_CALLBACK* PRTL_WORK_CALLBACK;
 
+/**
+ * The RtlQueueWorkItem routine queues a work item for execution by a thread-pool worker thread.
+ *
+ * \param Function The callback to execute.
+ * \param Context An optional context value passed to the callback.
+ * \param Flags Flags controlling execution (for example, WT_EXECUTELONGFUNCTION).
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -901,6 +1343,9 @@ VOID NTAPI RTL_OVERLAPPED_COMPLETION_ROUTINE(
     _In_ PVOID Context1,
     _In_ PVOID Context2
     );
+/**
+ * Pointer to an RTL_OVERLAPPED_COMPLETION_ROUTINE callback.
+ */
 typedef RTL_OVERLAPPED_COMPLETION_ROUTINE* PRTL_OVERLAPPED_COMPLETION_ROUTINE;
 
 /**
@@ -926,6 +1371,9 @@ _Function_class_(RTL_START_POOL_THREAD)
 NTSTATUS
 NTAPI
 RTL_START_POOL_THREAD(
+/**
+ * Pointer to an RTL_START_POOL_THREAD callback.
+ */
     _In_ PUSER_THREAD_START_ROUTINE Function,
     _In_ PVOID Parameter,
     _Out_ PHANDLE ThreadHandle);
@@ -936,9 +1384,20 @@ _Function_class_(RTL_EXIT_POOL_THREAD)
 NTSTATUS
 NTAPI
 RTL_EXIT_POOL_THREAD(
+/**
+ * Pointer to an RTL_EXIT_POOL_THREAD callback.
+ */
     _In_ NTSTATUS ExitStatus);
 typedef RTL_EXIT_POOL_THREAD *PRTL_EXIT_POOL_THREAD;
 
+/**
+ * The RtlSetThreadPoolStartFunc routine registers the callbacks used to start and exit worker threads in the RTL thread
+ * pool.
+ *
+ * \param StartPoolThread A pointer to the routine that starts a pool thread.
+ * \param ExitPoolThread A pointer to the routine that exits a pool thread.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -948,8 +1407,20 @@ RtlSetThreadPoolStartFunc(
 
 #pragma endregion
 
+/**
+ * Revision number of the import table hashing scheme.
+ */
 #define RTL_IMPORT_TABLE_HASH_REVISION 1
 
+/**
+ * The RtlComputeImportTableHash routine computes a hash of the import table of the image referenced by the specified
+ * file handle.
+ *
+ * \param FileHandle A handle to the image file whose import table is hashed.
+ * \param Hash A buffer that receives the 16-byte computed hash.
+ * \param ImportTableHashRevision The import table hash revision. This value must be 1.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -983,6 +1454,13 @@ RtlGetReturnAddressHijackTarget(VOID);
 
 
 // RtlCancelTimer
+/**
+ * The RtlCancelTimer routine cancels a timer previously created in a timer queue.
+ *
+ * \param TimerQueueHandle A handle to the timer queue that owns the timer.
+ * \param Handle A handle to the timer to cancel.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -992,14 +1470,29 @@ RtlCancelTimer(
     );
 
 // RtlAllocateWnfSerializationGroup
+/**
+ * The RtlAllocateWnfSerializationGroup routine allocates a WNF serialization group used to order state change
+ * notifications.
+ *
+ * \return ULONG The identifier of the allocated WNF serialization group.
+ */
 NTSYSAPI
 ULONG
 NTAPI
 RtlAllocateWnfSerializationGroup(
-    void
+    VOID
     );
 
 // RtlQueryWnfMetaNotification
+/**
+ * The RtlQueryWnfMetaNotification routine queries meta-notification information for a WNF state name.
+ *
+ * \param Result A pointer to a variable that receives the query result.
+ * \param NameInfoClass The WNF_STATE_NAME_INFORMATION class that selects the information to query.
+ * \param StateName The WNF state name to query.
+ * \param ExplicitScope An optional pointer to the explicit scope SID for the query.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1011,19 +1504,38 @@ RtlQueryWnfMetaNotification(
     );
 
 // RtlQueryWnfStateDataWithExplicitScope
+/**
+ * The RtlQueryWnfStateDataWithExplicitScope routine retrieves the state data for a WNF state name within an explicit
+ * scope, decoding it with a caller-supplied type decoder.
+ *
+ * \param ChangeStamp A pointer to a variable that receives the change stamp of the returned data.
+ * \param StateName The WNF state name to query.
+ * \param ExplicitScope An optional pointer to the explicit scope for the query.
+ * \param TypeDecoder A pointer to a callback that decodes the raw state data into the caller's buffer.
+ * \param CallbackContext A caller-defined value passed to the type decoder callback.
+ * \param TypeId An optional pointer to the type identifier that describes the data format.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlQueryWnfStateDataWithExplicitScope(
-    _Out_ PULONG ChangeStamp,
-    _In_ ULONGLONG StateName,
+    _Out_ PWNF_CHANGE_STAMP ChangeStamp,
+    _In_ WNF_STATE_NAME StateName,
     _In_opt_ const VOID *ExplicitScope,
-    _In_ NTSTATUS (NTAPI *TypeDecoder)(_In_ ULONGLONG, _In_ ULONGLONG, _In_ ULONGLONG, _In_ ULONGLONG, _In_reads_bytes_(BufferLength) UCHAR *, _In_ ULONG BufferLength),
-    _In_ ULONGLONG CallbackContext,
-    _In_opt_ const VOID *TypeId
+    _In_ PWNF_USER_CALLBACK TypeDecoder,
+    _In_opt_ PVOID CallbackContext,
+    _In_opt_ PCWNF_TYPE_ID TypeId
     );
 
 // RtlUnsubscribeWnfNotificationWaitForCompletion
+/**
+ * The RtlUnsubscribeWnfNotificationWaitForCompletion routine removes a WNF notification subscription and waits for any
+ * in-progress callbacks to complete.
+ *
+ * \param SubscriptionHandle A handle to the WNF notification subscription to remove.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1032,6 +1544,15 @@ RtlUnsubscribeWnfNotificationWaitForCompletion(
     );
 
 // RtlUnsubscribeWnfNotificationWithCompletionCallback
+/**
+ * The RtlUnsubscribeWnfNotificationWithCompletionCallback routine cancels a WNF subscription and invokes a completion
+ * callback once cancellation finishes.
+ *
+ * \param SubscriptionHandle The subscription handle to cancel.
+ * \param CompletionCallback An optional callback invoked when cancellation completes.
+ * \param CompletionContext An optional context value passed to the completion callback.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

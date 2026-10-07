@@ -11,12 +11,18 @@ EXTERN_C_START
 /* phnt */
 
 // private
+/**
+ * The PACKAGE_CONTEXT_REFERENCE structure represents an opaque reference to an application package context.
+ */
 typedef struct _PACKAGE_CONTEXT_REFERENCE
 {
     PVOID reserved;
 } *PACKAGE_CONTEXT_REFERENCE;
 
 // private
+/**
+ * The PackageProperty enumeration identifies a property of an application package.
+ */
 typedef enum _PackageProperty
 {
     PackageProperty_Name = 1,                  // q: WCHAR[]
@@ -37,12 +43,18 @@ typedef enum _PackageProperty
 } PackageProperty;
 
 // private
+/**
+ * The PACKAGE_APPLICATION_CONTEXT_REFERENCE structure represents an opaque reference to a package application context.
+ */
 typedef struct _PACKAGE_APPLICATION_CONTEXT_REFERENCE
 {
     PVOID reserved;
 } *PACKAGE_APPLICATION_CONTEXT_REFERENCE;
 
 // private
+/**
+ * The PackageApplicationProperty enumeration identifies a property of an application within a package.
+ */
 typedef enum _PackageApplicationProperty
 {
     PackageApplicationProperty_Aumid = 1,                        // q: WCHAR[]
@@ -64,12 +76,18 @@ typedef enum _PackageApplicationProperty
 } PackageApplicationProperty;
 
 // private
+/**
+ * The PACKAGE_RESOURCES_CONTEXT_REFERENCE structure represents an opaque reference to a package resources context.
+ */
 typedef struct _PACKAGE_RESOURCES_CONTEXT_REFERENCE
 {
     PVOID reserved;
 } *PACKAGE_RESOURCES_CONTEXT_REFERENCE;
 
 // private
+/**
+ * The PackageResourcesProperty enumeration identifies a resources property of an application package.
+ */
 typedef enum _PackageResourcesProperty
 {
     PackageResourcesProperty_DisplayName = 1,
@@ -81,12 +99,18 @@ typedef enum _PackageResourcesProperty
 } PackageResourcesProperty;
 
 // private
+/**
+ * The PACKAGE_SECURITY_CONTEXT_REFERENCE structure represents an opaque reference to a package security context.
+ */
 typedef struct _PACKAGE_SECURITY_CONTEXT_REFERENCE
 {
     PVOID reserved;
 } *PACKAGE_SECURITY_CONTEXT_REFERENCE;
 
 // private
+/**
+ * The PackageSecurityProperty enumeration identifies a security property of an application package.
+ */
 typedef enum _PackageSecurityProperty
 {
     PackageSecurityProperty_SecurityFlags = 1,     // q: ULONG
@@ -96,12 +120,18 @@ typedef enum _PackageSecurityProperty
 } PackageSecurityProperty;
 
 // private
+/**
+ * The TARGET_PLATFORM_CONTEXT_REFERENCE structure represents an opaque reference to a target platform context.
+ */
 typedef struct _TARGET_PLATFORM_CONTEXT_REFERENCE
 {
     PVOID reserved;
 } *TARGET_PLATFORM_CONTEXT_REFERENCE;
 
 // private
+/**
+ * The TargetPlatformProperty enumeration identifies a target platform property of an application package.
+ */
 typedef enum _TargetPlatformProperty
 {
     TargetPlatformProperty_Platform = 1,   // q: ULONG
@@ -110,12 +140,19 @@ typedef enum _TargetPlatformProperty
 } TargetPlatformProperty;
 
 // private
+/**
+ * The PACKAGE_GLOBALIZATION_CONTEXT_REFERENCE structure represents an opaque reference to a package globalization
+ * context.
+ */
 typedef struct _PACKAGE_GLOBALIZATION_CONTEXT_REFERENCE
 {
     PVOID reserved;
 } *PACKAGE_GLOBALIZATION_CONTEXT_REFERENCE;
 
 // private
+/**
+ * The PackageGlobalizationProperty enumeration identifies a globalization property of an application package.
+ */
 typedef enum _PackageGlobalizationProperty
 {
     PackageGlobalizationProperty_ForceUtf8 = 1,                // q: ULONG
@@ -125,6 +162,14 @@ typedef enum _PackageGlobalizationProperty
 #if (NTDDI_VERSION >= NTDDI_WINBLUE)
 
 // rev
+/**
+ * The GetCurrentPackageContext routine retrieves a package context reference for the current package.
+ *
+ * \param Index The zero-based index of the package in the current package graph.
+ * \param Unused Reserved; must be zero.
+ * \param PackageContext Receives the package context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -135,6 +180,15 @@ GetCurrentPackageContext(
 );
 
 // rev
+/**
+ * The GetPackageContext routine retrieves a package context reference from a package information reference.
+ *
+ * \param PackageInfoReference A reference to the package information object.
+ * \param Index The zero-based index of the package.
+ * \param Unused Reserved; must be zero.
+ * \param PackageContext Receives the package context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -146,6 +200,16 @@ GetPackageContext(
 );
 
 // rev
+/**
+ * The GetPackageProperty routine retrieves a property value from a package context.
+ *
+ * \param PackageContext The package context reference.
+ * \param PropertyId The package property identifier to query.
+ * \param BufferSize A pointer to a variable that specifies the buffer size and receives the required or returned size
+ * in bytes.
+ * \param Buffer A pointer to the buffer receiving the property value.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -157,6 +221,16 @@ GetPackageProperty(
 );
 
 // rev
+/**
+ * The GetPackagePropertyString routine retrieves a string property value from a package context.
+ *
+ * \param PackageContext The package context reference.
+ * \param PropertyId The package property identifier to query.
+ * \param BufferLength A pointer to a variable that specifies the buffer length and receives the required or returned
+ * length in characters.
+ * \param Buffer A pointer to the buffer receiving the string property.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -168,6 +242,14 @@ GetPackagePropertyString(
 );
 
 // rev
+/**
+ * The GetPackageOSMaxVersionTested routine retrieves the maximum operating system version against which the package was
+ * tested.
+ *
+ * \param PackageContext The package context reference.
+ * \param OSMaxVersionTested Receives the tested maximum OS version encoded as an integer.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -181,6 +263,14 @@ GetPackageOSMaxVersionTested(
 //
 
 // rev
+/**
+ * The GetCurrentPackageApplicationContext routine retrieves an application context reference for the current package.
+ *
+ * \param Index The zero-based index of the application in the package.
+ * \param Unused Reserved; must be zero.
+ * \param PackageApplicationContext Receives the package application context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -191,6 +281,16 @@ GetCurrentPackageApplicationContext(
 );
 
 // rev
+/**
+ * The GetPackageApplicationContext routine retrieves an application context reference from a package information
+ * reference.
+ *
+ * \param PackageInfoReference A reference to the package information object.
+ * \param Index The zero-based index of the application.
+ * \param Unused Reserved; must be zero.
+ * \param PackageApplicationContext Receives the package application context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -202,6 +302,16 @@ GetPackageApplicationContext(
 );
 
 // rev
+/**
+ * The GetPackageApplicationProperty routine retrieves a property value from a package application context.
+ *
+ * \param PackageApplicationContext The package application context reference.
+ * \param PropertyId The package application property identifier to query.
+ * \param BufferSize A pointer to a variable that specifies the buffer size and receives the required or returned size
+ * in bytes.
+ * \param Buffer A pointer to the buffer receiving the property value.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -213,6 +323,16 @@ GetPackageApplicationProperty(
 );
 
 // rev
+/**
+ * The GetPackageApplicationPropertyString routine retrieves a string property value from a package application context.
+ *
+ * \param PackageApplicationContext The package application context reference.
+ * \param PropertyId The package application property identifier to query.
+ * \param BufferLength A pointer to a variable that specifies the buffer length and receives the required or returned
+ * length in characters.
+ * \param Buffer A pointer to the buffer receiving the string property.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -228,6 +348,14 @@ GetPackageApplicationPropertyString(
 //
 
 // rev
+/**
+ * The GetCurrentPackageResourcesContext routine retrieves a resources context reference for the current package.
+ *
+ * \param Index The zero-based index of the resource context.
+ * \param Unused Reserved; must be zero.
+ * \param PackageResourcesContext Receives the package resources context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -238,6 +366,15 @@ GetCurrentPackageResourcesContext(
 );
 
 // rev
+/**
+ * The GetPackageResourcesContext routine retrieves a resources context reference from a package information reference.
+ *
+ * \param PackageInfoReference A reference to the package information object.
+ * \param Index The zero-based index of the resource context.
+ * \param Unused Reserved; must be zero.
+ * \param PackageResourcesContext Receives the package resources context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -249,6 +386,15 @@ GetPackageResourcesContext(
 );
 
 // rev
+/**
+ * The GetCurrentPackageApplicationResourcesContext routine retrieves an application resources context reference for the
+ * current package.
+ *
+ * \param Index The zero-based index of the application resource context.
+ * \param Unused Reserved; must be zero.
+ * \param PackageResourcesContext Receives the package resources context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 ULONG
 WINAPI
@@ -259,6 +405,16 @@ GetCurrentPackageApplicationResourcesContext(
 );
 
 // rev
+/**
+ * The GetPackageApplicationResourcesContext routine retrieves an application resources context reference from a package
+ * information reference.
+ *
+ * \param PackageInfoReference A reference to the package information object.
+ * \param Index The zero-based index of the application resource context.
+ * \param Unused Reserved; must be zero.
+ * \param PackageResourcesContext Receives the package resources context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -270,6 +426,17 @@ GetPackageApplicationResourcesContext(
 );
 
 // rev
+/**
+ * The GetPackageResourcesProperty routine retrieves a property value from a package resources context.
+ *
+ * \param PackageResourcesContext The package resources context reference.
+ * \param PropertyId The package resources property identifier to query.
+ * \param BufferSize A pointer to a variable specifying the buffer size and receiving the required or returned size in
+ * bytes.
+ * \param Buffer A pointer to the buffer receiving the resources property value.
+ * \param Flags An optional pointer receiving property flags.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -286,6 +453,13 @@ GetPackageResourcesProperty(
 //
 
 // rev
+/**
+ * The GetCurrentPackageSecurityContext routine retrieves a security context reference for the current package.
+ *
+ * \param Unused Reserved; must be zero.
+ * \param PackageSecurityContext Receives the package security context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -295,6 +469,14 @@ GetCurrentPackageSecurityContext(
 );
 
 // rev
+/**
+ * The GetPackageSecurityContext routine retrieves a security context reference from a package information reference.
+ *
+ * \param PackageInfoReference A reference to the package information object.
+ * \param Unused Reserved; must be zero.
+ * \param PackageSecurityContext Receives the package security context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -305,6 +487,16 @@ GetPackageSecurityContext(
 );
 
 // rev
+/**
+ * The GetPackageSecurityProperty routine retrieves a property value from a package security context.
+ *
+ * \param PackageSecurityContext The package security context reference.
+ * \param PropertyId The package security property identifier to query.
+ * \param BufferSize A pointer to a variable specifying the buffer size and receiving the required or returned size in
+ * bytes.
+ * \param Buffer A pointer to the buffer receiving the security property value.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -324,6 +516,13 @@ GetPackageSecurityProperty(
 //
 
 // rev
+/**
+ * The GetCurrentTargetPlatformContext routine retrieves a target platform context reference for the current package.
+ *
+ * \param Unused Reserved; must be zero.
+ * \param TargetPlatformContext Receives the target platform context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -332,6 +531,15 @@ GetCurrentTargetPlatformContext(
     _Out_ TARGET_PLATFORM_CONTEXT_REFERENCE *TargetPlatformContext
 );
 
+/**
+ * The GetTargetPlatformContext routine retrieves a target platform context reference from a package information
+ * reference.
+ *
+ * \param PackageInfoReference A reference to the package information object.
+ * \param Unused Reserved; must be zero.
+ * \param TargetPlatformContext Receives the target platform context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -342,6 +550,16 @@ GetTargetPlatformContext(
 );
 
 // rev
+/**
+ * The GetPackageTargetPlatformProperty routine retrieves a property value from a target platform context.
+ *
+ * \param TargetPlatformContext The target platform context reference.
+ * \param PropertyId The target platform property identifier to query.
+ * \param BufferSize A pointer to a variable specifying the buffer size and receiving the required or returned size in
+ * bytes.
+ * \param Buffer A pointer to the buffer receiving the property value.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -357,6 +575,18 @@ GetPackageTargetPlatformProperty(
 #if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 
 // rev
+/**
+ * The GetCurrentPackageInfo3 routine retrieves package information for the current process, specifying the package path
+ * type.
+ *
+ * \param Flags Package information flags specifying what information to retrieve.
+ * \param PackagePathType The type of folder path to retrieve for the package.
+ * \param BufferLength A pointer to a variable specifying the buffer size and receiving the required or returned size in
+ * bytes.
+ * \param Buffer A pointer to the buffer receiving the package information.
+ * \param ReturnLength Optional pointer receiving the number of elements written to the buffer.
+ * \return HRESULT Successful or error status.
+ */
 WINBASEAPI
 HRESULT
 WINAPI
@@ -373,6 +603,15 @@ GetCurrentPackageInfo3(
 //
 
 // rev
+/**
+ * The GetCurrentPackageGlobalizationContext routine retrieves a globalization context reference for the current
+ * package.
+ *
+ * \param Index An index specifying which globalization context to retrieve.
+ * \param Unused Reserved; must be zero.
+ * \param PackageGlobalizationContext Receives the package globalization context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -383,6 +622,16 @@ GetCurrentPackageGlobalizationContext(
 );
 
 // rev
+/**
+ * The GetPackageGlobalizationContext routine retrieves a globalization context reference from a package information
+ * reference.
+ *
+ * \param PackageInfoReference A reference to the package information object.
+ * \param Index An index specifying which globalization context to retrieve.
+ * \param Unused Reserved; must be zero.
+ * \param PackageGlobalizationContext Receives the package globalization context reference.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI
@@ -394,6 +643,16 @@ GetPackageGlobalizationContext(
 );
 
 // rev
+/**
+ * The GetPackageGlobalizationProperty routine retrieves a property value from a package globalization context.
+ *
+ * \param PackageGlobalizationContext The package globalization context reference.
+ * \param PropertyId The package globalization property identifier to query.
+ * \param BufferSize A pointer to a variable specifying the buffer size and receiving the required or returned size in
+ * bytes.
+ * \param Buffer A pointer to the buffer receiving the property value.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 WINBASEAPI
 LONG
 WINAPI

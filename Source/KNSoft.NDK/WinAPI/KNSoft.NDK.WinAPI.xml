@@ -159,6 +159,29 @@
     <Export Name="UMgrOpenProcessHandleForAccess" CallConv="__stdcall" Arg="int int ptr" />
     <Export Name="UMgrFreeUserCredentials" CallConv="__stdcall" Arg="ptr" />
     <Export Name="UMgrGetCachedCredentials" CallConv="__stdcall" Arg="ptr ptr" />
+    <Export Name="IsInteractiveUserSession" CallConv="__stdcall" Arg="int" />
+    <Export Name="QueryActiveSession" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="QueryUserToken" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="RegisterUsertokenForNoWinlogon" CallConv="__stdcall" />
+    <Export Name="UMgrChangeSessionActiveShellUser" CallConv="__stdcall" Arg="int int64" />
+    <Export Name="UMgrQuerySessionVirtualAccountToken" CallConv="__stdcall" Arg="int ptr" />
+    <Export Name="UMgrGetStandardAccessImpersonationTokenForContext" CallConv="__stdcall" Arg="ptr int64 ptr" />
+    <Export Name="UMgrIsAllowedToActivateAsUser" CallConv="__stdcall" Arg="ptr int64 ptr" />
+    <Export Name="UMgrLogonUser" CallConv="__stdcall" Arg="ptr int int ptr int ptr ptr int int ptr int ptr ptr ptr ptr ptr ptr ptr" />
+    <Export Name="UMgrInformFlags" CallConv="__stdcall" Arg="int" />
+    <Export Name="UMgrInformUserLogon" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrInformUserLogoff" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrInformSecondaryUserLogon" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="UMgrInformSecondaryUserLogoff" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="UMgrLaunchShell" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrLaunchShellInfrastructureHost" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrSetShellInformation" CallConv="__stdcall" Arg="ptr" />
+    <Export Name="UMgrConnectLocalUser" CallConv="__stdcall" Arg="ptr int128 ptr int" />
+    <Export Name="UMgrDisconnectLocalUser" CallConv="__stdcall" Arg="int128 ptr int ptr ptr" />
+    <Export Name="UMgrClearDefaultSignInAccount" CallConv="__stdcall" />
+    <Export Name="UMgrGetDefaultSignInAccount" CallConv="__stdcall" />
+    <Export Name="UMgrSetCachedCredentials" CallConv="__stdcall" Arg="int ptr ptr" />
+    <Export Name="UMgrpGetRegistryLocation" CallConv="__stdcall" />
   </Dll>
   <Dll Name="bcd.dll">
     <Export Name="BcdCloseObject" CallConv="__stdcall" Arg="ptr" />
@@ -353,6 +376,7 @@
     <Export Name="FveOpenVolumeByHandle" CallConv="__stdcall" Arg="ptr int int int int ptr" />
     <Export Name="FveOpenVolumeExW" CallConv="__stdcall" Arg="ptr int int int int ptr" />
     <Export Name="FveOpenVolumeW" CallConv="__stdcall" Arg="ptr int ptr" />
+    <Export Name="FvePcrMonPredictionsUpdated" CallConv="__stdcall" Arg="ptr" />
     <Export Name="FvePpfPredictionsUpdated" CallConv="__stdcall" Arg="ptr" />
     <Export Name="FveProtectorTypeToFlags" CallConv="__stdcall" Arg="int ptr" />
     <Export Name="FveQuery" CallConv="__stdcall" Arg="int ptr int ptr ptr" />
@@ -409,5 +433,10 @@
     <Export Name="MathTranslate" CallConv="__stdcall" Arg="ptr int" />
     <Export Name="GetMathAlphanumeric" CallConv="__stdcall" Arg="int int" />
     <Export Name="GetMathAlphanumericCode" CallConv="__stdcall" Arg="int ptr" />
+  </Dll>
+  <Dll Name="winsta.dll">
+    <Export Name="ServerLicensingGetAadInfo" CallConv="__stdcall" Arg="ptr ptr ptr ptr" />
+    <Export Name="WinStationCreateAgentSessionTransport" CallConv="__stdcall" Arg="ptr int" />
+    <Export Name="WinStationGetSpecialSessionFlags" CallConv="__stdcall" Arg="int ptr" />
   </Dll>
 </LibCreate>

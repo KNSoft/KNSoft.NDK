@@ -331,6 +331,16 @@ typedef struct _KEY_CONTROL_FLAGS_INFORMATION
     ULONG ControlFlags;
 } KEY_CONTROL_FLAGS_INFORMATION, *PKEY_CONTROL_FLAGS_INFORMATION;
 
+/**
+ * The KEY_SET_VIRTUALIZATION_INFORMATION structure is used to set virtualization
+ * related flags on a registry key.
+ *
+ * The fields include:
+ * - VirtualTarget: When set, marks the key as a virtualization target.
+ * - VirtualStore: When set, marks the key as part of the virtual store path.
+ * - VirtualSource: True if the key has been virtualized at least once.
+ * - Reserved: Reserved bits for future use.
+ */
 typedef struct _KEY_SET_VIRTUALIZATION_INFORMATION
 {
     ULONG VirtualTarget : 1;
@@ -436,6 +446,14 @@ typedef struct _KEY_VALUE_ENTRY
     ULONG Type;
 } KEY_VALUE_ENTRY, *PKEY_VALUE_ENTRY;
 
+/**
+ * The REG_ACTION enumeration describes the type of change reported by
+ * registry change notifications.
+ *
+ * - KeyAdded: A key was created.
+ * - KeyRemoved: A key was deleted.
+ * - KeyModified: A key was modified.
+ */
 typedef enum _REG_ACTION
 {
     KeyAdded,
@@ -444,6 +462,16 @@ typedef enum _REG_ACTION
 } REG_ACTION;
 
 _Struct_size_bytes_(NextEntryOffset)
+/**
+ * The REG_NOTIFY_INFORMATION structure is returned by registry change
+ * notifications and describes a single change event.
+ *
+ * Fields:
+ * - NextEntryOffset: Offset, in bytes, to the next REG_NOTIFY_INFORMATION entry in the buffer (0 for last).
+ * - Action: The type of change (REG_ACTION).
+ * - KeyLength: Length, in bytes, of the Key name string.
+ * - Key: Wide-character buffer containing the name of the key affected (not necessarily null-terminated).
+ */
 typedef struct _REG_NOTIFY_INFORMATION
 {
     ULONG NextEntryOffset;
@@ -461,6 +489,7 @@ typedef struct _REG_NOTIFY_INFORMATION
  * @param[in] Length The size of the buffer.
  * @param[out] ResultLength A pointer to a variable that receives the size of the data returned.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwquerykey
  */
 _Kernel_entry_
 NTSYSCALLAPI

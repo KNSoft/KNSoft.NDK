@@ -374,6 +374,9 @@ VOID NTAPI PS_PROCESS_START_ROUTINE(
     );
 typedef PS_PROCESS_START_ROUTINE* PPS_PROCESS_START_ROUTINE;
 
+/**
+ * The SDBQUERYRESULT structure contains the result of an application compatibility database (SDB) query.
+ */
 typedef struct _SDBQUERYRESULT
 {
     ULONG Exes[16];
@@ -391,6 +394,9 @@ typedef struct _SDBQUERYRESULT
 
 _STATIC_ASSERT(sizeof(SDBQUERYRESULT) == 0x1c8);
 
+/**
+ * The SWITCH_CONTEXT_ATTRIBUTE structure describes a single attribute of an application compatibility switch context.
+ */
 typedef struct _SWITCH_CONTEXT_ATTRIBUTE
 {
     ULONG_PTR ContextUpdateCounter;
@@ -405,6 +411,9 @@ _STATIC_ASSERT(sizeof(SWITCH_CONTEXT_ATTRIBUTE) == 0x18);
 _STATIC_ASSERT(sizeof(SWITCH_CONTEXT_ATTRIBUTE) == 0x10);
 #endif
 
+/**
+ * The SWITCH_CONTEXT_DATA structure contains the data for an application compatibility switch context.
+ */
 typedef struct tagSWITCH_CONTEXT_DATA
 {
     ULONGLONG OsMaxVersionTested;
@@ -419,6 +428,9 @@ typedef struct tagSWITCH_CONTEXT_DATA
 
 _STATIC_ASSERT(sizeof(SWITCH_CONTEXT_DATA) == 0x340);
 
+/**
+ * The SWITCH_CONTEXT structure contains an application compatibility switch context.
+ */
 typedef struct tagSWITCH_CONTEXT
 {
     SWITCH_CONTEXT_ATTRIBUTE Attribute;
@@ -431,6 +443,10 @@ _STATIC_ASSERT(sizeof(SWITCH_CONTEXT) == 0x358);
 _STATIC_ASSERT(sizeof(SWITCH_CONTEXT) == 0x350);
 #endif
 
+/**
+ * The SDB_CSTRUCT_COBALT_PROCFLAG structure contains the Cobalt process flags from the application compatibility
+ * database (SDB).
+ */
 typedef struct _SDB_CSTRUCT_COBALT_PROCFLAG
 {
     KAFFINITY AffinityMask;
@@ -458,7 +474,7 @@ typedef struct _SDB_CSTRUCT_COBALT_PROCFLAG
     {
         ULONGLONG Group1AsUINT64;
         struct _SDB_CSTRUCT_COBALT_PROCFLAG* Specified;
-    };
+    } DUMMYUNIONNAME;
 } SDB_CSTRUCT_COBALT_PROCFLAG, *PSDB_CSTRUCT_COBALT_PROCFLAG;
 
 #ifdef _WIN64
@@ -467,6 +483,9 @@ _STATIC_ASSERT(sizeof(SDB_CSTRUCT_COBALT_PROCFLAG) == 0x28);
 _STATIC_ASSERT(sizeof(SDB_CSTRUCT_COBALT_PROCFLAG) == 0x20);
 #endif
 
+/**
+ * The APPCOMPAT_EXE_DATA structure contains the application compatibility data for an executable image.
+ */
 typedef struct _APPCOMPAT_EXE_DATA
 {
     ULONG_PTR Reserved[65];
@@ -2037,21 +2056,44 @@ _STATIC_ASSERT(sizeof(TEB) == sizeof(TEB64));
 _STATIC_ASSERT(sizeof(TEB) == sizeof(TEB32));
 #endif
 
+/**
+ * The RtlGetCurrentPeb routine returns a pointer to the process environment block (PEB) of the current process.
+ *
+ * \return A pointer to the PEB of the current process.
+ */
 NTSYSAPI
 PPEB
 NTAPI
 RtlGetCurrentPeb(VOID);
 
+/**
+ * The RtlAcquirePebLock routine acquires the lock that protects the process environment block (PEB).
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
+_Acquires_exclusive_lock_(*NtCurrentPeb()->FastPebLock)
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlAcquirePebLock(VOID);
 
+/**
+ * The RtlReleasePebLock routine releases the lock that protects the process environment block (PEB).
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
+_Releases_exclusive_lock_(*NtCurrentPeb()->FastPebLock)
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlReleasePebLock(VOID);
 
+/**
+ * The RtlTryAcquirePebLock routine attempts to acquire the process environment block (PEB) lock without blocking.
+ *
+ * \return A nonzero value if the lock was acquired, otherwise zero.
+ */
+_When_(return != 0, _Acquires_exclusive_lock_(*NtCurrentPeb()->FastPebLock))
 NTSYSAPI
 LOGICAL
 NTAPI

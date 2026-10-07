@@ -2,7 +2,7 @@
 
 ## Scope
 
-`winsta.dll` exposes private Terminal Services client APIs. The implementations described here are:
+`winsta.dll` exposes private Terminal Services client APIs. The original analysis used these implementations:
 
 | Architecture | File version | SHA-256 |
 | --- | --- | --- |
@@ -10,7 +10,8 @@
 | x86 | `10.0.26100.8972` | `ffa6abb538d243266d376c7a0b460bb0634dc6be6b3101db89e6612b588e7996` |
 
 These are the original input identities stored in the IDA databases. Private behavior can differ between Windows
-versions. ARM64 and ARM64EC implementations are outside this analysis.
+versions. Additional verification on 10.0.26100.9278 and scoped revalidation on 10.0.28000.2804 are described
+below. ARM64 and ARM64EC implementations are outside this analysis.
 
 ## Client architecture
 
@@ -37,8 +38,10 @@ on failure. Test the declared byte result. Notification functions returning `BOO
 | Return contract | Functions |
 | --- | --- |
 | `BOOL` | Window notification registration, unregistration and release functions; event notification registration and unregistration |
-| Win32 error code in `ULONG`, with `0` for success | `WinStationConsumeCacheSession`, `WinStationIsBoundToCacheTerminal`, `WinStationIsSessionPermitted`, `WinStationSystemShutdownStarted`, `WinStationSystemShutdownWait`, `WinStationRedirectErrorMessage`, `WinStationGetUserCredentials`, `WinStationFreeUserCredentials` |
-| `HRESULT` | `WinStationSetRenderHint`, `WinStationCreateChildSessionTransport`, `WinStationRedirectLogonBeginPainting`, `WinStationRedirectLogonStatus`, `WinStationRedirectLogonMessage`, `WinStationRedirectLogonError`, `WinStationGetUserProfile` |
+| Win32 error code in `ULONG`, with `0` for success | `WinStationConsumeCacheSession`, `WinStationIsBoundToCacheTerminal`, `WinStationIsSessionPermitted`, `WinStationSystemShutdownStarted`, `WinStationSystemShutdownWait`, `WinStationRedirectErrorMessage`, `WinStationGetUserCredentials`, `WinStationFreeUserCredentials`, `WinStationNegotiateSession`, `WinStationReportUIResult` |
+| `ULONG` translated RPC status, with an early local-binding-failure exception | `ServerLicensingSetPolicy`; a null-context binding failure returns `0` and sets `RPC_S_INVALID_BINDING` without executing the operation |
+| `HRESULT` | `WinStationSetRenderHint`, `WinStationCreateChildSessionTransport`, `WinStationRedirectLogonBeginPainting`, `WinStationRedirectLogonStatus`, `WinStationRedirectLogonMessage`, `WinStationRedirectLogonError`, `WinStationGetUserProfile`, `WinStationGetRedirectAuthInfo` |
+| `NTSTATUS`, with `NT_SUCCESS` to test the result | `_WinStationShadowTarget`, `_WinStationShadowTarget2` |
 
 Return width and output width are independent. `WinStationActiveSessionExists` returns `BOOLEAN` status and
 accepts a four-byte `PBOOL` output. `WinStationIsChildSessionsEnabled`, `WinStationIsCurrentSessionRemoteable`,
@@ -122,8 +125,9 @@ its level-1 payload holds three 32-bit values and five allocated string pointers
 
 `WinStationGetAllUserSessions` validates the SID, converts it to a string SID, and obtains session records by
 RPC. The native output uses a `20`-byte stride: a leading version DWORD set to `1`, followed by four copied
-DWORDs. The client does not establish the meaning of every copied field. In particular, the inherited
-`TS_USER_SESSION.State` / `SESSIONTYPE` association is not independently confirmed by this copy loop.
+DWORDs. The current fields are `SessionId`, `State`, `SessionType`, and `ChildSessionId`, at offsets 4, 8, 12,
+and 16. Their names and enum semantics are inherited from phnt; the copy loop does not independently establish
+the meaning of every field.
 
 `WinStationGetSessionIds` requires a nonnull array and nonzero input capacity through `Count`. It clears the
 array and count before RPC. A partial result can be copied on `ERROR_MORE_DATA` while the function returns
@@ -249,13 +253,22 @@ The payload can represent different authentication formats and remains `PVOID`.
 `WinStationFreeUserCredentials` clears the indicated payload bytes, frees both allocations, and returns
 `ERROR_INVALID_PARAMETER` for null.
 
-`WinStationGetInitialApplication` returns two allocated wide strings and two one-byte outputs. Their individual
-meanings remain unknown. `WinStationGetUserProfile` takes a pointer-sized handle value and returns three
-allocated wide strings. The required handle subtype and access rights remain unknown.
+`WinStationGetInitialApplication` returns two allocated wide strings and two one-byte outputs. The header retains
+phnt's `CommandLine`, `WorkingDirectory`, `ApplicationAllowed` and `Maximize` names; their individual purposes
+were not independently recovered. `WinStationGetUserProfile` takes a pointer-sized unsigned scalar represented by
+`HANDLE` and returns three allocated wide strings. Its `SessionId`, `UserName`, `Domain` and `ProfilePath` names
+follow phnt; the required input subtype and access rights remain unknown.
 
-Logon-redirection calls use the wide-string and DWORD slots declared in the header. Unnamed DWORDs and strings
-retain `Unknown` names. `WinStationSystemShutdownWait` accepts a millisecond timeout and an optional DWORD output;
-the meaning of that output remains unknown.
+Logon-redirection calls use the wide-string and DWORD slots declared in the header. Existing phnt parameter names
+are retained where the inspected client does not contradict their roles. `WinStationSystemShutdownWait` accepts
+a millisecond timeout and an optional DWORD output named `Result`; its purpose was not independently recovered.
+
+The current header also retains phnt's capability enum and `PBOOL` result, the CHAR element category of the direct
+device-ID buffer, and inherited policy, negotiation, notification-clock and UI-result interpretations. These names
+and interpretations are not new reverse-engineering findings. Width, direction or client forwarding alone does not
+invalidate an existing semantic name. The verified ABI corrections remain: native-sized inputs, one-byte outputs,
+required output slots, fixed 257-WCHAR extents and corrected return types. The 23 unresolved legacy prototypes
+remain excluded from NDK; no upstream-only declaration was added by this naming correction.
 
 ## Ownership and unresolved legacy data
 
@@ -269,3 +282,330 @@ Their historical field meanings remain protocol-derived. No current producing pa
 all members of `WINSTATIONEXECSRVSYSTEMPIPE`, `WINSTATIONINFORMATIONEX_LEVEL2`, or every `SESSIONTYPE` value.
 These limits do not invalidate the inherited declarations, but they prevent assigning new semantics from
 client-side copies alone.
+
+## Verification on 10.0.26100.9278
+
+The current x64 and WOW64 images both have file/product version `10.0.26100.9278`. The IDA input SHA-256 values
+were read from each database and matched to the live PE files before assigning that version to the analysis.
+
+| Architecture | SHA-256 |
+| --- | --- |
+| x64 | `94365e3090001ce4003d000424d07bf5ce3d28b9311372ab864e106117ec0072` |
+| x86 | `23b43d57835a6f06dc0feff7599fd3b210ba851b410aae8a666e1ac7b50ed6fd` |
+
+This pass collected complete disassembly for all 157 declarations in the initial merged-header snapshot, and
+successful decompilation for all 157 x64 exports. Five x86 exports could not be decompiled; their complete
+assembly and x64 counterparts remain available. Forty-nine direct `NdrClientCall3` paths were inspected in the
+x64 client, with x86 NDR and assembly cross-checks for the corrected interfaces. Collection, argument-byte counts,
+and wire descriptions do not establish all parameter semantics. The coverage manifest distinguishes newly
+verified contracts, limited stub behavior, and declarations whose remaining semantics are inherited from phnt
+or the existing analysis. ARM64 and ARM64EC runtime implementations were not examined.
+
+`ServerLicensingSetAadInfo` is excluded pending ABI verification because its full native argument types remain unresolved.
+The inherited declaration supplies two x86 arguments, but the current export returns `E_NOTIMPL` with
+`ret 0x10` and does not read the argument area. The 16-byte cleanup is established; the original argument
+count, categories, native widths, and meanings are not. No replacement historical prototype is inferred from
+the non-reading stub.
+
+## Notifications and profile outputs
+
+The two event-registration exports return a full 32-bit `BOOL`. They duplicate the caller's kernel event handle,
+allocate a wait-registration object, and write that object pointer through a pointer-sized output slot. The
+returned object is opaque and must be released through `WinStationUnRegisterNotificationEvent`; it is not a
+kernel handle. Unregistration also returns a full `BOOL` and dereferences the supplied object without a null check.
+The previously documented mask translation is present in both current images.
+
+`WinStationGetInitialApplication` returns two allocated wide-string pointers and two one-byte output values.
+Both x64 and x86 NDR descriptions use `FC_CHAR` for those final output slots. The `ApplicationAllowed` and `Maximize`
+names follow phnt; their individual purposes were not independently recovered. They must not be widened to `PULONG`
+or `PBOOL`.
+
+`WinStationGetUserProfile` takes a pointer-sized unsigned scalar, represented by `HANDLE` in this header. The
+handle subtype and access rights remain unknown. It clears three required pointer-sized output slots before RPC
+and returns the RPC HRESULT, or an HRESULT formed from a binding error. Its allocated strings use the normal
+LocalAlloc/LocalFree ownership convention. Required output-slot pointers and nullable returned pointers are
+different contracts: the NDR string referents are unique pointers, and the client does not validate that every
+successful result contains a nonnull string.
+
+## Licensing and request contexts
+
+`ServerLicensingGetPolicy` requires a DWORD output pointer as its second argument. It returns a byte boolean.
+The DWORD's meaning has not been independently established.
+
+`ServerLicensingSetPolicy` takes an input DWORD and a required DWORD output pointer. After RPC it returns the
+service's status translated through `RtlNtStatusToDosError`, normally zero for RPC success. With a null context,
+failed local binding creation also returns zero and sets last error to `RPC_S_INVALID_BINDING` (1702), without
+sending the policy RPC or writing the output. Zero alone therefore does not prove success. The final output
+is not an input policy value. `ServerLicensingFreePolicyInformation` accepts a null outer
+pointer or a null object. It also ignores objects whose `Version` is not 1. For version 1, it frees nonnull
+`Name` and `Value` allocations and the containing object with `LocalFree`, without clearing the caller's pointer.
+
+`WinStationNegotiateSession` uses an input/output RPC context slot as its first argument and a pointer-sized
+unsigned scalar as its second argument. They are not an ordinary server-binding handle and a DWORD session ID.
+The returned DWORD array has four-byte elements; its scalar field names remain inherited. The exact context
+creation/release sequence and the scalar's meaning are not established by this client path.
+
+`WinStationReportUIResult` takes an input RPC context, followed by two DWORDs. It returns a Win32 error code,
+with zero for success. The first argument is not a DWORD session ID. The exact request-context subtype and
+lifetime should not be inferred merely from the related negotiation/report RPC methods.
+
+## Certificates and credentials
+
+The native certificate wrapper receives RPC method 10 on RCMPublic interface
+`bde95fdf-eee0-45de-9e12-e5a61cd0d4fe`, then copies the returned count, byte length, and data pointer into a native
+object. The official `RpcGetUserCertificates` contract identifies `pcCerts` as the certificate count, `ppbCerts`
+as the data, and `pcbCerts` as the byte length. The first native DWORD is therefore `Count`, not `Type`.
+The native object occupies 16 bytes on x64 and 12 on x86; the pointer is at offset 8 on both architectures.
+No particular certificate-blob encoding is inferred from the client copy.
+See [MS-TSTS RCMPublic IDL](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-tsts/7b70d367-5d92-4783-8bb7-ce1820ca8069)
+and [RpcGetUserCertificates](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-tsts/aa5f03ee-8284-48f0-a3e0-3c4661336541).
+
+`CRED_PROV_CREDENTIAL` and `TS_USER_CREDENTIALS` have compatible native layouts: three DWORDs followed by an
+aligned pointer, occupying 24 bytes on x64 and 16 on x86. The first DWORD is initialized to zero, the next two
+are copied from RPC metadata, and the third is the payload byte length. The free helper reads that length,
+clears the payload, and frees both allocations. The client confirms this layout and ownership, but not every
+inherited field name, including `AuthenticationPackage`, for all credential formats. These inherited names are distinct from the offsets and stores independently established above.
+
+`WinStationGetRedirectAuthInfo` has six output parameters. Its first parameter receives a 16-byte GUID; it is
+not an input GUID pointer. Its return follows HRESULT semantics. Its byte arrays and string use unique NDR
+referents; their format-specific meanings remain inherited unless separately supported.
+
+## Window messages, enumeration, and fixed arrays
+
+`WinStationBroadcastSystemMessage` receives the message ID in its seventh argument, followed by native-width
+`WPARAM` and `LPARAM` values. Its third argument supplies the target session ID. A zero second DWORD selects
+that target, while a nonzero value omits that filter. The fourth and fifth DWORDs are passed to RPC without
+establishing their meanings. The recipients pointer accepts null. The response value is read and updated:
+for messages 26 and 27 the wrapper permits a null response pointer, but the direct worker for messages 536 and
+537 can dereference it without a null check. A required input/output pointer is the conservative general SAL
+contract. The message-specific payload is marshalled from `lParam`, not from a separate `MessageData` argument.
+The worker normalizes its result to zero or one; it does not return an untruncated RPC status code.
+
+`WinStationSendWindowMessage` constructs a local binding and ignores its native server-handle argument. Its
+fourth argument is a pointer-sized unsigned value of unverified meaning. The sixth and seventh are native-width
+`WPARAM` and `LPARAM`, and the eighth is a required DWORD output pointer, not an input timeout. For selected
+messages, a pointer payload in `lParam` is read and copied before RPC. Its shape is message-specific.
+
+`WinStationEnumerateContainerSessions` takes an allocated-output pointer and DWORD count output. There is no
+native server-handle argument. It constructs a local binding; the client does not establish every returned
+record's field semantics.
+
+The get/set last-Winlogon-notification RPC methods marshal a fixed 257-WCHAR subscriber-name array on both
+architectures. The setter therefore requires 257 readable WCHARs even if a terminator occurs earlier.
+The fixed-array descriptor alone does not establish a terminator guarantee for the getter. MAX_PATH is not
+the marshalled extent.
+
+`WinStationSendMessageA` requires terminated ANSI title/message strings: the conversion path computes
+`strlen + 1`, independently of the accompanying length arguments. Connection-property getter success does
+not guarantee a nonnull returned property object; the output slots remain required, with nullable results.
+
+## Structure interpretation limits
+
+The user-session converter produces 20-byte native records, sets `Version` to 1, and copies four DWORDs from
+16-byte RPC records. The current header names those DWORDs `SessionId`, `State`, `SessionType`, and
+`ChildSessionId` at offsets 4, 8, 12, and 16. The names and enum meanings are inherited; the copy loop does not
+independently interpret them. The copy loop alone does not establish the enum associations or the meaning of every copied field.
+
+The all-session fallback constructs 344-byte records and initializes a verified subset from `SESSIONIDW`.
+The extended enumerator constructs 1112-byte records. Copy sizes, offsets, and initialized portions support
+layout constraints; copied opaque data does not independently establish every new field name or semantic.
+Failure-only or initializer stubs cannot recover unused historical parameter types. Their observed failure
+code, output widths, and stack cleanup may be recorded, while the remaining inherited contract stays explicit.
+
+## Previously excluded export verification
+
+The following additional client observations were made on winsta.dll 10.0.26100.9278. The x64 input SHA-256
+is 94365e3090001ce4003d000424d07bf5ce3d28b9311372ab864e106117ec0072; the WOW64 x86 input SHA-256 is
+23b43d57835a6f06dc0feff7599fd3b210ba851b410aae8a666e1ac7b50ed6fd. These identities apply to this section
+only; earlier observations retain their original binary scope. ARM64 and ARM64EC were not reverse analyzed.
+
+ServerLicensingOpenW takes one native-sized input that must be zero. A nonzero value is rejected before
+RPC binding with RPC_S_SERVER_UNAVAILABLE. These implementations never read pointee data, so the original
+semantic type is unknown. The zero-only input is exposed as a reserved ULONG_PTR Unknown. The result is an
+opaque native licensing RPC context or NULL. The RPC operation's output is FC_BIND_CONTEXT; it is distinct
+from the binding-object domain returned by WinStationOpenServer*. The RPC's own byte result controls whether
+the context is returned, while its separate status output is 32 bits.
+
+_WinStationWaitForConnectEx takes GUID by value. WOW64 copies the caller's 16-byte stack argument into a
+local value and returns with ret 0x10. The x64 ABI passes the 16-byte aggregate indirectly. Both RPC type
+tables describe the GUID layout: a DWORD, two WORDs, and eight bytes. The client forwards its GUID address
+as an input argument to RpcConnectTerminalEx and provides no caller GUID writeback. The RPC returns a
+32-bit HRESULT; the native export reports success or failure in the one-byte BOOLEAN result.
+
+WinStationQueryAllowConcurrentConnections has no parameters. Its x86 import is decorated @0 and the
+export returns without an argument cleanup immediate. Both current implementations are deprecated stubs
+that set ERROR_INVALID_FUNCTION and return FALSE in AL. There is no output-buffer parameter.
+
+The other 22 previously excluded declarations remain unresolved. Together with `ServerLicensingSetAadInfo`,
+23 current exports are withheld from this header. Twenty-one are stubs whose positive
+x86 stack cleanup agrees with the SDK import library but does not establish argument count, scalar
+widths, pointer types, or direction. ServerLicensingLoadPolicy and ServerLicensingUnloadPolicy share one
+stub setting ERROR_CALL_NOT_IMPLEMENTED; the other stubs set ERROR_INVALID_FUNCTION. No code callers in
+these two client images establish the missing argument types. Filling the cleanup with invented
+ULONG_PTR Unknown slots would hide the uncertainty and is not supported by this evidence.
+
+WinStationFreeUserSessionInfo is implemented, but its full ABI remains unproved. It passes a nonnull first
+pointer to LocalFree once and returns TRUE without checking LocalFree's result; NULL gives
+ERROR_INVALID_PARAMETER and FALSE. It reads no fields from the allocation. WOW64 requires eight argument
+bytes but neither architecture reads the second parameter. Its scalar/pointer category and x64 width are
+not established, nor is a historical entry-count contract. It remains excluded until independent
+functioning implementation or caller evidence establishes that second parameter.
+
+For these BOOLEAN results, only AL is an output contract; the upper EAX/RAX bits can retain unrelated
+values. Constant-failure stubs do not prove their historical output contracts or restore the semantics
+of removed operations.
+
+### Unresolved ABI inventory (10.0.26100.9278)
+
+This per-export inventory retains the evidence for all 23 excluded declarations. The input
+identities are those stated at the start of this section. VAs use image bases 0x180000000
+(x64) and 0x10000000 (WOW64). Cleanup sizes and observed results describe these images only;
+they do not recover unused argument categories or establish safe replacement prototypes.
+
+| Export | x64 VA | WOW64 VA | x86 cleanup bytes | Observed result | Evidence boundary |
+| --- | --- | --- | ---: | --- | --- |
+| `ServerGetInternetConnectorStatus` | `0x18002de10` | `0x10039e10` | 12 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `ServerLicensingLoadPolicy` | `0x18002da40` | `0x10039b20` | 8 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `ServerLicensingSetAadInfo` | `0x18002dc00` | `0x10039c60` | 16 | EAX: `E_NOTIMPL` | non-reading stub; inherited two-argument @8 declaration conflicts with ret 0x10 and the @16 symbol; argument count/categories/native widths remain unknown |
+| `ServerLicensingUnloadPolicy` | `0x18002da40` | `0x10039b20` | 8 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `ServerQueryInetConnectorInformationA` | `0x18002de50` | `0x10039e40` | 16 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `ServerQueryInetConnectorInformationW` | `0x18002de90` | `0x10039e70` | 16 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `ServerSetInternetConnectorStatus` | `0x18002ded0` | `0x10039ea0` | 12 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationActivateLicense` | `0x18002df10` | `0x10039ed0` | 16 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationConnectA` | `0x18002e010` | `0x10039f90` | 20 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationEnumerate_IndexedA` | `0x18002e110` | `0x1003a050` | 20 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationEnumerate_IndexedW` | `0x18002e150` | `0x1003a080` | 20 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationFreeUserSessionInfo` | `0x180013610` | `0x10034ae0` | 8 | BOOLEAN/AL | first pointer passed to LocalFree; second slot never read; its x64 width/category remains unknown |
+| `WinStationGenerateLicense` | `0x18002e190` | `0x1003a0b0` | 16 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationGetLanAdapterNameA` | `0x18002e1d0` | `0x1003a0e0` | 24 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationGetLanAdapterNameW` | `0x18002e210` | `0x1003a110` | 24 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationInstallLicense` | `0x18002e290` | `0x1003a170` | 12 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationNameFromLogonIdA` | `0x18002e2d0` | `0x1003a1a0` | 12 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationQueryLogonCredentialsW` | `0x18002e410` | `0x1003a280` | 4 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `WinStationRemoveLicense` | `0x18002e490` | `0x1003a2e0` | 12 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `_NWLogonQueryAdmin` | `0x18002e5d0` | `0x1003a3d0` | 12 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `_NWLogonSetAdmin` | `0x18002e610` | `0x1003a400` | 12 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `_WinStationNotifyLogon` | `0x18002e850` | `0x1003a590` | 32 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+| `_WinStationOpenSessionDirectory` | `0x18002e8d0` | `0x1003a5f0` | 8 | BOOLEAN/AL | deprecated stub; no argument reads or code callers in either IDB; argument categories/directions unknown |
+
+`ServerLicensingSetAadInfo` is absent from both 10.0.28000.2804 export tables. That absence does not
+resolve the older ABI or establish an exact removal build. Its former local two-argument
+declaration and @8 import were withdrawn; no guessed replacement was introduced.
+
+The 23 upstream prototypes remain unchanged in
+[PR #3070](https://github.com/winsiderss/systeminformer/pull/3070). Verified repairs, binary
+checkpoints and test limits are summarized in its
+[follow-up comment](https://github.com/winsiderss/systeminformer/pull/3070#issuecomment-6063796614).
+
+## Scoped revalidation on 10.0.28000.2804
+
+The following static pass used copied x64 and WOW64 `winsta.dll` files from an isolated guest collection.
+Both files have file/product version `10.0.28000.2804`. Each new IDA input path, architecture and SHA-256
+was matched to the copied PE and its collection manifest before assigning this version to the evidence.
+The DLL version is independent of the guest OS revision.
+
+| Architecture | SHA-256 |
+| --- | --- |
+| x64 | `256b19f4cda7f479fcb90c907334ebb04db5751ce3be9baa327c54672033d496` |
+| x86 | `1e09860f856aedc6f6373b005bd31be8ebd2f37de606f5f31de8fc434c4df405` |
+
+Both PE export tables contain 180 named exports. Compared with the 184 exports in 10.0.26100.9278,
+exactly four names are absent and none are added: `ServerLicensingGetAadInfo`, `ServerLicensingSetAadInfo`,
+`WinStationCreateAgentSessionTransport`, and `WinStationGetSpecialSessionFlags`. The previously established
+contracts for the other three remain evidence for older inputs. This observation does not establish an
+exact removal build or a maximum `NTDDI_VERSION` boundary. `ServerLicensingSetAadInfo` remains unresolved;
+its absence here supplies no newer argument-type or stack-cleanup evidence. An internal or PDB name would
+not establish a public export contract.
+
+This pass collected complete function/chunk disassembly, CFGs and successful decompilation for 11 native
+exports on each architecture: both event-registration methods, event unregistration, initial application,
+user profile, licensing open/get-policy/set-policy/free-policy, the concurrent-connection query, and
+`WinStationFreeMemory`. Seven supporting implementations were also inspected: two internal notification
+registration helpers and five WOW64 RPC wrappers. The complete NDR procedure descriptors for
+`WinStationGetInitialApplication`, `WinStationGetUserProfile`, `ServerLicensingGetPolicy`, and
+`ServerLicensingSetPolicy` match the older 10.0.26100.9278 descriptors on both architectures, for eight
+comparisons. Their relevant output-pointer/type chains were checked separately. This is scoped contract
+revalidation, not semantic verification of every parameter or all 180 exports.
+
+Event registration still duplicates a valid caller event, writes an opaque registration object on success,
+and returns a full 32-bit zero/one value. Unregistration reads the supplied object without a null check;
+only a nonnull object returned by successful registration is a valid release input. Initial application
+still returns a byte Boolean and receives two allocated unique wide-string outputs plus two `FC_CHAR`
+outputs. The latter establishes one-byte width, not Boolean meaning. User profile still marshals a
+native-width unsigned scalar and three nullable unique wide-string outputs, and returns `HRESULT`.
+Its null input is forwarded to RPC without a special client-side rejection; no fixed HRESULT or server
+outcome is established for that input.
+
+Licensing open still rejects every nonzero native-width input before RPC with
+`RPC_S_SERVER_UNAVAILABLE`, including a high-word-only nonzero value on x64. GetPolicy's second argument
+and SetPolicy's third argument remain DWORD output slots. The local-binding helper was additionally
+cross-checked on both old and new architectures: failed context creation sets `RPC_S_INVALID_BINDING`
+(1702). The policy wrappers return zero immediately, without issuing their operation RPC or writing the
+output. After binding succeeds, a null output gives FALSE/last error 87 for GetPolicy and direct result
+87 for SetPolicy; SetPolicy does not set last error to 87 on that validation path. The early binding
+failure is a limitation, not successful policy execution. These paths support the bounded return
+contract described above and do not establish the service-defined DWORD meanings.
+
+FreePolicyInformation still ignores null outer/inner pointers and objects whose `Version` is not 1.
+For version 1 it accepts null `Name`/`Value`, frees any nonnull nested allocations and the object with
+`LocalFree`, and leaves the caller's pointer unchanged. A zero-initialized version-0 object tests only the
+no-op branch. The concurrent-connection query still takes no arguments, sets `ERROR_INVALID_FUNCTION`,
+and returns FALSE in `AL`; `WinStationFreeMemory` accepts null and otherwise calls `LocalFree` before
+returning TRUE in `AL`.
+
+No ABI change was found in these 11 declarations. This static pass did not execute the private APIs,
+verify service-side parameter meanings, or establish runtime success. The earlier 157-declaration
+coverage and its inherited/stub limitations remain separate; ARM64 and ARM64EC runtime implementations
+were not examined.
+
+## Runtime coverage status
+
+The read-only collection successfully copied the four x64/WOW64 `winsta.dll`/`fveapi.dll` files with
+file/product version `10.0.28000.2804`; those files supplied the static IDA inputs. Earlier startup/readiness
+attempts stopped before private API calls. Hyper-V-Worker event 18514 identifies a guest OS reset, whose
+internal cause and initiating process remain unknown. One failed automatic cleanup manifest and its
+separate successful exact-checkpoint recovery record remain preserved independently.
+
+The later run `NDK-PrivateAPI-20261008-230930-9657ddc1648c46e9b57f97498fa162eb` completed all eight child
+cases with exit code zero, without timeout or token refusal. Four WinSta cases ran before VHD creation:
+x64 and WOW64 against explicit target Session 0, then the same architectures against the observed active
+console target Session 1. All four actual callers remained elevated, high-integrity administrators in
+noninteractive Session 0; the console target was an API argument, not an interactive caller context.
+Native stdout PIDs, pointer sizes and token observations matched the suspended-child launcher records.
+
+The WinSta probes made 42 direct export invocations: 11 in each x64 case and 10 in each WOW64 case.
+Internal helper/RPC calls and observation-only rows are not included in that count. Explicit registration
+returned full `BOOL` value 1 for both target sessions on both architectures; each entered the nonnull
+registration-object branch and was immediately unregistered with full `BOOL` value 1. Thus four successful
+registration/unregistration pairs were observed, with the measured registration-slot canaries intact.
+Notification delivery itself was not tested. Current-session registration returned 0 with last error 87
+for all four Session 0 callers; its successful output path remains untested in this caller context.
+
+InitialApplication returned 0 with last error 2250 in all four cases. Its two one-byte values changed from
+`0xC3` to zero while each preceding byte and four following bytes retained `0xC3`; both string-output slots were NULL.
+This observes failure-path byte writes and intact adjacent canaries, not successful string outputs or the
+meaning of either byte. UserProfile(NULL) returned `0x80070005` in all four cases. Its success string outputs
+were not exercised, and its logged `guards: true` is a fixed probe field, not an independent canary check.
+No `WinStationFreeMemory` branch was entered.
+
+The remaining observed paths were consistent across targets and architectures:
+
+- The no-argument concurrent-connection query returned FALSE and set last error 1.
+- LicensingOpenW returned NULL with last error 1722 for four nonzero inputs and the two x64 high-word-only inputs.
+- GetPolicy(NULL, NULL) returned FALSE with last error 87 four times. SetPolicy(NULL, 0, NULL) returned 87
+  four times and preserved the seeded last-error value `0x12345678`. These reached the null-output validation
+  paths, without issuing policy RPCs. The separate early-binding-failure `0`/1702 path was not observed here.
+- Four version-1 FreePolicy calls, each using an outer `LocalAlloc(LPTR)` object with NULL `Name` and `Value`,
+  left the caller's pointer unchanged. That observation does not independently verify heap deallocation or
+  freeing nonnull members, and its reported value 1 is the pointer comparison, not a native VOID return.
+
+All four reviewed DLL identities matched before the calls, after the WinSta phase and at the end of the
+complete run. The overall evaluator recorded 213/213 checks passing with status `Limited`, preserving the
+unexercised success-path limits above. Automatic cleanup verified Off, removed the exact owned checkpoint
+and VHD, and retained the original two disk roots, two pre-existing checkpoints and network configuration.
+These selected client observations do not establish every parameter meaning or historical implementation.
+
+The NDK solution passed eight build configurations and four native UnitTest runs. The PR changes also
+passed x86/x64/ARM64/ARM64EC header, call-shape and layout compilation checks. Those compilation and
+basic-library results remain distinct from the scoped x64/WOW64 private-API observations above; ARM64 and
+ARM64EC runtime implementations were not exercised.

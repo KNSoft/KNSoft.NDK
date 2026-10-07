@@ -8,6 +8,9 @@ EXTERN_C_START
 
 /* phnt */
 
+/**
+ * Specifies Application Verifier options for a process.
+ */
 typedef struct _RTL_PROCESS_VERIFIER_OPTIONS
 {
     ULONG SizeStruct;
@@ -16,6 +19,9 @@ typedef struct _RTL_PROCESS_VERIFIER_OPTIONS
 } RTL_PROCESS_VERIFIER_OPTIONS, *PRTL_PROCESS_VERIFIER_OPTIONS;
 
 // private
+/**
+ * Contains the state used to capture and hold process debug information snapshots.
+ */
 typedef struct _RTL_DEBUG_INFORMATION
 {
     HANDLE SectionHandleClient;
@@ -47,17 +53,38 @@ typedef struct _RTL_DEBUG_INFORMATION
     PVOID Reserved[4];
 } RTL_DEBUG_INFORMATION, *PRTL_DEBUG_INFORMATION;
 
+/**
+ * Application-defined hash function used to index stack-trace entries in a trace database.
+ *
+ * \param Count The number of entries in the Trace array.
+ * \param Trace An array of Count captured return addresses.
+ * \return The hash value for the supplied stack trace.
+ */
 typedef _Function_class_(RTL_TRACE_HASH_FUNCTION)
 ULONG
 NTAPI
 RTL_TRACE_HASH_FUNCTION(
+/**
+ * Pointer to an RTL_TRACE_HASH_FUNCTION callback.
+ */
     _In_ ULONG Count,
     _In_reads_(Count) PVOID* Trace);
 typedef RTL_TRACE_HASH_FUNCTION* PRTL_TRACE_HASH_FUNCTION;
 
+/**
+ * Record sizes used when querying loaded module information.
+ */
 #define RTL_QUERY_MODULE_INFORMATION_RECORD_SIZE_IMAGE_BASE 0x8
 #define RTL_QUERY_MODULE_INFORMATION_RECORD_SIZE_MODULE     0x110
 
+/**
+ * The RtlCreateQueryDebugBuffer routine allocates and initializes a debug information buffer for use with the
+ * RtlQueryProcessDebugInformation routine.
+ *
+ * \param MaximumCommit The maximum number of bytes to commit for the buffer, or zero for the default.
+ * \param UseEventPair A boolean that specifies whether an event pair is used to synchronize with the target process.
+ * \return PRTL_DEBUG_INFORMATION A pointer to the allocated debug buffer, or NULL on failure.
+ */
 NTSYSAPI
 PRTL_DEBUG_INFORMATION
 NTAPI
@@ -66,6 +93,13 @@ RtlCreateQueryDebugBuffer(
     _In_ BOOLEAN UseEventPair
     );
 
+/**
+ * The RtlDestroyQueryDebugBuffer routine frees a debug information buffer previously allocated by
+ * RtlCreateQueryDebugBuffer.
+ *
+ * \param Buffer A pointer to the debug buffer to free.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -74,6 +108,13 @@ RtlDestroyQueryDebugBuffer(
     );
 
 // private
+/**
+ * The RtlCommitDebugInfo routine allocates a block within an RTL_DEBUG_INFORMATION buffer.
+ *
+ * \param Buffer The debug information buffer to allocate from.
+ * \param Size The number of bytes to allocate.
+ * \return A pointer to the allocated block, or NULL on failure.
+ */
 NTSYSAPI
 PVOID
 NTAPI
@@ -83,6 +124,13 @@ RtlCommitDebugInfo(
     );
 
 // private
+/**
+ * The RtlDeCommitDebugInfo routine frees a block previously allocated within an RTL_DEBUG_INFORMATION buffer.
+ *
+ * \param Buffer The debug information buffer that owns the block.
+ * \param p The block to free.
+ * \param Size The size, in bytes, of the block.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -92,6 +140,9 @@ RtlDeCommitDebugInfo(
     _In_ SIZE_T Size
     );
 
+/**
+ * Flags for RtlQueryProcessDebugInformation and related debug information queries.
+ */
 #define RTL_QUERY_PROCESS_MODULES 0x00000001
 #define RTL_QUERY_PROCESS_BACKTRACES 0x00000002
 #define RTL_QUERY_PROCESS_HEAP_SUMMARY 0x00000004
@@ -107,6 +158,15 @@ RtlDeCommitDebugInfo(
 #define RTL_QUERY_PROCESS_NONINVASIVE 0x80000000
 #define RTL_QUERY_PROCESS_NONINVASIVE_CS_OWNER 0x80000800 // WIN11
 
+/**
+ * The RtlQueryProcessDebugInformation routine retrieves debug information, such as heaps, modules, and locks, for the
+ * specified process.
+ *
+ * \param UniqueProcessId The unique process identifier of the process to query.
+ * \param Flags Flags that specify which classes of debug information are collected.
+ * \param Buffer A pointer to a debug buffer, allocated by RtlCreateQueryDebugBuffer, that receives the information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -117,6 +177,14 @@ RtlQueryProcessDebugInformation(
     );
 
 // rev
+/**
+ * The RtlSetProcessDebugInformation routine sets debug information for the specified process.
+ *
+ * \param UniqueProcessId The unique process identifier of the target process.
+ * \param Flags Flags that specify which classes of debug information are set.
+ * \param Buffer A pointer to a debug buffer, allocated by RtlCreateQueryDebugBuffer, that contains the information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -127,6 +195,14 @@ RtlSetProcessDebugInformation(
     );
 
 // RtlQueryModuleInformation
+/**
+ * The RtlQueryModuleInformation routine retrieves information about the modules loaded in the system.
+ *
+ * \param BufferSize On input specifies the buffer size; on output receives the required or written size, in bytes.
+ * \param UnitSize The size, in bytes, of each module information record (RTL_QUERY_MODULE_INFORMATION_RECORD_SIZE_*).
+ * \param ModuleInformation An optional buffer that receives the module information records.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -137,6 +213,12 @@ RtlQueryModuleInformation(
     );
 
 // rev
+/**
+ * The RtlDebugPrintTimes routine prints the accumulated timing statistics collected by the run-time library to the
+ * debugger.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -146,6 +228,15 @@ RtlDebugPrintTimes(VOID);
 typedef struct _RTL_TRACE_DATABASE RTL_TRACE_DATABASE, *PRTL_TRACE_DATABASE;
 
 // RtlTraceDatabaseAdd
+/**
+ * The RtlTraceDatabaseAdd routine adds a stack trace to a trace database.
+ *
+ * \param Database The trace database to modify.
+ * \param Count The number of entries in the Trace array.
+ * \param Trace An optional array of captured return addresses.
+ * \param TraceBlock An optional pointer that receives the trace block that stores the trace.
+ * \return TRUE if the trace was added; otherwise, FALSE.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -157,6 +248,16 @@ RtlTraceDatabaseAdd(
     );
 
 // RtlTraceDatabaseCreate
+/**
+ * The RtlTraceDatabaseCreate routine creates a trace database used to record stack traces and other trace entries.
+ *
+ * \param Buckets The number of hash buckets in the trace database.
+ * \param MaximumSize An optional maximum size, in bytes, for the trace database.
+ * \param Flags Flags that control the trace database behavior.
+ * \param Tag A tag value associated with the trace database.
+ * \param HashFunction An optional hash function used to index trace entries.
+ * \return PRTL_TRACE_DATABASE A pointer to the created trace database, or NULL on failure.
+ */
 NTSYSAPI
 PRTL_TRACE_DATABASE
 NTAPI
@@ -169,6 +270,12 @@ RtlTraceDatabaseCreate(
     );
 
 // RtlTraceDatabaseDestroy
+/**
+ * The RtlTraceDatabaseDestroy routine destroys a trace database previously created by RtlTraceDatabaseCreate.
+ *
+ * \param Database A pointer to the trace database to destroy.
+ * \return `TRUE` if the trace database was destroyed, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -177,6 +284,14 @@ RtlTraceDatabaseDestroy(
     );
 
 // RtlTraceDatabaseEnumerate
+/**
+ * The RtlTraceDatabaseEnumerate routine enumerates the stack traces recorded in a trace database.
+ *
+ * \param Database The trace database to enumerate.
+ * \param Enumerator An enumeration cursor advanced across calls.
+ * \param TraceBlock An optional pointer that receives the current trace block.
+ * \return TRUE if a trace was returned; FALSE when enumeration is complete.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -187,6 +302,15 @@ RtlTraceDatabaseEnumerate(
     );
 
 // RtlTraceDatabaseFind
+/**
+ * The RtlTraceDatabaseFind routine finds a stack trace within a trace database.
+ *
+ * \param Database The trace database to search.
+ * \param Count The number of entries in the Trace array.
+ * \param Trace An optional array of captured return addresses to match.
+ * \param TraceBlock An optional pointer that receives the matching trace block.
+ * \return TRUE if the trace was found; otherwise, FALSE.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -198,6 +322,13 @@ RtlTraceDatabaseFind(
     );
 
 // RtlTraceDatabaseLock
+/**
+ * The RtlTraceDatabaseLock routine acquires the lock that serializes access to the specified trace database.
+ *
+ * \param Database A pointer to the trace database to lock.
+ * \return NTSTATUS Successful or errant status.
+ */
+_Acquires_lock_(Database)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -206,6 +337,14 @@ RtlTraceDatabaseLock(
     );
 
 // RtlTraceDatabaseUnlock
+/**
+ * The RtlTraceDatabaseUnlock routine releases the lock on the specified trace database previously acquired with
+ * RtlTraceDatabaseLock.
+ *
+ * \param Database A pointer to the trace database to unlock.
+ * \return NTSTATUS Successful or errant status.
+ */
+_Releases_lock_(Database)
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -214,6 +353,12 @@ RtlTraceDatabaseUnlock(
     );
 
 // RtlTraceDatabaseValidate
+/**
+ * The RtlTraceDatabaseValidate routine validates the integrity of the specified trace database.
+ *
+ * \param Database A pointer to the trace database to validate.
+ * \return `TRUE` if the trace database is valid, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -222,6 +367,22 @@ RtlTraceDatabaseValidate(
     );
 
 // RtlApplicationVerifierStop
+/**
+ * The RtlApplicationVerifierStop routine reports an Application Verifier stop, breaking into the debugger with the
+ * supplied diagnostic parameters.
+ *
+ * \param Param1 An optional first diagnostic value.
+ * \param Desc1 An optional description of the first value.
+ * \param Param2 An optional second diagnostic value.
+ * \param Desc2 An optional description of the second value.
+ * \param Param3 An optional third diagnostic value.
+ * \param Desc3 An optional description of the third value.
+ * \param Param4 An optional fourth diagnostic value.
+ * \param Desc4 An optional description of the fourth value.
+ * \param Param5 An optional fifth diagnostic value.
+ * \param Desc5 An optional description of the fifth value.
+ * \return Implementation-defined; typically NULL.
+ */
 NTSYSAPI
 PVOID
 NTAPI
@@ -239,14 +400,25 @@ RtlApplicationVerifierStop(
     );
 
 // RtlLogUnexpectedCodepath
+/**
+ * The RtlLogUnexpectedCodepath routine records that an unexpected code path was reached for diagnostic purposes.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 RtlLogUnexpectedCodepath(
-    void
+    VOID
     );
 
 // RtlReportSqmEscalation
+/**
+ * The RtlReportSqmEscalation routine reports a Software Quality Metrics (SQM) escalation event.
+ *
+ * \param Callback A callback that supplies the escalation data.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

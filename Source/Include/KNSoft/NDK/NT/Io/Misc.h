@@ -36,6 +36,9 @@ NtUnloadDriver(
 
 #pragma region Session
 
+/**
+ * The IO_SESSION_EVENT enumeration identifies the type of an I/O session event.
+ */
 typedef enum _IO_SESSION_EVENT
 {
     IoSessionEventIgnore,
@@ -48,6 +51,9 @@ typedef enum _IO_SESSION_EVENT
     IoSessionEventMax
 } IO_SESSION_EVENT;
 
+/**
+ * The IO_SESSION_STATE enumeration identifies the state of an I/O session.
+ */
 typedef enum _IO_SESSION_STATE
 {
     IoSessionStateCreated = 1,
@@ -61,6 +67,14 @@ typedef enum _IO_SESSION_STATE
     IoSessionStateMax
 } IO_SESSION_STATE;
 
+/**
+ * The NtOpenSession routine opens a handle to a session object.
+ *
+ * \param[out] SessionHandle Pointer to a variable that receives a handle to the session object.
+ * \param[in] DesiredAccess The access mask that specifies the requested access to the session object.
+ * \param[in] ObjectAttributes Pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -70,6 +84,19 @@ NtOpenSession(
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes);
 
+/**
+ * The NtNotifyChangeSession routine notifies registered clients of a change in the state of a session.
+ *
+ * \param[in] SessionHandle Handle to the session object.
+ * \param[in] ChangeSequenceNumber The sequence number associated with the state change.
+ * \param[in] ChangeTimeStamp Pointer to the time stamp of the state change.
+ * \param[in] Event The session event that occurred.
+ * \param[in] NewState The new session state.
+ * \param[in] PreviousState The previous session state.
+ * \param[in, optional] Payload Pointer to an optional event-specific payload buffer.
+ * \param[in] PayloadSize The size, in bytes, of the payload buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -222,7 +249,7 @@ typedef struct _REPARSE_DATA_BUFFER
         {
             UCHAR DataBuffer[1];
         } GenericReparseBuffer;
-    };
+    } DUMMYUNIONNAME;
 } REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;
 
 #define REPARSE_DATA_BUFFER_HEADER_SIZE UFIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer)
@@ -283,7 +310,7 @@ typedef struct _REPARSE_DATA_BUFFER_EX
     {
         REPARSE_DATA_BUFFER ReparseDataBuffer;
         REPARSE_GUID_DATA_BUFFER ReparseGuidDataBuffer;
-    };
+    } DUMMYUNIONNAME;
 } REPARSE_DATA_BUFFER_EX, *PREPARSE_DATA_BUFFER_EX;
 
 //  REPARSE_DATA_BUFFER_EX Flags
@@ -306,6 +333,9 @@ typedef struct _REPARSE_DATA_BUFFER_EX
 
 #pragma endregion
 
+/**
+ * The INTERFACE_TYPE enumeration identifies the type of bus interface for a device.
+ */
 typedef enum _INTERFACE_TYPE
 {
     InterfaceTypeUndefined = -1,
@@ -330,6 +360,9 @@ typedef enum _INTERFACE_TYPE
     MaximumInterfaceType
 } INTERFACE_TYPE, *PINTERFACE_TYPE;
 
+/**
+ * The DMA_WIDTH enumeration specifies the width of a DMA transfer.
+ */
 typedef enum _DMA_WIDTH
 {
     Width8Bits,
@@ -340,6 +373,9 @@ typedef enum _DMA_WIDTH
     MaximumDmaWidth
 } DMA_WIDTH, *PDMA_WIDTH;
 
+/**
+ * The DMA_SPEED enumeration specifies the speed of a DMA transfer.
+ */
 typedef enum _DMA_SPEED
 {
     Compatible,
@@ -350,6 +386,9 @@ typedef enum _DMA_SPEED
     MaximumDmaSpeed
 } DMA_SPEED, *PDMA_SPEED;
 
+/**
+ * The BUS_DATA_TYPE enumeration identifies the type of bus configuration space.
+ */
 typedef enum _BUS_DATA_TYPE
 {
     ConfigurationSpaceUndefined = -1,
@@ -377,6 +416,10 @@ typedef enum _BUS_DATA_TYPE
 #define FLT_MSG_DEVICE_NAME  L"\\FileSystem\\Filters\\FltMgrMsg"
 
 // private
+/**
+ * The FLT_CONNECT_CONTEXT structure contains the connection context passed when connecting to a filter communication
+ * port.
+ */
 typedef struct _FLT_CONNECT_CONTEXT
 {
     PUNICODE_STRING PortName;
@@ -391,6 +434,9 @@ typedef struct _FLT_CONNECT_CONTEXT
 #define FLT_PORT_CONTEXT_MAX 0xFFE8
 
 // combined FILE_FULL_EA_INFORMATION and FLT_CONNECT_CONTEXT
+/**
+ * The FLT_PORT_FULL_EA structure is the full extended attribute buffer used to open a filter communication port.
+ */
 typedef struct _FLT_PORT_FULL_EA
 {
     ULONG NextEntryOffset; // 0
@@ -439,6 +485,9 @@ typedef struct _FLT_PORT_FULL_EA
 // end_rev
 
 // private
+/**
+ * The FLT_LOAD_PARAMETERS structure contains the parameters used to load a minifilter driver.
+ */
 typedef struct _FLT_LOAD_PARAMETERS
 {
     USHORT FilterNameSize;
@@ -446,6 +495,9 @@ typedef struct _FLT_LOAD_PARAMETERS
 } FLT_LOAD_PARAMETERS, *PFLT_LOAD_PARAMETERS;
 
 // private
+/**
+ * The FLT_LINK_TYPE enumeration specifies the type of a filter manager link operation.
+ */
 typedef enum _FLT_LINK_TYPE
 {
     FILTER = 0,                // FLT_FILTER_PARAMETERS
@@ -456,6 +508,9 @@ typedef enum _FLT_LINK_TYPE
 } FLT_LINK_TYPE, *PFLT_LINK_TYPE;
 
 // private
+/**
+ * The FLT_LINK structure contains the parameters describing a filter manager link operation.
+ */
 typedef struct _FLT_LINK
 {
     FLT_LINK_TYPE Type;
@@ -463,6 +518,9 @@ typedef struct _FLT_LINK
 } FLT_LINK, *PFLT_LINK;
 
 // rev
+/**
+ * The FLT_FILTER_PARAMETERS structure contains the parameters describing a registered minifilter.
+ */
 typedef struct _FLT_FILTER_PARAMETERS
 {
     USHORT FilterNameSize;
@@ -470,6 +528,9 @@ typedef struct _FLT_FILTER_PARAMETERS
 } FLT_FILTER_PARAMETERS, *PFLT_FILTER_PARAMETERS;
 
 // private
+/**
+ * The FLT_INSTANCE_PARAMETERS structure contains the parameters describing a minifilter instance.
+ */
 typedef struct _FLT_INSTANCE_PARAMETERS
 {
     USHORT FilterNameSize;
@@ -481,6 +542,9 @@ typedef struct _FLT_INSTANCE_PARAMETERS
 } FLT_INSTANCE_PARAMETERS, *PFLT_INSTANCE_PARAMETERS;
 
 // rev
+/**
+ * The FLT_VOLUME_PARAMETERS structure contains the parameters describing a volume known to the filter manager.
+ */
 typedef struct _FLT_VOLUME_PARAMETERS
 {
     USHORT VolumeNameSize;
@@ -488,6 +552,9 @@ typedef struct _FLT_VOLUME_PARAMETERS
 } FLT_VOLUME_PARAMETERS, *PFLT_VOLUME_PARAMETERS;
 
 // private
+/**
+ * The ATTACH_TYPE enumeration specifies the type of a minifilter instance attachment.
+ */
 typedef enum _ATTACH_TYPE
 {
     AltitudeBased = 0,
@@ -495,6 +562,9 @@ typedef enum _ATTACH_TYPE
 } ATTACH_TYPE, *PATTACH_TYPE;
 
 // private
+/**
+ * The FLT_ATTACH structure contains the parameters used to attach a minifilter instance to a volume.
+ */
 typedef struct _FLT_ATTACH
 {
     USHORT FilterNameSize;
@@ -518,6 +588,9 @@ typedef struct _FLT_ATTACH
 #define FSCTL_MUP_GET_UNC_HARDENING_CONFIGURATION_FOR_PATH  CTL_CODE(FILE_DEVICE_MULTI_UNC_PROVIDER, 15, METHOD_BUFFERED, FILE_ANY_ACCESS) // in: MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_IN; out: MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_OUT
 
 // private
+/**
+ * The MUP_FSCTL_UNC_CACHE_ENTRY structure describes a single entry in the MUP UNC provider cache.
+ */
 typedef struct _MUP_FSCTL_UNC_CACHE_ENTRY
 {
     ULONG TotalLength;
@@ -533,6 +606,9 @@ typedef struct _MUP_FSCTL_UNC_CACHE_ENTRY
 } MUP_FSCTL_UNC_CACHE_ENTRY, *PMUP_FSCTL_UNC_CACHE_ENTRY;
 
 // private
+/**
+ * The MUP_FSCTL_UNC_CACHE_INFORMATION structure contains information about the MUP UNC provider cache.
+ */
 typedef struct _MUP_FSCTL_UNC_CACHE_INFORMATION
 {
     ULONG MaxCacheSize;
@@ -543,6 +619,9 @@ typedef struct _MUP_FSCTL_UNC_CACHE_INFORMATION
 } MUP_FSCTL_UNC_CACHE_INFORMATION, *PMUP_FSCTL_UNC_CACHE_INFORMATION;
 
 // private
+/**
+ * The MUP_FSCTL_UNC_PROVIDER_ENTRY structure describes a single MUP UNC provider entry.
+ */
 typedef struct _MUP_FSCTL_UNC_PROVIDER_ENTRY
 {
     ULONG TotalLength;
@@ -551,10 +630,13 @@ typedef struct _MUP_FSCTL_UNC_PROVIDER_ENTRY
     ULONG ProviderState;
     ULONG ProviderId;
     USHORT ProviderNameLength; // in bytes
-    WCHAR ProviderName[ANYSIZE_ARRAY];
+    _Field_size_bytes_(ProviderNameLength) WCHAR ProviderName[ANYSIZE_ARRAY];
 } MUP_FSCTL_UNC_PROVIDER_ENTRY, *PMUP_FSCTL_UNC_PROVIDER_ENTRY;
 
 // private
+/**
+ * The MUP_FSCTL_UNC_PROVIDER_INFORMATION structure contains information about the registered MUP UNC providers.
+ */
 typedef struct _MUP_FSCTL_UNC_PROVIDER_INFORMATION
 {
     ULONG TotalEntries;
@@ -562,6 +644,9 @@ typedef struct _MUP_FSCTL_UNC_PROVIDER_INFORMATION
 } MUP_FSCTL_UNC_PROVIDER_INFORMATION, *PMUP_FSCTL_UNC_PROVIDER_INFORMATION;
 
 // private
+/**
+ * The MUP_FSCTL_SURROGATE_PROVIDER_ENTRY structure describes a single MUP surrogate provider entry.
+ */
 typedef struct _MUP_FSCTL_SURROGATE_PROVIDER_ENTRY
 {
     ULONG TotalLength;
@@ -570,10 +655,14 @@ typedef struct _MUP_FSCTL_SURROGATE_PROVIDER_ENTRY
     ULONG SurrogateState;
     ULONG SurrogatePriority;
     USHORT SurrogateNameLength; // in bytes
-    WCHAR SurrogateName[ANYSIZE_ARRAY];
+    _Field_size_bytes_(SurrogateNameLength) WCHAR SurrogateName[ANYSIZE_ARRAY];
 } MUP_FSCTL_SURROGATE_PROVIDER_ENTRY, *PMUP_FSCTL_SURROGATE_PROVIDER_ENTRY;
 
 // private
+/**
+ * The MUP_FSCTL_SURROGATE_PROVIDER_INFORMATION structure contains information about the registered MUP surrogate
+ * providers.
+ */
 typedef struct _MUP_FSCTL_SURROGATE_PROVIDER_INFORMATION
 {
     ULONG TotalEntries;
@@ -581,6 +670,10 @@ typedef struct _MUP_FSCTL_SURROGATE_PROVIDER_INFORMATION
 } MUP_FSCTL_SURROGATE_PROVIDER_INFORMATION, *PMUP_FSCTL_SURROGATE_PROVIDER_INFORMATION;
 
 // private
+/**
+ * The MUP_FSCTL_UNC_HARDENING_PREFIX_TABLE_ENTRY structure describes a single entry in the MUP UNC hardening prefix
+ * table.
+ */
 typedef struct _MUP_FSCTL_UNC_HARDENING_PREFIX_TABLE_ENTRY
 {
     ULONG NextOffset; // from this struct
@@ -594,12 +687,16 @@ typedef struct _MUP_FSCTL_UNC_HARDENING_PREFIX_TABLE_ENTRY
             ULONG RequiresMutualAuth : 1;
             ULONG RequiresIntegrity : 1;
             ULONG RequiresPrivacy : 1;
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
     ULONGLONG OpenCount;
 } MUP_FSCTL_UNC_HARDENING_PREFIX_TABLE_ENTRY, *PMUP_FSCTL_UNC_HARDENING_PREFIX_TABLE_ENTRY;
 
 // private
+/**
+ * The MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_IN structure is the input used to query the MUP UNC hardening
+ * configuration.
+ */
 typedef struct _MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_IN
 {
     ULONG Size;
@@ -608,6 +705,10 @@ typedef struct _MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_IN
 } MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_IN, *PMUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_IN;
 
 // private
+/**
+ * The MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_OUT structure is the output containing the MUP UNC hardening
+ * configuration.
+ */
 typedef struct _MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_OUT
 {
     ULONG Size;
@@ -619,8 +720,8 @@ typedef struct _MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_OUT
             ULONG RequiresMutualAuth : 1;
             ULONG RequiresIntegrity : 1;
             ULONG RequiresPrivacy : 1;
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
 } MUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_OUT, *PMUP_FSCTL_QUERY_UNC_HARDENING_CONFIGURATION_OUT;
 
 EXTERN_C_END

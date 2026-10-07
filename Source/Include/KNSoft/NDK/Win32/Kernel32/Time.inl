@@ -37,19 +37,22 @@ _Inline_GetTickCount(VOID)
 #if _WIN64
     return (ULONG)((SharedUserData->TickCountMultiplier * SharedUserData->TickCountQuad) >> 24);
 #else
-    REGISTER ULONG HighPart;
+    REGISTER ULONG HighPart, LowPart;
     if (SharedUserData->TickCountMultiplier < 0x1000000UL)
     {
         while (TRUE)
         {
-            HighPart = SharedUserData->TickCount.High1Time;
-            if (HighPart == SharedUserData->TickCount.High2Time)
+            // The kernel writes High2Time, LowPart, then High1Time. Read High1Time and LowPart with acquire
+            // ordering before checking High2Time to avoid accepting a torn tick count.
+            HighPart = (ULONG)ReadAcquire(&SharedUserData->TickCount.High1Time);
+            LowPart = (ULONG)ReadAcquire((volatile LONG*)&SharedUserData->TickCount.LowPart);
+            if (HighPart == (ULONG)ReadNoFence(&SharedUserData->TickCount.High2Time))
             {
                 break;
             }
             YieldProcessor();
         }
-        return (ULONG)((UInt32x32To64(SharedUserData->TickCountMultiplier, SharedUserData->TickCount.LowPart) >> 24) +
+        return (ULONG)((UInt32x32To64(SharedUserData->TickCountMultiplier, LowPart) >> 24) +
                        (UInt32x32To64(SharedUserData->TickCountMultiplier, HighPart) << 8));
     }
     return UInt32x32To64(SharedUserData->TickCountMultiplier, SharedUserData->TickCount.LowPart) >> 24;
@@ -64,17 +67,20 @@ _Inline_GetTickCount64(VOID)
 #if _WIN64
     return (SharedUserData->TickCountMultiplier * SharedUserData->TickCountQuad) >> 24;
 #else
-    REGISTER ULONG HighPart;
+    REGISTER ULONG HighPart, LowPart;
     while (TRUE)
     {
-        HighPart = SharedUserData->TickCount.High1Time;
-        if (HighPart == SharedUserData->TickCount.High2Time)
+        // The kernel writes High2Time, LowPart, then High1Time. Read High1Time and LowPart with acquire
+        // ordering before checking High2Time to avoid accepting a torn tick count.
+        HighPart = (ULONG)ReadAcquire(&SharedUserData->TickCount.High1Time);
+        LowPart = (ULONG)ReadAcquire((volatile LONG*)&SharedUserData->TickCount.LowPart);
+        if (HighPart == (ULONG)ReadNoFence(&SharedUserData->TickCount.High2Time))
         {
             break;
         }
         YieldProcessor();
     }
-    return (UInt32x32To64(SharedUserData->TickCountMultiplier, SharedUserData->TickCount.LowPart) >> 24) +
+    return (UInt32x32To64(SharedUserData->TickCountMultiplier, LowPart) >> 24) +
         (UInt32x32To64(SharedUserData->TickCountMultiplier, HighPart) << 8);
 #endif
 }

@@ -7,9 +7,15 @@ EXTERN_C_START
 /* phnt */
 
 // CURDIR Handle | Flags
+/**
+ * Flags describing how the current directory handle is inherited by a new process.
+ */
 #define RTL_USER_PROC_CURDIR_CLOSE      0x00000002
 #define RTL_USER_PROC_CURDIR_INHERIT    0x00000003
 
+/**
+ * Represents the current directory of a process.
+ */
 typedef struct _CURDIR
 {
     UNICODE_STRING DosPath;
@@ -29,9 +35,15 @@ typedef struct _CURDIR32
 } CURDIR32, *PCURDIR32;
 
 // RTL_DRIVE_LETTER_CURDIR Flags
+/**
+ * Constants describing the per-drive current directory table.
+ */
 #define RTL_MAX_DRIVE_LETTERS   32
 #define RTL_DRIVE_LETTER_VALID  ((USHORT)0x0001)
 
+/**
+ * Represents a saved per-drive current directory entry.
+ */
 typedef struct _RTL_DRIVE_LETTER_CURDIR
 {
     USHORT Flags;
@@ -56,10 +68,16 @@ typedef struct _RTL_DRIVE_LETTER_CURDIR32
     STRING32 DosPath;
 } RTL_DRIVE_LETTER_CURDIR32, *PRTL_DRIVE_LETTER_CURDIR32;
 
+/**
+ * Console and window creation flags for a new user process.
+ */
 #define RTL_USER_PROC_DETACHED_PROCESS      ((HANDLE)(LONG_PTR)-1)
 #define RTL_USER_PROC_CREATE_NEW_CONSOLE    ((HANDLE)(LONG_PTR)-2)
 #define RTL_USER_PROC_CREATE_NO_WINDOW      ((HANDLE)(LONG_PTR)-3)
 
+/**
+ * Flags describing the state of an RTL_USER_PROCESS_PARAMETERS block.
+ */
 typedef enum RTL_USER_PROC_FLAGS
 {
     RTL_USER_PROC_PARAMS_NORMALIZED = 0x1,
@@ -94,6 +112,9 @@ typedef enum _RTL_USER_PROC_WINDOW_FLAGS
     RTL_USER_PROC_WINDOW_FLAG_HASSHELLDATA_STDOUT = 0x400,
 } _RTL_USER_PROC_WINDOW_FLAGS;
 
+/**
+ * Contains the parameters used to create and initialize a user-mode process environment.
+ */
 typedef struct _RTL_USER_PROCESS_PARAMETERS
 {
     ULONG MaximumLength;
@@ -143,6 +164,7 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS
     ULONG DefaultThreadpoolCpuSetMaskCount;
     ULONG DefaultThreadpoolThreadMaximum; // 20H1
     ULONG HeapMemoryTypeMask; // WIN11 22H2
+    PVOID AttributeList;
 } RTL_USER_PROCESS_PARAMETERS, *PRTL_USER_PROCESS_PARAMETERS;
 
 typedef struct _RTL_USER_PROCESS_PARAMETERS64
@@ -186,6 +208,7 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS64
     ULONG DefaultThreadpoolCpuSetMaskCount;
     ULONG DefaultThreadpoolThreadMaximum;
     ULONG HeapMemoryTypeMask;
+    VOID* POINTER_64 AttributeList;
 } RTL_USER_PROCESS_PARAMETERS64, *PRTL_USER_PROCESS_PARAMETERS64;
 
 typedef struct _RTL_USER_PROCESS_PARAMETERS32
@@ -229,6 +252,7 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32
     ULONG DefaultThreadpoolCpuSetMaskCount;
     ULONG DefaultThreadpoolThreadMaximum;
     ULONG HeapMemoryTypeMask;
+    VOID* POINTER_32 AttributeList;
 } RTL_USER_PROCESS_PARAMETERS32, *PRTL_USER_PROCESS_PARAMETERS32;
 
 /**
@@ -242,6 +266,9 @@ _Function_class_(USER_THREAD_START_ROUTINE)
 NTSTATUS
 NTAPI
 USER_THREAD_START_ROUTINE(
+/**
+ * Pointer to a USER_THREAD_START_ROUTINE callback.
+ */
     _In_ PVOID ThreadParameter);
 typedef USER_THREAD_START_ROUTINE *PUSER_THREAD_START_ROUTINE;
 

@@ -14,6 +14,9 @@ EXTERN_C_START
 // right indicates that the key was not found and the node should be inserted
 //  as the right child of the parent.
 //
+/**
+ * Describes the outcome of searching a generic or AVL table for an element.
+ */
 typedef enum _TABLE_SEARCH_RESULT
 {
     TableEmptyTree,
@@ -25,6 +28,9 @@ typedef enum _TABLE_SEARCH_RESULT
 //
 //  The results of a compare can be less than, equal, or greater than.
 //
+/**
+ * Describes the ordering relationship between two elements compared in a generic table.
+ */
 typedef enum _RTL_GENERIC_COMPARE_RESULTS
 {
     GenericLessThan,
@@ -67,6 +73,9 @@ _Function_class_(RTL_AVL_COMPARE_ROUTINE)
 RTL_GENERIC_COMPARE_RESULTS
 NTAPI
 RTL_AVL_COMPARE_ROUTINE(
+/**
+ * Pointer to an RTL_AVL_COMPARE_ROUTINE callback.
+ */
     _In_ struct _RTL_AVL_TABLE* Table,
     _In_ PVOID FirstStruct,
     _In_ PVOID SecondStruct);
@@ -83,6 +92,9 @@ __drv_allocatesMem(Mem)
 PVOID
 NTAPI
 RTL_AVL_ALLOCATE_ROUTINE(
+/**
+ * Pointer to an RTL_AVL_ALLOCATE_ROUTINE callback.
+ */
     _In_ struct _RTL_AVL_TABLE* Table,
     _In_ CLONG ByteSize);
 typedef RTL_AVL_ALLOCATE_ROUTINE *PRTL_AVL_ALLOCATE_ROUTINE;
@@ -98,6 +110,9 @@ _Function_class_(RTL_AVL_FREE_ROUTINE)
 VOID
 NTAPI
 RTL_AVL_FREE_ROUTINE(
+/**
+ * Pointer to an RTL_AVL_FREE_ROUTINE callback.
+ */
     _In_ struct _RTL_AVL_TABLE* Table,
     _In_ __drv_freesMem(Mem) _Post_invalid_ PVOID Buffer);
 typedef RTL_AVL_FREE_ROUTINE *PRTL_AVL_FREE_ROUTINE;
@@ -120,6 +135,9 @@ _Function_class_(RTL_AVL_MATCH_FUNCTION)
 NTSTATUS
 NTAPI
 RTL_AVL_MATCH_FUNCTION(
+/**
+ * Pointer to an RTL_AVL_MATCH_FUNCTION callback.
+ */
     _In_ struct _RTL_AVL_TABLE* Table,
     _In_ PVOID UserData,
     _In_ PVOID MatchData);
@@ -142,6 +160,9 @@ typedef RTL_AVL_MATCH_FUNCTION *PRTL_AVL_MATCH_FUNCTION;
 //                  (depending on the algorithm) prior to rebalancing
 //                  in insert and delete routines.
 //
+/**
+ * Represents a node in a balanced (AVL) binary tree used by the generic table package.
+ */
 typedef struct _RTL_BALANCED_LINKS
 {
     struct _RTL_BALANCED_LINKS* Parent;
@@ -158,6 +179,9 @@ typedef RTL_BALANCED_LINKS *PRTL_BALANCED_LINKS;
 //  the table and to manipulate the table.  Note that the generic table
 //  should really be an opaque type.
 //
+/**
+ * Represents a generic table implemented as a balanced (AVL) binary tree.
+ */
 typedef struct _RTL_AVL_TABLE
 {
     RTL_BALANCED_LINKS BalancedRoot;
@@ -256,6 +280,12 @@ RtlDeleteElementGenericTableAvl(
 //  been obtained with RtlLookupElementGenericTableFull.
 //
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The RtlDeleteElementGenericTableAvlEx routine deletes the specified element from an AVL generic table.
+ *
+ * \param Table The AVL generic table to modify.
+ * \param NodeOrParent The element pointer obtained from RtlLookupElementGenericTableFull.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -488,12 +518,24 @@ RtlIsGenericTableEmptyAvl(
 #undef RTL_GENERIC_TABLE
 #undef PRTL_GENERIC_TABLE
 
+/**
+ * Pointer to an RTL_GENERIC_COMPARE_ROUTINE callback.
+ */
 #define PRTL_GENERIC_COMPARE_ROUTINE PRTL_AVL_COMPARE_ROUTINE
 #define RTL_GENERIC_COMPARE_ROUTINE RTL_AVL_COMPARE_ROUTINE
+/**
+ * Pointer to an RTL_GENERIC_ALLOCATE_ROUTINE callback.
+ */
 #define PRTL_GENERIC_ALLOCATE_ROUTINE PRTL_AVL_ALLOCATE_ROUTINE
 #define RTL_GENERIC_ALLOCATE_ROUTINE RTL_AVL_ALLOCATE_ROUTINE
+/**
+ * Pointer to an RTL_GENERIC_FREE_ROUTINE callback.
+ */
 #define PRTL_GENERIC_FREE_ROUTINE PRTL_AVL_FREE_ROUTINE
 #define RTL_GENERIC_FREE_ROUTINE RTL_AVL_FREE_ROUTINE
+/**
+ * Represents a generic table implemented as a splay tree.
+ */
 #define RTL_GENERIC_TABLE RTL_AVL_TABLE
 #define PRTL_GENERIC_TABLE PRTL_AVL_TABLE
 
@@ -521,6 +563,9 @@ RtlIsGenericTableEmptyAvl(
 //  Routine are provided to traverse and manipulate the structure.
 //
 
+/**
+ * Represents the links of a node in a splay tree.
+ */
 typedef struct _RTL_SPLAY_LINKS
 {
     struct _RTL_SPLAY_LINKS* Parent;
@@ -529,6 +574,9 @@ typedef struct _RTL_SPLAY_LINKS
 } RTL_SPLAY_LINKS;
 typedef RTL_SPLAY_LINKS *PRTL_SPLAY_LINKS;
 
+/**
+ * Initializes the links of a splay tree node.
+ */
 FORCEINLINE
 VOID
 RtlInitializeSplayLinks(
@@ -558,6 +606,9 @@ RtlInitializeSplayLinks(
 //      PRTL_SPLAY_LINKS Links
 //      );
 //
+/**
+ * Accessors for the parent and child links of a splay tree node.
+ */
 #define RtlParent(Links) ((PRTL_SPLAY_LINKS)(Links)->Parent)
 
 //
@@ -621,6 +672,9 @@ RtlInitializeSplayLinks(
 //
 #define RtlIsRightChild(Links) ((RtlRightChild(RtlParent(Links)) == (PRTL_SPLAY_LINKS)(Links)))
 
+/**
+ * Inserts a node as the left child of a splay tree node.
+ */
 FORCEINLINE
 VOID
 RtlInsertAsLeftChild(
@@ -640,6 +694,9 @@ RtlInsertAsLeftChild(
     ChildLinks->Parent = ParentLinks;
 }
 
+/**
+ * Inserts a node as the right child of a splay tree node.
+ */
 FORCEINLINE
 VOID
 RtlInsertAsRightChild(
@@ -934,6 +991,13 @@ RtlInsertElementGenericTableFull(
 //  locating the element in the table.
 //
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlDeleteElementGenericTable routine deletes the element matching the supplied key from a generic table.
+ *
+ * \param Table The generic table to modify.
+ * \param Buffer A buffer containing the key that identifies the element to delete.
+ * \return TRUE if the element was found and deleted; otherwise, FALSE.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -950,6 +1014,13 @@ RtlDeleteElementGenericTable(
 //  input buffer is only used as a key in locating the element in the table.
 //
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlLookupElementGenericTable routine finds the element matching the supplied key in a generic table.
+ *
+ * \param Table The generic table to search.
+ * \param Buffer A buffer containing the key that identifies the element to find.
+ * \return A pointer to the user data of the matching element, or NULL if not found.
+ */
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -969,6 +1040,16 @@ RtlLookupElementGenericTable(
 //  call to optimize the insert.
 //
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlLookupElementGenericTableFull routine finds the element matching the supplied key in a generic table and
+ * returns its node position.
+ *
+ * \param Table The generic table to search.
+ * \param Buffer A buffer containing the key that identifies the element to find.
+ * \param NodeOrParent Receives the matching node, or its prospective parent if not found.
+ * \param SearchResult Receives the result of the search describing NodeOrParent.
+ * \return A pointer to the user data of the matching element, or NULL if not found.
+ */
 NTSYSAPI
 PVOID
 NTAPI
@@ -1002,6 +1083,13 @@ RtlLookupElementGenericTableFull(
 //      To enumerate the table without perturbing the splay links, use
 //      RtlEnumerateGenericTableWithoutSplaying
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlEnumerateGenericTable routine returns the elements of a generic table in order, one per call.
+ *
+ * \param Table The generic table to enumerate.
+ * \param Restart TRUE to restart the enumeration from the first element; FALSE to continue.
+ * \return A pointer to the user data of the next element, or NULL when enumeration is complete.
+ */
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -1036,6 +1124,14 @@ RtlEnumerateGenericTable(
 //  the splay order of the tree.
 //
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlEnumerateGenericTableWithoutSplaying routine returns the elements of a generic table in order without splaying
+ * the underlying tree.
+ *
+ * \param Table The generic table to enumerate.
+ * \param RestartKey On input, NULL restarts the enumeration; receives a key used to continue enumeration.
+ * \return A pointer to the user data of the next element, or NULL when enumeration is complete.
+ */
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -1054,6 +1150,13 @@ RtlEnumerateGenericTableWithoutSplaying(
 // an arbitrary element is deleted from the generic table it will cause
 // all elements inserted after the deleted element to "move up".
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlGetElementGenericTable routine returns the element at the specified ordinal position in a generic table.
+ *
+ * \param Table The generic table to query.
+ * \param I The zero-based index of the element to retrieve.
+ * \return A pointer to the user data of the element, or NULL if the index is out of range.
+ */
 _Must_inspect_result_
 NTSYSAPI
 PVOID
@@ -1068,6 +1171,13 @@ RtlGetElementGenericTable(
 // which is the number of generic table elements currently inserted
 // in the generic table.
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlNumberGenericTableElements routine returns the number of elements currently in a generic table.
+ *
+ * \param Table A pointer to the generic table to query.
+ * \return The number of elements in the generic table.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlnumbergenerictableelements
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -1081,6 +1191,13 @@ RtlNumberGenericTableElements(
 //  FALSE otherwise.
 //
 #if (NTDDI_VERSION >= NTDDI_WIN2K)
+/**
+ * The RtlIsGenericTableEmpty routine indicates whether a generic table currently contains any elements.
+ *
+ * \param Table A pointer to the generic table to query.
+ * \return `TRUE` if the generic table is empty, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlisgenerictableempty
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN

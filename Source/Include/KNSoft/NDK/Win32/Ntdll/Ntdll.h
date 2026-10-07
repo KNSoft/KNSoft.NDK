@@ -187,6 +187,15 @@ typedef struct _SBAPIMSG
     } u;
 } SBAPIMSG, *PSBAPIMSG;
 
+/**
+ * The RtlConnectToSm routine connects to the Session Manager (SMSS) API port.
+ *
+ * \param ApiPortName An optional pointer to the name of the Session Manager API port.
+ * \param ApiPortHandle An optional handle to an existing communication port.
+ * \param ProcessImageType The image type of the connecting process.
+ * \param SmssConnection A pointer to a HANDLE variable that receives the connection handle.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -196,6 +205,13 @@ RtlConnectToSm(
     _In_ ULONG ProcessImageType,
     _Out_ PHANDLE SmssConnection);
 
+/**
+ * The RtlSendMsgToSm routine sends an LPC message to the Session Manager (SMSS).
+ *
+ * \param ApiPortHandle A handle to the Session Manager communication port.
+ * \param MessageData A pointer to the LPC port message structure to send.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -232,6 +248,14 @@ RtlRegisterThreadWithCsrss(VOID);
 #pragma endregion
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_ZN)
+/**
+ * The ApiSetGetImplementationHost routine resolves the implementation host module of an API set.
+ *
+ * \param[in] ApiSetName The name of the API set to resolve.
+ * \param[out] Resolved Pointer to a variable that receives TRUE if the API set was resolved.
+ * \param[out] HostName Pointer to a UNICODE_STRING that receives the host module name.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -241,6 +265,13 @@ ApiSetGetImplementationHost(
     _Out_ PUNICODE_STRING HostName);
 #endif
 
+/**
+ * The ApiSetQueryApiSetPresence routine determines whether an API set is present on the system.
+ *
+ * \param[in] Namespace The API set namespace name to query.
+ * \param[out] Present Pointer to a variable that receives TRUE if the API set is present.
+ * \return LOGICAL TRUE if the operation succeeded; otherwise FALSE.
+ */
 NTSYSAPI
 LOGICAL
 NTAPI
@@ -248,6 +279,14 @@ ApiSetQueryApiSetPresence(
     _In_ PCUNICODE_STRING Namespace,
     _Out_ PBOOLEAN Present);
 
+/**
+ * The ApiSetQueryApiSetPresenceEx routine determines whether an API set is present and defined in the API set schema.
+ *
+ * \param[in] Namespace The API set namespace name to query.
+ * \param[out] IsInSchema Pointer to a variable that receives TRUE if the API set is defined in the schema.
+ * \param[out] Present Pointer to a variable that receives TRUE if the API set is present.
+ * \return LOGICAL TRUE if the operation succeeded; otherwise FALSE.
+ */
 NTSYSAPI
 LOGICAL
 NTAPI

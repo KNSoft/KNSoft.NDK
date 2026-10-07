@@ -8,6 +8,9 @@
 
 EXTERN_C_START
 
+/**
+ * The EVENT_TRACE_INFORMATION_CLASS enumeration defines the information classes used with event tracing (ETW).
+ */
 typedef enum _EVENT_TRACE_INFORMATION_CLASS
 {
     EventTraceKernelVersionInformation,                 // q: EVENT_TRACE_VERSION_INFORMATION
@@ -41,12 +44,18 @@ typedef enum _EVENT_TRACE_INFORMATION_CLASS
     MaxEventTraceInfoClass
 } EVENT_TRACE_INFORMATION_CLASS;
 
+/**
+ * The EVENT_TRACE_VERSION_INFORMATION structure contains event trace version information.
+ */
 typedef struct _EVENT_TRACE_VERSION_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
     ULONG EventTraceKernelVersion;
 } EVENT_TRACE_VERSION_INFORMATION, *PEVENT_TRACE_VERSION_INFORMATION;
 
+/**
+ * The EVENT_TRACE_GROUPMASK_INFORMATION structure contains event trace groupmask information.
+ */
 typedef struct _EVENT_TRACE_GROUPMASK_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -70,6 +79,9 @@ typedef struct _EVENT_TRACE_GROUPMASK_INFORMATION
 #define EVENT_TRACE_LAST_BRANCH_CONFIGURATION_CALLSTACK_ENABLE      0x00000200
 #define EVENT_TRACE_LAST_BRANCH_CONFIGURATION_SAMPLED               0x00000400
 
+/**
+ * The EVENT_TRACE_LAST_BRANCH_EVENT_ID structure describes the event trace last branch event id.
+ */
 typedef struct _EVENT_TRACE_LAST_BRANCH_EVENT_ID
 {
     GUID EventGuid;
@@ -77,6 +89,10 @@ typedef struct _EVENT_TRACE_LAST_BRANCH_EVENT_ID
     UCHAR Reserved[7];
 } EVENT_TRACE_LAST_BRANCH_EVENT_ID, *PEVENT_TRACE_LAST_BRANCH_EVENT_ID;
 
+/**
+ * The EVENT_TRACE_LAST_BRANCH_CONFIGURATION_INFORMATION structure contains event trace last branch configuration
+ * information.
+ */
 typedef struct _EVENT_TRACE_LAST_BRANCH_CONFIGURATION_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -85,6 +101,10 @@ typedef struct _EVENT_TRACE_LAST_BRANCH_CONFIGURATION_INFORMATION
     EVENT_TRACE_LAST_BRANCH_EVENT_ID Events[EVENT_TRACE_LAST_BRANCH_MAXIMUM_EVENTS];
 } EVENT_TRACE_LAST_BRANCH_CONFIGURATION_INFORMATION, *PEVENT_TRACE_LAST_BRANCH_CONFIGURATION_INFORMATION;
 
+/**
+ * The EVENT_TRACE_PROCESSOR_TRACE_CONFIGURATION_INFORMATION structure contains event trace processor trace
+ * configuration information.
+ */
 typedef struct _EVENT_TRACE_PROCESSOR_TRACE_CONFIGURATION_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -92,18 +112,27 @@ typedef struct _EVENT_TRACE_PROCESSOR_TRACE_CONFIGURATION_INFORMATION
     PVOID Callback; // Kernel-mode processor trace configuration callback passed to the ETW hardware trace extension.
 } EVENT_TRACE_PROCESSOR_TRACE_CONFIGURATION_INFORMATION, *PEVENT_TRACE_PROCESSOR_TRACE_CONFIGURATION_INFORMATION;
 
+/**
+ * The EVENT_TRACE_PERFORMANCE_INFORMATION structure contains event trace performance information.
+ */
 typedef struct _EVENT_TRACE_PERFORMANCE_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
     LARGE_INTEGER LogfileBytesWritten;
 } EVENT_TRACE_PERFORMANCE_INFORMATION, *PEVENT_TRACE_PERFORMANCE_INFORMATION;
 
+/**
+ * The EVENT_TRACE_TIME_PROFILE_INFORMATION structure contains event trace time profile information.
+ */
 typedef struct _EVENT_TRACE_TIME_PROFILE_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
     ULONG ProfileInterval;
 } EVENT_TRACE_TIME_PROFILE_INFORMATION, *PEVENT_TRACE_TIME_PROFILE_INFORMATION;
 
+/**
+ * The EVENT_TRACE_SESSION_SECURITY_INFORMATION structure contains event trace session security information.
+ */
 typedef struct _EVENT_TRACE_SESSION_SECURITY_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -112,6 +141,9 @@ typedef struct _EVENT_TRACE_SESSION_SECURITY_INFORMATION
     UCHAR SecurityDescriptor[1];
 } EVENT_TRACE_SESSION_SECURITY_INFORMATION, *PEVENT_TRACE_SESSION_SECURITY_INFORMATION;
 
+/**
+ * The EVENT_TRACE_SPINLOCK_INFORMATION structure contains event trace spinlock information.
+ */
 typedef struct _EVENT_TRACE_SPINLOCK_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -121,6 +153,9 @@ typedef struct _EVENT_TRACE_SPINLOCK_INFORMATION
     ULONG SpinLockHoldThreshold;
 } EVENT_TRACE_SPINLOCK_INFORMATION, *PEVENT_TRACE_SPINLOCK_INFORMATION;
 
+/**
+ * The EVENT_TRACE_SYSTEM_EVENT_INFORMATION structure contains event trace system event information.
+ */
 typedef struct _EVENT_TRACE_SYSTEM_EVENT_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -132,6 +167,9 @@ typedef EVENT_TRACE_SYSTEM_EVENT_INFORMATION EVENT_TRACE_STACK_TRACING_INFORMATI
 typedef EVENT_TRACE_SYSTEM_EVENT_INFORMATION EVENT_TRACE_PEBS_TRACING_INFORMATION, *PEVENT_TRACE_PEBS_TRACING_INFORMATION;
 typedef EVENT_TRACE_SYSTEM_EVENT_INFORMATION EVENT_TRACE_PROFILE_EVENT_INFORMATION, *PEVENT_TRACE_PROFILE_EVENT_INFORMATION;
 
+/**
+ * The EVENT_TRACE_EXECUTIVE_RESOURCE_INFORMATION structure contains event trace executive resource information.
+ */
 typedef struct _EVENT_TRACE_EXECUTIVE_RESOURCE_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -140,12 +178,18 @@ typedef struct _EVENT_TRACE_EXECUTIVE_RESOURCE_INFORMATION
     ULONG NumberOfExcessiveTimeouts;
 } EVENT_TRACE_EXECUTIVE_RESOURCE_INFORMATION, *PEVENT_TRACE_EXECUTIVE_RESOURCE_INFORMATION;
 
+/**
+ * The EVENT_TRACE_HEAP_TRACING_INFORMATION structure contains event trace heap tracing information.
+ */
 typedef struct _EVENT_TRACE_HEAP_TRACING_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
     ULONG ProcessId[1];
 } EVENT_TRACE_HEAP_TRACING_INFORMATION, *PEVENT_TRACE_HEAP_TRACING_INFORMATION;
 
+/**
+ * The EVENT_TRACE_TAG_FILTER_INFORMATION structure contains event trace tag filter information.
+ */
 typedef struct _EVENT_TRACE_TAG_FILTER_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -161,6 +205,9 @@ typedef EVENT_TRACE_TAG_FILTER_INFORMATION EVENT_TRACE_OBJECT_TYPE_FILTER_INFORM
 #define ETW_MAX_PMC_EVENTS        4
 #define ETW_MAX_PMC_COUNTERS      4
 
+/**
+ * The EVENT_TRACE_PROFILE_COUNTER_INFORMATION structure contains event trace profile counter information.
+ */
 typedef struct _EVENT_TRACE_PROFILE_COUNTER_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -183,6 +230,9 @@ typedef EVENT_TRACE_PROFILE_COUNTER_INFORMATION EVENT_TRACE_PROFILE_CONFIG_INFOR
 
 typedef struct _PROFILE_SOURCE_INFO *PPROFILE_SOURCE_INFO;
 
+/**
+ * The EVENT_TRACE_PROFILE_LIST_INFORMATION structure contains event trace profile list information.
+ */
 typedef struct _EVENT_TRACE_PROFILE_LIST_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -190,6 +240,9 @@ typedef struct _EVENT_TRACE_PROFILE_LIST_INFORMATION
     PPROFILE_SOURCE_INFO Profile[1];
 } EVENT_TRACE_PROFILE_LIST_INFORMATION, *PEVENT_TRACE_PROFILE_LIST_INFORMATION;
 
+/**
+ * The EVENT_TRACE_STACK_CACHING_INFORMATION structure contains event trace stack caching information.
+ */
 typedef struct _EVENT_TRACE_STACK_CACHING_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -200,6 +253,9 @@ typedef struct _EVENT_TRACE_STACK_CACHING_INFORMATION
     ULONG BucketCount;
 } EVENT_TRACE_STACK_CACHING_INFORMATION, *PEVENT_TRACE_STACK_CACHING_INFORMATION;
 
+/**
+ * The EVENT_TRACE_SOFT_RESTART_INFORMATION structure contains event trace soft restart information.
+ */
 typedef struct _EVENT_TRACE_SOFT_RESTART_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -208,6 +264,10 @@ typedef struct _EVENT_TRACE_SOFT_RESTART_INFORMATION
     WCHAR FileName[1];
 } EVENT_TRACE_SOFT_RESTART_INFORMATION, *PEVENT_TRACE_SOFT_RESTART_INFORMATION;
 
+/**
+ * The EVENT_TRACE_PROFILE_ADD_INFORMATION_VERSIONS enumeration defines the supported versions of event trace profile
+ * add information.
+ */
 typedef enum _EVENT_TRACE_PROFILE_ADD_INFORMATION_VERSIONS
 {
     EventTraceProfileAddInformationMinVersion = 0x2,
@@ -216,6 +276,9 @@ typedef enum _EVENT_TRACE_PROFILE_ADD_INFORMATION_VERSIONS
     EventTraceProfileAddInformationMaxVersion = 0x3,
 } EVENT_TRACE_PROFILE_ADD_INFORMATION_VERSIONS;
 
+/**
+ * The EVENT_TRACE_PROFILE_ADD_INFORMATION_V2 union contains event trace profile add information.
+ */
 typedef union _EVENT_TRACE_PROFILE_ADD_INFORMATION_V2
 {
     struct
@@ -239,6 +302,9 @@ typedef union _EVENT_TRACE_PROFILE_ADD_INFORMATION_V2
     } Arm;
 } EVENT_TRACE_PROFILE_ADD_INFORMATION_V2;
 
+/**
+ * The EVENT_TRACE_PROFILE_ADD_INFORMATION_V3 union contains event trace profile add information.
+ */
 typedef union _EVENT_TRACE_PROFILE_ADD_INFORMATION_V3
 {
     struct
@@ -267,6 +333,9 @@ typedef union _EVENT_TRACE_PROFILE_ADD_INFORMATION_V3
     } Arm;
 } EVENT_TRACE_PROFILE_ADD_INFORMATION_V3;
 
+/**
+ * The EVENT_TRACE_PROFILE_ADD_INFORMATION structure contains event trace profile add information.
+ */
 typedef struct _EVENT_TRACE_PROFILE_ADD_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -275,13 +344,16 @@ typedef struct _EVENT_TRACE_PROFILE_ADD_INFORMATION
     {
         EVENT_TRACE_PROFILE_ADD_INFORMATION_V2 V2;
         EVENT_TRACE_PROFILE_ADD_INFORMATION_V3 V3;
-    };
+    } DUMMYUNIONNAME;
     ULONG CpuInfoHierarchy[0x3];
     ULONG InitialInterval;
     BOOLEAN Persist;
     WCHAR ProfileSourceDescription[0x1];
 } EVENT_TRACE_PROFILE_ADD_INFORMATION, *PEVENT_TRACE_PROFILE_ADD_INFORMATION;
 
+/**
+ * The EVENT_TRACE_PROFILE_REMOVE_INFORMATION structure contains event trace profile remove information.
+ */
 typedef struct _EVENT_TRACE_PROFILE_REMOVE_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;
@@ -289,6 +361,9 @@ typedef struct _EVENT_TRACE_PROFILE_REMOVE_INFORMATION
     ULONG CpuInfoHierarchy[0x3];
 } EVENT_TRACE_PROFILE_REMOVE_INFORMATION, *PEVENT_TRACE_PROFILE_REMOVE_INFORMATION;
 
+/**
+ * The EVENT_TRACE_COVERAGE_SAMPLER_INFORMATION structure contains event trace coverage sampler information.
+ */
 typedef struct _EVENT_TRACE_COVERAGE_SAMPLER_INFORMATION
 {
     EVENT_TRACE_INFORMATION_CLASS EventTraceInformationClass;

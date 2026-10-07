@@ -91,6 +91,16 @@ D3DKMTEnumProcesses(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_MN)
 // rev
+/**
+ * The NtDirectGraphicsCall routine issues a direct call to the graphics subsystem.
+ *
+ * \param[in] InputBufferLength The size, in bytes, of the input buffer.
+ * \param[in, optional] InputBuffer Pointer to the input buffer.
+ * \param[in] OutputBufferLength The size, in bytes, of the output buffer.
+ * \param[out, optional] OutputBuffer Pointer to the output buffer.
+ * \param[out, optional] ReturnLength Pointer to a variable that receives the number of bytes returned.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS

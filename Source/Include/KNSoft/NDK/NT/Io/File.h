@@ -709,6 +709,9 @@ NtCopyFileChunk(
 
 #if (NTDDI_VERSION >= NTDDI_WIN11_GA)
 
+/**
+ * Flags for RtlCopyFileChunk.
+ */
 #define COPY_FILE_CHUNK_DUPLICATE_EXTENTS    0x00000001L
 #define VALID_COPY_FILE_CHUNK_FLAGS          (COPY_FILE_CHUNK_DUPLICATE_EXTENTS)
 

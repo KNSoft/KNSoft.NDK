@@ -237,6 +237,15 @@ NTSYSAPI BOOLEAN NlsMbCodePageTag;
 NTSYSAPI BOOLEAN NlsMbOemCodePageTag;
 #endif
 
+/**
+ * The NtInitializeNlsFiles routine maps the National Language Support (NLS) data files into memory.
+ *
+ * \param BaseAddress A pointer to a variable that receives the base address of the mapped NLS data.
+ * \param DefaultLocaleId A pointer to a variable that receives the default locale identifier.
+ * \param DefaultCasingTableSize A pointer to a variable that receives the size of the default casing table, in bytes.
+ * This parameter is optional.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -246,6 +255,19 @@ NtInitializeNlsFiles(
     _Out_ PLCID DefaultLocaleId,
     _Out_opt_ PLARGE_INTEGER DefaultCasingTableSize);
 
+/**
+ * The NtGetNlsSectionPtr routine retrieves a pointer to a National Language Support (NLS) section of the specified
+ * type.
+ *
+ * \param SectionType The type of the NLS section to retrieve.
+ * \param SectionData The data identifying the NLS section to retrieve.
+ * \param ContextData A pointer to a variable that receives context data. This must be NULL for user-mode callers.
+ * This parameter is optional.
+ * \param SectionPointer A pointer to a variable that receives the pointer to the NLS section.
+ * \param SectionSize A pointer to a variable that receives the size of the NLS section, in bytes.
+ * This parameter is optional.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS

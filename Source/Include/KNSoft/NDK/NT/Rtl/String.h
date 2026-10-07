@@ -42,6 +42,13 @@ RtlInitAnsiStringEx(
     _In_opt_z_ PCSZ SourceString
 );
 
+/**
+ * The RtlInitEmptyUnicodeString routine initializes a UNICODE_STRING with a caller-supplied buffer and zero length.
+ *
+ * \param UnicodeString A pointer to the UNICODE_STRING structure to initialize.
+ * \param Buffer A pointer to the caller-allocated buffer that backs the string.
+ * \param BufferSize The size, in bytes, of the buffer.
+ */
 _At_(UnicodeString->Buffer, _Post_equal_to_(Buffer))
 _At_(UnicodeString->Length, _Post_equal_to_(0))
 _At_(UnicodeString->MaximumLength, _Post_equal_to_(BufferSize))
@@ -60,6 +67,13 @@ RtlInitEmptyUnicodeString(
     UnicodeString->Buffer = Buffer;
 }
 
+/**
+ * The RtlInitEmptyAnsiString routine initializes an ANSI_STRING with a caller-supplied buffer and zero length.
+ *
+ * \param AnsiString A pointer to the ANSI_STRING structure to initialize.
+ * \param Buffer A pointer to the caller-allocated buffer that backs the string.
+ * \param MaximumLength The size, in bytes, of the buffer.
+ */
 _At_(AnsiString->Buffer, _Post_equal_to_(Buffer))
 _At_(AnsiString->Length, _Post_equal_to_(0))
 _At_(AnsiString->MaximumLength, _Post_equal_to_(BufferSize))
@@ -79,6 +93,12 @@ RtlInitEmptyAnsiString(
 #pragma prefast(push)
 #pragma prefast(disable : 6101, "Out parameter is not written fully or at all.")
 
+/**
+ * The RtlSanitizeUnicodeStringPadding routine zeroes the structure padding of a UNICODE_STRING to avoid leaking
+ * uninitialized memory.
+ *
+ * \param String A pointer to the UNICODE_STRING whose padding is cleared.
+ */
 FORCEINLINE
 VOID
 RtlSanitizeUnicodeStringPadding(
@@ -115,6 +135,12 @@ RtlFreeAnsiString(
 );
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_MN)
+/**
+ * The RtlInitUTF8String routine initializes a counted UTF-8 string.
+ *
+ * \param DestinationString A pointer to the UTF8_STRING structure to initialize.
+ * \param SourceString An optional pointer to a null-terminated string used to initialize the counted string.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -123,6 +149,13 @@ RtlInitUTF8String(
     _In_opt_z_ PCSZ SourceString
 );
 
+/**
+ * The RtlInitUTF8StringEx routine initializes a counted UTF-8 string and validates the length of the source string.
+ *
+ * \param DestinationString A pointer to the UTF8_STRING structure to initialize.
+ * \param SourceString An optional pointer to a null-terminated string used to initialize the counted string.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -131,6 +164,11 @@ RtlInitUTF8StringEx(
     _In_opt_z_ PCSZ SourceString
 );
 
+/**
+ * The RtlFreeUTF8String routine releases storage that was allocated by RtlUnicodeStringToUTF8String.
+ *
+ * \param Utf8String A pointer to the UTF-8 string whose buffer is freed.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -146,6 +184,14 @@ RtlFreeOemString(
     _Inout_ POEM_STRING OemString
 );
 
+/**
+ * The RtlCopyString routine copies a source string to a destination string.
+ *
+ * \param DestinationString A pointer to the destination counted string.
+ * \param SourceString An optional pointer to the source counted string. If `NULL`, the destination length is set to
+ * zero.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlcopystring
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -154,6 +200,13 @@ RtlCopyString(
     _In_opt_ PSTRING SourceString
 );
 
+/**
+ * The RtlUpperChar routine converts the specified character to uppercase.
+ *
+ * \param Character The character to convert.
+ * \return The uppercase equivalent of the specified character.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlupperchar
+ */
 NTSYSAPI
 CHAR
 NTAPI
@@ -161,6 +214,16 @@ RtlUpperChar(
     _In_ CHAR Character
 );
 
+/**
+ * The RtlCompareString routine compares two counted strings.
+ *
+ * \param String1 A pointer to the first counted string.
+ * \param String2 A pointer to the second counted string.
+ * \param CaseInSensitive If `TRUE`, case is ignored when comparing the strings.
+ * \return A signed value that is negative, zero, or positive if String1 is less than, equal to, or greater than
+ * String2.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlcomparestring
+ */
 _Must_inspect_result_
 NTSYSAPI
 LONG
@@ -171,6 +234,15 @@ RtlCompareString(
     _In_ BOOLEAN CaseInSensitive
 );
 
+/**
+ * The RtlEqualString routine compares two counted strings to determine whether they are equal.
+ *
+ * \param String1 A pointer to the first counted string.
+ * \param String2 A pointer to the second counted string.
+ * \param CaseInSensitive If `TRUE`, case is ignored when comparing the strings.
+ * \return `TRUE` if the strings are equal, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlequalstring
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -181,6 +253,15 @@ RtlEqualString(
     _In_ BOOLEAN CaseInSensitive
 );
 
+/**
+ * The RtlPrefixString routine determines whether one counted string is a prefix of another.
+ *
+ * \param String1 A pointer to the counted string that is the potential prefix.
+ * \param String2 A pointer to the counted string to search.
+ * \param CaseInSensitive If `TRUE`, case is ignored when comparing the strings.
+ * \return `TRUE` if String1 is a prefix of String2, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlprefixstring
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -191,6 +272,14 @@ RtlPrefixString(
     _In_ BOOLEAN CaseInSensitive
 );
 
+/**
+ * The RtlAppendStringToString routine concatenates two counted strings.
+ *
+ * \param Destination A pointer to the destination counted string.
+ * \param Source A pointer to the source counted string to append.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlappendstringtostring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -199,6 +288,14 @@ RtlAppendStringToString(
     _In_ PSTRING Source
 );
 
+/**
+ * The RtlAppendAsciizToString routine concatenates a null-terminated string to a counted string.
+ *
+ * \param Destination A pointer to the destination counted string.
+ * \param Source An optional pointer to the null-terminated source string to append.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlappendasciiztostring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -207,6 +304,13 @@ RtlAppendAsciizToString(
     _In_opt_z_ PCSTR Source
 );
 
+/**
+ * The RtlUpperString routine copies a source string to a destination string, converting each character to uppercase.
+ *
+ * \param DestinationString A pointer to the destination counted string.
+ * \param SourceString A pointer to the source counted string.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlupperstring
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -215,6 +319,13 @@ RtlUpperString(
     _In_ const STRING* SourceString
 );
 
+/**
+ * The RtlIsNullOrEmptyUnicodeString routine determines whether a UNICODE_STRING pointer is NULL or refers to a
+ * zero-length string.
+ *
+ * \param String An optional pointer to the UNICODE_STRING to test.
+ * \return Returns `TRUE` if the string is NULL or empty, otherwise `FALSE`.
+ */
 FORCEINLINE
 BOOLEAN
 RtlIsNullOrEmptyUnicodeString(
@@ -232,6 +343,15 @@ RtlInitUnicodeString(
     _In_opt_z_ PCWSTR SourceString
 );
 
+/**
+ * The RtlInitUnicodeStringEx routine initializes a counted Unicode string and validates the length of the source
+ * string.
+ *
+ * \param DestinationString A pointer to the UNICODE_STRING structure to initialize.
+ * \param SourceString An optional pointer to a null-terminated Unicode string used to initialize the counted string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlinitunicodestringex
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -258,6 +378,15 @@ RtlCreateUnicodeString(
     _In_z_ PCWSTR SourceString
 );
 
+/**
+ * The RtlCreateUnicodeStringFromAsciiz routine allocates and initializes a counted Unicode string from a
+ * null-terminated ANSI string.
+ *
+ * \param DestinationString A pointer to the UNICODE_STRING structure that receives the newly allocated string.
+ * \param SourceString A pointer to the null-terminated ANSI source string.
+ * \return `TRUE` if the Unicode string was successfully created, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcreateunicodestringfromasciiz
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -279,9 +408,21 @@ RtlFreeUnicodeString(
     _Inout_ _At_(UnicodeString->Buffer, _Frees_ptr_opt_) PUNICODE_STRING UnicodeString
 );
 
+/**
+ * Flags for RtlDuplicateUnicodeString.
+ */
 #define RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE (0x00000001)
 #define RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING (0x00000002)
 
+/**
+ * The RtlDuplicateUnicodeString routine creates a copy of a counted Unicode string.
+ *
+ * \param Flags Flags that control how the string is duplicated.
+ * \param StringIn A pointer to the source Unicode string.
+ * \param StringOut A pointer to the UNICODE_STRING structure that receives the duplicated string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlduplicateunicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -394,6 +535,9 @@ RtlEqualUnicodeString(
     _In_ BOOLEAN CaseInSensitive
 );
 
+/**
+ * String hashing algorithm identifiers for RtlHashUnicodeString.
+ */
 #define HASH_STRING_ALGORITHM_DEFAULT 0
 #define HASH_STRING_ALGORITHM_X65599 1
 #define HASH_STRING_ALGORITHM_INVALID 0xffffffff
@@ -418,6 +562,13 @@ RtlHashUnicodeString(
     _Out_ PULONG HashValue
 );
 
+/**
+ * The RtlValidateUnicodeString routine validates that a counted Unicode string is well formed.
+ *
+ * \param Flags Reserved. Must be zero.
+ * \param String A pointer to the Unicode string to validate.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -446,6 +597,15 @@ RtlPrefixUnicodeString(
 );
 
 #if defined(_KERNEL_MODE) && NTDDI_VERSION >= NTDDI_WIN10
+/**
+ * The RtlSuffixUnicodeString routine determines whether one counted Unicode string is a suffix of another.
+ *
+ * \param String1 A pointer to the Unicode string that is the potential suffix.
+ * \param String2 A pointer to the Unicode string to search.
+ * \param CaseInSensitive If `TRUE`, case is ignored when comparing the strings.
+ * \return `TRUE` if String1 is a suffix of String2, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlsuffixunicodestring
+ */
 _Must_inspect_result_
 NTSYSAPI
 BOOLEAN
@@ -458,6 +618,14 @@ RtlSuffixUnicodeString(
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
+/**
+ * The RtlFindUnicodeSubstring routine searches for the first occurrence of a substring within a counted Unicode string.
+ *
+ * \param FullString A pointer to the Unicode string to search.
+ * \param SearchString A pointer to the Unicode substring to find.
+ * \param CaseInSensitive If `TRUE`, case is ignored when comparing the strings.
+ * \return A pointer to the first occurrence of the substring, or `NULL` if it was not found.
+ */
 _Must_inspect_result_
 NTSYSAPI
 PWCHAR
@@ -469,10 +637,25 @@ RtlFindUnicodeSubstring(
 );
 #endif
 
+/**
+ * Flags for RtlFindCharInUnicodeString.
+ */
 #define RTL_FIND_CHAR_IN_UNICODE_STRING_START_AT_END 0x00000001
 #define RTL_FIND_CHAR_IN_UNICODE_STRING_COMPLEMENT_CHAR_SET 0x00000002
 #define RTL_FIND_CHAR_IN_UNICODE_STRING_CASE_INSENSITIVE 0x00000004
 
+/**
+ * The RtlFindCharInUnicodeString routine searches for the first occurrence of any character from a character set within
+ * a counted Unicode string.
+ *
+ * \param Flags Flags that control how the search is performed.
+ * \param StringToSearch A pointer to the Unicode string to search.
+ * \param CharSet A pointer to a Unicode string that contains the set of characters to find.
+ * \param NonInclusivePrefixLength A pointer to a variable that receives the length, in bytes, of the prefix that
+ * precedes the found character.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlfindcharinunicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -483,6 +666,14 @@ RtlFindCharInUnicodeString(
     _Out_ PUSHORT NonInclusivePrefixLength
 );
 
+/**
+ * The RtlAppendUnicodeStringToString routine concatenates two counted Unicode strings.
+ *
+ * \param Destination A pointer to the destination Unicode string.
+ * \param Source A pointer to the source Unicode string to append.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlappendunicodestringtostring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -491,6 +682,14 @@ RtlAppendUnicodeStringToString(
     _In_ PCUNICODE_STRING Source
 );
 
+/**
+ * The RtlAppendUnicodeToString routine concatenates a null-terminated Unicode string to a counted Unicode string.
+ *
+ * \param Destination A pointer to the destination Unicode string.
+ * \param Source An optional pointer to the null-terminated Unicode source string to append.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlappendunicodetostring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -499,6 +698,16 @@ RtlAppendUnicodeToString(
     _In_opt_z_ PCWSTR Source
 );
 
+/**
+ * The RtlUpcaseUnicodeString routine converts a counted Unicode string to uppercase.
+ *
+ * \param DestinationString A pointer to the destination Unicode string. If AllocateDestinationString is `TRUE`, the
+ * buffer is allocated by the routine.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlupcaseunicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -508,6 +717,16 @@ RtlUpcaseUnicodeString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlDowncaseUnicodeString routine converts a counted Unicode string to lowercase.
+ *
+ * \param DestinationString A pointer to the destination Unicode string. If AllocateDestinationString is `TRUE`, the
+ * buffer is allocated by the routine.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtldowncaseunicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -517,6 +736,11 @@ RtlDowncaseUnicodeString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlEraseUnicodeString routine securely zeroes the buffer of a counted Unicode string.
+ *
+ * \param String A pointer to the Unicode string to erase.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -533,6 +757,13 @@ RtlAnsiStringToUnicodeString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlxAnsiStringToUnicodeSize routine computes the number of bytes required to hold the Unicode translation of a
+ * counted ANSI string.
+ *
+ * \param AnsiString A pointer to the ANSI string.
+ * \return The size, in bytes, required for the Unicode translation, including the terminating null character.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -571,6 +802,13 @@ RtlUnicodeStringToAnsiString(
 );
 
 // rev
+/**
+ * The RtlUnicodeStringToAnsiSize routine computes the number of bytes required to hold the ANSI translation of a
+ * counted Unicode string.
+ *
+ * \param SourceString A pointer to the Unicode string.
+ * \return The size, in bytes, required for the ANSI translation, including the terminating null character.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -579,6 +817,15 @@ RtlUnicodeStringToAnsiSize(
 );
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_MN)
+/**
+ * The RtlUnicodeStringToUTF8String routine converts a counted Unicode string to a counted UTF-8 string.
+ *
+ * \param DestinationString A pointer to the destination UTF-8 string. If AllocateDestinationString is `TRUE`, the
+ * buffer is allocated by the routine.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -588,6 +835,15 @@ RtlUnicodeStringToUTF8String(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlUTF8StringToUnicodeString routine converts a counted UTF-8 string to a counted Unicode string.
+ *
+ * \param DestinationString A pointer to the destination Unicode string. If AllocateDestinationString is `TRUE`, the
+ * buffer is allocated by the routine.
+ * \param SourceString A pointer to the source UTF-8 string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -598,6 +854,14 @@ RtlUTF8StringToUnicodeString(
 );
 #endif
 
+/**
+ * The RtlAnsiCharToUnicodeChar routine converts the next ANSI (multibyte) character to a Unicode character and advances
+ * the source pointer.
+ *
+ * \param SourceCharacter A pointer to a variable that points to the ANSI character to convert. On return, the variable
+ * is advanced past the converted character.
+ * \return The Unicode equivalent of the source character.
+ */
 NTSYSAPI
 WCHAR
 NTAPI
@@ -605,6 +869,16 @@ RtlAnsiCharToUnicodeChar(
     _Inout_ PUCHAR * SourceCharacter
 );
 
+/**
+ * The RtlUpcaseUnicodeStringToAnsiString routine converts a counted Unicode string to an uppercase counted ANSI string.
+ *
+ * \param DestinationString A pointer to the destination ANSI string. If AllocateDestinationString is `TRUE`, the buffer
+ * is allocated by the routine.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlupcaseunicodestringtoansistring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -614,6 +888,16 @@ RtlUpcaseUnicodeStringToAnsiString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlOemStringToUnicodeString routine converts a counted OEM string to a counted Unicode string.
+ *
+ * \param DestinationString A pointer to the destination Unicode string. If AllocateDestinationString is `TRUE`, the
+ * buffer is allocated by the routine.
+ * \param SourceString A pointer to the source OEM string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtloemstringtounicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -632,6 +916,16 @@ RtlUnicodeStringToOemString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlUpcaseUnicodeStringToOemString routine converts a counted Unicode string to an uppercase counted OEM string.
+ *
+ * \param DestinationString A pointer to the destination OEM string. If AllocateDestinationString is `TRUE`, the buffer
+ * is allocated by the routine.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlupcaseunicodestringtooemstring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -641,6 +935,17 @@ RtlUpcaseUnicodeStringToOemString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlOemStringToCountedUnicodeString routine converts a counted OEM string to a counted Unicode string that is not
+ * null-terminated.
+ *
+ * \param DestinationString A pointer to the destination Unicode string. If AllocateDestinationString is `TRUE`, the
+ * buffer is allocated by the routine.
+ * \param SourceString A pointer to the source OEM string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtloemstringtocountedunicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -650,6 +955,17 @@ RtlOemStringToCountedUnicodeString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlUnicodeStringToCountedOemString routine converts a counted Unicode string to a counted OEM string that is not
+ * null-terminated.
+ *
+ * \param DestinationString A pointer to the destination OEM string. If AllocateDestinationString is `TRUE`, the buffer
+ * is allocated by the routine.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlunicodestringtocountedoemstring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -659,6 +975,17 @@ RtlUnicodeStringToCountedOemString(
     _In_ BOOLEAN AllocateDestinationString
 );
 
+/**
+ * The RtlUpcaseUnicodeStringToCountedOemString routine converts a counted Unicode string to an uppercase counted OEM
+ * string that is not null-terminated.
+ *
+ * \param DestinationString A pointer to the destination OEM string. If AllocateDestinationString is `TRUE`, the buffer
+ * is allocated by the routine.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param AllocateDestinationString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlupcaseunicodestringtocountedoemstring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -775,6 +1102,18 @@ RtlUpcaseUnicodeToMultiByteN(
     _In_ ULONG BytesInUnicodeString
 );
 
+/**
+ * The RtlOemToUnicodeN routine converts an OEM string to a Unicode string.
+ *
+ * \param UnicodeString A pointer to a buffer that receives the translated Unicode string.
+ * \param MaxBytesInUnicodeString The maximum number of bytes to write to UnicodeString.
+ * \param BytesInUnicodeString An optional pointer to a variable that receives the number of bytes written to
+ * UnicodeString.
+ * \param OemString A pointer to the OEM source string.
+ * \param BytesInOemString The number of bytes in the OEM source string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtloemtounicoden
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -786,6 +1125,17 @@ RtlOemToUnicodeN(
     _In_ ULONG BytesInOemString
 );
 
+/**
+ * The RtlUnicodeToOemN routine converts a Unicode string to an OEM string.
+ *
+ * \param OemString A pointer to a buffer that receives the translated OEM string.
+ * \param MaxBytesInOemString The maximum number of bytes to write to OemString.
+ * \param BytesInOemString An optional pointer to a variable that receives the number of bytes written to OemString.
+ * \param UnicodeString A pointer to the Unicode source string.
+ * \param BytesInUnicodeString The number of bytes in the Unicode source string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlunicodetooemn
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -797,6 +1147,17 @@ RtlUnicodeToOemN(
     _In_ ULONG BytesInUnicodeString
 );
 
+/**
+ * The RtlUpcaseUnicodeToOemN routine converts a Unicode string to an uppercase OEM string.
+ *
+ * \param OemString A pointer to a buffer that receives the translated OEM string.
+ * \param MaxBytesInOemString The maximum number of bytes to write to OemString.
+ * \param BytesInOemString An optional pointer to a variable that receives the number of bytes written to OemString.
+ * \param UnicodeString A pointer to the Unicode source string.
+ * \param BytesInUnicodeString The number of bytes in the Unicode source string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlupcaseunicodetooemn
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -808,6 +1169,20 @@ RtlUpcaseUnicodeToOemN(
     _In_ ULONG BytesInUnicodeString
 );
 
+/**
+ * The RtlConsoleMultiByteToUnicodeN routine converts a console multibyte string to a Unicode string, reporting whether
+ * any special characters were encountered.
+ *
+ * \param UnicodeString A pointer to a buffer that receives the translated Unicode string.
+ * \param MaxBytesInUnicodeString The maximum number of bytes to write to UnicodeString.
+ * \param BytesInUnicodeString An optional pointer to a variable that receives the number of bytes written to
+ * UnicodeString.
+ * \param MultiByteString A pointer to the multibyte source string.
+ * \param BytesInMultiByteString The number of bytes in the multibyte source string.
+ * \param pdwSpecialChar A pointer to a variable that receives a value indicating whether a special character was
+ * encountered.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -864,6 +1239,18 @@ RtlUnicodeToUTF8N(
     _In_ ULONG UnicodeStringByteCount
 );
 
+/**
+ * The RtlCustomCPToUnicodeN routine converts a string in a custom code page to a Unicode string.
+ *
+ * \param CustomCP A pointer to the code page table that describes the custom code page.
+ * \param UnicodeString A pointer to a buffer that receives the translated Unicode string.
+ * \param MaxBytesInUnicodeString The maximum number of bytes to write to UnicodeString.
+ * \param BytesInUnicodeString An optional pointer to a variable that receives the number of bytes written to
+ * UnicodeString.
+ * \param CustomCPString A pointer to the custom code page source string.
+ * \param BytesInCustomCPString The number of bytes in the custom code page source string.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -876,6 +1263,18 @@ RtlCustomCPToUnicodeN(
     _In_ ULONG BytesInCustomCPString
 );
 
+/**
+ * The RtlUnicodeToCustomCPN routine converts a Unicode string to a string in a custom code page.
+ *
+ * \param CustomCP A pointer to the code page table that describes the custom code page.
+ * \param CustomCPString A pointer to a buffer that receives the translated custom code page string.
+ * \param MaxBytesInCustomCPString The maximum number of bytes to write to CustomCPString.
+ * \param BytesInCustomCPString An optional pointer to a variable that receives the number of bytes written to
+ * CustomCPString.
+ * \param UnicodeString A pointer to the Unicode source string.
+ * \param BytesInUnicodeString The number of bytes in the Unicode source string.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -888,6 +1287,18 @@ RtlUnicodeToCustomCPN(
     _In_ ULONG BytesInUnicodeString
 );
 
+/**
+ * The RtlUpcaseUnicodeToCustomCPN routine converts a Unicode string to an uppercase string in a custom code page.
+ *
+ * \param CustomCP A pointer to the code page table that describes the custom code page.
+ * \param CustomCPString A pointer to a buffer that receives the translated custom code page string.
+ * \param MaxBytesInCustomCPString The maximum number of bytes to write to CustomCPString.
+ * \param BytesInCustomCPString An optional pointer to a variable that receives the number of bytes written to
+ * CustomCPString.
+ * \param UnicodeString A pointer to the Unicode source string.
+ * \param BytesInUnicodeString The number of bytes in the Unicode source string.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -900,6 +1311,13 @@ RtlUpcaseUnicodeToCustomCPN(
     _In_ ULONG BytesInUnicodeString
 );
 
+/**
+ * The RtlInitCodePageTable routine initializes a code page table structure from a raw code page table image.
+ *
+ * \param TableBase A pointer to the raw code page table data.
+ * \param CodePageTable A pointer to the CPTABLEINFO structure that receives the initialized code page table.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlinitcodepagetable
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -908,6 +1326,15 @@ RtlInitCodePageTable(
     _Inout_ PCPTABLEINFO CodePageTable
 );
 
+/**
+ * The RtlInitNlsTables routine initializes an NLS (National Language Support) table information structure from the
+ * specified ANSI, OEM, and language code page tables.
+ *
+ * \param AnsiNlsBase A pointer to the ANSI code page NLS data.
+ * \param OemNlsBase A pointer to the OEM code page NLS data.
+ * \param LanguageNlsBase A pointer to the language (case-mapping) NLS data.
+ * \param TableInfo A pointer to the NLSTABLEINFO structure that receives the initialized table information.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -918,6 +1345,12 @@ RtlInitNlsTables(
     _Out_ PNLSTABLEINFO TableInfo // PCPTABLEINFO?
 );
 
+/**
+ * The RtlResetRtlTranslations routine resets the code page translation tables used by the run-time library to those
+ * described by the specified NLS table information.
+ *
+ * \param TableInfo A pointer to the NLSTABLEINFO structure that describes the translation tables.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -925,6 +1358,14 @@ RtlResetRtlTranslations(
     _In_ PNLSTABLEINFO TableInfo
 );
 
+/**
+ * The RtlIsTextUnicode routine applies heuristics to determine whether a buffer likely contains Unicode (UTF-16) text.
+ *
+ * \param Buffer The buffer to examine.
+ * \param Size The size, in bytes, of the buffer.
+ * \param Result On input specifies which tests to apply (or NULL for all); on output receives the tests that passed.
+ * \return TRUE if the buffer is likely Unicode text; otherwise, FALSE.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -934,6 +1375,9 @@ RtlIsTextUnicode(
     _Inout_opt_ PULONG Result
 );
 
+/**
+ * Identifies the Unicode normalization form applied by string normalization routines.
+ */
 typedef enum _RTL_NORM_FORM
 {
     NormOther = 0x0,
@@ -950,6 +1394,18 @@ typedef enum _RTL_NORM_FORM
     NormIdnaDisallowUnassigned = 0x10d
 } RTL_NORM_FORM;
 
+/**
+ * The RtlNormalizeString routine normalizes a Unicode string according to the specified Unicode normalization form.
+ *
+ * \param NormForm The normalization form to apply (RTL_NORM_FORM).
+ * \param SourceString A pointer to the source Unicode string.
+ * \param SourceStringLength The length, in characters, of the source string, or -1 if the string is null-terminated.
+ * \param DestinationString A buffer that receives the normalized string.
+ * \param DestinationStringLength On input, the size of the destination buffer in characters; on output, the number of
+ * characters written or required.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlnormalizestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -961,6 +1417,16 @@ RtlNormalizeString(
     _Inout_ PLONG DestinationStringLength
 );
 
+/**
+ * The RtlIsNormalizedString routine determines whether a Unicode string is already in the specified normalization form.
+ *
+ * \param NormForm The normalization form to test against (RTL_NORM_FORM).
+ * \param SourceString A pointer to the source Unicode string.
+ * \param SourceStringLength The length, in characters, of the source string, or -1 if the string is null-terminated.
+ * \param Normalized A pointer to a variable that receives `TRUE` if the string is normalized, otherwise `FALSE`.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlisnormalizedstring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -994,6 +1460,16 @@ RtlIsNameInExpression(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10_RS4)
 // rev
+/**
+ * The RtlIsNameInUnUpcasedExpression routine determines whether a name matches a wildcard expression, using a
+ * caller-supplied upcase table rather than upcasing the expression.
+ *
+ * \param Expression A pointer to the wildcard expression, which must already be uppercase when IgnoreCase is `TRUE`.
+ * \param Name A pointer to the name to test against the expression.
+ * \param IgnoreCase If `TRUE`, the comparison is case-insensitive.
+ * \param UpcaseTable An optional pointer to an upcase translation table used to upcase the name.
+ * \return `TRUE` if the name matches the expression, otherwise `FALSE`.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -1022,6 +1498,14 @@ RtlDoesNameContainWildCards(
 );
 #endif
 
+/**
+ * The RtlEqualDomainName routine compares two domain names for equality.
+ *
+ * \param String1 A pointer to the first domain name.
+ * \param String2 A pointer to the second domain name.
+ * \return `TRUE` if the domain names are equal, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlequaldomainname
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -1030,6 +1514,14 @@ RtlEqualDomainName(
     _In_ PUNICODE_STRING String2
 );
 
+/**
+ * The RtlEqualComputerName routine compares two computer names for equality.
+ *
+ * \param String1 A pointer to the first computer name.
+ * \param String2 A pointer to the second computer name.
+ * \return `TRUE` if the computer names are equal, otherwise `FALSE`.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlequalcomputername
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -1038,6 +1530,14 @@ RtlEqualComputerName(
     _In_ PUNICODE_STRING String2
 );
 
+/**
+ * The RtlDnsHostNameToComputerName routine converts a DNS host name to a NetBIOS computer name.
+ *
+ * \param ComputerNameString A pointer to the string that receives the computer name.
+ * \param DnsHostNameString A pointer to the DNS host name to convert.
+ * \param AllocateComputerNameString If `TRUE`, the routine allocates the computer name string buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1047,6 +1547,14 @@ RtlDnsHostNameToComputerName(
     _In_ BOOLEAN AllocateComputerNameString
 );
 
+/**
+ * The RtlCompareAltitudes routine compares two filter driver altitude strings.
+ *
+ * \param Altitude1 A pointer to the first altitude string.
+ * \param Altitude2 A pointer to the second altitude string.
+ * \return A signed value that is negative, zero, or positive if Altitude1 is less than, equal to, or greater than
+ * Altitude2.
+ */
 NTSYSAPI
 LONG
 NTAPI
@@ -1055,6 +1563,18 @@ RtlCompareAltitudes(
     _In_ PUNICODE_STRING Altitude2
 );
 
+/**
+ * The RtlIdnToAscii routine converts an internationalized domain name (IDN) to its ASCII (Punycode) representation.
+ *
+ * \param Flags Flags that control the conversion.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param SourceStringLength The length, in characters, of the source string, or -1 if the string is null-terminated.
+ * \param DestinationString A buffer that receives the converted string.
+ * \param DestinationStringLength On input, the size of the destination buffer in characters; on output, the number of
+ * characters written or required.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlidntoascii
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1066,6 +1586,18 @@ RtlIdnToAscii(
     _Inout_ PLONG DestinationStringLength
 );
 
+/**
+ * The RtlIdnToUnicode routine converts an ASCII (Punycode) internationalized domain name to its Unicode representation.
+ *
+ * \param Flags Flags that control the conversion.
+ * \param SourceString A pointer to the source string.
+ * \param SourceStringLength The length, in characters, of the source string, or -1 if the string is null-terminated.
+ * \param DestinationString A buffer that receives the converted string.
+ * \param DestinationStringLength On input, the size of the destination buffer in characters; on output, the number of
+ * characters written or required.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlidntounicode
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1077,6 +1609,19 @@ RtlIdnToUnicode(
     _Inout_ PLONG DestinationStringLength
 );
 
+/**
+ * The RtlIdnToNameprepUnicode routine applies the nameprep algorithm to an internationalized domain name and returns
+ * the result in Unicode.
+ *
+ * \param Flags Flags that control the conversion.
+ * \param SourceString A pointer to the source Unicode string.
+ * \param SourceStringLength The length, in characters, of the source string, or -1 if the string is null-terminated.
+ * \param DestinationString A buffer that receives the converted string.
+ * \param DestinationStringLength On input, the size of the destination buffer in characters; on output, the number of
+ * characters written or required.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlidntonameprepunicode
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1088,6 +1633,17 @@ RtlIdnToNameprepUnicode(
     _Inout_ PLONG DestinationStringLength
 );
 
+/**
+ * The RtlIntegerToChar routine converts an unsigned integer to its character-string representation in the specified
+ * base.
+ *
+ * \param Value The unsigned integer to convert.
+ * \param Base The numeric base for the conversion, or zero for base 10.
+ * \param OutputLength The size, in characters, of the output buffer. A negative value pads the result to the given
+ * width.
+ * \param String A buffer that receives the converted character string.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1107,6 +1663,17 @@ RtlCharToInteger(
     _Out_ PULONG Value
 );
 
+/**
+ * The RtlLargeIntegerToChar routine converts a large integer to its character-string representation in the specified
+ * base.
+ *
+ * \param Value A pointer to the large integer to convert.
+ * \param Base The numeric base for the conversion, or zero for base 10.
+ * \param OutputLength The size, in characters, of the output buffer. A negative value pads the result to the given
+ * width.
+ * \param String A buffer that receives the converted character string.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1117,6 +1684,16 @@ RtlLargeIntegerToChar(
     _Out_ PSTR String
 );
 
+/**
+ * The RtlIntegerToUnicodeString routine converts an unsigned integer to its Unicode-string representation in the
+ * specified base.
+ *
+ * \param Value The unsigned integer to convert.
+ * \param Base The numeric base for the conversion, or zero for base 10.
+ * \param String A pointer to a UNICODE_STRING that receives the converted string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlintegertounicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1126,6 +1703,16 @@ RtlIntegerToUnicodeString(
     _Inout_ PUNICODE_STRING String
 );
 
+/**
+ * The RtlInt64ToUnicodeString routine converts an unsigned 64-bit integer to its Unicode-string representation in the
+ * specified base.
+ *
+ * \param Value The unsigned 64-bit integer to convert.
+ * \param Base The numeric base for the conversion, or zero for base 10.
+ * \param String A pointer to a UNICODE_STRING that receives the converted string.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlint64tounicodestring
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1136,6 +1723,9 @@ RtlInt64ToUnicodeString(
 );
 
 #ifdef _WIN64
+/**
+ * Maps RtlIntPtrToUnicodeString to the appropriate 32- or 64-bit conversion routine.
+ */
 #define RtlIntPtrToUnicodeString(Value, Base, String) RtlInt64ToUnicodeString(Value, Base, String)
 #else
 #define RtlIntPtrToUnicodeString(Value, Base, String) RtlIntegerToUnicodeString(Value, Base, String)
@@ -1501,6 +2091,9 @@ RtlIpv6StringToAddressExW(
 
 #pragma region Prefix
 
+/**
+ * Represents an entry in an ANSI prefix table.
+ */
 typedef struct _PREFIX_TABLE_ENTRY
 {
     CSHORT NodeTypeCode;
@@ -1510,6 +2103,9 @@ typedef struct _PREFIX_TABLE_ENTRY
     PSTRING Prefix;
 } PREFIX_TABLE_ENTRY, *PPREFIX_TABLE_ENTRY;
 
+/**
+ * Represents an ANSI prefix table used for longest-prefix name lookups.
+ */
 typedef struct _PREFIX_TABLE
 {
     CSHORT NodeTypeCode;
@@ -1517,6 +2113,12 @@ typedef struct _PREFIX_TABLE
     PPREFIX_TABLE_ENTRY NextPrefixTree;
 } PREFIX_TABLE, *PPREFIX_TABLE;
 
+/**
+ * The PfxInitialize routine initializes a prefix table used to hold ANSI string prefixes.
+ *
+ * \param PrefixTable A pointer to the prefix table to initialize.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-pfxinitialize
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -1524,6 +2126,15 @@ PfxInitialize(
     _Out_ PPREFIX_TABLE PrefixTable
 );
 
+/**
+ * The PfxInsertPrefix routine inserts a prefix into a prefix table.
+ *
+ * \param PrefixTable A pointer to the prefix table.
+ * \param Prefix A pointer to the counted string that is the prefix to insert.
+ * \param PrefixTableEntry A pointer to the prefix table entry that describes the inserted prefix.
+ * \return `TRUE` if the prefix was inserted, otherwise `FALSE` if a matching prefix already exists.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-pfxinsertprefix
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -1533,6 +2144,13 @@ PfxInsertPrefix(
     _Out_ PPREFIX_TABLE_ENTRY PrefixTableEntry
 );
 
+/**
+ * The PfxRemovePrefix routine removes a prefix from a prefix table.
+ *
+ * \param PrefixTable A pointer to the prefix table.
+ * \param PrefixTableEntry A pointer to the prefix table entry to remove.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-pfxremoveprefix
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -1541,6 +2159,14 @@ PfxRemovePrefix(
     _In_ PPREFIX_TABLE_ENTRY PrefixTableEntry
 );
 
+/**
+ * The PfxFindPrefix routine searches a prefix table for the longest prefix of the specified name.
+ *
+ * \param PrefixTable A pointer to the prefix table.
+ * \param FullName A pointer to the counted string to search for a prefix.
+ * \return A pointer to the matching prefix table entry, or `NULL` if no prefix was found.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-pfxfindprefix
+ */
 NTSYSAPI
 PPREFIX_TABLE_ENTRY
 NTAPI
@@ -1549,6 +2175,9 @@ PfxFindPrefix(
     _In_ PSTRING FullName
 );
 
+/**
+ * Represents an entry in a Unicode prefix table.
+ */
 typedef struct _UNICODE_PREFIX_TABLE_ENTRY
 {
     CSHORT NodeTypeCode;
@@ -1559,6 +2188,9 @@ typedef struct _UNICODE_PREFIX_TABLE_ENTRY
     PUNICODE_STRING Prefix;
 } UNICODE_PREFIX_TABLE_ENTRY, *PUNICODE_PREFIX_TABLE_ENTRY;
 
+/**
+ * Represents a Unicode prefix table used for longest-prefix name lookups.
+ */
 typedef struct _UNICODE_PREFIX_TABLE
 {
     CSHORT NodeTypeCode;
@@ -1567,6 +2199,12 @@ typedef struct _UNICODE_PREFIX_TABLE
     PUNICODE_PREFIX_TABLE_ENTRY LastNextEntry;
 } UNICODE_PREFIX_TABLE, *PUNICODE_PREFIX_TABLE;
 
+/**
+ * The RtlInitializeUnicodePrefix routine initializes a Unicode prefix table.
+ *
+ * \param PrefixTable A pointer to the Unicode prefix table to initialize.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlinitializeunicodeprefix
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -1574,6 +2212,15 @@ RtlInitializeUnicodePrefix(
     _Out_ PUNICODE_PREFIX_TABLE PrefixTable
 );
 
+/**
+ * The RtlInsertUnicodePrefix routine inserts a prefix into a Unicode prefix table.
+ *
+ * \param PrefixTable A pointer to the Unicode prefix table.
+ * \param Prefix A pointer to the Unicode string that is the prefix to insert.
+ * \param PrefixTableEntry A pointer to the prefix table entry that describes the inserted prefix.
+ * \return `TRUE` if the prefix was inserted, otherwise `FALSE` if a matching prefix already exists.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlinsertunicodeprefix
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -1583,6 +2230,13 @@ RtlInsertUnicodePrefix(
     _Out_ PUNICODE_PREFIX_TABLE_ENTRY PrefixTableEntry
 );
 
+/**
+ * The RtlRemoveUnicodePrefix routine removes a prefix from a Unicode prefix table.
+ *
+ * \param PrefixTable A pointer to the Unicode prefix table.
+ * \param PrefixTableEntry A pointer to the prefix table entry to remove.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlremoveunicodeprefix
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -1591,6 +2245,15 @@ RtlRemoveUnicodePrefix(
     _In_ PUNICODE_PREFIX_TABLE_ENTRY PrefixTableEntry
 );
 
+/**
+ * The RtlFindUnicodePrefix routine searches a Unicode prefix table for the longest prefix of the specified name.
+ *
+ * \param PrefixTable A pointer to the Unicode prefix table.
+ * \param FullName A pointer to the Unicode string to search for a prefix.
+ * \param CaseInsensitiveIndex The number of leading characters to compare case-insensitively.
+ * \return A pointer to the matching prefix table entry, or `NULL` if no prefix was found.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlfindunicodeprefix
+ */
 NTSYSAPI
 PUNICODE_PREFIX_TABLE_ENTRY
 NTAPI
@@ -1600,6 +2263,14 @@ RtlFindUnicodePrefix(
     _In_ ULONG CaseInsensitiveIndex
 );
 
+/**
+ * The RtlNextUnicodePrefix routine enumerates the entries in a Unicode prefix table.
+ *
+ * \param PrefixTable A pointer to the Unicode prefix table.
+ * \param Restart If `TRUE`, the enumeration restarts from the first entry.
+ * \return A pointer to the next prefix table entry, or `NULL` when the enumeration is complete.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlnextunicodeprefix
+ */
 NTSYSAPI
 PUNICODE_PREFIX_TABLE_ENTRY
 NTAPI
@@ -1612,6 +2283,13 @@ RtlNextUnicodePrefix(
 
 #pragma region Encode/Decode
 
+/**
+ * The RtlRunEncodeUnicodeString routine obfuscates a Unicode string in place using a simple run-based encoding seeded
+ * by the specified value.
+ *
+ * \param Seed A pointer to the seed byte; the routine updates it with the seed actually used.
+ * \param String A pointer to the UNICODE_STRING to encode in place.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -1619,6 +2297,13 @@ RtlRunEncodeUnicodeString(
     _Inout_ PUCHAR Seed,
     _Inout_ PUNICODE_STRING String);
 
+/**
+ * The RtlRunDecodeUnicodeString routine reverses the encoding performed by RtlRunEncodeUnicodeString, restoring a
+ * Unicode string in place.
+ *
+ * \param Seed The seed byte that was used to encode the string.
+ * \param String A pointer to the UNICODE_STRING to decode in place.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -1626,6 +2311,14 @@ RtlRunDecodeUnicodeString(
     _In_ UCHAR Seed,
     _Inout_ PUNICODE_STRING String);
 
+/**
+ * The RtlFindClosestEncodableLength routine finds the closest length that can be encoded for the specified source
+ * length.
+ *
+ * \param SourceLength The source length to encode.
+ * \param TargetLength A pointer to a variable that receives the closest encodable length.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1637,6 +2330,14 @@ RtlFindClosestEncodableLength(
 
 typedef struct _RTL_UNICODE_STRING_BUFFER RTL_UNICODE_STRING_BUFFER, *PRTL_UNICODE_STRING_BUFFER;
 
+/**
+ * The RtlMultiAppendUnicodeStringBuffer routine appends multiple counted Unicode strings to a Unicode string buffer.
+ *
+ * \param Buffer A pointer to the Unicode string buffer.
+ * \param BufferCount The number of source strings in the array.
+ * \param Source A pointer to an array of Unicode strings to append.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1645,6 +2346,15 @@ RtlMultiAppendUnicodeStringBuffer(
     _In_ ULONG BufferCount,
     _In_ PCUNICODE_STRING Source);
 
+/**
+ * The RtlAppendPathElement routine appends a path element to a Unicode string buffer, inserting a path separator as
+ * needed.
+ *
+ * \param Flags Flags that control how the path element is appended.
+ * \param Buffer A pointer to the Unicode string buffer.
+ * \param Source A pointer to the path element to append.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

@@ -225,6 +225,9 @@ _InterlockedReadPointer(
 #define NtCurrentThreadId() ((HANDLE)NtReadTeb(ClientId.UniqueThread))
 #define NtGetImageNtHeader() ((PIMAGE_NT_HEADERS)Add2Ptr(&__ImageBase, __ImageBase.e_lfanew))
 
+/**
+ * Retrieves the process default heap from the PEB.
+ */
 #define RtlProcessHeap() (NtCurrentPeb()->ProcessHeap)
 
 #pragma endregion

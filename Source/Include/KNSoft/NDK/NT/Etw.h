@@ -50,37 +50,37 @@ typedef ULONG64 CONTROLTRACE_ID;
 //
 // The predefined event groups or families for NT subsystems
 //
-#define EVENT_TRACE_GROUP_HEADER               0x0000
-#define EVENT_TRACE_GROUP_IO                   0x0100
-#define EVENT_TRACE_GROUP_MEMORY               0x0200
-#define EVENT_TRACE_GROUP_PROCESS              0x0300
-#define EVENT_TRACE_GROUP_FILE                 0x0400
-#define EVENT_TRACE_GROUP_THREAD               0x0500
-#define EVENT_TRACE_GROUP_TCPIP                0x0600
-#define EVENT_TRACE_GROUP_JOB                  0x0700
-#define EVENT_TRACE_GROUP_UDPIP                0x0800
-#define EVENT_TRACE_GROUP_REGISTRY             0x0900
-#define EVENT_TRACE_GROUP_DBGPRINT             0x0A00
-#define EVENT_TRACE_GROUP_CONFIG               0x0B00
-#define EVENT_TRACE_GROUP_SPARE1               0x0C00   // Spare1
-#define EVENT_TRACE_GROUP_WNF                  0x0D00
-#define EVENT_TRACE_GROUP_POOL                 0x0E00
-#define EVENT_TRACE_GROUP_PERFINFO             0x0F00
-#define EVENT_TRACE_GROUP_HEAP                 0x1000
-#define EVENT_TRACE_GROUP_OBJECT               0x1100
-#define EVENT_TRACE_GROUP_POWER                0x1200
-#define EVENT_TRACE_GROUP_MODBOUND             0x1300
-#define EVENT_TRACE_GROUP_IMAGE                0x1400
-#define EVENT_TRACE_GROUP_DPC                  0x1500
-#define EVENT_TRACE_GROUP_CC                   0x1600
-#define EVENT_TRACE_GROUP_CRITSEC              0x1700
-#define EVENT_TRACE_GROUP_STACKWALK            0x1800
-#define EVENT_TRACE_GROUP_UMS                  0x1900
-#define EVENT_TRACE_GROUP_ALPC                 0x1A00
-#define EVENT_TRACE_GROUP_SPLITIO              0x1B00
-#define EVENT_TRACE_GROUP_THREAD_POOL          0x1C00
-#define EVENT_TRACE_GROUP_HYPERVISOR           0x1D00
-#define EVENT_TRACE_GROUP_HYPERVISORX          0x1E00
+#define EVENT_TRACE_GROUP_HEADER               0x0000 // EventTraceGuid
+#define EVENT_TRACE_GROUP_IO                   0x0100 // DiskIoGuid
+#define EVENT_TRACE_GROUP_MEMORY               0x0200 // PageFaultGuid
+#define EVENT_TRACE_GROUP_PROCESS              0x0300 // ProcessGuid
+#define EVENT_TRACE_GROUP_FILE                 0x0400 // FileIoGuid
+#define EVENT_TRACE_GROUP_THREAD               0x0500 // ThreadGuid
+#define EVENT_TRACE_GROUP_TCPIP                0x0600 // TcpIpGuid
+#define EVENT_TRACE_GROUP_JOB                  0x0700 // JobGuid
+#define EVENT_TRACE_GROUP_UDPIP                0x0800 // UdpIpGuid
+#define EVENT_TRACE_GROUP_REGISTRY             0x0900 // RegistryGuid
+#define EVENT_TRACE_GROUP_DBGPRINT             0x0A00 // DbgPrintGuid
+#define EVENT_TRACE_GROUP_CONFIG               0x0B00 // EventTraceConfigGuid
+#define EVENT_TRACE_GROUP_SPARE1               0x0C00
+#define EVENT_TRACE_GROUP_WNF                  0x0D00 // WnfGuid
+#define EVENT_TRACE_GROUP_POOL                 0x0E00 // PoolGuid
+#define EVENT_TRACE_GROUP_PERFINFO             0x0F00 // PerfinfoGuid
+#define EVENT_TRACE_GROUP_HEAP                 0x1000 // HeapGuid
+#define EVENT_TRACE_GROUP_OBJECT               0x1100 // ObjectGuid
+#define EVENT_TRACE_GROUP_POWER                0x1200 // PowerGuid
+#define EVENT_TRACE_GROUP_MODBOUND             0x1300 // ModBoundGuid
+#define EVENT_TRACE_GROUP_IMAGE                0x1400 // ImageLoadGuid
+#define EVENT_TRACE_GROUP_DPC                  0x1500 // DpcGuid
+#define EVENT_TRACE_GROUP_CC                   0x1600 // CcGuid
+#define EVENT_TRACE_GROUP_CRITSEC              0x1700 // CritSecGuid
+#define EVENT_TRACE_GROUP_STACKWALK            0x1800 // StackWalkGuid
+#define EVENT_TRACE_GROUP_UMS                  0x1900 // UmsTraceGuid
+#define EVENT_TRACE_GROUP_ALPC                 0x1A00 // ALPCGuid
+#define EVENT_TRACE_GROUP_SPLITIO              0x1B00 // SplitIoGuid
+#define EVENT_TRACE_GROUP_THREAD_POOL          0x1C00 // ThreadPoolGuid
+#define EVENT_TRACE_GROUP_HYPERVISOR           0x1D00 // HypervisorTraceGuid
+#define EVENT_TRACE_GROUP_HYPERVISORX          0x1E00 // HypervisorXTraceGuid
 
 //
 // If you add any new groups, you must bump up MAX_KERNEL_TRACE_EVENTS
@@ -579,27 +579,13 @@ typedef struct _PERFINFO_GROUPMASK
 #define PERFINFO_OR_GROUP_WITH_GROUPMASK(Group, GroupMask) (GroupMask)->Masks[PERF_GET_MASK_INDEX(Group)] |= PERF_GET_MASK_GROUP(Group)
 #define PERFINFO_CLEAR_GROUP_IN_GROUPMASK(Group, GroupMask) (GroupMask)->Masks[PERF_GET_MASK_INDEX(Group)] &= (~PERF_GET_MASK_GROUP(Group))
 
-/*++
-
-Routine Description:
-
-    Determines whether any group is on in a group mask
-
-Arguments:
-
-    Group - Group index to check.
-
-    GroupMask - pointer to group mask to check.
-
-Return Value:
-
-    Boolean indicating whether it is set or not.
-
-Environment:
-
-    User mode.
-
---*/
+/**
+ * The PerfIsGroupOnInGroupMask routine determines whether any group is enabled in a performance group mask.
+ *
+ * \param Group The group index to check.
+ * \param GroupMask A pointer to the group mask to check.
+ * \return TRUE if the group is enabled in the mask; otherwise, FALSE.
+ */
 FORCEINLINE
 BOOLEAN
 PerfIsGroupOnInGroupMask(
@@ -2670,6 +2656,17 @@ typedef struct _ETW_CREATE_HANDLE_EVENT
 typedef ETW_CREATE_HANDLE_EVENT ETW_CLOSE_HANDLE_EVENT, *PETW_CLOSE_HANDLE_EVENT;
 
 #include <pshpack1.h>
+// ObHandleDuplicateEvent, Version 2.
+typedef struct _ETW_DUPLICATE_HANDLE_EVENT_V2
+{
+    PVOID Object;
+    ULONG SourceHandle;
+    ULONG TargetHandle;
+    ULONG TargetProcessId;
+    USHORT ObjectType;
+} ETW_DUPLICATE_HANDLE_EVENT_V2, *PETW_DUPLICATE_HANDLE_EVENT_V2;
+
+// ObHandleDuplicateEvent, Version 3.
 typedef struct _ETW_DUPLICATE_HANDLE_EVENT
 {
     PVOID Object;
@@ -2679,6 +2676,8 @@ typedef struct _ETW_DUPLICATE_HANDLE_EVENT
     USHORT ObjectType;
     ULONG SourceProcessId;
 } ETW_DUPLICATE_HANDLE_EVENT, *PETW_DUPLICATE_HANDLE_EVENT;
+
+typedef ETW_DUPLICATE_HANDLE_EVENT ETW_DUPLICATE_HANDLE_EVENT_V3, *PETW_DUPLICATE_HANDLE_EVENT_V3;
 #include <poppack.h>
 
 typedef struct _ETW_OBJECT_TYPE_EVENT
@@ -5910,6 +5909,14 @@ typedef struct _EVENT_DESCRIPTOR
 typedef const EVENT_DESCRIPTOR* PCEVENT_DESCRIPTOR;
 #endif
 
+/**
+ * The EtwSetMark routine sets a mark or watermark event in an event tracing session.
+ *
+ * \param TraceHandle Optional handle to an event tracing session.
+ * \param MarkInfo A pointer to the mark information structure describing the mark to inject.
+ * \param Size The size of the mark information structure in bytes.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -5921,6 +5928,19 @@ EtwSetMark(
 
 typedef struct _EVENT_DATA_DESCRIPTOR EVENT_DATA_DESCRIPTOR, *PEVENT_DATA_DESCRIPTOR;
 
+/**
+ * The EtwEventWriteFull routine writes an event to an event tracing session with extended options and activity
+ * identifiers.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param EventProperty Optional event properties or flags.
+ * \param ActivityId Optional pointer to the activity identifier for this event.
+ * \param RelatedActivityId Optional pointer to the related activity identifier for this event.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -5944,6 +5964,12 @@ EtwEventWriteFull(
 //    _Out_ PREGHANDLE RegHandle
 //    );
 
+/**
+ * The EtwEventUnregister routine unregisters an event tracing provider previously registered with EtwEventRegister.
+ *
+ * \param RegHandle The registration handle returned by EtwEventRegister.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -5953,6 +5979,15 @@ EtwEventUnregister(
 
 typedef enum _EVENT_INFO_CLASS EVENT_INFO_CLASS;
 
+/**
+ * The EtwEventSetInformation routine configures registration options for an ETW event provider.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param InformationClass The type of configuration information to set.
+ * \param EventInformation A pointer to the buffer containing the configuration information.
+ * \param InformationLength The size of the configuration information buffer in bytes.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -5963,6 +5998,11 @@ EtwEventSetInformation(
     _In_ ULONG InformationLength
 );
 
+/**
+ * The EtwRegisterSecurityProvider routine registers the ETW user-mode security event provider.
+ *
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -5970,6 +6010,15 @@ EtwRegisterSecurityProvider(
     VOID
 );
 
+/**
+ * The EtwEventProviderEnabled routine determines whether an event provider is enabled for a specified level and
+ * keyword.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param Level The logging level to test.
+ * \param Keyword The keyword bitmask to test.
+ * \return TRUE if the provider is enabled for the specified level and keyword; otherwise, FALSE.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -5979,6 +6028,13 @@ EtwEventProviderEnabled(
     _In_ ULONGLONG Keyword
 );
 
+/**
+ * The EtwEventEnabled routine determines whether a specific event descriptor is enabled for a provider.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param EventDescriptor A pointer to the descriptor of the event to test.
+ * \return TRUE if the event is enabled; otherwise, FALSE.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -5987,6 +6043,15 @@ EtwEventEnabled(
     _In_ PCEVENT_DESCRIPTOR EventDescriptor
 );
 
+/**
+ * The EtwEventWrite routine writes an event to an event tracing session.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -5997,6 +6062,18 @@ EtwEventWrite(
     _In_reads_opt_(UserDataCount) PEVENT_DATA_DESCRIPTOR UserData
 );
 
+/**
+ * The EtwEventWriteTransfer routine writes an event to an event tracing session with activity and related activity
+ * identifiers.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param ActivityId Optional pointer to the activity identifier for this event.
+ * \param RelatedActivityId Optional pointer to the related activity identifier for this event.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6009,6 +6086,15 @@ EtwEventWriteTransfer(
     _In_reads_opt_(UserDataCount) PEVENT_DATA_DESCRIPTOR UserData
 );
 
+/**
+ * The EtwEventWriteString routine writes an event containing a single string to an event tracing session.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param Level The logging level of the event.
+ * \param Keyword The keyword bitmask of the event.
+ * \param String The null-terminated string to write.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6019,6 +6105,19 @@ EtwEventWriteString(
     _In_ PCWSTR String
 );
 
+/**
+ * The EtwEventWriteEx routine writes an event to an event tracing session with filter criteria and flags.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param Filter A filter value used to evaluate whether the event should be logged.
+ * \param Flags Flags controlling event delivery and formatting.
+ * \param ActivityId Optional pointer to the activity identifier for this event.
+ * \param RelatedActivityId Optional pointer to the related activity identifier for this event.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6033,6 +6132,15 @@ EtwEventWriteEx(
     _In_reads_opt_(UserDataCount) PEVENT_DATA_DESCRIPTOR UserData
 );
 
+/**
+ * The EtwEventWriteStartScenario routine writes a scenario start event to an event tracing session.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6043,6 +6151,15 @@ EtwEventWriteStartScenario(
     _In_reads_opt_(UserDataCount) PEVENT_DATA_DESCRIPTOR UserData
 );
 
+/**
+ * The EtwEventWriteEndScenario routine writes a scenario end event to an event tracing session.
+ *
+ * \param RegHandle The registration handle of the provider.
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6053,6 +6170,15 @@ EtwEventWriteEndScenario(
     _In_reads_opt_(UserDataCount) PEVENT_DATA_DESCRIPTOR UserData
 );
 
+/**
+ * The EtwWriteUMSecurityEvent routine writes a user-mode security audit event.
+ *
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param EventProperty Event properties or flags.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6063,6 +6189,16 @@ EtwWriteUMSecurityEvent(
     _In_opt_ PEVENT_DATA_DESCRIPTOR UserData
 );
 
+/**
+ * The EtwEventWriteNoRegistration routine writes an event to an event tracing session without requiring prior provider
+ * registration.
+ *
+ * \param ProviderId A pointer to the provider GUID.
+ * \param EventDescriptor A pointer to the descriptor of the event to write.
+ * \param UserDataCount The number of user data descriptor items in UserData.
+ * \param UserData Optional pointer to an array of event data descriptor items.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6073,6 +6209,13 @@ EtwEventWriteNoRegistration(
     _In_reads_opt_(UserDataCount) PEVENT_DATA_DESCRIPTOR UserData
 );
 
+/**
+ * The EtwEventActivityIdControl routine controls the activity identifier used for event tracing.
+ *
+ * \param ControlCode The operation to perform on the activity identifier.
+ * \param ActivityId A pointer to the activity identifier supplied or returned by the operation.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6081,6 +6224,16 @@ EtwEventActivityIdControl(
     _Inout_ LPGUID ActivityId
 );
 
+/**
+ * The EtwNotificationRegister routine registers a callback to receive ETW notifications for a specified GUID.
+ *
+ * \param Guid A pointer to the notification GUID.
+ * \param Type The notification type flags.
+ * \param Callback The callback function invoked when a notification is delivered.
+ * \param Context Optional context value passed to the callback function.
+ * \param RegHandle Receives the registration handle.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6092,6 +6245,13 @@ EtwNotificationRegister(
     _Out_ PREGHANDLE RegHandle
 );
 
+/**
+ * The EtwNotificationUnregister routine unregisters a previously registered ETW notification callback.
+ *
+ * \param RegHandle The registration handle returned by EtwNotificationRegister.
+ * \param Context Optional pointer receiving the context previously supplied during registration.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6100,6 +6260,16 @@ EtwNotificationUnregister(
     _Out_opt_ PVOID * Context
 );
 
+/**
+ * The EtwSendNotification routine sends an ETW notification to registered notification receivers.
+ *
+ * \param DataBlock A pointer to the notification header and payload to send.
+ * \param ReceiveDataBlockSize The size of the response buffer in bytes.
+ * \param ReceiveDataBlock A pointer to the buffer receiving response data.
+ * \param ReplyReceived Receives the size of the reply received in bytes.
+ * \param ReplySizeNeeded Receives the required buffer size in bytes if ReceiveDataBlockSize was insufficient.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6111,6 +6281,12 @@ EtwSendNotification(
     _Out_ PULONG ReplySizeNeeded
 );
 
+/**
+ * The EtwReplyNotification routine replies to an ETW notification delivered to a notification callback.
+ *
+ * \param Notification A pointer to the notification header and reply data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6118,6 +6294,14 @@ EtwReplyNotification(
     _In_ PETW_NOTIFICATION_HEADER Notification
 );
 
+/**
+ * The EtwEnumerateProcessRegGuids routine enumerates the ETW provider GUIDs registered by processes on the system.
+ *
+ * \param OutBuffer Optional buffer receiving the array of ETW registration GUID information.
+ * \param OutBufferSize The size of OutBuffer in bytes.
+ * \param ReturnLength Receives the number of bytes written or required.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6127,6 +6311,15 @@ EtwEnumerateProcessRegGuids(
     _Out_ PULONG ReturnLength
 );
 
+/**
+ * The EtwQueryRealtimeConsumer routine queries realtime performance and dropped event statistics for a realtime trace
+ * consumer.
+ *
+ * \param TraceHandle The handle to the realtime trace consumer session.
+ * \param EventsLostCount Receives the count of lost events.
+ * \param BuffersLostCount Receives the count of lost buffers.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6603,6 +6796,15 @@ EtwCheckCoverage(
 );
 #endif
 
+/**
+ * Registers an ETW event provider.
+ *
+ * \param ProviderId A pointer to the provider ID.
+ * \param EnableCallback Optional. A pointer to the enable callback function.
+ * \param CallbackContext Optional. A pointer to the callback context.
+ * \param RegHandle A pointer to a variable that receives the registration handle.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -6676,12 +6878,13 @@ WmiQueryAllDataW(
     );
 
 /**
- * The WmiQueryAllDataW function returns all WMI data blocks that implement a given WMI class (Unicode).
+ * The WmiQueryAllDataMultipleA routine queries all data for multiple WMI data blocks (ANSI).
  *
- * \param DataBlockHandle Handle to a WMI data block object.
- * \param BufferLength Pointer to a memory location that specifies the size of the buffer.
- * \param Buffer Pointer to the buffer where the routine returns the WMI data.
- * \return ULONG Successful or errant status.
+ * \param HandleList An array of handles to WMI data blocks.
+ * \param HandleCount The number of handles in HandleList.
+ * \param InOutBufferSize A pointer to a variable specifying buffer size and receiving required size.
+ * \param OutBuffer A pointer to the buffer receiving the query results.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
  */
 NTSYSAPI
 ULONG
@@ -6693,6 +6896,15 @@ WmiQueryAllDataMultipleA(
     _Out_writes_bytes_(*InOutBufferSize) PVOID OutBuffer
     );
 
+/**
+ * The WmiQueryAllDataMultipleW routine queries all data for multiple WMI data blocks (Unicode).
+ *
+ * \param HandleList An array of handles to WMI data blocks.
+ * \param HandleCount The number of handles in HandleList.
+ * \param InOutBufferSize A pointer to a variable specifying buffer size and receiving required size.
+ * \param OutBuffer A pointer to the buffer receiving the query results.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6703,6 +6915,15 @@ WmiQueryAllDataMultipleW(
     _Out_writes_bytes_(*InOutBufferSize) PVOID OutBuffer
     );
 
+/**
+ * The WmiQuerySingleInstanceA routine queries a single instance of a WMI data block (ANSI).
+ *
+ * \param DataBlockHandle A handle to a WMI data block.
+ * \param InstanceName The instance name to query.
+ * \param BufferSize A pointer to a variable specifying buffer size and receiving required size.
+ * \param Buffer A pointer to the buffer receiving instance data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6713,6 +6934,15 @@ WmiQuerySingleInstanceA(
     _Out_writes_bytes_to_opt_(*BufferSize, *BufferSize) PVOID Buffer
     );
 
+/**
+ * The WmiQuerySingleInstanceW routine queries a single instance of a WMI data block (Unicode).
+ *
+ * \param DataBlockHandle A handle to a WMI data block.
+ * \param InstanceName The instance name to query.
+ * \param BufferSize A pointer to a variable specifying buffer size and receiving required size.
+ * \param Buffer A pointer to the buffer receiving instance data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6723,6 +6953,16 @@ WmiQuerySingleInstanceW(
     _Out_writes_bytes_to_opt_(*BufferSize, *BufferSize) PVOID Buffer
     );
 
+/**
+ * The WmiQuerySingleInstanceMultipleW routine queries multiple single instances across WMI data blocks (Unicode).
+ *
+ * \param HandleList An array of handles to WMI data blocks.
+ * \param InstanceNames An array of instance names corresponding to each data block.
+ * \param HandleCount The number of handles in HandleList.
+ * \param InOutBufferSize A pointer to a variable specifying buffer size and receiving required size.
+ * \param OutBuffer A pointer to the buffer receiving the instance data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6734,6 +6974,16 @@ WmiQuerySingleInstanceMultipleW(
     _Out_writes_bytes_to_opt_(*InOutBufferSize, *InOutBufferSize) PVOID OutBuffer
     );
 
+/**
+ * The WmiQuerySingleInstanceMultipleA routine queries multiple single instances across WMI data blocks (ANSI).
+ *
+ * \param HandleList An array of handles to WMI data blocks.
+ * \param InstanceNames An array of instance names corresponding to each data block.
+ * \param HandleCount The number of handles in HandleList.
+ * \param InOutBufferSize A pointer to a variable specifying buffer size and receiving required size.
+ * \param OutBuffer A pointer to the buffer receiving the instance data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6745,6 +6995,16 @@ WmiQuerySingleInstanceMultipleA(
     _Out_writes_bytes_to_opt_(*InOutBufferSize, *InOutBufferSize) PVOID OutBuffer
     );
 
+/**
+ * The WmiSetSingleInstanceA routine sets the data for a single instance of a WMI data block (ANSI).
+ *
+ * \param DataBlockHandle A handle to a WMI data block.
+ * \param InstanceName The name of the instance to set.
+ * \param Reserved Reserved; must be zero.
+ * \param ValueBufferSize The size of ValueBuffer in bytes.
+ * \param ValueBuffer A pointer to the buffer containing new instance data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6756,6 +7016,16 @@ WmiSetSingleInstanceA(
     _In_reads_bytes_(ValueBufferSize) PVOID ValueBuffer
     );
 
+/**
+ * The WmiSetSingleInstanceW routine sets the data for a single instance of a WMI data block (Unicode).
+ *
+ * \param DataBlockHandle A handle to a WMI data block.
+ * \param InstanceName The name of the instance to set.
+ * \param Reserved Reserved; must be zero.
+ * \param ValueBufferSize The size of ValueBuffer in bytes.
+ * \param ValueBuffer A pointer to the buffer containing new instance data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6767,6 +7037,17 @@ WmiSetSingleInstanceW(
     _In_reads_bytes_(ValueBufferSize) PVOID ValueBuffer
     );
 
+/**
+ * The WmiSetSingleItemA routine sets the value of a single data item in a WMI instance (ANSI).
+ *
+ * \param DataBlockHandle A handle to a WMI data block.
+ * \param InstanceName The name of the instance containing the item.
+ * \param DataItemId The identifier of the data item to set.
+ * \param Reserved Reserved; must be zero.
+ * \param ValueBufferSize The size of ValueBuffer in bytes.
+ * \param ValueBuffer A pointer to the buffer containing new item data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6779,6 +7060,17 @@ WmiSetSingleItemA(
     _In_reads_bytes_(ValueBufferSize) PVOID ValueBuffer
     );
 
+/**
+ * The WmiSetSingleItemW routine sets the value of a single data item in a WMI instance (Unicode).
+ *
+ * \param DataBlockHandle A handle to a WMI data block.
+ * \param InstanceName The name of the instance containing the item.
+ * \param DataItemId The identifier of the data item to set.
+ * \param Reserved Reserved; must be zero.
+ * \param ValueBufferSize The size of ValueBuffer in bytes.
+ * \param ValueBuffer A pointer to the buffer containing new item data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6791,6 +7083,18 @@ WmiSetSingleItemW(
     _In_reads_bytes_(ValueBufferSize) PVOID ValueBuffer
     );
 
+/**
+ * The WmiExecuteMethodA routine executes a method on a WMI instance (ANSI).
+ *
+ * \param MethodDataBlockHandle A handle to the WMI data block containing the method.
+ * \param MethodInstanceName The name of the instance executing the method.
+ * \param MethodId The identifier of the method to execute.
+ * \param InputBufferSize The size of the input parameters in bytes.
+ * \param InputBuffer Optional pointer to input parameters for the method.
+ * \param OutputBufferSize Optional pointer specifying buffer size and receiving required size.
+ * \param OutputBuffer Optional pointer receiving method output data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6804,6 +7108,18 @@ WmiExecuteMethodA(
     _Out_writes_bytes_opt_(*OutputBufferSize) PVOID OutputBuffer
     );
 
+/**
+ * The WmiExecuteMethodW routine executes a method on a WMI instance (Unicode).
+ *
+ * \param MethodDataBlockHandle A handle to the WMI data block containing the method.
+ * \param MethodInstanceName The name of the instance executing the method.
+ * \param MethodId The identifier of the method to execute.
+ * \param InputBufferSize The size of the input parameters in bytes.
+ * \param InputBuffer Optional pointer to input parameters for the method.
+ * \param OutputBufferSize Optional pointer specifying buffer size and receiving required size.
+ * \param OutputBuffer Optional pointer receiving method output data.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6836,13 +7152,26 @@ VOID NTAPI NOTIFICATIONCALLBACK(
     );
 typedef NOTIFICATIONCALLBACK* PNOTIFICATIONCALLBACK;
 
+/** GUID for WMI registration-change notifications. */
 // {B48D49A1-E777-11d0-A50C-00A0C9062910}
 DEFINE_GUID(GUID_REGISTRATION_CHANGE_NOTIFICATION,0xb48d49a1, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10);
+/** GUID for WMI MOF-resource-added notifications. */
 // {B48D49A2-E777-11d0-A50C-00A0C9062910}
 DEFINE_GUID(GUID_MOF_RESOURCE_ADDED_NOTIFICATION,0xb48d49a2, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10);
+/** GUID for WMI MOF-resource-removed notifications. */
 // {B48D49A3-E777-11d0-A50C-00A0C9062910}
 DEFINE_GUID(GUID_MOF_RESOURCE_REMOVED_NOTIFICATION,0xb48d49a3, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10);
 
+/**
+ * The WmiNotificationRegistrationA routine registers or unregisters a caller to receive WMI event notifications (ANSI).
+ *
+ * \param Guid A pointer to the GUID for which notifications are requested.
+ * \param Enable TRUE to enable notifications; FALSE to disable notifications.
+ * \param DeliveryInfo Delivery mechanism information, such as an event handle or callback routine.
+ * \param DeliveryContext Context value passed to the notification delivery mechanism.
+ * \param Flags Flags controlling the notification registration.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6854,6 +7183,17 @@ WmiNotificationRegistrationA(
     _In_ ULONG Flags
     );
 
+/**
+ * The WmiNotificationRegistrationW routine registers or unregisters a caller to receive WMI event notifications
+ * (Unicode).
+ *
+ * \param Guid A pointer to the GUID for which notifications are requested.
+ * \param Enable TRUE to enable notifications; FALSE to disable notifications.
+ * \param DeliveryInfo Delivery mechanism information, such as an event handle or callback routine.
+ * \param DeliveryContext Context value passed to the notification delivery mechanism.
+ * \param Flags Flags controlling the notification registration.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6865,6 +7205,14 @@ WmiNotificationRegistrationW(
     _In_ ULONG Flags
     );
 
+/**
+ * The WmiEnumerateGuids routine enumerates all WMI GUIDs registered on the system.
+ *
+ * \param GuidList Optional pointer to a buffer receiving the array of GUIDs.
+ * \param GuidCount A pointer to a variable specifying buffer capacity in GUIDs and receiving the count of returned
+ * GUIDs.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6901,6 +7249,14 @@ typedef struct _MOFRESOURCEINFOW MOFRESOURCEINFO, *PMOFRESOURCEINFO;
 typedef struct _MOFRESOURCEINFOA MOFRESOURCEINFO, *PMOFRESOURCEINFO;
 #endif
 
+/**
+ * The WmiMofEnumerateResourcesW routine enumerates MOF resources attached to an open WMI device or driver (Unicode).
+ *
+ * \param MofResourceHandle A handle to the MOF resource provider.
+ * \param MofResourceCount Receives the count of MOF resource structures returned.
+ * \param MofResourceInfo Receives a pointer to an array of MOFRESOURCEINFOW structures.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6910,6 +7266,14 @@ WmiMofEnumerateResourcesW(
     _Outptr_result_buffer_(*MofResourceCount) PMOFRESOURCEINFOW *MofResourceInfo
     );
 
+/**
+ * The WmiMofEnumerateResourcesA routine enumerates MOF resources attached to an open WMI device or driver (ANSI).
+ *
+ * \param MofResourceHandle A handle to the MOF resource provider.
+ * \param MofResourceCount Receives the count of MOF resource structures returned.
+ * \param MofResourceInfo Receives a pointer to an array of MOFRESOURCEINFOA structures.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6919,6 +7283,15 @@ WmiMofEnumerateResourcesA(
     _Outptr_result_buffer_(*MofResourceCount) PMOFRESOURCEINFOA *MofResourceInfo
     );
 
+/**
+ * The WmiFileHandleToInstanceNameA routine translates a file handle to a WMI instance name (ANSI).
+ *
+ * \param DataBlockHandle A handle to the WMI data block.
+ * \param FileHandle A file handle to translate.
+ * \param NumberCharacters A pointer specifying buffer capacity in characters and receiving returned character count.
+ * \param InstanceNames A pointer to the buffer receiving the instance name.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6929,6 +7302,15 @@ WmiFileHandleToInstanceNameA(
     _Out_writes_(*NumberCharacters) CHAR *InstanceNames
     );
 
+/**
+ * The WmiFileHandleToInstanceNameW routine translates a file handle to a WMI instance name (Unicode).
+ *
+ * \param DataBlockHandle A handle to the WMI data block.
+ * \param FileHandle A file handle to translate.
+ * \param NumberCharacters A pointer specifying buffer capacity in characters and receiving returned character count.
+ * \param InstanceNames A pointer to the buffer receiving the instance name.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6939,6 +7321,15 @@ WmiFileHandleToInstanceNameW(
     _Out_writes_(*NumberCharacters) WCHAR *InstanceNames
     );
 
+/**
+ * The WmiDevInstToInstanceNameA routine translates a device instance identifier to a WMI instance name (ANSI).
+ *
+ * \param InstanceName Optional buffer receiving the translated instance name.
+ * \param InstanceNameLength The size of InstanceName in characters.
+ * \param DevInst The device instance identifier string.
+ * \param InstanceIndex The instance index within the device.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6949,6 +7340,15 @@ WmiDevInstToInstanceNameA(
     _In_ ULONG InstanceIndex
     );
 
+/**
+ * The WmiDevInstToInstanceNameW routine translates a device instance identifier to a WMI instance name (Unicode).
+ *
+ * \param InstanceName Optional buffer receiving the translated instance name.
+ * \param InstanceNameLength The size of InstanceName in characters.
+ * \param DevInst The device instance identifier string.
+ * \param InstanceIndex The instance index within the device.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6966,6 +7366,13 @@ typedef struct _WMIGUIDINFORMATION
     BOOLEAN IsEventOnly;
 } WMIGUIDINFORMATION, *PWMIGUIDINFORMATION;
 
+/**
+ * The WmiQueryGuidInformation routine queries information about a WMI GUID.
+ *
+ * \param GuidHandle A handle to the WMI GUID.
+ * \param GuidInfo A pointer to a structure receiving the GUID information.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6974,6 +7381,15 @@ WmiQueryGuidInformation(
     _Out_ PWMIGUIDINFORMATION GuidInfo
     );
 
+/**
+ * The WmiReceiveNotificationsW routine waits for and receives WMI event notifications (Unicode).
+ *
+ * \param HandleCount The number of event handles in HandleList.
+ * \param HandleList An array of event handles to wait on.
+ * \param Callback The callback function invoked when a notification arrives.
+ * \param DeliveryContext Context value passed to the notification callback.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6984,6 +7400,15 @@ WmiReceiveNotificationsW(
     _In_ ULONG_PTR DeliveryContext
     );
 
+/**
+ * The WmiReceiveNotificationsA routine waits for and receives WMI event notifications (ANSI).
+ *
+ * \param HandleCount The number of event handles in HandleList.
+ * \param HandleList An array of event handles to wait on.
+ * \param Callback The callback function invoked when a notification arrives.
+ * \param DeliveryContext Context value passed to the notification callback.
+ * \return A Win32 error code. ERROR_SUCCESS on success.
+ */
 NTSYSAPI
 ULONG
 NTAPI
@@ -6997,6 +7422,11 @@ WmiReceiveNotificationsA(
 #define WmiInsertTimestamp(WnodeHeader) \
     GetSystemTimeAsFileTime((PFILETIME)&((PWNODE_HEADER)(WnodeHeader))->TimeStamp)
 
+/**
+ * The WmiFreeBuffer routine frees a buffer allocated by WMI routines.
+ *
+ * \param Buffer A pointer to the buffer to free.
+ */
 NTSYSAPI
 VOID
 NTAPI

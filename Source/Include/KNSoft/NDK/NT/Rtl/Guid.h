@@ -32,6 +32,9 @@ EXTERN_C_START
 // null terminator.
 //
 
+/**
+ * Constants describing the length of a GUID string.
+ */
 #define RTL_GUID_STRING_SIZE 38
 
 /**
@@ -51,6 +54,14 @@ RtlStringFromGUID(
     _In_ PCGUID Guid,
     _Out_ _At_(GuidString->Buffer, __drv_allocatesMem(Mem)) PUNICODE_STRING GuidString);
 
+/**
+ * The RtlGUIDFromString routine converts the Unicode string representation of a GUID into a GUID structure.
+ *
+ * \param GuidString A pointer to the Unicode string that contains the GUID.
+ * \param Guid A pointer to a variable that receives the converted GUID.
+ * \return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlguidfromstring
+ */
 _IRQL_requires_max_(PASSIVE_LEVEL)
 _Must_inspect_result_
 NTSYSAPI
@@ -64,6 +75,16 @@ RtlGUIDFromString(
 
 #if (NTDDI_VERSION >= NTDDI_WINBLUE)
 // rev
+/**
+ * The RtlStringFromGUIDEx routine converts a GUID into its Unicode string representation, optionally allocating the
+ * destination string.
+ *
+ * \param Guid A pointer to the GUID to convert.
+ * \param GuidString A pointer to the Unicode string that receives the string representation. If AllocateGuidString is
+ * `TRUE`, the buffer is allocated by the routine.
+ * \param AllocateGuidString If `TRUE`, the routine allocates the destination string buffer.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI

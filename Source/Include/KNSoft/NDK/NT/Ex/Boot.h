@@ -110,6 +110,10 @@ NtSetSystemEnvironmentValueEx(
     _In_ ULONG Attributes // EFI_VARIABLE_*
 );
 
+/**
+ * The SYSTEM_ENVIRONMENT_INFORMATION_CLASS enumeration defines the information classes for querying and setting
+ * firmware environment variables.
+ */
 typedef enum _SYSTEM_ENVIRONMENT_INFORMATION_CLASS
 {
     SystemEnvironmentNameInformation = 1, // q: VARIABLE_NAME
@@ -117,6 +121,9 @@ typedef enum _SYSTEM_ENVIRONMENT_INFORMATION_CLASS
     MaxSystemEnvironmentInfoClass
 } SYSTEM_ENVIRONMENT_INFORMATION_CLASS;
 
+/**
+ * The VARIABLE_NAME structure describes the name and vendor GUID of a firmware environment variable.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _VARIABLE_NAME
 {
@@ -125,6 +132,9 @@ typedef struct _VARIABLE_NAME
     WCHAR Name[ANYSIZE_ARRAY];
 } VARIABLE_NAME, *PVARIABLE_NAME;
 
+/**
+ * The VARIABLE_NAME_AND_VALUE structure describes the name, vendor GUID, and value of a firmware environment variable.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _VARIABLE_NAME_AND_VALUE
 {
@@ -155,6 +165,9 @@ NtEnumerateSystemEnvironmentValuesEx(
     _Inout_ PULONG BufferLength);
 
 // private
+/**
+ * The BOOT_ENTRY structure describes a single boot entry in the firmware boot configuration.
+ */
 typedef struct _BOOT_ENTRY
 {
     ULONG Version;
@@ -168,6 +181,9 @@ typedef struct _BOOT_ENTRY
 } BOOT_ENTRY, *PBOOT_ENTRY;
 
 // private
+/**
+ * The BOOT_ENTRY_LIST structure describes a linked list of boot entries.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _BOOT_ENTRY_LIST
 {
@@ -176,6 +192,9 @@ typedef struct _BOOT_ENTRY_LIST
 } BOOT_ENTRY_LIST, *PBOOT_ENTRY_LIST;
 
 // private
+/**
+ * The BOOT_OPTIONS structure describes the global boot options stored in the firmware boot configuration.
+ */
 typedef struct _BOOT_OPTIONS
 {
     ULONG Version;
@@ -187,6 +206,9 @@ typedef struct _BOOT_OPTIONS
 } BOOT_OPTIONS, *PBOOT_OPTIONS;
 
 // private
+/**
+ * The FILE_PATH structure describes a file path used by the boot configuration.
+ */
 typedef struct _FILE_PATH
 {
     ULONG Version;
@@ -196,6 +218,9 @@ typedef struct _FILE_PATH
 } FILE_PATH, *PFILE_PATH;
 
 // private
+/**
+ * The EFI_DRIVER_ENTRY structure describes a single EFI driver entry in the firmware boot configuration.
+ */
 typedef struct _EFI_DRIVER_ENTRY
 {
     ULONG Version;
@@ -206,6 +231,9 @@ typedef struct _EFI_DRIVER_ENTRY
 } EFI_DRIVER_ENTRY, *PEFI_DRIVER_ENTRY;
 
 // private
+/**
+ * The EFI_DRIVER_ENTRY_LIST structure describes a linked list of EFI driver entries.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _EFI_DRIVER_ENTRY_LIST
 {
@@ -434,6 +462,9 @@ NtSetDriverEntryOrder(
     _In_reads_(Count) PULONG Ids,
     _In_ ULONG Count);
 
+/**
+ * The FILTER_BOOT_OPTION_OPERATION enumeration defines the operations that can be applied when filtering boot options.
+ */
 typedef enum _FILTER_BOOT_OPTION_OPERATION
 {
     FilterBootOptionOperationOpenSystemStore,

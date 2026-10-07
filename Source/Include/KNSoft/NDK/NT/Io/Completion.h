@@ -7,6 +7,9 @@ EXTERN_C_START
 #pragma region I/O Completion Port
 
 // private
+/**
+ * The FILE_IO_COMPLETION_INFORMATION structure describes an I/O completion entry removed from an I/O completion port.
+ */
 typedef struct _FILE_IO_COMPLETION_INFORMATION
 {
     PVOID KeyContext;

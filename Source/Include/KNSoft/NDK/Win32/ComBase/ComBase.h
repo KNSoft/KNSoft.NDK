@@ -18,6 +18,9 @@ typedef enum _MTA_HOST_USAGE_FLAGS
 DEFINE_ENUM_FLAG_OPERATORS(MTA_HOST_USAGE_FLAGS);
 
 // private
+/**
+ * The MTA_USAGE_GLOBALS structure contains the global state used to track COM multithreaded apartment (MTA) usage.
+ */
 typedef struct _MTA_USAGE_GLOBALS
 {
     _Reserved_ ULONG StackCapture;
@@ -34,6 +37,11 @@ typedef struct _MTA_USAGE_GLOBALS
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 // private // combase.dll, ordinal 70
+/**
+ * The CoGetMTAUsageInfo routine retrieves the global multithreaded apartment (MTA) usage tracking structure.
+ *
+ * \return A pointer to the MTA_USAGE_GLOBALS structure if MTA usage information is available; otherwise, NULL.
+ */
 _Success_(return != 0)
 _Must_inspect_result_
 WINBASEAPI

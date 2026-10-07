@@ -217,6 +217,9 @@ typedef struct _MOUNTMGR_SILO_ARRIVAL_INPUT
      (s)->Buffer[47] == '}')
 
 // Output structure for IOCTL_MOUNTDEV_QUERY_DEVICE_NAME.
+/**
+ * The MOUNTDEV_NAME structure contains a device name returned by a mount-manager device.
+ */
 typedef struct _MOUNTDEV_NAME
 {
     USHORT NameLength;
@@ -224,6 +227,9 @@ typedef struct _MOUNTDEV_NAME
 } MOUNTDEV_NAME, *PMOUNTDEV_NAME;
 
 // Output structure for IOCTL_MOUNTMGR_QUERY_DOS_VOLUME_PATH and IOCTL_MOUNTMGR_QUERY_DOS_VOLUME_PATHS.
+/**
+ * The MOUNTMGR_VOLUME_PATHS structure contains the set of volume paths (drive letters and mount points) for a volume.
+ */
 typedef struct _MOUNTMGR_VOLUME_PATHS
 {
     ULONG MultiSzLength;

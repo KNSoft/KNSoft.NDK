@@ -515,6 +515,12 @@ typedef const LDR_DATA_TABLE_ENTRY32* PCLDR_DATA_TABLE_ENTRY32;
 
 #pragma region Load
 
+/**
+ * The LdrInitializeThunk routine is the loader initialization routine invoked when a new thread begins execution.
+ *
+ * \param ContextRecord The initial thread context to resume after loader initialization.
+ * \param Parameter The system startup argument for the thread.
+ */
 NTSYSAPI
 VOID
 NTAPI
@@ -522,6 +528,11 @@ LdrInitializeThunk(
     _In_ PCONTEXT ContextRecord,
     _In_ PVOID Parameter);
 
+/**
+ * The LdrProcessInitializationComplete routine signals that process initialization performed by the loader is complete.
+ *
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -697,6 +708,17 @@ LdrGetProcedureAddress(
 
 #define LDR_GET_PROCEDURE_ADDRESS_DONT_RECORD_FORWARDER 0x00000001
 
+/**
+ * The LdrGetProcedureAddressEx routine retrieves the address of an exported function or variable from the specified
+ * DLL.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param ProcedureName An optional pointer to an ANSI_STRING structure containing the name of the function.
+ * \param ProcedureNumber An optional ordinal of the function.
+ * \param ProcedureAddress A pointer that receives the address of the exported function or variable.
+ * \param Flags Flags to modify the behavior of the function.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -708,6 +730,14 @@ LdrGetProcedureAddressEx(
     _In_ ULONG Flags // LDR_GET_PROCEDURE_ADDRESS_*
     );
 
+/**
+ * The LdrGetKnownDllSectionHandle routine retrieves a section handle for a known DLL.
+ *
+ * \param DllName The name of the DLL.
+ * \param KnownDlls32 TRUE if the known DLL is 32-bit, FALSE otherwise.
+ * \param SectionHandle A pointer to a variable that receives the section handle.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -719,6 +749,18 @@ LdrGetKnownDllSectionHandle(
 
 #if (NTDDI_VERSION >= NTDDI_WIN10)
 // rev
+/**
+ * The LdrGetProcedureAddressForCaller routine retrieves the address of an exported function or variable from the
+ * specified DLL.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param ProcedureName An optional pointer to an ANSI_STRING structure containing the name of the function.
+ * \param ProcedureNumber An optional ordinal of the function.
+ * \param ProcedureAddress A pointer that receives the address of the exported function or variable.
+ * \param Flags Flags to modify the behavior of the function.
+ * \param CallerAddress The address of the caller.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -732,6 +774,12 @@ LdrGetProcedureAddressForCaller(
     );
 #endif
 
+/**
+ * The LdrDisableThreadCalloutsForDll routine disables thread callouts for the specified DLL.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -816,6 +864,11 @@ LdrRemoveDllDirectory(
 
 #if NTDDI_VERSION >= NTDDI_WIN10
 // Deprecated
+/**
+ * The LdrStandardizeSystemPath routine standardizes a system path.
+ *
+ * \param SystemPath A pointer to a UNICODE_STRING structure containing the system path.
+ */
 NTSYSAPI
 PUNICODE_STRING
 NTAPI
@@ -835,6 +888,15 @@ LdrStandardizeSystemPath(
 #define LDR_LOCK_LOADER_LOCK_DISPOSITION_LOCK_ACQUIRED 1
 #define LDR_LOCK_LOADER_LOCK_DISPOSITION_LOCK_NOT_ACQUIRED 2
 
+/**
+ * The LdrLockLoaderLock routine acquires the loader lock.
+ *
+ * \param Flags Flags to modify the behavior of the function (e.g., LDR_LOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS).
+ * \param Disposition An optional pointer to a variable that receives the disposition of the lock
+ * (LDR_LOCK_LOADER_LOCK_DISPOSITION_*).
+ * \param Cookie A pointer to a variable that receives a cookie for the lock, which is used to release it.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -845,6 +907,13 @@ LdrLockLoaderLock(
 
 #define LDR_UNLOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS 0x00000001
 
+/**
+ * The LdrUnlockLoaderLock routine releases the loader lock.
+ *
+ * \param Flags Flags to modify the behavior of the function (e.g., LDR_UNLOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS).
+ * \param Cookie The cookie received from LdrLockLoaderLock.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -857,6 +926,15 @@ LdrUnlockLoaderLock(
 #pragma region Relocate
 
 // private
+/**
+ * The LdrProcessRelocationBlock routine processes a relocation block.
+ *
+ * \param VA The virtual address of the relocation block.
+ * \param SizeOfBlock The size of the relocation block.
+ * \param NextOffset A pointer to the next offset.
+ * \param Diff The difference to apply to the relocations.
+ * \return PIMAGE_BASE_RELOCATION A pointer to the next relocation block.
+ */
 _Must_inspect_result_
 _Maybenull_
 NTSYSAPI
@@ -871,6 +949,16 @@ LdrProcessRelocationBlock(
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
 // private
+/**
+ * The LdrProcessRelocationBlockEx routine processes a relocation block for a specific machine type.
+ *
+ * \param Machine The machine type for the relocation (e.g., IMAGE_FILE_MACHINE_AMD64).
+ * \param VA The virtual address of the relocation block.
+ * \param SizeOfBlock The size of the relocation block.
+ * \param NextOffset A pointer to the next offset.
+ * \param Diff The difference to apply to the relocations.
+ * \return PIMAGE_BASE_RELOCATION A pointer to the next relocation block.
+ */
 _Must_inspect_result_
 _Maybenull_
 NTSYSAPI
@@ -907,6 +995,15 @@ LDR_IMPORT_MODULE_CALLBACK(
 typedef LDR_IMPORT_MODULE_CALLBACK *PLDR_IMPORT_MODULE_CALLBACK;
 
 // private
+/**
+ * The LdrVerifyImageMatchesChecksum routine verifies that an image matches its checksum.
+ *
+ * \param ImageFileHandle A handle to the image file.
+ * \param ImportCallbackRoutine An optional pointer to a callback routine for imports.
+ * \param ImportCallbackParameter A pointer to a parameter to pass to the callback routine.
+ * \param ImageCharacteristics An optional pointer to a variable that receives the image characteristics.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -946,6 +1043,13 @@ typedef struct _LDR_VERIFY_IMAGE_INFO
     USHORT ImageCharacteristics;
 } LDR_VERIFY_IMAGE_INFO, *PLDR_VERIFY_IMAGE_INFO;
 
+/**
+ * The LdrVerifyImageMatchesChecksumEx routine verifies that an image matches its checksum with extended information.
+ *
+ * \param ImageFileHandle A handle to the image file.
+ * \param VerifyInfo A pointer to a LDR_VERIFY_IMAGE_INFO structure.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -964,6 +1068,11 @@ typedef struct _LDR_FAILURE_DATA
     WCHAR AdditionalInfo[0x20];
 } LDR_FAILURE_DATA, *PLDR_FAILURE_DATA;
 
+/**
+ * The LdrGetFailureData routine retrieves failure data from the loader.
+ *
+ * \return PLDR_FAILURE_DATA A pointer to the loader failure data.
+ */
 NTSYSAPI
 PLDR_FAILURE_DATA
 NTAPI
@@ -1124,6 +1233,13 @@ typedef struct _RTL_SCPCFG_NTDLL_EXPORTS
         PVOID NtOpenSection;
         PVOID NtMapViewOfSection;
     } LdrpCriticalLoaderFunctions;
+    struct
+    {
+        PVOID SymCryptMd4Init;
+        PVOID SymCryptMd4Append;
+        PVOID SymCryptMd4AppendBlocks;
+        PVOID SymCryptMd4StateCopy;
+    } SymCryptMd4Algorithm_default;
 } RTL_SCPCFG_NTDLL_EXPORTS, *PRTL_SCPCFG_NTDLL_EXPORTS;
 
 // rev
@@ -1136,6 +1252,16 @@ NTSYSAPI RTL_SCPCFG_NTDLL_EXPORTS RtlpScpCfgNtdllExports;
 #pragma region Load as Data Table
 
 // private
+/**
+ * The LdrAddLoadAsDataTable routine adds a loaded DLL to the loader data table.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param FilePath An optional pointer to a wide-character string containing the file path.
+ * \param FileSize The size of the file.
+ * \param FileHandle A handle to the file.
+ * \param ActCtx An optional pointer to an activation context.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1148,6 +1274,15 @@ LdrAddLoadAsDataTable(
     );
 
 // private
+/**
+ * The LdrRemoveLoadAsDataTable routine removes a loaded DLL from the loader data table.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param BaseModule A pointer to a variable that receives the base address of the module.
+ * \param FileSize An optional pointer to a variable that receives the file size.
+ * \param Flags Flags to modify the behavior of the function.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1159,6 +1294,13 @@ LdrRemoveLoadAsDataTable(
     );
 
 // private
+/**
+ * The LdrGetFileNameFromLoadAsDataTable routine retrieves the file name of a DLL loaded as a data table.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param FileName A pointer to a variable that receives a pointer to the file name.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1176,7 +1318,7 @@ LdrGetFileNameFromLoadAsDataTable(
 typedef struct _LDR_RESLOADER_RET
 {
     PVOID Module;
-    PVOID DataEntry;
+    PIMAGE_RESOURCE_DATA_ENTRY DataEntry;
     PVOID TargetModule;
 } LDR_RESLOADER_RET, *PLDR_RESLOADER_RET;
 
@@ -1581,6 +1723,16 @@ LdrLoadAlternateResourceModule(
 // Flags for LdrLoadAlternateResourceModuleEx
 #define LDR_LOAD_ALT_RESOURCE_MUN_MODE 0x01000000u // Use .mun files instead of .mui files
 
+/**
+ * The LdrLoadAlternateResourceModuleEx routine loads an alternate resource module for a specific language.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param LanguageId The language ID for the alternate resource module.
+ * \param BaseAddress A pointer to a variable that receives the base address of the loaded module.
+ * \param Size An optional pointer to a variable that receives the size of the loaded module.
+ * \param Flags Flags to modify the behavior of the function.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1592,12 +1744,25 @@ LdrLoadAlternateResourceModuleEx(
     _In_ ULONG Flags);
 
 // rev
+/**
+ * The LdrUnloadAlternateResourceModule routine unloads an alternate resource module.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \return BOOLEAN TRUE if the module was successfully unloaded, FALSE otherwise.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
 LdrUnloadAlternateResourceModule(
     _In_ PVOID DllHandle);
 
+/**
+ * The LdrUnloadAlternateResourceModuleEx routine unloads an alternate resource module with extended options.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param Flags Flags to modify the behavior of the function.
+ * \return BOOLEAN TRUE if the module was successfully unloaded, FALSE otherwise.
+ */
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -1654,6 +1819,14 @@ typedef struct _RTL_PROCESS_MODULE_INFORMATION_EX
     PVOID DefaultBase;
 } RTL_PROCESS_MODULE_INFORMATION_EX, *PRTL_PROCESS_MODULE_INFORMATION_EX;
 
+/**
+ * The LdrQueryProcessModuleInformation routine queries information about the modules loaded in the process.
+ *
+ * \param ModuleInformation An optional pointer to a RTL_PROCESS_MODULES structure to receive the module information.
+ * \param Size An optional size of the module information buffer.
+ * \param ReturnedSize An optional pointer to a variable that receives the actual size of the module information.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1710,6 +1883,14 @@ LDR_ENUM_CALLBACK32(
     _Out_ PBOOLEAN Stop);
 typedef LDR_ENUM_CALLBACK32 *PLDR_ENUM_CALLBACK32;
 
+/**
+ * The LdrEnumerateLoadedModules routine enumerates the modules loaded in the current process.
+ *
+ * \param ReservedFlag Reserved flag.
+ * \param EnumProc A pointer to a callback function to be called for each module.
+ * \param Context An optional context to pass to the callback function.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1722,6 +1903,14 @@ LdrEnumerateLoadedModules(
 
 #pragma region IFEO
 
+/**
+ * The LdrOpenImageFileOptionsKey routine opens the image file options key.
+ *
+ * \param SubKey A pointer to a UNICODE_STRING structure containing the subkey.
+ * \param Wow64 TRUE if the key is for WOW64, FALSE otherwise.
+ * \param NewKeyHandle A pointer to a variable that receives the new key handle.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1730,6 +1919,17 @@ LdrOpenImageFileOptionsKey(
     _In_ BOOLEAN Wow64,
     _Out_ PHANDLE NewKeyHandle);
 
+/**
+ * The LdrQueryImageFileKeyOption routine queries an image file key option.
+ *
+ * \param KeyHandle A handle to the key.
+ * \param ValueName The name of the value to query.
+ * \param Type The type of the value.
+ * \param Buffer A pointer to a buffer to receive the value.
+ * \param BufferSize The size of the buffer.
+ * \param ReturnedLength An optional pointer to a variable that receives the length of the returned value.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1741,6 +1941,17 @@ LdrQueryImageFileKeyOption(
     _In_ ULONG BufferSize,
     _Out_opt_ PULONG ReturnedLength);
 
+/**
+ * The LdrQueryImageFileExecutionOptions routine queries image file execution options.
+ *
+ * \param SubKey A pointer to a UNICODE_STRING structure containing the subkey.
+ * \param ValueName The name of the value to query.
+ * \param ValueSize The size of the value.
+ * \param Buffer A pointer to a buffer to receive the value.
+ * \param BufferSize The size of the buffer.
+ * \param ReturnedLength An optional pointer to a variable that receives the length of the returned value.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -1752,6 +1963,18 @@ LdrQueryImageFileExecutionOptions(
     _In_ ULONG BufferSize,
     _Out_opt_ PULONG ReturnedLength);
 
+/**
+ * The LdrQueryImageFileExecutionOptionsEx routine queries image file execution options with extended information.
+ *
+ * \param SubKey A pointer to a UNICODE_STRING structure containing the subkey.
+ * \param ValueName The name of the value to query.
+ * \param Type The type of the value.
+ * \param Buffer A pointer to a buffer to receive the value.
+ * \param BufferSize The size of the buffer.
+ * \param ReturnedLength An optional pointer to a variable that receives the length of the returned value.
+ * \param Wow64 TRUE if the key is for WOW64, FALSE otherwise.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -2055,6 +2278,14 @@ LdrLoadEnclaveModule(
 
 #pragma endregion
 
+/**
+ * The LdrQueryModuleServiceTags routine queries the service tags associated with a module.
+ *
+ * \param DllHandle A handle to the DLL module.
+ * \param ServiceTagBuffer A pointer to a buffer to receive the service tags.
+ * \param BufferSize A pointer to a variable that specifies the size of the buffer, and receives the required size.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -2064,10 +2295,18 @@ LdrQueryModuleServiceTags(
     _Inout_ PULONG BufferSize);
 
 #if (NTDDI_VERSION >= NTDDI_WINBLUE)
+/**
+ * The LdrSetImplicitPathOptions routine sets implicit path options.
+ *
+ * \param[in] DllHandle The DLL handle.
+ * \param[in] ImplicitPathOptions The implicit path options to set.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
 LdrSetImplicitPathOptions(
+    _In_ PVOID DllHandle,
     _In_ ULONG ImplicitPathOptions);
 #endif
 
@@ -2134,11 +2373,21 @@ LdrDllRedirectionCallback(
     );
 
 // rev
+/**
+ * The LdrSetDllManifestProber routine registers custom callbacks for probing and building activation contexts
+ * (manifests) when a DLL is loaded.
+ *
+ * \param ManifestProberRoutine A pointer to the manifest prober routine.
+ * \param CreateActCtxLanguageW An optional pointer to the CreateActCtxLanguageW routine.
+ * \param ReleaseActCtxW An optional pointer to the ReleaseActCtxW routine.
+ */
 NTSYSAPI
 VOID 
 NTAPI 
 LdrSetDllManifestProber(
-    _In_ PVOID Routine
+    _In_ PVOID ManifestProberRoutine,
+    _In_opt_ PVOID CreateActCtxLanguageW,
+    _In_opt_ PVOID ReleaseActCtxW
     );
 
 #if (NTDDI_VERSION >= NTDDI_WINTHRESHOLD)
@@ -2146,6 +2395,12 @@ NTSYSAPI BOOLEAN LdrpChildNtdll; // DATA export
 #endif
 
 // rev
+/**
+ * The LdrAppxHandleIntegrityFailure routine handles an AppX integrity failure.
+ *
+ * \param Status The integrity failure status.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -2155,46 +2410,54 @@ LdrAppxHandleIntegrityFailure(
 
 // LdrHotPatchNotify
 
+/**
+ * The LdrHotPatchNotify routine notifies the loader that a hot-patch image has been applied so that dependent loader
+ * state can be updated.
+ *
+ * \param ImageBase The base address of the image receiving the hot patch.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
-
 NTSTATUS
-
 NTAPI
-
 LdrHotPatchNotify(
-
-    _In_ PVOID ImageBase,
-
-    _In_ PVOID Unknown1,
-
-    _In_ PVOID Unknown2,
-
-    _In_ ULONGLONG Flags
-
+    _In_ PVOID ImageBase
     );
 
 
 
 // LdrInitShimEngineDynamic
 
+/**
+ * The LdrInitShimEngineDynamic routine dynamically initializes the application-compatibility shim engine for the
+ * specified image.
+ *
+ * \param ImageBase The base address of the shim engine image.
+ * \param ShimData Opaque shim data describing the shims to apply.
+ * \return BOOL TRUE if successful, FALSE otherwise.
+ */
 NTSYSAPI
-
-NTSTATUS
-
+BOOL
 NTAPI
-
 LdrInitShimEngineDynamic(
-
-    _In_ ULONGLONG ImageBase,
-
-    _In_ PVOID ShimData
-
+    _In_ PVOID ImageBase,
+    _In_opt_ PVOID ShimData
     );
 
 
 
 // LdrRscIsTypeExist
 
+/**
+ * The LdrRscIsTypeExist routine determines whether a resource of the specified type exists within a resource
+ * enumeration context.
+ *
+ * \param RscContext A pointer to the resource enumeration context.
+ * \param Type The resource type name to test for.
+ * \param Reserved Reserved; must be NULL.
+ * \param Flags On input specifies matching flags; on output receives result flags.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 
 NTSTATUS
@@ -2217,6 +2480,13 @@ LdrRscIsTypeExist(
 
 // LdrSetAppCompatDllRedirectionCallback
 
+/**
+ * The LdrSetAppCompatDllRedirectionCallback routine registers a callback used to redirect application-compatibility DLL
+ * loads.
+ *
+ * \param Callback The redirection callback routine to register.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 
 NTSTATUS
@@ -2233,6 +2503,13 @@ LdrSetAppCompatDllRedirectionCallback(
 
 // LdrSetMUICacheType
 
+/**
+ * The LdrSetMUICacheType routine sets the MUI (Multilingual User Interface) resource cache type for the current
+ * process.
+ *
+ * \param MuiCacheType The MUI cache type to set.
+ * \return NTSTATUS Successful or errant status.
+ */
 NTSYSAPI
 
 NTSTATUS

@@ -301,16 +301,31 @@ typedef struct _FILE_END_OF_FILE_INFORMATION
 } FILE_END_OF_FILE_INFORMATION, *PFILE_END_OF_FILE_INFORMATION;
 
 //#if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
+// Signals that this EOF adjustment specifically targets a paging file,
+// invoking distinct allocation paths in the file system to ensure the
+// space is non-paged and contiguous where possible.
 #define FLAGS_END_OF_FILE_INFO_EX_EXTEND_PAGING             0x00000001
+// Prevents the file system from over-allocating. By default, file systems
+// might allocate more space than requested to prevent fragmentation;
+// this flag forces exact allocation to conserve disk space.
 #define FLAGS_END_OF_FILE_INFO_EX_NO_EXTRA_PAGING_EXTEND    0x00000002
+// Prevents the operation from blocking indefinitely. If the disk is highly
+// fragmented and finding contiguous space would take too long,
+// the file system is instructed to fail or truncate the request rather
+// than hanging a critical Mm thread.
 #define FLAGS_END_OF_FILE_INFO_EX_TIME_CONSTRAINED          0x00000004
 #define FLAGS_DELAY_REASONS_LOG_FILE_FULL                   0x00000001
 #define FLAGS_DELAY_REASONS_BITMAP_SCANNED                  0x00000002
 
+/**
+ * The FILE_END_OF_FILE_INFORMATION_EX structure contains extended end-of-file information used to set the logical
+ * end of a file.
+ */
 typedef struct _FILE_END_OF_FILE_INFORMATION_EX
 {
-    LARGE_INTEGER EndOfFile;
-    LARGE_INTEGER PagingFileSizeInMM;
+    LARGE_INTEGER EndOfFile; // The new desired end-of-file byte offset.
+    LARGE_INTEGER PagingFileSizeInMM; // The size currently recognized or requested by the Memory Manager.
+    // The hard limit for the paging file's growth, preventing it from consuming the entire volume.
     LARGE_INTEGER PagingFileMaxSize;
     ULONG Flags;
 } FILE_END_OF_FILE_INFORMATION_EX, *PFILE_END_OF_FILE_INFORMATION_EX;
@@ -343,12 +358,24 @@ typedef struct _FILE_VALID_DATA_LENGTH_INFORMATION
  */
 typedef struct _FILE_LINK_INFORMATION
 {
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS5)
+    union
+    {
+        BOOLEAN ReplaceIfExists; // FileLinkInformation
+        ULONG Flags; // FileLinkInformationEx
+    } DUMMYUNIONNAME;
+#else
     BOOLEAN ReplaceIfExists;
+#endif
     HANDLE RootDirectory;
     ULONG FileNameLength;
     _Field_size_bytes_(FileNameLength) WCHAR FileName[1];
 } FILE_LINK_INFORMATION, *PFILE_LINK_INFORMATION;
 
+/**
+ * The FILE_LINK_INFORMATION_EX structure contains extended information, including flags, used to create a hard link
+ * to an existing file.
+ */
 typedef struct _FILE_LINK_INFORMATION_EX
 {
     ULONG Flags;
@@ -357,6 +384,10 @@ typedef struct _FILE_LINK_INFORMATION_EX
     _Field_size_bytes_(FileNameLength) WCHAR FileName[1];
 } FILE_LINK_INFORMATION_EX, *PFILE_LINK_INFORMATION_EX;
 
+/**
+ * The FILE_MOVE_CLUSTER_INFORMATION structure contains information used to move a cluster of a file during a
+ * defragmentation operation.
+ */
 typedef struct _FILE_MOVE_CLUSTER_INFORMATION
 {
     ULONG ClusterCount;
@@ -516,8 +547,8 @@ typedef struct _FILE_REPARSE_POINT_INFORMATION
         {
             ULONGLONG MftRecordIndex : 48; // rev
             ULONGLONG SequenceNumber : 16; // rev
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
     ULONG Tag;
 } FILE_REPARSE_POINT_INFORMATION, *PFILE_REPARSE_POINT_INFORMATION;
 
@@ -562,6 +593,10 @@ typedef struct _FILE_STANDARD_LINK_INFORMATION
     BOOLEAN Directory;
 } FILE_STANDARD_LINK_INFORMATION, *PFILE_STANDARD_LINK_INFORMATION;
 
+/**
+ * The FILE_SFIO_RESERVE_INFORMATION structure contains scheduled-file-I/O (SFIO) bandwidth reservation information
+ * for a file.
+ */
 typedef struct _FILE_SFIO_RESERVE_INFORMATION
 {
     ULONG RequestsPerPeriod;
@@ -572,6 +607,9 @@ typedef struct _FILE_SFIO_RESERVE_INFORMATION
     ULONG NumOutstandingRequests;
 } FILE_SFIO_RESERVE_INFORMATION, *PFILE_SFIO_RESERVE_INFORMATION;
 
+/**
+ * The FILE_SFIO_VOLUME_INFORMATION structure contains scheduled-file-I/O (SFIO) reservation information for a volume.
+ */
 typedef struct _FILE_SFIO_VOLUME_INFORMATION
 {
     ULONG MaximumRequestsPerPeriod;
@@ -630,11 +668,19 @@ typedef struct _FILE_IO_PRIORITY_HINT_INFORMATION_EX
  */
 #define FILE_SKIP_SET_USER_EVENT_ON_FAST_IO 0x4
 
+/**
+ * The FILE_IO_COMPLETION_NOTIFICATION_INFORMATION structure contains the I/O completion notification flags for a
+ * file handle.
+ */
 typedef struct _FILE_IO_COMPLETION_NOTIFICATION_INFORMATION
 {
     ULONG Flags;
 } FILE_IO_COMPLETION_NOTIFICATION_INFORMATION, *PFILE_IO_COMPLETION_NOTIFICATION_INFORMATION;
 
+/**
+ * The FILE_PROCESS_IDS_USING_FILE_INFORMATION structure contains the list of process identifiers that currently have
+ * the file open.
+ */
 typedef struct _FILE_PROCESS_IDS_USING_FILE_INFORMATION
 {
     ULONG NumberOfProcessIdsInList;
@@ -650,11 +696,17 @@ typedef struct _FILE_IS_REMOTE_DEVICE_INFORMATION
     BOOLEAN IsRemote; // A value that indicates whether the file system that contains the file is a remote file system.
 } FILE_IS_REMOTE_DEVICE_INFORMATION, *PFILE_IS_REMOTE_DEVICE_INFORMATION;
 
+/**
+ * The FILE_NUMA_NODE_INFORMATION structure contains the NUMA node associated with a file.
+ */
 typedef struct _FILE_NUMA_NODE_INFORMATION
 {
     USHORT NodeNumber;
 } FILE_NUMA_NODE_INFORMATION, *PFILE_NUMA_NODE_INFORMATION;
 
+/**
+ * The FILE_IOSTATUSBLOCK_RANGE_INFORMATION structure describes a range of I/O status blocks associated with a file.
+ */
 typedef struct _FILE_IOSTATUSBLOCK_RANGE_INFORMATION
 {
     PUCHAR IoStatusBlockRange;
@@ -662,6 +714,10 @@ typedef struct _FILE_IOSTATUSBLOCK_RANGE_INFORMATION
 } FILE_IOSTATUSBLOCK_RANGE_INFORMATION, *PFILE_IOSTATUSBLOCK_RANGE_INFORMATION;
 
 // Win32 FILE_REMOTE_PROTOCOL_INFO
+/**
+ * The FILE_REMOTE_PROTOCOL_INFORMATION structure contains information about the protocol used to access a file on a
+ * remote server.
+ */
 typedef struct _FILE_REMOTE_PROTOCOL_INFORMATION
 {
     // Structure Version
@@ -725,6 +781,9 @@ typedef struct _FILE_REMOTE_PROTOCOL_INFORMATION
 
 #define CHECKSUM_ENFORCEMENT_OFF 0x00000001
 
+/**
+ * The FILE_INTEGRITY_STREAM_INFORMATION structure contains the integrity (checksum) settings for a file's data stream.
+ */
 typedef struct _FILE_INTEGRITY_STREAM_INFORMATION
 {
     USHORT ChecksumAlgorithm;
@@ -733,6 +792,9 @@ typedef struct _FILE_INTEGRITY_STREAM_INFORMATION
     ULONG Flags;
 } FILE_INTEGRITY_STREAM_INFORMATION, *PFILE_INTEGRITY_STREAM_INFORMATION;
 
+/**
+ * The FILE_VOLUME_NAME_INFORMATION structure contains the name of the volume on which a file resides.
+ */
 typedef struct _FILE_VOLUME_NAME_INFORMATION
 {
     ULONG DeviceNameLength;
@@ -1036,7 +1098,7 @@ typedef struct _FILE_MEMORY_PARTITION_INFORMATION
         {
             UCHAR NoCrossPartitionAccess;
             UCHAR Spare[3];
-        };
+        } DUMMYSTRUCTNAME;
         ULONG AllFlags;
     } Flags;
 } FILE_MEMORY_PARTITION_INFORMATION, *PFILE_MEMORY_PARTITION_INFORMATION;
@@ -1075,6 +1137,9 @@ typedef struct _FILE_STAT_LX_INFORMATION
 #endif
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The FILE_STORAGE_RESERVE_ID_INFORMATION structure contains the storage reserve area identifier assigned to a file.
+ */
 typedef struct _FILE_STORAGE_RESERVE_ID_INFORMATION
 {
     STORAGE_RESERVE_ID StorageReserveId;
@@ -1090,6 +1155,9 @@ typedef struct _FILE_CASE_SENSITIVE_INFORMATION
 } FILE_CASE_SENSITIVE_INFORMATION, *PFILE_CASE_SENSITIVE_INFORMATION;
 #endif
 
+/**
+ * The FILE_KNOWN_FOLDER_TYPE enumeration identifies the type of a known folder.
+ */
 typedef enum _FILE_KNOWN_FOLDER_TYPE
 {
     KnownFolderNone = 0,
@@ -1103,12 +1171,18 @@ typedef enum _FILE_KNOWN_FOLDER_TYPE
     KnownFolderMax
 } FILE_KNOWN_FOLDER_TYPE;
 
+/**
+ * The FILE_KNOWN_FOLDER_INFORMATION structure contains the known-folder classification of a file or directory.
+ */
 typedef struct _FILE_KNOWN_FOLDER_INFORMATION
 {
     FILE_KNOWN_FOLDER_TYPE Type;
 } FILE_KNOWN_FOLDER_INFORMATION, *PFILE_KNOWN_FOLDER_INFORMATION;
 
 // private
+/**
+ * The FILE_STREAM_RESERVATION_INFORMATION structure contains reservation information for a file's data stream.
+ */
 typedef struct _FILE_STREAM_RESERVATION_INFORMATION
 {
     ULONG_PTR TrackedReservation;
@@ -1116,6 +1190,9 @@ typedef struct _FILE_STREAM_RESERVATION_INFORMATION
 } FILE_STREAM_RESERVATION_INFORMATION, *PFILE_STREAM_RESERVATION_INFORMATION;
 
 // private
+/**
+ * The MUP_PROVIDER_INFORMATION structure contains information about a Multiple UNC Provider (MUP) redirector.
+ */
 typedef struct _MUP_PROVIDER_INFORMATION
 {
     ULONG Level;
@@ -1125,6 +1202,9 @@ typedef struct _MUP_PROVIDER_INFORMATION
 
 // NtQueryDirectoryFile types
 
+/**
+ * The FILE_INFORMATION_DEFINITION structure contains metadata describing a file information class.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_INFORMATION_DEFINITION
 {
@@ -1305,6 +1385,9 @@ typedef struct _FILE_ID_GLOBAL_TX_DIR_INFORMATION
     FIELD_OFFSET(FILE_ID_GLOBAL_TX_DIR_INFORMATION, FileNameLength)     \
 }
 
+/**
+ * The FILE_OBJECTID_INFORMATION structure contains the object identifier and extended data for a file.
+ */
 typedef struct _FILE_OBJECTID_INFORMATION
 {
     union
@@ -1314,8 +1397,8 @@ typedef struct _FILE_OBJECTID_INFORMATION
         {
             ULONGLONG MftRecordIndex : 48; // rev
             ULONGLONG SequenceNumber : 16; // rev
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
     UCHAR ObjectId[16]; // GUID
     union
     {
@@ -1324,11 +1407,15 @@ typedef struct _FILE_OBJECTID_INFORMATION
             UCHAR BirthVolumeId[16];
             UCHAR BirthObjectId[16];
             UCHAR DomainId[16];
-        };
+        } DUMMYSTRUCTNAME;
         UCHAR ExtendedInfo[48];
-    };
+    } DUMMYUNIONNAME2;
 } FILE_OBJECTID_INFORMATION, *PFILE_OBJECTID_INFORMATION;
 
+/**
+ * The FILE_DIRECTORY_NEXT_INFORMATION structure contains the offset to the next entry in a directory information
+ * buffer.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_DIRECTORY_NEXT_INFORMATION
 {
@@ -1337,6 +1424,9 @@ typedef struct _FILE_DIRECTORY_NEXT_INFORMATION
 
 // NtQueryEaFile/NtSetEaFile types
 
+/**
+ * The FILE_FULL_EA_INFORMATION structure describes a full extended attribute (EA) name/value entry for a file.
+ */
 _Struct_size_bytes_(NextEntryOffset)
 typedef struct _FILE_FULL_EA_INFORMATION
 {
@@ -1549,9 +1639,9 @@ typedef struct _FILE_FS_OBJECTID_INFORMATION
             UCHAR BirthVolumeId[16];
             UCHAR BirthObjectId[16];
             UCHAR DomainId[16];
-        };
+        } DUMMYSTRUCTNAME;
         UCHAR ExtendedInfo[48];
-    };
+    } DUMMYUNIONNAME;
 } FILE_FS_OBJECTID_INFORMATION, *PFILE_FS_OBJECTID_INFORMATION;
 
 /**
@@ -2076,6 +2166,10 @@ NtNotifyChangeDirectoryFile(
     _In_ BOOLEAN WatchTree);
 
 // private
+/**
+ * The DIRECTORY_NOTIFY_INFORMATION_CLASS enumeration specifies the type of information reported by a directory
+ * change notification.
+ */
 typedef enum _DIRECTORY_NOTIFY_INFORMATION_CLASS
 {
     DirectoryNotifyInformation = 1, // FILE_NOTIFY_INFORMATION

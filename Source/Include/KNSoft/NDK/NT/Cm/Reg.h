@@ -35,6 +35,13 @@ NtInitializeRegistry(
 #define REG_MAX_KEY_VALUE_NAME_LENGTH 32767
 #define REG_MAX_KEY_NAME_LENGTH 512
 
+/**
+ * The CM_EXTENDED_PARAMETER_TYPE enumeration specifies the kind of extended
+ * parameter contained in a CM_EXTENDED_PARAMETER structure.
+ *
+ * Values indicate how the union in CM_EXTENDED_PARAMETER should be interpreted
+ * (for example, as a handle, pointer, size, access mask, etc.).
+ */
 typedef enum _CM_EXTENDED_PARAMETER_TYPE
 {
   CmExtendedParameterInvalidType,
@@ -46,6 +53,12 @@ typedef enum _CM_EXTENDED_PARAMETER_TYPE
 
 #define CM_EXTENDED_PARAMETER_TYPE_BITS 8
 
+/**
+ * The CM_EXTENDED_PARAMETER structure represents an extended parameter passed to registry APIs.
+ *
+ * It contains a type field and a union for the parameter value which may be a pointer, handle,
+ * size or other scalar value.
+ */
 typedef struct DECLSPEC_ALIGN(8) _CM_EXTENDED_PARAMETER
 {
     struct
@@ -76,6 +89,7 @@ typedef struct DECLSPEC_ALIGN(8) _CM_EXTENDED_PARAMETER
  * @param[in] CreateOptions The options to use when creating the key.
  * @param[out, optional] Disposition A pointer to a variable that receives the disposition value.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatekey
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -103,6 +117,7 @@ NtCreateKey(
  * @param[in] TransactionHandle A handle to the transaction.
  * @param[out, optional] Disposition A pointer to a variable that receives the disposition value.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatekeytransacted
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -146,6 +161,7 @@ NtOpenKey(
  * @param[in] ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * @param[in] TransactionHandle A handle to the transaction.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwopenkeytransacted
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -166,6 +182,7 @@ NtOpenKeyTransacted(
  * @param[in] ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object attributes.
  * @param[in] OpenOptions The options to use when opening the key.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwopenkeyex
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -187,6 +204,7 @@ NtOpenKeyEx(
  * @param[in] OpenOptions The options to use when opening the key.
  * @param[in] TransactionHandle A handle to the transaction.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwopenkeytransactedex
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -205,6 +223,7 @@ NtOpenKeyTransactedEx(
  * 
  * @param[in] KeyHandle A handle to the key to be deleted.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwdeletekey
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -220,6 +239,7 @@ NtDeleteKey(
  * @param[in] KeyHandle A handle to the key to be renamed.
  * @param[in] NewName A pointer to a UNICODE_STRING structure that specifies the new name of the key.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwrenamekey
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -236,6 +256,7 @@ NtRenameKey(
  * @param[in] KeyHandle A handle to the key that contains the value to be deleted.
  * @param[in] ValueName A pointer to a UNICODE_STRING structure that specifies the name of the value to be deleted.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwdeletevaluekey
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -251,6 +272,7 @@ NtDeleteValueKey(
  * 
  * @param[in] KeyHandle A handle to the key to be flushed.
  * @return NTSTATUS Successful or errant status.
+ * \sa https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwflushkey
  */
 _Kernel_entry_
 NTSYSCALLAPI
@@ -602,12 +624,24 @@ NtQueryOpenSubKeys(
     _Out_ PULONG HandleCount
     );
 
+/**
+ * The KEY_PID_ARRAY structure associates a process id with a registry key name.
+ * It is used when reporting open subkeys and the process that holds them.
+ */
 typedef struct _KEY_PID_ARRAY
 {
     HANDLE ProcessId;
     UNICODE_STRING KeyName;
 } KEY_PID_ARRAY, *PKEY_PID_ARRAY;
 
+/**
+ * The KEY_OPEN_SUBKEYS_INFORMATION structure contains an array of KEY_PID_ARRAY entries
+ * describing subkeys that are currently open.
+ *
+ * The fields include:
+ * - Count: Number of entries in KeyArray.
+ * - KeyArray: Array of KEY_PID_ARRAY items.
+ */
 typedef struct _KEY_OPEN_SUBKEYS_INFORMATION
 {
     ULONG Count;
@@ -652,8 +686,8 @@ NtLockRegistryKey(
 /**
  * Locks the product activation keys.
  * 
- * @param pPrivateVer Optional pointer to a private version variable.
- * @param pSafeMode Optional pointer to a safe mode variable.
+ * @param PrivateVersion Optional pointer to a private version variable.
+ * @param SafeMode Optional pointer to a safe mode variable.
  * @return NTSTATUS Successful or errant status.
  */
 _Kernel_entry_
@@ -661,8 +695,8 @@ NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtLockProductActivationKeys(
-    _Inout_opt_ ULONG *pPrivateVer,
-    _Out_opt_ ULONG *pSafeMode
+    _Inout_opt_ PULONG PrivateVersion,
+    _Out_opt_ PULONG SafeMode
     );
 
 /**

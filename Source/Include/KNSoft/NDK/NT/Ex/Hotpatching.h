@@ -6,6 +6,10 @@ EXTERN_C_START
 
 /* phnt */
 
+/**
+ * The HOT_PATCH_INFORMATION_CLASS enumeration defines the information classes for querying and setting hot patch
+ * information.
+ */
 typedef enum _HOT_PATCH_INFORMATION_CLASS
 {
     ManageHotPatchLoadPatch = 0, // MANAGE_HOT_PATCH_LOAD_PATCH
@@ -113,8 +117,8 @@ typedef struct _MANAGE_HOT_PATCH_APPLY_IMAGE_PATCH
             ULONG ApplyReversePatches : 1;      // If set, apply reverse patches.
             ULONG ApplyForwardPatches : 1;      // If set, apply forward patches.
             ULONG Spare : 29;
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
     HANDLE ProcessHandle;                       // Handle to the process to patch.
     PVOID BaseImageAddress;                     // Base address of the image to patch.
     PVOID PatchImageAddress;                    // Address of the patch image.

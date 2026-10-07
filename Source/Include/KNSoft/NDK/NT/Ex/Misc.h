@@ -6,6 +6,13 @@ EXTERN_C_START
 
 #pragma region Unique ID
 
+/**
+ * The NtAllocateLocallyUniqueId routine allocates a locally unique identifier (LUID).
+ *
+ * \param Luid A pointer to a variable that receives the allocated locally unique identifier.
+ * \return NTSTATUS Successful or errant status.
+ * \see https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-allocatelocallyuniqueid
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -13,6 +20,12 @@ NTAPI
 NtAllocateLocallyUniqueId(
     _Out_ PLUID Luid);
 
+/**
+ * The NtSetUuidSeed routine sets the seed value used by the system to generate universally unique identifiers (UUIDs).
+ *
+ * \param Seed A pointer to the seed value used as the node identifier when generating UUIDs.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -20,6 +33,16 @@ NTAPI
 NtSetUuidSeed(
     _In_ PCHAR Seed);
 
+/**
+ * The NtAllocateUuids routine allocates a block of universally unique identifiers (UUIDs).
+ *
+ * \param Time A pointer to a variable that receives the timestamp used for the allocated UUIDs.
+ * \param Range A pointer to a variable that receives the number of UUIDs available in the allocated range.
+ * \param Sequence A pointer to a variable that receives the clock sequence value.
+ * \param Seed A pointer to a variable that receives the seed (node identifier) value.
+ * \return NTSTATUS Successful or errant status.
+ * \see https://learn.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-uuidcreatesequential
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -87,6 +110,8 @@ typedef enum _HARDERROR_RESPONSE
  * \param[out] Response Receives the user's response to the error dialog.
  * \return NTSTATUS Successful or errant status.
  */
+_Analysis_noreturn_
+DECLSPEC_NORETURN
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS

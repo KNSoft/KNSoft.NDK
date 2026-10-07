@@ -196,6 +196,9 @@
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Etw.h">
       <Filter>NT</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\KNSoft\NDK\NT\Hv.h">
+      <Filter>NT</Filter>
+    </ClInclude>
     <ClInclude Include="..\Include\KNSoft\NDK\NT\Ps\Ps.h">
       <Filter>NT\Ps</Filter>
     </ClInclude>

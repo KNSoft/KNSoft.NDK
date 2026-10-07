@@ -162,7 +162,7 @@ typedef union _SYSDBG_LIVEDUMP_CONTROL_FLAGS
         ULONG AbortIfMemoryPressure : 1; // REDSTONE4
         ULONG SelectiveDump : 1; // WIN11
         ULONG Reserved : 27;
-    };
+    } DUMMYSTRUCTNAME;
     ULONG AsUlong;
 } SYSDBG_LIVEDUMP_CONTROL_FLAGS, *PSYSDBG_LIVEDUMP_CONTROL_FLAGS;
 
@@ -177,7 +177,7 @@ typedef union _SYSDBG_LIVEDUMP_CONTROL_ADDPAGES
         ULONG HypervisorPages : 1;
         ULONG NonEssentialHypervisorPages : 1; // since WIN11
         ULONG Reserved : 30;
-    };
+    } DUMMYSTRUCTNAME;
     ULONG AsUlong;
 } SYSDBG_LIVEDUMP_CONTROL_ADDPAGES, *PSYSDBG_LIVEDUMP_CONTROL_ADDPAGES;
 
@@ -199,8 +199,8 @@ typedef struct _SYSDBG_LIVEDUMP_SELECTIVE_CONTROL
         {
             ULONGLONG ThreadKernelStacks : 1;
             ULONGLONG ReservedFlags : 63;
-        };
-    };
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
     ULONGLONG Reserved[4];
 } SYSDBG_LIVEDUMP_SELECTIVE_CONTROL, *PSYSDBG_LIVEDUMP_SELECTIVE_CONTROL;
 

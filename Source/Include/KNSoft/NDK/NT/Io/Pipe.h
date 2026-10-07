@@ -115,6 +115,9 @@ NtCreateNamedPipeFile(
 #define FILE_PIPE_WRITE_SPACE 0x00000001
 
 // Input for FSCTL_PIPE_ASSIGN_EVENT
+/**
+ * The FILE_PIPE_ASSIGN_EVENT_BUFFER structure is the input buffer used to assign an event to a named pipe.
+ */
 typedef struct _FILE_PIPE_ASSIGN_EVENT_BUFFER
 {
     HANDLE EventHandle;
@@ -122,6 +125,9 @@ typedef struct _FILE_PIPE_ASSIGN_EVENT_BUFFER
 } FILE_PIPE_ASSIGN_EVENT_BUFFER, *PFILE_PIPE_ASSIGN_EVENT_BUFFER;
 
 // Output for FILE_PIPE_PEEK_BUFFER
+/**
+ * The FILE_PIPE_PEEK_BUFFER structure is the output buffer that receives data peeked from a named pipe.
+ */
 typedef struct _FILE_PIPE_PEEK_BUFFER
 {
     ULONG NamedPipeState;
@@ -132,6 +138,9 @@ typedef struct _FILE_PIPE_PEEK_BUFFER
 } FILE_PIPE_PEEK_BUFFER, *PFILE_PIPE_PEEK_BUFFER;
 
 // Output for FSCTL_PIPE_QUERY_EVENT
+/**
+ * The FILE_PIPE_EVENT_BUFFER structure describes a named pipe event.
+ */
 typedef struct _FILE_PIPE_EVENT_BUFFER
 {
     ULONG NamedPipeState;
@@ -142,6 +151,10 @@ typedef struct _FILE_PIPE_EVENT_BUFFER
 } FILE_PIPE_EVENT_BUFFER, *PFILE_PIPE_EVENT_BUFFER;
 
 // Input for FSCTL_PIPE_WAIT
+/**
+ * The FILE_PIPE_WAIT_FOR_BUFFER structure is the input buffer used to wait for an instance of a named pipe to become
+ * available.
+ */
 typedef struct _FILE_PIPE_WAIT_FOR_BUFFER
 {
     LARGE_INTEGER Timeout;
@@ -151,6 +164,9 @@ typedef struct _FILE_PIPE_WAIT_FOR_BUFFER
 } FILE_PIPE_WAIT_FOR_BUFFER, *PFILE_PIPE_WAIT_FOR_BUFFER;
 
 // Input for FSCTL_PIPE_SET_CLIENT_PROCESS, Output for FSCTL_PIPE_QUERY_CLIENT_PROCESS
+/**
+ * The FILE_PIPE_CLIENT_PROCESS_BUFFER structure associates a client process with a named pipe.
+ */
 typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER
 {
 #if !defined(BUILD_WOW6432)
@@ -164,6 +180,10 @@ typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER
 
 // Control structure for FSCTL_PIPE_QUERY_CLIENT_PROCESS_V2
 
+/**
+ * The FILE_PIPE_CLIENT_PROCESS_BUFFER_V2 structure associates a client process, with additional context, with a
+ * named pipe.
+ */
 typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER_V2
 {
     ULONGLONG ClientSession;
@@ -177,6 +197,10 @@ typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER_V2
 #define FILE_PIPE_COMPUTER_NAME_LENGTH 15
 
 // Input for FSCTL_PIPE_SET_CLIENT_PROCESS, Output for FSCTL_PIPE_QUERY_CLIENT_PROCESS
+/**
+ * The FILE_PIPE_CLIENT_PROCESS_BUFFER_EX structure associates a client process, with extended information, with a
+ * named pipe.
+ */
 typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER_EX
 {
 #if !defined(BUILD_WOW6432)
@@ -192,6 +216,9 @@ typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER_EX
 
 // Control structure for FSCTL_PIPE_SILO_ARRIVAL
 
+/**
+ * The FILE_PIPE_SILO_ARRIVAL_INPUT structure describes a server silo arrival notification for a named pipe.
+ */
 typedef struct _FILE_PIPE_SILO_ARRIVAL_INPUT
 {
     HANDLE JobHandle;
@@ -222,6 +249,9 @@ typedef struct _FILE_PIPE_SILO_ARRIVAL_INPUT
 
 // Control structure for FSCTL_PIPE_CREATE_SYMLINK
 
+/**
+ * The FILE_PIPE_CREATE_SYMLINK_INPUT structure is the input used to create a named pipe symbolic link.
+ */
 typedef struct _FILE_PIPE_CREATE_SYMLINK_INPUT
 {
     USHORT NameOffset;
@@ -233,6 +263,9 @@ typedef struct _FILE_PIPE_CREATE_SYMLINK_INPUT
 
 // Control structure for FSCTL_PIPE_DELETE_SYMLINK
 
+/**
+ * The FILE_PIPE_DELETE_SYMLINK_INPUT structure is the input used to delete a named pipe symbolic link.
+ */
 typedef struct _FILE_PIPE_DELETE_SYMLINK_INPUT
 {
     USHORT NameOffset;
@@ -281,6 +314,9 @@ NtCreateMailslotFile(
 #define FSCTL_MAILSLOT_PEEK             CTL_CODE(FILE_DEVICE_MAILSLOT, 0, METHOD_NEITHER, FILE_READ_DATA)
 
 // Output for FSCTL_MAILSLOT_PEEK
+/**
+ * The FILE_MAILSLOT_PEEK_BUFFER structure is the output buffer that receives data peeked from a mailslot.
+ */
 typedef struct _FILE_MAILSLOT_PEEK_BUFFER
 {
     ULONG ReadDataAvailable;

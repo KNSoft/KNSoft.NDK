@@ -21,6 +21,7 @@
 #include "Console.h"
 #include "Dbg.h"
 #include "Etw.h"
+#include "Hv.h"
 #include "Image.h"
 #include "Ldr.h"
 #include "Misc.h"

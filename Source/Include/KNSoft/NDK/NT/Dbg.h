@@ -162,6 +162,13 @@ DbgSetDebugFilterState(
     _In_ ULONG Level,
     _In_ BOOLEAN State);
 
+/**
+ * The NtQueryDebugFilterState routine queries the state of a specific debug filter component and level.
+ *
+ * \param ComponentId The identifier of the component whose debug filter state is being queried.
+ * \param Level The debug filter level being queried.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -170,6 +177,14 @@ NtQueryDebugFilterState(
     _In_ ULONG ComponentId,
     _In_ ULONG Level);
 
+/**
+ * The NtSetDebugFilterState routine sets the state of a specific debug filter component and level.
+ *
+ * \param ComponentId The identifier of the component whose debug filter state is being set.
+ * \param Level The debug filter level being set.
+ * \param State TRUE to enable the debug filter, FALSE to disable it.
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS

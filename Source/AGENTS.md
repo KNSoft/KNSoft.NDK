@@ -38,8 +38,10 @@ The goal is not to mirror `phnt` mechanically. This repository exists to provide
 - For each definition, first decide whether it belongs in this repository under the goal above and the SDK rules above.
 - Use each definition's name, purpose, and nearby symbol names in context to locate the best matching file and position in this repository. `phnt` often keeps definitions in large files, while this repository splits them into smaller files, so synchronize by declaration meaning rather than by upstream file layout. For example, `ntrtl.h` changes may land across `NT/Rtl/**`, and `ntimage.h` changes may belong in either `NT/Image.h` or `NT/Rtl/Image.h`.
 - When synchronization adds, removes, or renames a public header, or adds a public Win32 declaration in this repository, also update the related repository wiring as needed, such as aggregate includes, Visual Studio project entries, or import-library XML definitions.
-- Stop and ask before synchronizing any uncertain item.
-- Stop and ask when an uncertainty blocks progress or requires a project decision.
-- Stop and ask when an upstream `phnt` change appears questionable.
+- Treat ordinary updates to reverse-engineered signatures, fields, version boundaries, and return behavior as the latest upstream findings and synchronize them under the source-of-truth rules above. Reversing an earlier upstream change or lacking independent SDK evidence alone does not require user confirmation.
+- Stop and ask before synchronizing a change when there is a concrete reason to suspect an upstream error, such as contradictory declaration details, duplicate named members, an invalid layout, or a compilation failure.
+- Stop and ask when unresolved scope, source selection, or integration uncertainty blocks progress or requires a project decision.
+- For demonstrable copied or misplaced comments, verify the function or type name, parameter names, SAL, and meaning against the corresponding declaration, use the corrected comment, and record the upstream error in `note.md` without asking separately for each occurrence.
+- Apply handling decisions already confirmed by the user without requesting confirmation again. After confirmation, record suspected upstream errors and the agreed handling in the repository-root `note.md`, unless the user asks to exclude an item. The user will decide whether to submit upstream PRs after synchronization.
 - After synchronization is complete, ensure that the `UnitTest` project builds successfully, with cross-platform impact considered for x86, x64, ARM64, and ARM64EC.
 - Record the completed synchronization with a `[SYNC] Sync phnt` commit whose body includes the target upstream commit URL.

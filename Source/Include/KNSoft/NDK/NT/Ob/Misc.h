@@ -470,6 +470,19 @@ NtCreateDirectoryObject(
     );
 
 #if (NTDDI_VERSION >= NTDDI_WIN8)
+/**
+ * The NtCreateDirectoryObjectEx routine creates or opens an object-directory object with extended options, such as
+ * shadow directories.
+ *
+ * \param DirectoryHandle A pointer to a HANDLE variable that receives the directory object handle.
+ * \param DesiredAccess The access mask that specifies the requested access to the directory object.
+ * \param ObjectAttributes A pointer to an OBJECT_ATTRIBUTES structure that specifies the object name and other
+ * attributes.
+ * \param ShadowDirectoryHandle An optional handle to a directory object that serves as a shadow directory.
+ * If NULL, no shadow directory is associated.
+ * \param Flags Flags controlling the directory creation behavior (DIRECTORY_EX_FLAG_*).
+ * \return NTSTATUS Successful or errant status.
+ */
 _Kernel_entry_
 NTSYSCALLAPI
 NTSTATUS
@@ -478,7 +491,7 @@ NtCreateDirectoryObjectEx(
     _Out_ PHANDLE DirectoryHandle,
     _In_ ACCESS_MASK DesiredAccess,
     _In_ POBJECT_ATTRIBUTES ObjectAttributes,
-    _In_ HANDLE ShadowDirectoryHandle,
+    _In_opt_ HANDLE ShadowDirectoryHandle,
     _In_ ULONG Flags
     );
 #endif
@@ -573,7 +586,13 @@ typedef struct _OBJECT_BOUNDARY_ENTRY
 {
     BOUNDARY_ENTRY_TYPE Type;
     ULONG Size;
-    // OBJECT_BOUNDARY_VALUE Value;
+    //union
+    //{
+    //    PSID Sid;
+    //    PSID IntegrityLabel;
+    //    WCHAR Name[1];
+    //    OBJECT_BOUNDARY_VALUE Value;
+    //} DUMMYUNIONNAME;
 } OBJECT_BOUNDARY_ENTRY, *POBJECT_BOUNDARY_ENTRY;
 
 // rev
